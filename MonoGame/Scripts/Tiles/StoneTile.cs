@@ -6,7 +6,9 @@ public class StoneTile : Tile
     {
         Id = "base.stone";
         Name = "Stone";
-        TextureName = "textures/stone";
+        SpritesheetName = "textures/spritesheet";
+        TextureX = 1;
+        TextureY = 0;
     }
 }
 

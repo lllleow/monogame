@@ -4,14 +4,10 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/grass.png</File>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/player.png</File>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/stone.png</File>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/sword.png</File>
+    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/player_spritesheet.png</File>
+    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/spritesheet.png</File>
   </SourceFiles>
   <DestFiles>
-    <File xsi:nil="true" />
-    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>

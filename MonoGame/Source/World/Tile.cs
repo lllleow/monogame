@@ -7,17 +7,14 @@ public class Tile : ITile
 {
     public string Id { get; set; }
     public string Name { get; set; }
-    public string TextureName { get; set; }
+    public string SpritesheetName { get; set; }
+    public int TextureX { get; set; }
+    public int TextureY { get; set; }
     public Texture2D Texture { get; set; }
     public int SizeX { get; set; } = 1;
     public int SizeY { get; set; } = 1;
-
-    public Tile(string id, string name, string textureName)
-    {
-        Id = id;
-        Name = name;
-        TextureName = textureName;
-    }
+    public static int PixelSizeX { get; set; } = 32;
+    public static int PixelSizeY { get; set; } = 32;
 
     public Tile()
     {
@@ -26,6 +23,6 @@ public class Tile : ITile
 
     public void Initialize()
     {
-        Texture = Globals.contentManager.Load<Texture2D>(TextureName);
+        
     }
 }

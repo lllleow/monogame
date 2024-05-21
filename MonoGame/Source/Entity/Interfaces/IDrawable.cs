@@ -5,8 +5,10 @@ namespace MonoGame;
 
 public interface IDrawable
 {
-    Texture2D Texture { get; set; }
+    string SpritesheetName { get; set; }
     Vector2 Size { get; set; }
+    int TextureX { get; set; }
+    int TextureY { get; set; }
     void Draw(SpriteBatch spriteBatch);
     void BaseDraw(SpriteBatch spriteBatch);
 }

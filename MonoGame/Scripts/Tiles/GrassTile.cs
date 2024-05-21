@@ -6,7 +6,9 @@ public class GrassTile : Tile
     {
         Id = "base.grass";
         Name = "Grass";
-        TextureName = "textures/grass";
+        SpritesheetName = "textures/spritesheet";
+        TextureX = 0;
+        TextureY = 0;
     }
 }
 

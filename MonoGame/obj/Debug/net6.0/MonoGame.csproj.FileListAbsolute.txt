@@ -81,7 +81,6 @@ C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\ru\M
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\tr\Microsoft.CodeAnalysis.Scripting.resources.dll
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\zh-Hans\Microsoft.CodeAnalysis.Scripting.resources.dll
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\zh-Hant\Microsoft.CodeAnalysis.Scripting.resources.dll
-C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\grass.xnb
-C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\player.xnb
-C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\stone.xnb
-C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\sword.xnb
+C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\player_spritesheet.xnb
+C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\spritesheet.xnb
+C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\obj\Debug\net6.0\MonoGame.sourcelink.json

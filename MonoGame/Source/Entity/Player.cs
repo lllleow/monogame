@@ -7,17 +7,24 @@ namespace MonoGame;
 
 public class Player : DrawablePhysicalEntity
 {
-    public Player(String texture, Vector2 position, Vector2 size)
+    public Player(String spriteSheet, Vector2 position, Vector2 size)
     {
-        Texture = Globals.contentManager.Load<Texture2D>(texture);
+        SpritesheetName = "textures/player_spritesheet";
+        TextureX = 0;
+        TextureY = 0;
         Position = position;
         Size = size;
         Speed = new Vector2(5, 5);
     }
 
+    public Rectangle GetCurrentSpriteRectangle()
+    {
+        return new Rectangle(0, 0, (int)Size.X, (int)Size.Y);
+    }
+
     public override void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(Texture, Position, Color.White);
+        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(SpritesheetName), Position, GetCurrentSpriteRectangle(), Color.White);
     }
 
     public override void Update(GameTime gameTime)

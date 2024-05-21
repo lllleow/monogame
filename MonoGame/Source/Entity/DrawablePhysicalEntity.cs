@@ -6,8 +6,10 @@ namespace MonoGame;
 
 public class DrawablePhysicalEntity : PhysicalEntity, IDrawable
 {
-    public Texture2D Texture { get; set; }
     public Vector2 Size { get; set; }
+    public string SpritesheetName { get; set; }
+    public int TextureX { get; set; }
+    public int TextureY { get; set; }
 
     public void BaseDraw(SpriteBatch spriteBatch)
     {

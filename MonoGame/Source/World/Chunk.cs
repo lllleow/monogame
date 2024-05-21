@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame;
 
@@ -28,14 +29,7 @@ public class Chunk : IChunk
         {
             for (int chunkY = 0; chunkY < SizeY; chunkY++)
             {
-                if (chunkY == 0 || chunkX == 0)
-                {
-                    SetTile("base.stone", chunkX, chunkY);
-                }
-                else
-                {
-                    SetTile("base.grass", chunkX, chunkY);
-                }
+                SetTile("base.stone", chunkX, chunkY);
             }
         }
     }
@@ -46,5 +40,22 @@ public class Chunk : IChunk
         tile.Initialize();
         Tiles[x, y] = tile;
         return tile;
+    }
+
+    public void Draw(SpriteBatch spriteBatch)
+    {
+        for (int chunkX = 0; chunkX < SizeX; chunkX++)
+        {
+            for (int chunkY = 0; chunkY < SizeY; chunkY++)
+            {
+                var tile = GetTile(chunkX, chunkY);
+                if (tile != null)
+                {
+                    int x = (X * SizeX * Tile.PixelSizeX) + (chunkX * tile.SizeX * Tile.PixelSizeX);
+                    int y = (Y * SizeY * Tile.PixelSizeY) + (chunkY * tile.SizeY * Tile.PixelSizeY);
+                    spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(tile.SpritesheetName), new Vector2(x, y), tile.GetSpriteRectangle(), Color.White);
+                }
+            }
+        }
     }
 }

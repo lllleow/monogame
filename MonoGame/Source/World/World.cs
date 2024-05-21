@@ -53,25 +53,11 @@ public class World
         }
     }
 
-    const int TILE_SIZE_X = 32;
-    const int TILE_SIZE_Y = 32;
     public void DrawWorld()
     {
         foreach (var chunk in Chunks)
         {
-            for (int chunkX = 0; chunkX < Chunk.SizeX; chunkX++)
-            {
-                for (int chunkY = 0; chunkY < Chunk.SizeY; chunkY++)
-                {
-                    var tile = chunk.GetTile(chunkX, chunkY);
-                    if (tile != null)
-                    {
-                        int x = (chunk.X * Chunk.SizeX * TILE_SIZE_X) + (chunkX * tile.SizeX * TILE_SIZE_X);
-                        int y = (chunk.Y * Chunk.SizeY * TILE_SIZE_Y) + (chunkY * tile.SizeY * TILE_SIZE_Y);
-                        Globals.spriteBatch.Draw(tile.Texture, new Vector2(x, y), Color.White);
-                    }
-                }
-            }
+            chunk.Draw(Globals.spriteBatch);
         }
     }
 }
