@@ -7,7 +7,7 @@ namespace MonoGame;
 
 public class Player : DrawablePhysicalEntity
 {
-    public Player(String spriteSheet, Vector2 position, int sizeX, int sizeY)
+    public Player(Vector2 position, int sizeX, int sizeY)
     {
         SpritesheetName = "textures/player_spritesheet";
         TextureX = 0;
@@ -15,34 +15,39 @@ public class Player : DrawablePhysicalEntity
         Position = position;
         PixelSizeX = sizeX;
         PixelSizeY = sizeY;
-        Speed = new Vector2(5, 5);
-        AddComponent(new AnimatorComponent(this, AnimationRegistry.GetAnimation("player_movement_animation")));
+        Speed = new Vector2(2, 2);
+        AddComponent(new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player")));
     }
 
-    public void Update(GameTime gameTime)
+    public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
         KeyboardState state = Keyboard.GetState();
 
         if (state.IsKeyDown(Keys.W))
         {
-            GetFirstComponent<AnimatorComponent>().SetState("walking_back");
+            GetFirstComponent<AnimatorComponent>().PlayAnimation("walking_back");
             this.Position = new Vector2(this.Position.X, this.Position.Y - Speed.Y);
         }
         if (state.IsKeyDown(Keys.A))
         {
-            GetFirstComponent<AnimatorComponent>().SetState("walking_left");
+            GetFirstComponent<AnimatorComponent>().PlayAnimation("walking_left");
             this.Position = new Vector2(this.Position.X - Speed.X, this.Position.Y);
         }
         if (state.IsKeyDown(Keys.S))
         {
-            GetFirstComponent<AnimatorComponent>().SetState("walking_front");
+            GetFirstComponent<AnimatorComponent>().PlayAnimation("walking_front");
             this.Position = new Vector2(this.Position.X, this.Position.Y + Speed.Y);
         }
         if (state.IsKeyDown(Keys.D))
         {
-            GetFirstComponent<AnimatorComponent>().SetState("walking_right");
+            GetFirstComponent<AnimatorComponent>().PlayAnimation("walking_right");
             this.Position = new Vector2(this.Position.X + Speed.X, this.Position.Y);
+        }
+
+        if (state.IsKeyUp(Keys.W) && state.IsKeyUp(Keys.A) && state.IsKeyUp(Keys.S) && state.IsKeyUp(Keys.D))
+        {
+            GetFirstComponent<AnimatorComponent>().PlayAnimation("idle");
         }
     }
 }

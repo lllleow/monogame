@@ -9,34 +9,33 @@ public class AnimatorComponent : IEntityComponent
 {
     int CurrentTime;
     public IGameEntity Entity { get; set; }
-    public IAnimation Animation;
+    public IAnimationBundle AnimationBundle;
+    public string CurrentAnimation;
 
-    public AnimatorComponent(IGameEntity entity, IAnimation animation)
+    public AnimatorComponent(IGameEntity entity, IAnimationBundle animation)
     {
         Entity = entity;
-        Animation = animation;
+        AnimationBundle = animation;
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        double percentage = CurrentTime / Animation.Duration;
-        Rectangle spriteRectangle = Animation.GetSpriteRectangle(percentage);
-        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(Animation.SpriteSheet), Entity.Position, spriteRectangle, Color.White);
+        Rectangle spriteRectangle = AnimationBundle.GetSpriteRectangle(CurrentAnimation, (double)CurrentTime / (double)AnimationBundle.Animations[CurrentAnimation].Duration);
+        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(AnimationBundle.SpriteSheet), Entity.Position, spriteRectangle, Color.White);
     }
 
     public void Initialize()
     {
-        string stateCopy = Animation.CurrentState;
-        if (stateCopy == null)
-        {
-            stateCopy = Animation.AnimationStates.Keys.ToList().First();
-        }
-        Animation.CurrentState = stateCopy;
+        CurrentAnimation ??= AnimationBundle.Animations.Keys.ToList().First();
     }
 
-    public void SetState(string state)
+    public void PlayAnimation(string animationId)
     {
-        Animation.SetState(state);
+        if (animationId != CurrentAnimation)
+        {
+            CurrentTime = 0;
+            CurrentAnimation = animationId;
+        }
     }
 
     public void Update(GameTime gameTime)
@@ -44,7 +43,7 @@ public class AnimatorComponent : IEntityComponent
         if (Entity is IDrawable)
         {
             CurrentTime++;
-            if (CurrentTime > Animation.Duration)
+            if (CurrentTime > AnimationBundle.Animations[CurrentAnimation].Duration)
             {
                 CurrentTime = 0;
             }

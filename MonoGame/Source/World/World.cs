@@ -9,10 +9,11 @@ public class World
 {
     private List<IGameEntity> Entities { get; set; } = new List<IGameEntity>();
     private List<IChunk> Chunks { get; set; } = new List<IChunk>();
+    public Player player;
 
     public void InitWorld()
     {
-        var player = new Player("textures/player", new Vector2(100, 100), 32, 32);
+        player = new Player(new Vector2(0, 0), 32, 32);
         Entities.Add(player);
 
         InitializeChunks();

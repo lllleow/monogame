@@ -7,38 +7,38 @@ using System.IO;
 
 namespace MonoGame;
 
-public static class AnimationRegistry
+public static class AnimationBundleRegistry
 {
-    public static Dictionary<string, Type> Animations { get; private set; } = new Dictionary<string, Type>();
+    public static Dictionary<string, Type> AnimationBundles { get; private set; } = new Dictionary<string, Type>();
 
-    public static void RegisterAnimation(string id, Type tileType)
+    public static void RegisterAnimationBundle(string id, Type tileType)
     {
-        if (!typeof(IAnimation).IsAssignableFrom(tileType))
+        if (!typeof(IAnimationBundle).IsAssignableFrom(tileType))
         {
             throw new ArgumentException("Tile type must implement IAnimation interface", nameof(tileType));
         }
-        Animations.Add(id, tileType);
+        AnimationBundles.Add(id, tileType);
     }
 
-    public static IAnimation GetAnimation(string id)
+    public static IAnimationBundle GetAnimationBundle(string id)
     {
-        Type animationType = Animations[id];
-        IAnimation animation = Activator.CreateInstance(animationType) as IAnimation;
+        Type animationType = AnimationBundles[id];
+        IAnimationBundle animation = Activator.CreateInstance(animationType) as IAnimationBundle;
         return animation;
     }
 
-    public static void LoadAnimationScripts()
+    public static void LoadAnimationBundleScripts()
     {
-        string[] files = FileLoader.LoadAllFilesFromFolder(@"C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\Scripts\Animations");
+        string[] files = FileLoader.LoadAllFilesFromFolder(@"C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\Scripts\AnimationBundles");
         foreach (string file in files)
         {
             string code = File.ReadAllText(file);
-            IAnimation animation = LoadAnimationScript(code);
-            RegisterAnimation(animation.Id, animation.GetType());
+            IAnimationBundle animation = LoadAnimationBundleScript(code);
+            RegisterAnimationBundle(animation.Id, animation.GetType());
         }
     }
 
-    public static IAnimation LoadAnimationScript(string code)
+    public static IAnimationBundle LoadAnimationBundleScript(string code)
     {
         ScriptOptions options = ScriptOptions.Default
             .AddReferences(Assembly.GetExecutingAssembly())
@@ -46,7 +46,7 @@ public static class AnimationRegistry
 
         try
         {
-            IAnimation tile = CSharpScript.EvaluateAsync<IAnimation>(code, options).Result;
+            IAnimationBundle tile = CSharpScript.EvaluateAsync<IAnimationBundle>(code, options).Result;
             return tile;
         }
         catch (CompilationErrorException e)

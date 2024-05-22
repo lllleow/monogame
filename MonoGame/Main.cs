@@ -7,12 +7,18 @@ namespace MonoGame;
 public class Main : Game
 {
     private World world;
+    private const float scaleFactor = 2.5f;
+    private Matrix globalScale = Matrix.CreateScale(scaleFactor, scaleFactor, 1f);
 
     public Main()
     {
         Globals.graphicsDevice = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+        Globals.graphicsDevice.PreferredBackBufferWidth = 640;
+        Globals.graphicsDevice.PreferredBackBufferHeight = 480;
+        Globals.graphicsDevice.PreferMultiSampling = false;
+        Globals.graphicsDevice.ApplyChanges();
     }
 
     protected override void Initialize()
@@ -26,7 +32,7 @@ public class Main : Game
         Globals.spriteBatch = new SpriteBatch(GraphicsDevice);
 
         TileRegistry.LoadTileScripts();
-        AnimationRegistry.LoadAnimationScripts();
+        AnimationBundleRegistry.LoadAnimationBundleScripts();
 
         world = new World();
         world.InitWorld();
@@ -41,11 +47,18 @@ public class Main : Game
         base.Update(gameTime);
     }
 
+    Matrix viewMatrix;
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        Globals.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+
+        Vector2 screenCenter = new Vector2(320, 240);
+        Vector2 translation = screenCenter - world.player.Position * 1.5f;
+        viewMatrix = Matrix.CreateTranslation(new Vector3(translation, 0f));
+
+        Globals.spriteBatch.Begin(transformMatrix: globalScale * viewMatrix, sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+
         world.Draw(Globals.spriteBatch);
         Globals.spriteBatch.End();
 

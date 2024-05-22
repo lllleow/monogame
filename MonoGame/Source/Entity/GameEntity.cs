@@ -18,7 +18,7 @@ public abstract class GameEntity : IGameEntity
         Speed = Vector2.Zero;
     }
 
-    public void Update(GameTime gameTime)
+    public virtual void Update(GameTime gameTime)
     {
         foreach (var component in components)
         {

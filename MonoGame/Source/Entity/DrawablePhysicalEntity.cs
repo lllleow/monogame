@@ -30,7 +30,7 @@ public class DrawablePhysicalEntity : PhysicalEntity, IDrawable
         }
     }
 
-    public void Update(GameTime gameTime)
+    public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
         foreach (var component in components)
