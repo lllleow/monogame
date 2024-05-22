@@ -7,18 +7,22 @@ namespace MonoGame;
 public class Main : Game
 {
     private World world;
-    private const float scaleFactor = 2.5f;
-    private Matrix globalScale = Matrix.CreateScale(scaleFactor, scaleFactor, 1f);
+    private Camera camera;
+    private const int ScreenSizeX = 640;
+    private const int ScreenSizeY = 480;
 
     public Main()
     {
         Globals.graphicsDevice = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+
         Globals.graphicsDevice.PreferredBackBufferWidth = 640;
         Globals.graphicsDevice.PreferredBackBufferHeight = 480;
         Globals.graphicsDevice.PreferMultiSampling = false;
         Globals.graphicsDevice.ApplyChanges();
+
+        camera = new Camera(ScreenSizeX, ScreenSizeY);
     }
 
     protected override void Initialize()
@@ -44,6 +48,8 @@ public class Main : Game
             Exit();
 
         world.Update(gameTime);
+        camera.Follow(world.Player);
+        camera.Update(gameTime);
         base.Update(gameTime);
     }
 
@@ -51,7 +57,7 @@ public class Main : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        Globals.spriteBatch.Begin(transformMatrix: globalScale, sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+        Globals.spriteBatch.Begin(transformMatrix: camera.Transform, sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
         world.Draw(Globals.spriteBatch);
         Globals.spriteBatch.End();
 
