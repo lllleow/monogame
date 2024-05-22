@@ -47,18 +47,11 @@ public class Main : Game
         base.Update(gameTime);
     }
 
-    Matrix viewMatrix;
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-
-        Vector2 screenCenter = new Vector2(320, 240);
-        Vector2 translation = screenCenter - world.player.Position * 1.5f;
-        viewMatrix = Matrix.CreateTranslation(new Vector3(translation, 0f));
-
-        Globals.spriteBatch.Begin(transformMatrix: globalScale * viewMatrix, sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
-
+        Globals.spriteBatch.Begin(transformMatrix: globalScale, sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
         world.Draw(Globals.spriteBatch);
         Globals.spriteBatch.End();
 

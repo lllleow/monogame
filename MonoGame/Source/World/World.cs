@@ -32,10 +32,7 @@ public class World
         DrawWorld();
         foreach (var entity in Entities)
         {
-            if (entity is IDrawable)
-            {
-                (entity as IDrawable).Draw(spriteBatch);
-            }
+            entity.Draw(spriteBatch);
         }
     }
 

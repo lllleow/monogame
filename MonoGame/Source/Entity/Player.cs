@@ -5,16 +5,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MonoGame;
 
-public class Player : DrawablePhysicalEntity
+public class Player : GameEntity
 {
     public Player(Vector2 position, int sizeX, int sizeY)
     {
-        SpritesheetName = "textures/player_spritesheet";
-        TextureX = 0;
-        TextureY = 0;
         Position = position;
-        PixelSizeX = sizeX;
-        PixelSizeY = sizeY;
         Speed = new Vector2(2, 2);
         AddComponent(new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player")));
     }

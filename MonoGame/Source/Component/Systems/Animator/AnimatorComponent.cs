@@ -21,6 +21,7 @@ public class AnimatorComponent : IEntityComponent
     public void Draw(SpriteBatch spriteBatch)
     {
         Rectangle spriteRectangle = AnimationBundle.GetSpriteRectangle(CurrentAnimation, (double)CurrentTime / (double)AnimationBundle.Animations[CurrentAnimation].Duration);
+        Console.Write(spriteRectangle);
         spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(AnimationBundle.SpriteSheet), Entity.Position, spriteRectangle, Color.White);
     }
 
@@ -40,13 +41,10 @@ public class AnimatorComponent : IEntityComponent
 
     public void Update(GameTime gameTime)
     {
-        if (Entity is IDrawable)
+        CurrentTime++;
+        if (CurrentTime > AnimationBundle.Animations[CurrentAnimation].Duration)
         {
-            CurrentTime++;
-            if (CurrentTime > AnimationBundle.Animations[CurrentAnimation].Duration)
-            {
-                CurrentTime = 0;
-            }
+            CurrentTime = 0;
         }
     }
 }

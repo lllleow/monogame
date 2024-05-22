@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame;
 
@@ -23,6 +24,14 @@ public abstract class GameEntity : IGameEntity
         foreach (var component in components)
         {
             component.Update(gameTime);
+        }
+    }
+
+    public virtual void Draw(SpriteBatch spriteBatch)
+    {
+        foreach (var component in components)
+        {
+            component.Draw(spriteBatch);
         }
     }
 

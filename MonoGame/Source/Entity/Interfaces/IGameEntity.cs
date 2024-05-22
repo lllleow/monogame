@@ -11,6 +11,7 @@ public interface IGameEntity
     Vector2 Position { get; set; }
     Vector2 Speed { get; set; }
     void Update(GameTime gameTime);
+    void Draw(SpriteBatch spriteBatch);
     void AddComponent(IEntityComponent component);
     void RemoveComponent(IEntityComponent component);
     T GetFirstComponent<T>();
