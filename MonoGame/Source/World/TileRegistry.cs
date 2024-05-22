@@ -24,7 +24,6 @@ public static class TileRegistry
     {
         Type tileType = Tiles[id];
         ITile tile = Activator.CreateInstance(tileType) as ITile;
-        tile.Name = id;
         return tile;
     }
 

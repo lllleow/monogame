@@ -11,9 +11,9 @@ public interface IGameEntity
     Vector2 Position { get; set; }
     Vector2 Speed { get; set; }
     void Update(GameTime gameTime);
-    void BaseUpdate(GameTime gameTime);
     void AddComponent(IEntityComponent component);
     void RemoveComponent(IEntityComponent component);
     T GetFirstComponent<T>();
     List<T> GetComponents<T>();
+    bool ContainsComponent<T>();
 }

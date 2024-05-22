@@ -7,12 +7,12 @@ namespace MonoGame;
 
 public class World
 {
-    public List<IGameEntity> Entities { get; set; } = new List<IGameEntity>();
-    public List<IChunk> Chunks { get; set; } = new List<IChunk>();
+    private List<IGameEntity> Entities { get; set; } = new List<IGameEntity>();
+    private List<IChunk> Chunks { get; set; } = new List<IChunk>();
 
     public void InitWorld()
     {
-        var player = new Player("textures/player", new Vector2(100, 100), new Vector2(50, 50));
+        var player = new Player("textures/player", new Vector2(100, 100), 32, 32);
         Entities.Add(player);
 
         InitializeChunks();
@@ -22,7 +22,6 @@ public class World
     {
         foreach (var entity in Entities)
         {
-            entity.BaseUpdate(gameTime);
             entity.Update(gameTime);
         }
     }
@@ -35,25 +34,34 @@ public class World
             if (entity is IDrawable)
             {
                 (entity as IDrawable).Draw(spriteBatch);
-                (entity as IDrawable).BaseDraw(spriteBatch);
             }
         }
     }
 
-    public void InitializeChunks()
+    public ITile GetTileAt(int globalX, int globalY)
+    {
+        int chunkX = globalX / Chunk.SizeX;
+        int chunkY = globalY / Chunk.SizeY;
+        int tileX = globalX % Chunk.SizeX;
+        int tileY = globalY % Chunk.SizeY;
+        var chunk = Chunks.Find(c => c.X == chunkX && c.Y == chunkY);
+        return chunk.GetTile(tileX, tileY);
+    }
+
+    private void InitializeChunks()
     {
         for (int x = 0; x < 16; x++)
         {
             for (int y = 0; y < 16; y++)
             {
-                var chunk = new Chunk(x, y);
+                var chunk = new Chunk(this, x, y);
                 chunk.Initialize();
                 Chunks.Add(chunk);
             }
         }
     }
 
-    public void DrawWorld()
+    private void DrawWorld()
     {
         foreach (var chunk in Chunks)
         {

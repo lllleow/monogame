@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "v/Ab3s+FprE=",
+  "dgSpecHash": "j8sXyv/3ncE=",
   "success": true,
   "projectFilePath": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Leonardo\\.nuget\\packages\\dotnetnoise\\1.0.0\\dotnetnoise.1.0.0.nupkg.sha512",
     "C:\\Users\\Leonardo\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\3.3.4\\microsoft.codeanalysis.analyzers.3.3.4.nupkg.sha512",
     "C:\\Users\\Leonardo\\.nuget\\packages\\microsoft.codeanalysis.common\\4.9.2\\microsoft.codeanalysis.common.4.9.2.nupkg.sha512",
     "C:\\Users\\Leonardo\\.nuget\\packages\\microsoft.codeanalysis.csharp\\4.9.2\\microsoft.codeanalysis.csharp.4.9.2.nupkg.sha512",

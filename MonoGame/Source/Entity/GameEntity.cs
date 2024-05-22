@@ -18,12 +18,17 @@ public abstract class GameEntity : IGameEntity
         Speed = Vector2.Zero;
     }
 
-    public abstract void Update(GameTime gameTime);
+    public void Update(GameTime gameTime)
+    {
+        foreach (var component in components)
+        {
+            component.Update(gameTime);
+        }
+    }
 
     public void AddComponent(IEntityComponent component)
     {
         components.Add(component);
-        component.BaseInitialize(this);
         component.Initialize();
     }
 
@@ -42,11 +47,8 @@ public abstract class GameEntity : IGameEntity
         return components.OfType<T>().ToList();
     }
 
-    public void BaseUpdate(GameTime gameTime)
+    public bool ContainsComponent<T>()
     {
-        foreach (var component in components)
-        {
-            component.Update(gameTime);
-        }
+        return components.OfType<T>().Any();
     }
 }

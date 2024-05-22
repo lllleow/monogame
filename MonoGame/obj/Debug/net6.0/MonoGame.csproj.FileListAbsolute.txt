@@ -84,3 +84,4 @@ C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\zh-H
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\player_spritesheet.xnb
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\spritesheet.xnb
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\obj\Debug\net6.0\MonoGame.sourcelink.json
+C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\DotnetNoise.dll

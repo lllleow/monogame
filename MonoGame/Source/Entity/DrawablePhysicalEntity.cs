@@ -6,26 +6,36 @@ namespace MonoGame;
 
 public class DrawablePhysicalEntity : PhysicalEntity, IDrawable
 {
-    public Vector2 Size { get; set; }
+    public int PixelSizeX { get; set; }
+    public int PixelSizeY { get; set; }
     public string SpritesheetName { get; set; }
     public int TextureX { get; set; }
     public int TextureY { get; set; }
 
-    public void BaseDraw(SpriteBatch spriteBatch)
+    public Rectangle GetCurrentSpriteRectangle()
     {
+        return new Rectangle(0, 0, PixelSizeX, PixelSizeY);
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        if (!ContainsComponent<AnimatorComponent>())
+        {
+            spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(SpritesheetName), Position, GetCurrentSpriteRectangle(), Color.White);
+        }
+
         foreach (var component in components)
         {
             component.Draw(spriteBatch);
         }
     }
 
-    public override void Draw(SpriteBatch spriteBatch)
+    public void Update(GameTime gameTime)
     {
-        throw new NotImplementedException();
-    }
-
-    public override void Update(GameTime gameTime)
-    {
-        throw new NotImplementedException();
+        base.Update(gameTime);
+        foreach (var component in components)
+        {
+            component.Update(gameTime);
+        }
     }
 }

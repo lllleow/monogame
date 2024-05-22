@@ -26,6 +26,7 @@ public class Main : Game
         Globals.spriteBatch = new SpriteBatch(GraphicsDevice);
 
         TileRegistry.LoadTileScripts();
+        AnimationRegistry.LoadAnimationScripts();
 
         world = new World();
         world.InitWorld();
