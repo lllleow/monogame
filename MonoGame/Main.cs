@@ -6,7 +6,6 @@ namespace MonoGame;
 
 public class Main : Game
 {
-    private World world;
     private Camera camera;
     private const int ScreenSizeX = 640;
     private const int ScreenSizeY = 480;
@@ -37,9 +36,10 @@ public class Main : Game
 
         TileRegistry.LoadTileScripts();
         AnimationBundleRegistry.LoadAnimationBundleScripts();
+        BiomeRegistry.LoadBiomeScripts();
 
-        world = new World();
-        world.InitWorld();
+        Globals.world = new World();
+        Globals.world.InitWorld();
     }
 
     protected override void Update(GameTime gameTime)
@@ -47,8 +47,8 @@ public class Main : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        world.Update(gameTime);
-        camera.Follow(world.Player);
+        Globals.world.Update(gameTime);
+        camera.Follow(Globals.world.Player);
         camera.Update(gameTime);
         base.Update(gameTime);
     }
@@ -58,7 +58,7 @@ public class Main : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         Globals.spriteBatch.Begin(transformMatrix: camera.Transform, sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
-        world.Draw(Globals.spriteBatch);
+        Globals.world.Draw(Globals.spriteBatch);
         Globals.spriteBatch.End();
 
         base.Draw(gameTime);

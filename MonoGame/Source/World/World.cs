@@ -43,7 +43,15 @@ public class World
         int tileX = globalX % Chunk.SizeX;
         int tileY = globalY % Chunk.SizeY;
         var chunk = Chunks.Find(c => c.X == chunkX && c.Y == chunkY);
-        return chunk.GetTile(tileX, tileY);
+
+        if (chunk != null)
+        {
+            return chunk.GetTile(tileX, tileY);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     private void InitializeChunks()
@@ -53,9 +61,14 @@ public class World
             for (int y = 0; y < 16; y++)
             {
                 var chunk = new Chunk(this, x, y);
-                chunk.Initialize();
+                chunk.Generate();
                 Chunks.Add(chunk);
             }
+        }
+
+        foreach (IChunk chunk in Chunks)
+        {
+            chunk.UpdateTextureCoordinates();
         }
     }
 

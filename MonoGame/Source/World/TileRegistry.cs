@@ -27,6 +27,12 @@ public static class TileRegistry
         return tile;
     }
 
+    public static Type GetTileType(string id)
+    {
+        Type tileType = Tiles[id];
+        return tileType;
+    }
+
     public static void LoadTileScripts()
     {
         string[] files = FileLoader.LoadAllFilesFromFolder(@"C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\Scripts\Tiles");
