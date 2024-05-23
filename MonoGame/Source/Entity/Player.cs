@@ -21,23 +21,31 @@ public class Player : GameEntity
 
         if (state.IsKeyDown(Keys.W))
         {
-            GetFirstComponent<AnimatorComponent>().PlayAnimation("walking_back");
-            this.Position = new Vector2(this.Position.X, this.Position.Y - Speed.Y);
+            if (Move(Direction.TOP, Speed))
+            {
+                GetFirstComponent<AnimatorComponent>().PlayAnimation("walking_back");
+            }
         }
         if (state.IsKeyDown(Keys.A))
         {
-            GetFirstComponent<AnimatorComponent>().PlayAnimation("walking_left");
-            this.Position = new Vector2(this.Position.X - Speed.X, this.Position.Y);
+            if (Move(Direction.LEFT, Speed))
+            {
+                GetFirstComponent<AnimatorComponent>().PlayAnimation("walking_left");
+            }
         }
         if (state.IsKeyDown(Keys.S))
         {
-            GetFirstComponent<AnimatorComponent>().PlayAnimation("walking_front");
-            this.Position = new Vector2(this.Position.X, this.Position.Y + Speed.Y);
+            if (Move(Direction.BOTTOM, Speed))
+            {
+                GetFirstComponent<AnimatorComponent>().PlayAnimation("walking_front");
+            }
         }
         if (state.IsKeyDown(Keys.D))
         {
-            GetFirstComponent<AnimatorComponent>().PlayAnimation("walking_right");
-            this.Position = new Vector2(this.Position.X + Speed.X, this.Position.Y);
+            if (Move(Direction.RIGHT, Speed))
+            {
+                GetFirstComponent<AnimatorComponent>().PlayAnimation("walking_right");
+            }
         }
 
         if (state.IsKeyUp(Keys.W) && state.IsKeyUp(Keys.A) && state.IsKeyUp(Keys.S) && state.IsKeyUp(Keys.D))

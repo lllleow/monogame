@@ -14,6 +14,7 @@ public interface ITile
     public bool IsConnectingTexture { get; set; }
     public int PosX { get; set; }
     public int PosY { get; set; }
+    public bool Walkable { get; set; }
     public bool DoubleTextureSize { get; set; }
     public void UpdateTextureCoordinates();
     public void Initialize(int x, int y);

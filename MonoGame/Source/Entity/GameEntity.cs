@@ -60,4 +60,48 @@ public abstract class GameEntity : IGameEntity
     {
         return components.OfType<T>().Any();
     }
+
+    public Vector2 GetDisplacement(Direction direction, Vector2 speed)
+    {
+        switch (direction)
+        {
+            case Direction.TOP:
+                return new Vector2(0, -speed.Y);
+            case Direction.BOTTOM:
+                return new Vector2(0, speed.Y);
+            case Direction.LEFT:
+                return new Vector2(-speed.X, 0);
+            case Direction.RIGHT:
+                return new Vector2(speed.X, 0);
+            case Direction.LEFT_TOP:
+                return new Vector2(-speed.X, -speed.Y);
+            case Direction.RIGHT_TOP:
+                return new Vector2(speed.X, -speed.Y);
+            case Direction.LEFT_BOTTOM:
+                return new Vector2(-speed.X, speed.Y);
+            case Direction.RIGHT_BOTTOM:
+                return new Vector2(speed.X, speed.Y);
+            default:
+                return Vector2.Zero;
+        }
+    }
+
+    public bool Move(Direction direction, Vector2 speed)
+    {
+        Vector2 displacement = GetDisplacement(direction, speed);
+        Vector2 newPosition = Position + displacement;
+
+        if (IsValidPosition(newPosition))
+        {
+            Position = newPosition;
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool IsValidPosition(Vector2 position)
+    {
+        return true;
+    }
 }

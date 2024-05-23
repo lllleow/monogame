@@ -8,6 +8,7 @@ public class Chunk : IChunk
 {
     public Dictionary<int, ITile[,]> Tiles { get; set; }
     public BiomeGenerationConditions[,] Biome { get; set; }
+    public bool[,] WalkableTiles { get; set; }
     public int X { get; set; }
     public int Y { get; set; }
     public static int SizeX { get; set; } = 16;
@@ -33,6 +34,7 @@ public class Chunk : IChunk
     }
     public void Generate()
     {
+        WalkableTiles = new bool[SizeX, SizeY];
         Tiles[0] = new ITile[SizeX, SizeY];
         Tiles[1] = new ITile[SizeX, SizeY];
         Tiles[2] = new ITile[SizeX, SizeY];
@@ -57,7 +59,8 @@ public class Chunk : IChunk
                 IBiome biome = GetCurrentBiome(conditions);
                 if (biome != null)
                 {
-                    SetTile(biome.SampleBiomeTile(chunkX, chunkY), 1, chunkX, chunkY);
+                    ITile tile = SetTile(biome.SampleBiomeTile(chunkX, chunkY), 1, chunkX, chunkY);
+                    WalkableTiles[chunkX, chunkY] = tile.Walkable;
                 }
             }
         }

@@ -19,6 +19,7 @@ public class Tile : ITile
     public int PosX { get; set; }
     public int PosY { get; set; }
     public bool DoubleTextureSize { get; set; } = false;
+    public bool Walkable { get; set; }
 
     public void Initialize(int x, int y)
     {

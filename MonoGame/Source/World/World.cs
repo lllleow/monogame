@@ -36,6 +36,13 @@ public class World
         }
     }
 
+    public ITile GetTileAtPosition(Vector2 worldPosition)
+    {
+        int globalX = (int)(worldPosition.X / Chunk.SizeX);
+        int globalY = (int)(worldPosition.Y / Chunk.SizeY);
+        return GetTileAt(0, globalX, globalY);
+    }
+
     public ITile GetTileAt(int layer, int globalX, int globalY)
     {
         int chunkX = globalX / Chunk.SizeX;
