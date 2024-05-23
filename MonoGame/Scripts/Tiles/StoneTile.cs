@@ -9,6 +9,7 @@ public class StoneTile : Tile
         SpritesheetName = "textures/spritesheet";
         TextureX = 1;
         TextureY = 0;
+        DoubleTextureSize = true;
     }
 }
 

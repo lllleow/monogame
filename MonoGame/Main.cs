@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -9,6 +10,7 @@ public class Main : Game
     private Camera camera;
     private const int ScreenSizeX = 640;
     private const int ScreenSizeY = 480;
+    private FrameCounter _frameCounter = new FrameCounter();
 
     public Main()
     {
@@ -55,6 +57,12 @@ public class Main : Game
 
     protected override void Draw(GameTime gameTime)
     {
+        var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        _frameCounter.Update(deltaTime);
+
+        var fps = string.Format("FPS: {0}", _frameCounter.AverageFramesPerSecond);
+        Console.Write(fps);
+
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         Globals.spriteBatch.Begin(transformMatrix: camera.Transform, sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);

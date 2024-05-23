@@ -36,7 +36,7 @@ public class World
         }
     }
 
-    public ITile GetTileAt(int globalX, int globalY)
+    public ITile GetTileAt(int layer, int globalX, int globalY)
     {
         int chunkX = globalX / Chunk.SizeX;
         int chunkY = globalY / Chunk.SizeY;
@@ -46,7 +46,7 @@ public class World
 
         if (chunk != null)
         {
-            return chunk.GetTile(tileX, tileY);
+            return chunk.GetTile(layer: layer, x: tileX, y: tileY);
         }
         else
         {

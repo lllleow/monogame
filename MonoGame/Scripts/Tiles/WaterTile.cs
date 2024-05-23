@@ -9,6 +9,7 @@ public class WaterTile : Tile
         SpritesheetName = "textures/spritesheet";
         TextureX = 2;
         TextureY = 0;
+        DoubleTextureSize = true;
     }
 }
 

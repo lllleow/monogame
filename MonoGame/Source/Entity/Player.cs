@@ -10,7 +10,7 @@ public class Player : GameEntity
     public Player(Vector2 position, int sizeX, int sizeY)
     {
         Position = position;
-        Speed = new Vector2(10, 10);
+        Speed = new Vector2(5, 5);
         AddComponent(new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player")));
     }
 

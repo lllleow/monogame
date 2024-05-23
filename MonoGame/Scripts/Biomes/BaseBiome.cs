@@ -4,14 +4,14 @@ public class BaseBiome : IBiome
 {
     public string Id { get; set; }
     public string Name { get; set; }
-    public double Rarity { get; set; }
+    public bool Enabled { get; set; }
     public BiomeGenerationConditions BiomeGenerationConditions { get; set; }
 
     public BaseBiome()
     {
         Id = "base.biome";
         Name = "Base Biome";
-        Rarity = 0;
+        Enabled = true;
         BiomeGenerationConditions = new BiomeGenerationConditions(temperatureThreshold: 1, elevationThreshold: 0.5, urbanizationThreshold: 1, radiationThreshold: 1);
     }
 

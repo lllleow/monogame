@@ -18,6 +18,7 @@ public class Tile : ITile
     public static int PixelSizeY { get; set; } = 16;
     public int PosX { get; set; }
     public int PosY { get; set; }
+    public bool DoubleTextureSize { get; set; } = false;
 
     public void Initialize(int x, int y)
     {
@@ -27,14 +28,14 @@ public class Tile : ITile
 
     public void UpdateTextureCoordinates()
     {
-        ITile left = Globals.world.GetTileAt(PosX - 1, PosY);
-        ITile left_top = Globals.world.GetTileAt(PosX - 1, PosY + 1);
-        ITile left_bottom = Globals.world.GetTileAt(PosX - 1, PosY - 1);
-        ITile right = Globals.world.GetTileAt(PosX + 1, PosY);
-        ITile right_top = Globals.world.GetTileAt(PosX + 1, PosY + 1);
-        ITile right_bottom = Globals.world.GetTileAt(PosX + 1, PosY - 1);
-        ITile up = Globals.world.GetTileAt(PosX, PosY - 1);
-        ITile down = Globals.world.GetTileAt(PosX, PosY + 1);
+        ITile left = Globals.world.GetTileAt(1, PosX - 1, PosY);
+        ITile left_top = Globals.world.GetTileAt(1, PosX - 1, PosY + 1);
+        ITile left_bottom = Globals.world.GetTileAt(1, PosX - 1, PosY - 1);
+        ITile right = Globals.world.GetTileAt(1, PosX + 1, PosY);
+        ITile right_top = Globals.world.GetTileAt(1, PosX + 1, PosY + 1);
+        ITile right_bottom = Globals.world.GetTileAt(1, PosX + 1, PosY - 1);
+        ITile up = Globals.world.GetTileAt(1, PosX, PosY - 1);
+        ITile down = Globals.world.GetTileAt(1, PosX, PosY + 1);
 
         if (!IsSameType(left) && !IsSameType(right) && !IsSameType(up) && !IsSameType(down))
         {

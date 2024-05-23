@@ -21,7 +21,6 @@ public class AnimatorComponent : IEntityComponent
     public void Draw(SpriteBatch spriteBatch)
     {
         Rectangle spriteRectangle = AnimationBundle.GetSpriteRectangle(CurrentAnimation, (double)CurrentTime / (double)AnimationBundle.Animations[CurrentAnimation].Duration);
-        Console.Write(spriteRectangle);
         spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(AnimationBundle.SpriteSheet), Entity.Position, spriteRectangle, Color.White);
     }
 

@@ -1,11 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame;
 
 public class Chunk : IChunk
 {
-    public ITile[,] Tiles { get; set; }
+    public Dictionary<int, ITile[,]> Tiles { get; set; }
     public BiomeGenerationConditions[,] Biome { get; set; }
     public int X { get; set; }
     public int Y { get; set; }
@@ -17,27 +18,32 @@ public class Chunk : IChunk
     private UrbanizationSampler urbanizationSampler = new UrbanizationSampler();
     private RadiationSampler radiationSampler = new RadiationSampler();
 
-    public Chunk(World world, int X, int Y)
+    public Chunk(World world, int x, int y)
     {
-        this.X = X;
-        this.Y = Y;
-        this.World = world;
+        X = x;
+        Y = y;
+        World = world;
+        Tiles = new Dictionary<int, ITile[,]>();
     }
 
-    public ITile GetTile(int x, int y)
+    public ITile GetTile(int layer, int x, int y)
     {
         if (x >= SizeX || y >= SizeY || x < 0 || y < 0) return null;
-        return Tiles[x, y];
+        return Tiles[layer][x, y];
     }
     public void Generate()
     {
-        Tiles = new ITile[SizeX, SizeY];
+        Tiles[0] = new ITile[SizeX, SizeY];
+        Tiles[1] = new ITile[SizeX, SizeY];
+        Tiles[2] = new ITile[SizeX, SizeY];
 
         Biome = new BiomeGenerationConditions[SizeX, SizeY];
         for (int chunkX = 0; chunkX < SizeX; chunkX++)
         {
             for (int chunkY = 0; chunkY < SizeY; chunkY++)
             {
+                SetTile("base.water", 0, chunkX, chunkY);
+
                 Vector2 worldPosition = GetWorldPosition(chunkX, chunkY);
 
                 double temperature = temperatureSampler.Sample(worldPosition.X, worldPosition.Y);
@@ -48,7 +54,11 @@ public class Chunk : IChunk
                 BiomeGenerationConditions conditions = new BiomeGenerationConditions(temperature, elevation, urbanization, radiation);
                 Biome[chunkX, chunkY] = conditions;
 
-                SetTile(GetCurrentBiome(conditions).SampleBiomeTile(chunkX, chunkY), chunkX, chunkY);
+                IBiome biome = GetCurrentBiome(conditions);
+                if (biome != null)
+                {
+                    SetTile(biome.SampleBiomeTile(chunkX, chunkY), 1, chunkX, chunkY);
+                }
             }
         }
     }
@@ -58,12 +68,13 @@ public class Chunk : IChunk
         foreach (var biomeEntry in BiomeRegistry.Biomes)
         {
             IBiome biomeInstance = BiomeRegistry.GetBiome(biomeEntry.Key);
-            if (biomeInstance != null && conditions.ElevationThreshold < biomeInstance.BiomeGenerationConditions.ElevationThreshold)
+            if (biomeInstance != null && biomeInstance.Enabled && conditions.ElevationThreshold < biomeInstance.BiomeGenerationConditions.ElevationThreshold)
             {
                 return biomeInstance;
             }
         }
-        return BiomeRegistry.GetBiome("base.biome.ocean");
+
+        return null;
     }
 
     public Vector2 GetWorldPosition(int x, int y)
@@ -73,12 +84,12 @@ public class Chunk : IChunk
         return new Vector2(worldX, worldY);
     }
 
-    public ITile SetTile(string id, int x, int y)
+    public ITile SetTile(string id, int layer, int x, int y)
     {
         ITile tile = TileRegistry.GetTile(id);
         Vector2 worldPosition = GetWorldPosition(x, y);
-        tile.Initialize((int) worldPosition.X, (int) worldPosition.Y);
-        Tiles[x, y] = tile;
+        tile.Initialize((int)worldPosition.X, (int)worldPosition.Y);
+        Tiles[layer][x, y] = tile;
         return tile;
     }
 
@@ -101,7 +112,7 @@ public class Chunk : IChunk
         {
             for (int y = 0; y < SizeY; y++)
             {
-                ITile tile = GetTile(x, y);
+                ITile tile = GetTile(1, x, y);
                 if (tile != null)
                 {
                     tile.UpdateTextureCoordinates();
@@ -115,7 +126,7 @@ public class Chunk : IChunk
         {
             for (int y = 0; y < SizeY; y++)
             {
-                ITile tile = GetTile(x, y);
+                ITile tile = GetTile(1, x, y);
                 if (tile != null)
                 {
                     for (int X = -1; X <= 1; X++)
@@ -128,7 +139,7 @@ public class Chunk : IChunk
                             if (neighborX > 0 && neighborY > 0)
                             {
                                 Vector2 worldPosition = GetWorldPosition(neighborX, neighborY);
-                                ITile neighbor = Globals.world.GetTileAt((int)worldPosition.X, (int)worldPosition.Y);
+                                ITile neighbor = Globals.world.GetTileAt(1, (int)worldPosition.X, (int)worldPosition.Y);
 
                                 if (neighbor != null)
                                 {
@@ -144,16 +155,19 @@ public class Chunk : IChunk
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        for (int chunkX = 0; chunkX < SizeX; chunkX++)
+        foreach (var layer in Tiles)
         {
-            for (int chunkY = 0; chunkY < SizeY; chunkY++)
+            for (int chunkX = 0; chunkX < SizeX; chunkX++)
             {
-                var tile = GetTile(chunkX, chunkY);
-                if (tile != null)
+                for (int chunkY = 0; chunkY < SizeY; chunkY++)
                 {
-                    int x = (X * SizeX * Tile.PixelSizeX) + (chunkX * tile.SizeX * Tile.PixelSizeX);
-                    int y = (Y * SizeY * Tile.PixelSizeY) + (chunkY * tile.SizeY * Tile.PixelSizeY);
-                    spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(tile.SpritesheetName), new Vector2(x, y), tile.GetSpriteRectangle(), Color.White);
+                    var tile = GetTile(layer.Key, chunkX, chunkY);
+                    if (tile != null)
+                    {
+                        int x = (X * SizeX * Tile.PixelSizeX) + (chunkX * tile.SizeX * Tile.PixelSizeX);
+                        int y = (Y * SizeY * Tile.PixelSizeY) + (chunkY * tile.SizeY * Tile.PixelSizeY);
+                        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(tile.SpritesheetName), new Vector2(x, y), tile.GetSpriteRectangle(), Color.White);
+                    }
                 }
             }
         }
