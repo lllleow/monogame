@@ -130,7 +130,7 @@ public class Chunk : IChunk
     public ITile SetTileAndUpdateNeighbors(string id, int layer, int x, int y)
     {
         ITile tile = SetTile(id, layer, x, y);
-        UpdateNeighborTiles();
+        UpdateNeighborChunks();
         return tile;
     }
 
