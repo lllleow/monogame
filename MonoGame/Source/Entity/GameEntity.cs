@@ -106,6 +106,7 @@ public abstract class GameEntity : IGameEntity
         Position = newPosition;
     }
 
+
     public bool CanMove(Vector2 newPosition, Direction direction)
     {
         AnimatorComponent animator = GetFirstComponent<AnimatorComponent>();
@@ -114,27 +115,5 @@ public abstract class GameEntity : IGameEntity
 
         List<ITile> tiles = Globals.world.GetTilesIntersecting(mask, entityRectangle);
         return tiles.Count == 0;
-        // if (tiles != null && tiles.Count > 0)
-        // {
-        //     foreach (ITile tile in tiles)
-        //     {
-        //         switch (direction)
-        //         {
-        //             case Direction.Up:
-        //                 return tile.CollisionCriteria.Contains(TileCollisionCriteria.PassableBottom);
-        //             case Direction.Down:
-        //                 return tile.CollisionCriteria.Contains(TileCollisionCriteria.PassableTop);
-        //             case Direction.Left:
-        //                 return tile.CollisionCriteria.Contains(TileCollisionCriteria.PassableRight);
-        //             case Direction.Right:
-        //                 return tile.CollisionCriteria.Contains(TileCollisionCriteria.PassableLeft);
-        //         }
-        //     }
-        //     return true;
-        // }
-        // else
-        // {
-        //     return true;
-        // }
     }
 }

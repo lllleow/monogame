@@ -45,7 +45,7 @@ public class CollisionMaskHandler
         }
         catch (Exception e)
         {
-            Console.WriteLine("Error loading texture data for " + spritesheet + " " + region);
+            Console.WriteLine("Error loading texture data for " + spritesheet + " " + region + " " + e);
             return new bool[0, 0];
         }
 
@@ -64,36 +64,29 @@ public class CollisionMaskHandler
 
     public static bool CheckMaskCollision(bool[,] mask1, Rectangle rect1, bool[,] mask2, Rectangle rect2)
     {
-        // Calculate the overlapping region
         int overlapX = Math.Max(rect1.X, rect2.X);
         int overlapY = Math.Max(rect1.Y, rect2.Y);
         int overlapWidth = Math.Min(rect1.X + rect1.Width, rect2.X + rect2.Width) - overlapX;
         int overlapHeight = Math.Min(rect1.Y + rect1.Height, rect2.Y + rect2.Height) - overlapY;
 
-        // Early exit if there is no overlap
         if (overlapWidth <= 0 || overlapHeight <= 0)
             return false;
 
-        // Check every point in the overlapping area
         for (int y = 0; y < overlapHeight; y++)
         {
             for (int x = 0; x < overlapWidth; x++)
             {
-                // Coordinates in masks
                 int mask1X = overlapX - rect1.X + x;
                 int mask1Y = overlapY - rect1.Y + y;
                 int mask2X = overlapX - rect2.X + x;
                 int mask2Y = overlapY - rect2.Y + y;
 
-                // Bounds check for mask1
                 if (mask1X < 0 || mask1Y < 0 || mask1X >= mask1.GetLength(0) || mask1Y >= mask1.GetLength(1))
                     continue;
 
-                // Bounds check for mask2
                 if (mask2X < 0 || mask2Y < 0 || mask2X >= mask2.GetLength(0) || mask2Y >= mask2.GetLength(1))
                     continue;
 
-                // Check if both masks are solid at this point
                 if (mask1[mask1X, mask1Y] && mask2[mask2X, mask2Y])
                     return true;
             }
