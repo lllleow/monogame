@@ -58,6 +58,10 @@ public class Tile : ITile
             {
                 coordinates = new Vector2(4, 1);
             }
+            else if (!left_bottomIsSame)
+            {
+                coordinates = new Vector2(7, 2);
+            }
             else if (!right_topIsSame && !right_bottomIsSame)
             {
                 coordinates = new Vector2(7, 1);
@@ -77,7 +81,11 @@ public class Tile : ITile
         }
         else if (leftIsSame && rightIsSame && downIsSame)
         {
-            if (!right_bottomIsSame)
+            if (!right_bottomIsSame && !left_bottomIsSame)
+            {
+                coordinates = new Vector2(4, 2);
+            }
+            else if (!right_bottomIsSame)
             {
                 coordinates = new Vector2(6, 2);
             }
@@ -103,7 +111,14 @@ public class Tile : ITile
         }
         else if (upIsSame && downIsSame && leftIsSame)
         {
-            coordinates = new Vector2(2, 1);
+            if (!left_bottomIsSame)
+            {
+                coordinates = new Vector2(5, 1);
+            }
+            else
+            {
+                coordinates = new Vector2(2, 1);
+            }
         }
         else if (leftIsSame && rightIsSame && !upIsSame && !downIsSame)
         {
