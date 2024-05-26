@@ -7,9 +7,6 @@ public class StoneTile : Tile
         Id = "base.stone";
         Name = "Stone";
         SpritesheetName = "textures/spritesheet";
-        TextureX = 1;
-        TextureY = 0;
-        DoubleTextureSize = true;
     }
 }
 

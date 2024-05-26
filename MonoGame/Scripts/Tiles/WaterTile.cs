@@ -8,10 +8,8 @@ public class WaterTile : Tile
         Id = "base.water";
         Name = "Water";
         SpritesheetName = "textures/spritesheet";
-        TextureX = 2;
+        TextureX = 0;
         TextureY = 0;
-        DoubleTextureSize = true;
-        CollisionCriteria = new List<TileCollisionCriteria> { };
     }
 }
 

@@ -20,11 +20,10 @@ public class Tile : ITile
     public float Opacity { get; set; } = 1;
     public static int PixelSizeX { get; set; } = 16;
     public static int PixelSizeY { get; set; } = 16;
-    public List<TileCollisionCriteria> CollisionCriteria { get; set; } = new List<TileCollisionCriteria> { TileCollisionCriteria.PassableBottom, TileCollisionCriteria.PassableLeft, TileCollisionCriteria.PassableRight, TileCollisionCriteria.PassableTop };
     public TileTextureType TextureType { get; set; } = TileTextureType.Basic;
+    public CollisionType CollisionType { get; set; } = CollisionType.FullTile;
     public int PosX { get; set; }
     public int PosY { get; set; }
-    public bool DoubleTextureSize { get; set; } = false;
     public bool Walkable { get; set; } = true;
 
     public void Initialize(int x, int y)

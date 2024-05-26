@@ -38,7 +38,6 @@ public class Main : Game
 
         TileRegistry.LoadTileScripts();
         AnimationBundleRegistry.LoadAnimationBundleScripts();
-        BiomeRegistry.LoadBiomeScripts();
 
         Globals.world = new World();
         Globals.world.InitWorld();

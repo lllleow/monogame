@@ -7,8 +7,6 @@ public class GrassTile : Tile
         Id = "base.grass";
         Name = "Grass";
         SpritesheetName = "textures/grass_spritesheet";
-        TextureX = 1;
-        TextureY = 1;
         TextureType = TileTextureType.CompleteConnecting;
         Walkable = false;
     }

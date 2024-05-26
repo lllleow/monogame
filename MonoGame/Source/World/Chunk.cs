@@ -9,16 +9,11 @@ namespace MonoGame;
 public class Chunk : IChunk
 {
     public Dictionary<TileDrawLayer, ITile[,]> Tiles { get; set; }
-    public BiomeGenerationConditions[,] Biome { get; set; }
     public int X { get; set; }
     public int Y { get; set; }
     public static int SizeX { get; set; } = 16;
     public static int SizeY { get; set; } = 16;
     private World World;
-    private TemperatureSampler temperatureSampler = new TemperatureSampler();
-    private ElevationSampler elevationSampler = new ElevationSampler();
-    private UrbanizationSampler urbanizationSampler = new UrbanizationSampler();
-    private RadiationSampler radiationSampler = new RadiationSampler();
 
     public Chunk(World world, int x, int y)
     {
@@ -42,7 +37,6 @@ public class Chunk : IChunk
             Tiles[layer] = new ITile[SizeX, SizeY];
         }
 
-        Biome = new BiomeGenerationConditions[SizeX, SizeY];
         for (int x = 0; x < SizeX; x++)
         {
             for (int y = 0; y < SizeY; y++)
@@ -59,20 +53,6 @@ public class Chunk : IChunk
                 }
             }
         }
-    }
-
-    public IBiome GetCurrentBiome(BiomeGenerationConditions conditions)
-    {
-        foreach (var biomeEntry in BiomeRegistry.Biomes)
-        {
-            IBiome biomeInstance = BiomeRegistry.GetBiome(biomeEntry.Key);
-            if (biomeInstance != null && biomeInstance.Enabled && conditions.ElevationThreshold < biomeInstance.BiomeGenerationConditions.ElevationThreshold)
-            {
-                return biomeInstance;
-            }
-        }
-
-        return null;
     }
 
     public Vector2 GetWorldPosition(int x, int y)
