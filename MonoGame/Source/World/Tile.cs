@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -16,11 +17,11 @@ public class Tile : ITile
     public int SizeY { get; set; } = 1;
     public static int PixelSizeX { get; set; } = 16;
     public static int PixelSizeY { get; set; } = 16;
+    public List<TileCollisionCriteria> CollisionCriteria { get; set; } = new List<TileCollisionCriteria> { TileCollisionCriteria.PassableBottom, TileCollisionCriteria.PassableLeft, TileCollisionCriteria.PassableRight, TileCollisionCriteria.PassableTop };
     public TileTextureType TextureType { get; set; } = TileTextureType.Basic;
     public int PosX { get; set; }
     public int PosY { get; set; }
     public bool DoubleTextureSize { get; set; } = false;
-    public bool Walkable { get; set; }
 
     public void Initialize(int x, int y)
     {
@@ -28,17 +29,17 @@ public class Tile : ITile
         PosY = y;
     }
 
-    public void UpdateTextureCoordinates()
+    public void UpdateTextureCoordinates(int layer)
     {
-        ITile left = Globals.world.GetTileAt(1, PosX - 1, PosY);
-        ITile right = Globals.world.GetTileAt(1, PosX + 1, PosY);
-        ITile up = Globals.world.GetTileAt(1, PosX, PosY - 1);
-        ITile down = Globals.world.GetTileAt(1, PosX, PosY + 1);
+        ITile left = Globals.world.GetTileAt(layer, PosX - 1, PosY);
+        ITile right = Globals.world.GetTileAt(layer, PosX + 1, PosY);
+        ITile up = Globals.world.GetTileAt(layer, PosX, PosY - 1);
+        ITile down = Globals.world.GetTileAt(layer, PosX, PosY + 1);
 
-        ITile left_top = Globals.world.GetTileAt(1, PosX - 1, PosY - 1);
-        ITile right_top = Globals.world.GetTileAt(1, PosX + 1, PosY - 1);
-        ITile left_bottom = Globals.world.GetTileAt(1, PosX - 1, PosY + 1);
-        ITile right_bottom = Globals.world.GetTileAt(1, PosX + 1, PosY + 1);
+        ITile left_top = Globals.world.GetTileAt(layer, PosX - 1, PosY - 1);
+        ITile right_top = Globals.world.GetTileAt(layer, PosX + 1, PosY - 1);
+        ITile left_bottom = Globals.world.GetTileAt(layer, PosX - 1, PosY + 1);
+        ITile right_bottom = Globals.world.GetTileAt(layer, PosX + 1, PosY + 1);
 
         bool leftIsSame = IsSameType(left);
         bool rightIsSame = IsSameType(right);
@@ -262,7 +263,8 @@ public class Tile : ITile
     {
         if (TextureType != TileTextureType.Basic)
         {
-            UpdateTextureCoordinates();
+            UpdateTextureCoordinates(1);
+            UpdateTextureCoordinates(2);
         }
     }
 }

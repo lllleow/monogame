@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame;
 
@@ -14,9 +15,9 @@ public interface ITile
     public TileTextureType TextureType { get; set; }
     public int PosX { get; set; }
     public int PosY { get; set; }
-    public bool Walkable { get; set; }
     public bool DoubleTextureSize { get; set; }
-    public void UpdateTextureCoordinates();
+    public List<TileCollisionCriteria> CollisionCriteria { get; set; }
+    public void UpdateTextureCoordinates(int layer);
     public void Initialize(int x, int y);
     void OnNeighborChanged(ITile neighbor, Direction direction);
     public Rectangle GetSpriteRectangle()

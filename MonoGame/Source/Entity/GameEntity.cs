@@ -65,21 +65,21 @@ public abstract class GameEntity : IGameEntity
     {
         switch (direction)
         {
-            case Direction.TOP:
+            case Direction.Up:
                 return new Vector2(0, -speed.Y);
-            case Direction.BOTTOM:
+            case Direction.Down:
                 return new Vector2(0, speed.Y);
-            case Direction.LEFT:
+            case Direction.Left:
                 return new Vector2(-speed.X, 0);
-            case Direction.RIGHT:
+            case Direction.Right:
                 return new Vector2(speed.X, 0);
-            case Direction.LEFT_TOP:
+            case Direction.LeftUp:
                 return new Vector2(-speed.X, -speed.Y);
-            case Direction.RIGHT_TOP:
+            case Direction.RightUp:
                 return new Vector2(speed.X, -speed.Y);
-            case Direction.LEFT_BOTTOM:
+            case Direction.LeftDown:
                 return new Vector2(-speed.X, speed.Y);
-            case Direction.RIGHT_BOTTOM:
+            case Direction.RightDown:
                 return new Vector2(speed.X, speed.Y);
             default:
                 return Vector2.Zero;
@@ -91,7 +91,7 @@ public abstract class GameEntity : IGameEntity
         Vector2 displacement = GetDisplacement(direction, speed);
         Vector2 newPosition = Position + displacement;
 
-        if (IsValidPosition(newPosition))
+        if (CanMove(newPosition, direction))
         {
             Position = newPosition;
             return true;
@@ -100,8 +100,36 @@ public abstract class GameEntity : IGameEntity
         return false;
     }
 
-    public bool IsValidPosition(Vector2 position)
+    public void Teleport(Vector2 newPosition)
     {
-        return true;
+        Position = newPosition;
+    }
+
+    public bool CanMove(Vector2 newPosition, Direction direction)
+    {
+        Rectangle entityRectangle = new Rectangle((int)newPosition.X, (int)newPosition.Y, 32, 32);
+        List<ITile> tiles = Globals.world.GetTilesIntersecting(entityRectangle);
+        if (tiles != null && tiles.Count > 0)
+        {
+            foreach (ITile tile in tiles)
+            {
+                switch (direction)
+                {
+                    case Direction.Up:
+                        return tile.CollisionCriteria.Contains(TileCollisionCriteria.PassableBottom);
+                    case Direction.Down:
+                        return tile.CollisionCriteria.Contains(TileCollisionCriteria.PassableTop);
+                    case Direction.Left:
+                        return tile.CollisionCriteria.Contains(TileCollisionCriteria.PassableRight);
+                    case Direction.Right:
+                        return tile.CollisionCriteria.Contains(TileCollisionCriteria.PassableLeft);
+                }
+            }
+            return true;
+        }
+        else
+        {
+            return true;
+        }
     }
 }

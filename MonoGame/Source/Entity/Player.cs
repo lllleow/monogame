@@ -14,9 +14,9 @@ public class Player : GameEntity
     public Player(Vector2 position, int sizeX, int sizeY)
     {
         Position = position;
-        Speed = new Vector2(5, 5);
-        // Animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
-        // AddComponent(Animator);
+        Speed = new Vector2(2, 2);
+        Animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
+        AddComponent(Animator);
     }
 
     private void HandleMouseClick(int x, int y)
@@ -34,13 +34,13 @@ public class Player : GameEntity
         int localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
 
         IChunk chunk = Globals.world.CreateOrGetChunk(chunkX, chunkY);
-        if (chunk.GetTile(1, localX, localY) != null)
+        if (chunk.GetTile(2, localX, localY) != null)
         {
-            chunk.DeleteTile(1, localX, localY);
+            chunk.DeleteTile(2, localX, localY);
         }
         else
         {
-            chunk.SetTileAndUpdateNeighbors("base.fence", 1, localX, localY);
+            chunk.SetTileAndUpdateNeighbors("base.pipe", 2, localX, localY);
         }
     }
 
@@ -49,56 +49,52 @@ public class Player : GameEntity
         base.Update(gameTime);
         KeyboardState state = Keyboard.GetState();
 
-        // Update the current mouse state
         currentMouseState = Mouse.GetState();
 
-        // Check if the left mouse button was just pressed
         if (currentMouseState.LeftButton == ButtonState.Pressed && previousMouseState.LeftButton == ButtonState.Released)
         {
             int mouseX = currentMouseState.X;
             int mouseY = currentMouseState.Y;
 
-            // Handle the click event, for example, determining which tile was clicked
             HandleMouseClick(mouseX, mouseY);
         }
 
-        // Update the previous mouse state at the end of Update
         previousMouseState = currentMouseState;
 
         base.Update(gameTime);
 
         if (state.IsKeyDown(Keys.W))
         {
-            if (Move(Direction.TOP, Speed))
+            if (Move(Direction.Up, Speed))
             {
-                // Animator.PlayAnimation("walking_back");
+                Animator.PlayAnimation("walking_back");
             }
         }
         if (state.IsKeyDown(Keys.A))
         {
-            if (Move(Direction.LEFT, Speed))
+            if (Move(Direction.Left, Speed))
             {
-                // Animator.PlayAnimation("walking_left");
+                Animator.PlayAnimation("walking_left");
             }
         }
         if (state.IsKeyDown(Keys.S))
         {
-            if (Move(Direction.BOTTOM, Speed))
+            if (Move(Direction.Down, Speed))
             {
-                // Animator.PlayAnimation("walking_front");
+                Animator.PlayAnimation("walking_front");
             }
         }
         if (state.IsKeyDown(Keys.D))
         {
-            if (Move(Direction.RIGHT, Speed))
+            if (Move(Direction.Right, Speed))
             {
-                // Animator.PlayAnimation("walking_right");
+                Animator.PlayAnimation("walking_right");
             }
         }
 
         if (state.IsKeyUp(Keys.W) && state.IsKeyUp(Keys.A) && state.IsKeyUp(Keys.S) && state.IsKeyUp(Keys.D))
         {
-            // Animator.PlayAnimation("idle");
+            Animator.PlayAnimation("idle");
         }
     }
 }

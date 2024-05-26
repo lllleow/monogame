@@ -8,7 +8,6 @@ public class Chunk : IChunk
 {
     public Dictionary<int, ITile[,]> Tiles { get; set; }
     public BiomeGenerationConditions[,] Biome { get; set; }
-    public bool[,] WalkableTiles { get; set; }
     public int X { get; set; }
     public int Y { get; set; }
     public static int SizeX { get; set; } = 16;
@@ -34,59 +33,18 @@ public class Chunk : IChunk
     }
     public void Generate()
     {
-        WalkableTiles = new bool[SizeX, SizeY];
         Tiles[0] = new ITile[SizeX, SizeY];
         Tiles[1] = new ITile[SizeX, SizeY];
         Tiles[2] = new ITile[SizeX, SizeY];
 
         Biome = new BiomeGenerationConditions[SizeX, SizeY];
-        // bool[,] map = new bool[,]
-        // {
-        //     {true, true, true, false, false, false, false, false},
-        //     {true, false, true, false, false, false, false, false},
-        //     {true, true, true, false, false, false, false, false},
-        //     {false, false, false, false, false, false, false, true},
-        //     {false, true, false, false, true, true, true, true},
-        //     {false, false, false, false, true, true, false, false},
-        //     {false, true, true, true, true, false, false, false},
-        //     {false, false, false, false, false, false, false, false}
-        // };
-
-        // for (int y = 0; y < map.GetLength(0); y++)
-        // {
-        //     for (int x = 0; x < map.GetLength(1); x++)
-        //     {
-        //         if (map[y, x])
-        //         {
-        //             SetTile("base.grass", 1, x, y);
-        //         }
-        //     }
-        // }
-
-        // for (int chunkX = 0; chunkX < SizeX; chunkX++)
-        // {
-        //     for (int chunkY = 0; chunkY < SizeY; chunkY++)
-        //     {
-        //         SetTile(false, 0, chunkX, chunkY);
-
-        //         Vector2 worldPosition = GetWorldPosition(chunkX, chunkY);
-
-        //         double temperature = temperatureSampler.Sample(worldPosition.X, worldPosition.Y);
-        //         double elevation = elevationSampler.Sample(worldPosition.X, worldPosition.Y);
-        //         double urbanization = urbanizationSampler.Sample(worldPosition.X, worldPosition.Y);
-        //         double radiation = radiationSampler.Sample(worldPosition.X, worldPosition.Y);
-
-        //         BiomeGenerationConditions conditions = new BiomeGenerationConditions(temperature, elevation, urbanization, radiation);
-        //         Biome[chunkX, chunkY] = conditions;
-
-        //         IBiome biome = GetCurrentBiome(conditions);
-        //         if (biome != null)
-        //         {
-        //             ITile tile = SetTile(biome.SampleBiomeTile(chunkX, chunkY), 1, chunkX, chunkY);
-        //             WalkableTiles[chunkX, chunkY] = tile.Walkable;
-        //         }
-        //     }
-        // }
+        for (int x = 0; x < SizeX; x++)
+        {
+            for (int y = 0; y < SizeY; y++)
+            {
+                SetTile("base.grass", 1, x, y);
+            }
+        }
     }
 
     public IBiome GetCurrentBiome(BiomeGenerationConditions conditions)
@@ -136,15 +94,15 @@ public class Chunk : IChunk
 
     public Direction GetDirection(int x, int y)
     {
-        if (x == 0 && y == 1) return Direction.TOP;
-        if (x == 0 && y == -1) return Direction.BOTTOM;
-        if (x == 1 && y == 0) return Direction.RIGHT;
-        if (x == 1 && y == 1) return Direction.RIGHT_TOP;
-        if (x == 1 && y == -1) return Direction.RIGHT_BOTTOM;
-        if (x == -1 && y == 0) return Direction.LEFT;
-        if (x == -1 && y == 1) return Direction.LEFT_TOP;
-        if (x == -1 && y == -1) return Direction.LEFT_BOTTOM;
-        return Direction.TOP;
+        if (x == 0 && y == 1) return Direction.Up;
+        if (x == 0 && y == -1) return Direction.Down;
+        if (x == 1 && y == 0) return Direction.Right;
+        if (x == 1 && y == 1) return Direction.RightUp;
+        if (x == 1 && y == -1) return Direction.RightDown;
+        if (x == -1 && y == 0) return Direction.Left;
+        if (x == -1 && y == 1) return Direction.LeftUp;
+        if (x == -1 && y == -1) return Direction.LeftDown;
+        return Direction.Up;
     }
 
     public void UpdateTextureCoordinates()
@@ -158,12 +116,13 @@ public class Chunk : IChunk
                     ITile tile = GetTile(layer.Key, x, y);
                     if (tile != null)
                     {
-                        tile.UpdateTextureCoordinates();
+                        tile.UpdateTextureCoordinates(layer.Key);
                     }
                 }
             }
         }
     }
+
     public void UpdateNeighborTiles()
     {
         for (int x = 0; x < SizeX; x++)

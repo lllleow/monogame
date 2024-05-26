@@ -2,12 +2,12 @@
 
 public enum Direction
 {
-    TOP,
-    BOTTOM,
-    RIGHT,
-    LEFT,
-    RIGHT_TOP,
-    RIGHT_BOTTOM,
-    LEFT_TOP,
-    LEFT_BOTTOM
+    Up,
+    Down,
+    Right,
+    Left,
+    RightUp,
+    RightDown,
+    LeftUp,
+    LeftDown
 }
