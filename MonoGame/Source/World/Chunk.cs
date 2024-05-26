@@ -110,12 +110,27 @@ public class Chunk : IChunk
         return new Vector2(worldX, worldY);
     }
 
+    public void DeleteTile(int layer, int x, int y)
+    {
+        if (x > SizeX || y > SizeY || x < 0 || y < 0) return;
+        Tiles[layer][x, y] = null;
+        UpdateNeighborChunks();
+    }
+
     public ITile SetTile(string id, int layer, int x, int y)
     {
+        if (x > SizeX || y > SizeY || x < 0 || y < 0) return null;
         ITile tile = TileRegistry.GetTile(id);
         Vector2 worldPosition = GetWorldPosition(x, y);
         tile.Initialize((int)worldPosition.X, (int)worldPosition.Y);
         Tiles[layer][x, y] = tile;
+        return tile;
+    }
+
+    public ITile SetTileAndUpdateNeighbors(string id, int layer, int x, int y)
+    {
+        ITile tile = SetTile(id, layer, x, y);
+        UpdateNeighborTiles();
         return tile;
     }
 
@@ -204,5 +219,40 @@ public class Chunk : IChunk
 
     public void Initialize()
     {
+    }
+
+    public void UpdateNeighborChunks()
+    {
+        UpdateTextureCoordinates();
+
+        int chunkXMinus = X - 1;
+        int chunkXPlus = X + 1;
+        int chunkYMinus = Y - 1;
+        int chunkYPlus = Y + 1;
+
+        IChunk chunkMinusX = Globals.world.GetChunkAt(chunkXMinus, Y);
+        IChunk chunkPlusX = Globals.world.GetChunkAt(chunkXPlus, Y);
+        IChunk chunkMinusY = Globals.world.GetChunkAt(X, chunkYMinus);
+        IChunk chunkPlusY = Globals.world.GetChunkAt(X, chunkYPlus);
+
+        if (chunkMinusX != null)
+        {
+            chunkMinusX.UpdateTextureCoordinates();
+        }
+
+        if (chunkPlusX != null)
+        {
+            chunkPlusX.UpdateTextureCoordinates();
+        }
+
+        if (chunkMinusY != null)
+        {
+            chunkMinusY.UpdateTextureCoordinates();
+        }
+
+        if (chunkPlusY != null)
+        {
+            chunkPlusY.UpdateTextureCoordinates();
+        }
     }
 }

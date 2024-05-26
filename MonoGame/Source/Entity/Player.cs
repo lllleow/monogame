@@ -24,14 +24,24 @@ public class Player : GameEntity
         Vector2 worldPosition = new Vector2(x, y);
         worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.camera.Transform));
 
-        int chunkX = (int)Math.Ceiling(worldPosition.X / (Chunk.SizeX * Tile.PixelSizeX));
-        int chunkY = (int)Math.Ceiling(worldPosition.Y / (Chunk.SizeY * Tile.PixelSizeY));
+        int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
+        int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
 
-        int localX = (int)Math.Floor(worldPosition.X % (Chunk.SizeX * Tile.PixelSizeX)) / Tile.PixelSizeX;
-        int localY = (int)Math.Floor(worldPosition.Y % (Chunk.SizeY * Tile.PixelSizeY)) / Tile.PixelSizeY;
+        int chunkX = (int)(worldPosition.X / chunkSizeInPixelsX);
+        int chunkY = (int)(worldPosition.Y / chunkSizeInPixelsY);
+
+        int localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
+        int localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
 
         IChunk chunk = Globals.world.CreateOrGetChunk(chunkX, chunkY);
-        chunk.SetTile("base.grass", 1, Math.Abs(localX), Math.Abs(localY));
+        if (chunk.GetTile(1, localX, localY) != null)
+        {
+            chunk.DeleteTile(1, localX, localY);
+        }
+        else
+        {
+            chunk.SetTileAndUpdateNeighbors("base.grass", 1, localX, localY);
+        }
     }
 
     public override void Update(GameTime gameTime)
