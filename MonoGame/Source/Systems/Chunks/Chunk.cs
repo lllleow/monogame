@@ -3,22 +3,50 @@ using System.Collections.Generic;
 using DotnetNoise;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Source.Systems.Animation;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Scripts;
 using MonoGame.Source.Util.Loaders;
 
 namespace MonoGame.Source.Systems.Chunks;
 
+/// <summary>
+/// Represents a chunk in the game world.
+/// </summary>
 public class Chunk : IChunk
 {
+    /// <summary>
+    /// Gets or sets the dictionary of tiles in the chunk, organized by tile draw layer.
+    /// </summary>
     public Dictionary<TileDrawLayer, ITile[,]> Tiles { get; set; }
+
+    /// <summary>
+    /// Gets or sets the X coordinate of the chunk.
+    /// </summary>
     public int X { get; set; }
+
+    /// <summary>
+    /// Gets or sets the Y coordinate of the chunk.
+    /// </summary>
     public int Y { get; set; }
+
+    /// <summary>
+    /// Gets or sets the size of the chunk in the X direction.
+    /// </summary>
     public static int SizeX { get; set; } = 16;
+
+    /// <summary>
+    /// Gets or sets the size of the chunk in the Y direction.
+    /// </summary>
     public static int SizeY { get; set; } = 16;
+
     private World World;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Chunk"/> class.
+    /// </summary>
+    /// <param name="world">The world that the chunk belongs to.</param>
+    /// <param name="x">The X coordinate of the chunk.</param>
+    /// <param name="y">The Y coordinate of the chunk.</param>
     public Chunk(World world, int x, int y)
     {
         X = x;
@@ -27,12 +55,22 @@ public class Chunk : IChunk
         Tiles = new Dictionary<TileDrawLayer, ITile[,]>();
     }
 
+    /// <summary>
+    /// Gets the tile at the specified position in the chunk.
+    /// </summary>
+    /// <param name="layer">The tile draw layer.</param>
+    /// <param name="x">The X coordinate of the tile.</param>
+    /// <param name="y">The Y coordinate of the tile.</param>
+    /// <returns>The tile at the specified position, or null if no tile exists at that position.</returns>
     public ITile GetTile(TileDrawLayer layer, int x, int y)
     {
         if (x >= SizeX || y >= SizeY || x < 0 || y < 0) return null;
         return Tiles[layer][x, y];
     }
 
+    /// <summary>
+    /// Generates the tiles for the chunk.
+    /// </summary>
     public void Generate()
     {
         FastNoise noise = new FastNoise(seed: new Tuple<int, int>(X, Y).GetHashCode());
@@ -59,6 +97,12 @@ public class Chunk : IChunk
         }
     }
 
+    /// <summary>
+    /// Gets the world position of a tile in the chunk.
+    /// </summary>
+    /// <param name="x">The X coordinate of the tile.</param>
+    /// <param name="y">The Y coordinate of the tile.</param>
+    /// <returns>The world position of the tile.</returns>
     public Vector2 GetWorldPosition(int x, int y)
     {
         int worldX = X * SizeX + x;
@@ -66,82 +110,48 @@ public class Chunk : IChunk
         return new Vector2(worldX, worldY);
     }
 
+    /// <summary>
+    /// Deletes the tile at the specified position in the chunk.
+    /// </summary>
+    /// <param name="layer">The tile draw layer.</param>
+    /// <param name="x">The X coordinate of the tile.</param>
+    /// <param name="y">The Y coordinate of the tile.</param>
     public void DeleteTile(TileDrawLayer layer, int x, int y)
     {
         if (x > SizeX || y > SizeY || x < 0 || y < 0) return;
-        AnimateTileOpacity(Tiles[layer][x, y], 1, 0, 0.15f, null);
-        AnimateTileScale(Tiles[layer][x, y], 1, 0, GetWorldPosition(X, y), 0.15f, () =>
-        {
-            Tiles[layer][x, y] = null;
-            UpdateNeighborChunks();
-        });
+        Tiles[layer][x, y] = null;
+        UpdateNeighborChunks();
     }
 
+    /// <summary>
+    /// Sets the tile at the specified position in the chunk.
+    /// </summary>
+    /// <param name="id">The ID of the tile.</param>
+    /// <param name="layer">The tile draw layer.</param>
+    /// <param name="x">The X coordinate of the tile.</param>
+    /// <param name="y">The Y coordinate of the tile.</param>
+    /// <returns>The tile that was set.</returns>
     public ITile SetTile(string id, TileDrawLayer layer, int x, int y)
     {
         if (x > SizeX || y > SizeY || x < 0 || y < 0) return null;
+
         ITile tile = TileRegistry.GetTile(id);
         Vector2 worldPosition = GetWorldPosition(x, y);
 
         tile.Initialize((int)worldPosition.X, (int)worldPosition.Y);
-        tile.Scale = 0;
-
-
-        AnimateTileOpacity(tile, 0, 1, 0.15f, null);
-        AnimateTileScale(tile, 0, 1, worldPosition, 0.15f, null);
 
         Tiles[layer][x, y] = tile;
         return tile;
     }
 
-    public void AnimateTileScale(ITile tile, int start, int stop, Vector2 startPosition, float duration, Action callback)
-    {
-        float currentTime = 0;
-        tile.Scale = start;
-
-        Action<float> updateScale = _ => { };
-        updateScale = (deltaTime) =>
-         {
-             if (currentTime < duration)
-             {
-                 currentTime += deltaTime;
-                 tile.Scale = MathHelper.Lerp(start, stop, currentTime / duration);
-             }
-             else
-             {
-                 tile.Scale = stop;
-                 AnimationManager.Remove(updateScale);
-                 callback?.Invoke();
-             }
-         };
-
-        AnimationManager.Add(updateScale);
-    }
-
-    public void AnimateTileOpacity(ITile tile, float start, float stop, float duration, Action callback)
-    {
-        float currentTime = 0;
-        tile.Opacity = start;
-
-        Action<float> updateOpacity = _ => { };
-        updateOpacity = (deltaTime) =>
-         {
-             if (currentTime < duration)
-             {
-                 currentTime += deltaTime;
-                 tile.Opacity = MathHelper.Lerp(start, stop, currentTime / duration);
-             }
-             else
-             {
-                 tile.Opacity = stop;
-                 AnimationManager.Remove(updateOpacity);
-                 callback?.Invoke();
-             }
-         };
-
-        AnimationManager.Add(updateOpacity);
-    }
-
+    /// <summary>
+    /// Sets the tile at the specified position in the chunk and updates the neighboring chunks.
+    /// </summary>
+    /// <param name="id">The ID of the tile.</param>
+    /// <param name="layer">The tile draw layer.</param>
+    /// <param name="x">The X coordinate of the tile.</param>
+    /// <param name="y">The Y coordinate of the tile.</param>
+    /// <returns>The tile that was set.</returns>
     public ITile SetTileAndUpdateNeighbors(string id, TileDrawLayer layer, int x, int y)
     {
         ITile tile = SetTile(id, layer, x, y);
@@ -149,6 +159,12 @@ public class Chunk : IChunk
         return tile;
     }
 
+    /// <summary>
+    /// Gets the direction based on the specified X and Y coordinates.
+    /// </summary>
+    /// <param name="x">The X coordinate.</param>
+    /// <param name="y">The Y coordinate.</param>
+    /// <returns>The direction.</returns>
     public Direction GetDirection(int x, int y)
     {
         if (x == 0 && y == 1) return Direction.Up;
@@ -162,6 +178,9 @@ public class Chunk : IChunk
         return Direction.Up;
     }
 
+    /// <summary>
+    /// Updates the texture coordinates of all tiles in the chunk.
+    /// </summary>
     public void UpdateTextureCoordinates()
     {
         for (int x = 0; x < SizeX; x++)
@@ -180,6 +199,10 @@ public class Chunk : IChunk
         }
     }
 
+    /// <summary>
+    /// Updates the neighboring tiles of the specified tile draw layer in the chunk.
+    /// </summary>
+    /// <param name="layer">The tile draw layer.</param>
     public void UpdateNeighborTiles(TileDrawLayer layer)
     {
         for (int x = 0; x < SizeX; x++)
@@ -213,6 +236,10 @@ public class Chunk : IChunk
         }
     }
 
+    /// <summary>
+    /// Draws the tiles in the chunk using the specified sprite batch.
+    /// </summary>
+    /// <param name="spriteBatch">The sprite batch to draw with.</param>
     public void Draw(SpriteBatch spriteBatch)
     {
         foreach (var layer in Tiles)
@@ -250,10 +277,16 @@ public class Chunk : IChunk
         }
     }
 
+    /// <summary>
+    /// Initializes the chunk.
+    /// </summary>
     public void Initialize()
     {
     }
 
+    /// <summary>
+    /// Updates the neighboring chunks of the chunk.
+    /// </summary>
     public void UpdateNeighborChunks()
     {
         UpdateTextureCoordinates();

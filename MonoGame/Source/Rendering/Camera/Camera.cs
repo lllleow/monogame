@@ -4,15 +4,28 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Source.Systems.Entity.Interfaces;
 
 namespace MonoGame.Source.Rendering.Camera;
+
+/// <summary>
+/// Represents a camera used for rendering in a game.
+/// </summary>
 public class Camera
 {
+    /// <summary>
+    /// Gets or sets the transformation matrix of the camera.
+    /// </summary>
     public Matrix Transform { get; set; } = Matrix.Identity;
 
-    float ScaleFactor = 6f;
-    float ScreenSizeX { get; set; }
-    float ScreenSizeY { get; set; }
+    private float ScaleFactor = 6f;
+    private float ScreenSizeX { get; set; }
+    private float ScreenSizeY { get; set; }
+    private float FollowSpeed = 7f;
     private int previousScrollValue;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Camera"/> class.
+    /// </summary>
+    /// <param name="screenSizeX">The width of the screen.</param>
+    /// <param name="screenSizeY">The height of the screen.</param>
     public Camera(int screenSizeX, int screenSizeY)
     {
         ScreenSizeX = screenSizeX;
@@ -20,7 +33,11 @@ public class Camera
         previousScrollValue = Mouse.GetState().ScrollWheelValue;
     }
 
-    private float followSpeed = 7f;
+    /// <summary>
+    /// Adjusts the camera's position to follow a specified game entity.
+    /// </summary>
+    /// <param name="entity">The game entity to follow.</param>
+    /// <param name="gameTime">The current game time.</param>
     public void Follow(IGameEntity entity, GameTime gameTime)
     {
         float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -34,9 +51,13 @@ public class Camera
 
         Matrix targetTransform = Matrix.Multiply(Matrix.CreateScale(ScaleFactor, ScaleFactor, 1f), targetTranslation);
 
-        Transform = Matrix.Lerp(Transform, targetTransform, followSpeed * deltaTime);
+        Transform = Matrix.Lerp(Transform, targetTransform, FollowSpeed * deltaTime);
     }
 
+    /// <summary>
+    /// Updates the camera based on the current game time.
+    /// </summary>
+    /// <param name="gameTime">The current game time.</param>
     public void Update(GameTime gameTime)
     {
         MouseState mouseState = Mouse.GetState();

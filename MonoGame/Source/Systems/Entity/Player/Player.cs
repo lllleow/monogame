@@ -9,12 +9,19 @@ using MonoGame.Source.Systems.Entity;
 using MonoGame.Source.Systems.Scripts;
 namespace MonoGame;
 
+/// <summary>
+/// Represents a player entity in the game.
+/// </summary>
 public class Player : GameEntity
 {
     AnimatorComponent Animator;
     MouseState currentMouseState;
     MouseState previousMouseState;
 
+    /// <summary>
+    /// Represents a player in the game.
+    /// </summary>
+    /// <param name="position">The initial position of the player.</param>
     public Player(Vector2 position)
     {
         Position = position;
@@ -23,6 +30,11 @@ public class Player : GameEntity
         AddComponent(Animator);
     }
 
+    /// <summary>
+    /// Handles the mouse click event at the specified coordinates.
+    /// </summary>
+    /// <param name="x">The x-coordinate of the mouse click.</param>
+    /// <param name="y">The y-coordinate of the mouse click.</param>
     private void HandleMouseClick(int x, int y)
     {
         Vector2 worldPosition = new Vector2(x, y);
@@ -45,10 +57,21 @@ public class Player : GameEntity
         }
         else
         {
-            chunk.SetTileAndUpdateNeighbors("base.fence", TileDrawLayer.Tiles, localX, localY);
+            if (chunk.GetTile(TileDrawLayer.Terrain, localX, localY) != null)
+            {
+                chunk.DeleteTile(TileDrawLayer.Terrain, localX, localY);
+            }
+            else
+            {
+                chunk.SetTileAndUpdateNeighbors("base.fence", TileDrawLayer.Tiles, localX, localY);
+            }
         }
     }
 
+    /// <summary>
+    /// Updates the player's state based on user input and game time.
+    /// </summary>
+    /// <param name="gameTime">The game time.</param>
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);

@@ -3,11 +3,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Source.Rendering.Camera;
-using MonoGame.Source.Systems.Animation;
 using MonoGame.Source.Systems.Scripts;
 
 namespace MonoGame;
 
+/// <summary>
+/// Represents the main game class.
+/// </summary>
 public class Main : Game
 {
     private const int ScreenSizeX = 1080;
@@ -52,7 +54,6 @@ public class Main : Game
         Globals.world.Update(gameTime);
         Globals.camera.Follow(Globals.world.Player, gameTime);
         Globals.camera.Update(gameTime);
-        AnimationManager.Update(gameTime);
         base.Update(gameTime);
     }
 
