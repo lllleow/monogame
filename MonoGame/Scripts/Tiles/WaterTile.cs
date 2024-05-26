@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 public class WaterTile : Tile
 {
@@ -10,6 +11,7 @@ public class WaterTile : Tile
         TextureX = 2;
         TextureY = 0;
         DoubleTextureSize = true;
+        CollisionCriteria = new List<TileCollisionCriteria> { };
     }
 }
 

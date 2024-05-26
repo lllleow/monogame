@@ -88,3 +88,4 @@ C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Dotn
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\grass_spritesheet.xnb
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\fence_spritesheet.xnb
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\pipe_spritesheet.xnb
+C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\player_sprite_2.xnb

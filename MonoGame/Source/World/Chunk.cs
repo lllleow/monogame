@@ -6,7 +6,7 @@ namespace MonoGame;
 
 public class Chunk : IChunk
 {
-    public Dictionary<int, ITile[,]> Tiles { get; set; }
+    public Dictionary<TileDrawLayer, ITile[,]> Tiles { get; set; }
     public BiomeGenerationConditions[,] Biome { get; set; }
     public int X { get; set; }
     public int Y { get; set; }
@@ -23,26 +23,29 @@ public class Chunk : IChunk
         X = x;
         Y = y;
         World = world;
-        Tiles = new Dictionary<int, ITile[,]>();
+        Tiles = new Dictionary<TileDrawLayer, ITile[,]>();
     }
 
-    public ITile GetTile(int layer, int x, int y)
+    public ITile GetTile(TileDrawLayer layer, int x, int y)
     {
         if (x >= SizeX || y >= SizeY || x < 0 || y < 0) return null;
         return Tiles[layer][x, y];
     }
+
     public void Generate()
     {
-        Tiles[0] = new ITile[SizeX, SizeY];
-        Tiles[1] = new ITile[SizeX, SizeY];
-        Tiles[2] = new ITile[SizeX, SizeY];
+        foreach (TileDrawLayer layer in TileDrawLayerPriority.GetPriority())
+        {
+            Tiles[layer] = new ITile[SizeX, SizeY];
+        }
 
         Biome = new BiomeGenerationConditions[SizeX, SizeY];
         for (int x = 0; x < SizeX; x++)
         {
             for (int y = 0; y < SizeY; y++)
             {
-                SetTile("base.grass", 1, x, y);
+                SetTile("base.water", TileDrawLayer.Background, x, y);
+                SetTile("base.grass", TileDrawLayer.Terrain, x, y);
             }
         }
     }
@@ -68,14 +71,14 @@ public class Chunk : IChunk
         return new Vector2(worldX, worldY);
     }
 
-    public void DeleteTile(int layer, int x, int y)
+    public void DeleteTile(TileDrawLayer layer, int x, int y)
     {
         if (x > SizeX || y > SizeY || x < 0 || y < 0) return;
         Tiles[layer][x, y] = null;
         UpdateNeighborChunks();
     }
 
-    public ITile SetTile(string id, int layer, int x, int y)
+    public ITile SetTile(string id, TileDrawLayer layer, int x, int y)
     {
         if (x > SizeX || y > SizeY || x < 0 || y < 0) return null;
         ITile tile = TileRegistry.GetTile(id);
@@ -85,7 +88,7 @@ public class Chunk : IChunk
         return tile;
     }
 
-    public ITile SetTileAndUpdateNeighbors(string id, int layer, int x, int y)
+    public ITile SetTileAndUpdateNeighbors(string id, TileDrawLayer layer, int x, int y)
     {
         ITile tile = SetTile(id, layer, x, y);
         UpdateNeighborChunks();
@@ -123,13 +126,13 @@ public class Chunk : IChunk
         }
     }
 
-    public void UpdateNeighborTiles()
+    public void UpdateNeighborTiles(TileDrawLayer layer)
     {
         for (int x = 0; x < SizeX; x++)
         {
             for (int y = 0; y < SizeY; y++)
             {
-                ITile tile = GetTile(1, x, y);
+                ITile tile = GetTile(layer, x, y);
                 if (tile != null)
                 {
                     for (int X = -1; X <= 1; X++)
@@ -142,11 +145,11 @@ public class Chunk : IChunk
                             if (neighborX > 0 && neighborY > 0)
                             {
                                 Vector2 worldPosition = GetWorldPosition(neighborX, neighborY);
-                                ITile neighbor = Globals.world.GetTileAt(1, (int)worldPosition.X, (int)worldPosition.Y);
+                                ITile neighbor = Globals.world.GetTileAt(layer, (int)worldPosition.X, (int)worldPosition.Y);
 
                                 if (neighbor != null)
                                 {
-                                    neighbor.OnNeighborChanged(tile, GetDirection(X, Y));
+                                    neighbor.OnNeighborChanged(tile, layer, GetDirection(X, Y));
                                 }
                             }
                         }

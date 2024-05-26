@@ -107,29 +107,33 @@ public abstract class GameEntity : IGameEntity
 
     public bool CanMove(Vector2 newPosition, Direction direction)
     {
-        Rectangle entityRectangle = new Rectangle((int)newPosition.X, (int)newPosition.Y, 32, 32);
-        List<ITile> tiles = Globals.world.GetTilesIntersecting(entityRectangle);
-        if (tiles != null && tiles.Count > 0)
-        {
-            foreach (ITile tile in tiles)
-            {
-                switch (direction)
-                {
-                    case Direction.Up:
-                        return tile.CollisionCriteria.Contains(TileCollisionCriteria.PassableBottom);
-                    case Direction.Down:
-                        return tile.CollisionCriteria.Contains(TileCollisionCriteria.PassableTop);
-                    case Direction.Left:
-                        return tile.CollisionCriteria.Contains(TileCollisionCriteria.PassableRight);
-                    case Direction.Right:
-                        return tile.CollisionCriteria.Contains(TileCollisionCriteria.PassableLeft);
-                }
-            }
-            return true;
-        }
-        else
-        {
-            return true;
-        }
+        AnimatorComponent animator = GetFirstComponent<AnimatorComponent>();
+        Rectangle entityRectangle = new Rectangle((int)newPosition.X, (int)newPosition.Y, Tile.PixelSizeX, Tile.PixelSizeY);
+        bool[,] mask = CollisionMaskHandler.GetMaskForTexture(animator.AnimationBundle.SpriteSheet, animator.GetSpriteRectangle());
+
+        List<ITile> tiles = Globals.world.GetTilesIntersecting(mask, entityRectangle);
+        return tiles.Count == 0;
+        // if (tiles != null && tiles.Count > 0)
+        // {
+        //     foreach (ITile tile in tiles)
+        //     {
+        //         switch (direction)
+        //         {
+        //             case Direction.Up:
+        //                 return tile.CollisionCriteria.Contains(TileCollisionCriteria.PassableBottom);
+        //             case Direction.Down:
+        //                 return tile.CollisionCriteria.Contains(TileCollisionCriteria.PassableTop);
+        //             case Direction.Left:
+        //                 return tile.CollisionCriteria.Contains(TileCollisionCriteria.PassableRight);
+        //             case Direction.Right:
+        //                 return tile.CollisionCriteria.Contains(TileCollisionCriteria.PassableLeft);
+        //         }
+        //     }
+        //     return true;
+        // }
+        // else
+        // {
+        //     return true;
+        // }
     }
 }

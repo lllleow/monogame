@@ -20,8 +20,13 @@ public class AnimatorComponent : IEntityComponent
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        Rectangle spriteRectangle = AnimationBundle.GetSpriteRectangle(CurrentAnimation, (double)CurrentTime / (double)AnimationBundle.Animations[CurrentAnimation].Duration);
+        Rectangle spriteRectangle = GetSpriteRectangle();
         spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(AnimationBundle.SpriteSheet), Entity.Position, spriteRectangle, Color.White);
+    }
+
+    public Rectangle GetSpriteRectangle()
+    {
+        return AnimationBundle.GetSpriteRectangle(CurrentAnimation, (double)CurrentTime / (double)AnimationBundle.Animations[CurrentAnimation].Duration);
     }
 
     public void Initialize()

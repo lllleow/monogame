@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -13,10 +14,11 @@ public class World
 
     public void InitWorld()
     {
-        Player = new Player(new Vector2(0, 0), 32, 32);
+        Player = new Player(new Vector2(0, 0));
         Entities.Add(Player);
 
         InitializeChunks();
+        Player.Teleport(new Vector2(500, 500));
     }
 
     public void Update(GameTime gameTime)
@@ -64,7 +66,7 @@ public class World
         return GetTileAt(0, globalX, globalY);
     }
 
-    public ITile SetTileAtPosition(string tile, int layer, int globalX, int globalY)
+    public ITile SetTileAtPosition(string tile, TileDrawLayer layer, int globalX, int globalY)
     {
         int chunkX = globalX / Chunk.SizeX;
         int chunkY = globalY / Chunk.SizeY;
@@ -83,7 +85,7 @@ public class World
         return chunk.SetTile(tile, layer, tileX, tileY);
     }
 
-    public ITile GetTileAt(int layer, int globalX, int globalY)
+    public ITile GetTileAt(TileDrawLayer layer, int globalX, int globalY)
     {
         int chunkX = globalX / Chunk.SizeX;
         int chunkY = globalY / Chunk.SizeY;
@@ -112,7 +114,7 @@ public class World
         if (chunk != null)
         {
             List<ITile> tiles = new List<ITile>();
-            foreach (int layer in chunk.Tiles.Keys)
+            foreach (TileDrawLayer layer in chunk.Tiles.Keys)
             {
                 ITile tile = chunk.GetTile(layer, tileX, tileY);
                 tiles.Add(tile);
@@ -125,7 +127,7 @@ public class World
         }
     }
 
-    public ITile GetTileAtScreenPosition(int layer, int screenX, int screenY)
+    public ITile GetTileAtScreenPosition(TileDrawLayer layer, int screenX, int screenY)
     {
         Vector2 worldPosition = new Vector2(screenX, screenY);
         worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.camera.Transform));
@@ -143,9 +145,9 @@ public class World
         return chunk?.GetTile(layer, localX, localY) ?? null;
     }
 
-    public List<ITile> GetTilesIntersecting(Rectangle rectangle)
+    public List<ITile> GetTilesIntersecting(bool[,] mask, Rectangle rectangle)
     {
-        List<ITile> intersectingTiles = new List<ITile>();
+        Dictionary<string, ITile> intersectingTiles = new Dictionary<string, ITile>();
 
         int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
         int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
@@ -167,14 +169,31 @@ public class World
                     int endTileX = Math.Min(Chunk.SizeX - 1, (rectangle.Right - chunkX * chunkSizeInPixelsX) / Tile.PixelSizeX);
                     int endTileY = Math.Min(Chunk.SizeY - 1, (rectangle.Bottom - chunkY * chunkSizeInPixelsY) / Tile.PixelSizeY);
 
-                    for (int tileX = startTileX; tileX <= endTileX; tileX++)
+                    foreach (TileDrawLayer layer in chunk.Tiles.Keys.Reverse())
                     {
-                        for (int tileY = startTileY; tileY <= endTileY; tileY++)
+                        for (int tileX = startTileX; tileX <= endTileX; tileX++)
                         {
-                            ITile tile = chunk.GetTile(layer: 2, x: tileX, y: tileY);
-                            if (tile != null)
+                            for (int tileY = startTileY; tileY <= endTileY; tileY++)
                             {
-                                intersectingTiles.Add(tile);
+                                ITile tile = chunk.GetTile(layer: layer, x: tileX, y: tileY);
+                                if (tile != null && !tile.Walkable)
+                                {
+                                    Rectangle tileRect = new Rectangle(
+                                        chunkX * chunkSizeInPixelsX + tileX * Tile.PixelSizeX,
+                                        chunkY * chunkSizeInPixelsY + tileY * Tile.PixelSizeY,
+                                        Tile.PixelSizeX,
+                                        Tile.PixelSizeY
+                                    );
+
+                                    bool[,] tileMask = CollisionMaskHandler.GetMaskForTexture(tile.SpritesheetName, tile.GetSpriteRectangle());
+                                    if (CollisionMaskHandler.CheckMaskCollision(tileMask, rectangle, tileMask, tileRect))
+                                    {
+                                        if (!intersectingTiles.ContainsKey(tile.Id))
+                                        {
+                                            intersectingTiles.Add(tile.Id, tile);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -182,7 +201,7 @@ public class World
             }
         }
 
-        return intersectingTiles;
+        return intersectingTiles.Values.ToList();
     }
 
     public IChunk GetChunkAtScreenPosition(int layer, int screenX, int screenY)
@@ -205,9 +224,9 @@ public class World
 
     private void InitializeChunks()
     {
-        for (int x = 0; x < 16; x++)
+        for (int x = 0; x < 4; x++)
         {
-            for (int y = 0; y < 16; y++)
+            for (int y = 0; y < 4; y++)
             {
                 var chunk = new Chunk(this, x, y);
                 chunk.Generate();
@@ -219,8 +238,6 @@ public class World
         {
             chunk.UpdateTextureCoordinates();
         }
-
-        Player.Teleport(new Vector2(1000, 1000));
     }
 
     private void DrawWorld()

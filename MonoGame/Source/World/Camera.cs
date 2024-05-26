@@ -21,7 +21,7 @@ public class Camera
 
     public void Follow(IGameEntity entity)
     {
-        Vector2 entityCenter = new Vector2(entity.Position.X + 32 / 2, entity.Position.Y + 32 / 2);
+        Vector2 entityCenter = new Vector2(entity.Position.X + Tile.PixelSizeX / 2, entity.Position.Y + Tile.PixelSizeY / 2);
         Vector2 screenCenter = new Vector2(ScreenSizeX / 2f, ScreenSizeY / 2f);
         Matrix scale = Matrix.CreateScale(ScaleFactor, ScaleFactor, 1f);
         Matrix translation = Matrix.CreateTranslation(

@@ -5,7 +5,7 @@ public class PlayerMovementAnimationBundle : AnimationBundle
     public PlayerMovementAnimationBundle()
     {
         Id = "base.player";
-        SpriteSheet = "textures/player_spritesheet";
+        SpriteSheet = "textures/player_sprite_2";
 
         CreateAnimation(new Animation("walking_front", 0, 50, 4));
         CreateAnimation(new Animation("walking_back", 1, 50, 4));

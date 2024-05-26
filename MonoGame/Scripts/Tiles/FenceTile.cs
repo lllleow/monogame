@@ -10,6 +10,7 @@ public class FenceTile : Tile
         TextureX = 1;
         TextureY = 1;
         TextureType = TileTextureType.SimpleConnecting;
+        Walkable = false;
     }
 }
 

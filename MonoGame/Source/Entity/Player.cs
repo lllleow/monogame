@@ -11,7 +11,7 @@ public class Player : GameEntity
     MouseState currentMouseState;
     MouseState previousMouseState;
 
-    public Player(Vector2 position, int sizeX, int sizeY)
+    public Player(Vector2 position)
     {
         Position = position;
         Speed = new Vector2(2, 2);
@@ -34,13 +34,14 @@ public class Player : GameEntity
         int localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
 
         IChunk chunk = Globals.world.CreateOrGetChunk(chunkX, chunkY);
-        if (chunk.GetTile(2, localX, localY) != null)
+        
+        if (chunk.GetTile(TileDrawLayer.Tiles, localX, localY) != null)
         {
-            chunk.DeleteTile(2, localX, localY);
+            chunk.DeleteTile(TileDrawLayer.Tiles, localX, localY);
         }
         else
         {
-            chunk.SetTileAndUpdateNeighbors("base.pipe", 2, localX, localY);
+            chunk.SetTileAndUpdateNeighbors("base.fence", TileDrawLayer.Tiles, localX, localY);
         }
     }
 

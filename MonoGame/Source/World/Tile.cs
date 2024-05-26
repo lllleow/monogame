@@ -12,6 +12,7 @@ public class Tile : ITile
     public string SpritesheetName { get; set; }
     public int TextureX { get; set; }
     public int TextureY { get; set; }
+    public Vector2 CurrentTextureIndex { get; set; }
     public Texture2D Texture { get; set; }
     public int SizeX { get; set; } = 1;
     public int SizeY { get; set; } = 1;
@@ -22,6 +23,7 @@ public class Tile : ITile
     public int PosX { get; set; }
     public int PosY { get; set; }
     public bool DoubleTextureSize { get; set; } = false;
+    public bool Walkable { get; set; } = true;
 
     public void Initialize(int x, int y)
     {
@@ -29,7 +31,7 @@ public class Tile : ITile
         PosY = y;
     }
 
-    public void UpdateTextureCoordinates(int layer)
+    public void UpdateTextureCoordinates(TileDrawLayer layer)
     {
         ITile left = Globals.world.GetTileAt(layer, PosX - 1, PosY);
         ITile right = Globals.world.GetTileAt(layer, PosX + 1, PosY);
@@ -250,6 +252,8 @@ public class Tile : ITile
             }
         }
 
+        CurrentTextureIndex = coordinates;
+
         TextureX = (int)coordinates.X;
         TextureY = (int)coordinates.Y;
     }
@@ -259,12 +263,11 @@ public class Tile : ITile
         return tile != null && tile.GetType() == this.GetType();
     }
 
-    public void OnNeighborChanged(ITile neighbor, Direction direction)
+    public void OnNeighborChanged(ITile neighbor, TileDrawLayer layer, Direction direction)
     {
         if (TextureType != TileTextureType.Basic)
         {
-            UpdateTextureCoordinates(1);
-            UpdateTextureCoordinates(2);
+            UpdateTextureCoordinates(layer);
         }
     }
 }

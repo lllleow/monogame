@@ -15,12 +15,18 @@ public class AnimationBundle : IAnimationBundle
 
     public Rectangle GetSpriteRectangle(string animationId, double percentage)
     {
-        return new Rectangle(GetSpritesheetColumnForAnimationPercentage(animationId, percentage) * Tile.PixelSizeX * 2, GetSpritesheetRowForAnimation(animationId) * Tile.PixelSizeY * 2, SizeX * Tile.PixelSizeX * 2, SizeY * Tile.PixelSizeY * 2);
+        Rectangle rect = new Rectangle(GetSpritesheetColumnForAnimationPercentage(animationId, percentage) * Tile.PixelSizeX, GetSpritesheetRowForAnimation(animationId) * Tile.PixelSizeY, SizeX * Tile.PixelSizeX, SizeY * Tile.PixelSizeY);
+        return rect;
     }
 
     public int GetSpritesheetColumnForAnimationPercentage(string animationId, double percentage)
     {
-        return (int)(Animations[animationId].SpriteCount * percentage);
+        int column = (int)(Animations[animationId].SpriteCount * percentage);
+        if (column > Animations[animationId].SpriteCount)
+        {
+            return column - 1;
+        }
+        return column;
     }
 
     public int GetSpritesheetRowForAnimation(string animationName)
