@@ -40,30 +40,53 @@ public class Chunk : IChunk
         Tiles[2] = new ITile[SizeX, SizeY];
 
         Biome = new BiomeGenerationConditions[SizeX, SizeY];
-        for (int chunkX = 0; chunkX < SizeX; chunkX++)
-        {
-            for (int chunkY = 0; chunkY < SizeY; chunkY++)
-            {
-                SetTile("base.water", 0, chunkX, chunkY);
+        // bool[,] map = new bool[,]
+        // {
+        //     {true, true, true, false, false, false, false, false},
+        //     {true, false, true, false, false, false, false, false},
+        //     {true, true, true, false, false, false, false, false},
+        //     {false, false, false, false, false, false, false, true},
+        //     {false, true, false, false, true, true, true, true},
+        //     {false, false, false, false, true, true, false, false},
+        //     {false, true, true, true, true, false, false, false},
+        //     {false, false, false, false, false, false, false, false}
+        // };
 
-                Vector2 worldPosition = GetWorldPosition(chunkX, chunkY);
+        // for (int y = 0; y < map.GetLength(0); y++)
+        // {
+        //     for (int x = 0; x < map.GetLength(1); x++)
+        //     {
+        //         if (map[y, x])
+        //         {
+        //             SetTile("base.grass", 1, x, y);
+        //         }
+        //     }
+        // }
 
-                double temperature = temperatureSampler.Sample(worldPosition.X, worldPosition.Y);
-                double elevation = elevationSampler.Sample(worldPosition.X, worldPosition.Y);
-                double urbanization = urbanizationSampler.Sample(worldPosition.X, worldPosition.Y);
-                double radiation = radiationSampler.Sample(worldPosition.X, worldPosition.Y);
+        // for (int chunkX = 0; chunkX < SizeX; chunkX++)
+        // {
+        //     for (int chunkY = 0; chunkY < SizeY; chunkY++)
+        //     {
+        //         SetTile(false, 0, chunkX, chunkY);
 
-                BiomeGenerationConditions conditions = new BiomeGenerationConditions(temperature, elevation, urbanization, radiation);
-                Biome[chunkX, chunkY] = conditions;
+        //         Vector2 worldPosition = GetWorldPosition(chunkX, chunkY);
 
-                IBiome biome = GetCurrentBiome(conditions);
-                if (biome != null)
-                {
-                    ITile tile = SetTile(biome.SampleBiomeTile(chunkX, chunkY), 1, chunkX, chunkY);
-                    WalkableTiles[chunkX, chunkY] = tile.Walkable;
-                }
-            }
-        }
+        //         double temperature = temperatureSampler.Sample(worldPosition.X, worldPosition.Y);
+        //         double elevation = elevationSampler.Sample(worldPosition.X, worldPosition.Y);
+        //         double urbanization = urbanizationSampler.Sample(worldPosition.X, worldPosition.Y);
+        //         double radiation = radiationSampler.Sample(worldPosition.X, worldPosition.Y);
+
+        //         BiomeGenerationConditions conditions = new BiomeGenerationConditions(temperature, elevation, urbanization, radiation);
+        //         Biome[chunkX, chunkY] = conditions;
+
+        //         IBiome biome = GetCurrentBiome(conditions);
+        //         if (biome != null)
+        //         {
+        //             ITile tile = SetTile(biome.SampleBiomeTile(chunkX, chunkY), 1, chunkX, chunkY);
+        //             WalkableTiles[chunkX, chunkY] = tile.Walkable;
+        //         }
+        //     }
+        // }
     }
 
     public IBiome GetCurrentBiome(BiomeGenerationConditions conditions)
@@ -115,10 +138,13 @@ public class Chunk : IChunk
         {
             for (int y = 0; y < SizeY; y++)
             {
-                ITile tile = GetTile(1, x, y);
-                if (tile != null)
+                foreach (var layer in Tiles)
                 {
-                    tile.UpdateTextureCoordinates();
+                    ITile tile = GetTile(layer.Key, x, y);
+                    if (tile != null)
+                    {
+                        tile.UpdateTextureCoordinates();
+                    }
                 }
             }
         }

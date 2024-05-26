@@ -7,11 +7,31 @@ namespace MonoGame;
 
 public class Player : GameEntity
 {
+    AnimatorComponent Animator;
+    MouseState currentMouseState;
+    MouseState previousMouseState;
+
     public Player(Vector2 position, int sizeX, int sizeY)
     {
         Position = position;
         Speed = new Vector2(5, 5);
-        AddComponent(new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player")));
+        // Animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
+        // AddComponent(Animator);
+    }
+
+    private void HandleMouseClick(int x, int y)
+    {
+        Vector2 worldPosition = new Vector2(x, y);
+        worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.camera.Transform));
+
+        int chunkX = (int)Math.Ceiling(worldPosition.X / (Chunk.SizeX * Tile.PixelSizeX));
+        int chunkY = (int)Math.Ceiling(worldPosition.Y / (Chunk.SizeY * Tile.PixelSizeY));
+
+        int localX = (int)Math.Floor(worldPosition.X % (Chunk.SizeX * Tile.PixelSizeX)) / Tile.PixelSizeX;
+        int localY = (int)Math.Floor(worldPosition.Y % (Chunk.SizeY * Tile.PixelSizeY)) / Tile.PixelSizeY;
+
+        IChunk chunk = Globals.world.CreateOrGetChunk(chunkX, chunkY);
+        chunk.SetTile("base.grass", 1, Math.Abs(localX), Math.Abs(localY));
     }
 
     public override void Update(GameTime gameTime)
@@ -19,38 +39,56 @@ public class Player : GameEntity
         base.Update(gameTime);
         KeyboardState state = Keyboard.GetState();
 
+        // Update the current mouse state
+        currentMouseState = Mouse.GetState();
+
+        // Check if the left mouse button was just pressed
+        if (currentMouseState.LeftButton == ButtonState.Pressed && previousMouseState.LeftButton == ButtonState.Released)
+        {
+            int mouseX = currentMouseState.X;
+            int mouseY = currentMouseState.Y;
+
+            // Handle the click event, for example, determining which tile was clicked
+            HandleMouseClick(mouseX, mouseY);
+        }
+
+        // Update the previous mouse state at the end of Update
+        previousMouseState = currentMouseState;
+
+        base.Update(gameTime);
+
         if (state.IsKeyDown(Keys.W))
         {
             if (Move(Direction.TOP, Speed))
             {
-                GetFirstComponent<AnimatorComponent>().PlayAnimation("walking_back");
+                // Animator.PlayAnimation("walking_back");
             }
         }
         if (state.IsKeyDown(Keys.A))
         {
             if (Move(Direction.LEFT, Speed))
             {
-                GetFirstComponent<AnimatorComponent>().PlayAnimation("walking_left");
+                // Animator.PlayAnimation("walking_left");
             }
         }
         if (state.IsKeyDown(Keys.S))
         {
             if (Move(Direction.BOTTOM, Speed))
             {
-                GetFirstComponent<AnimatorComponent>().PlayAnimation("walking_front");
+                // Animator.PlayAnimation("walking_front");
             }
         }
         if (state.IsKeyDown(Keys.D))
         {
             if (Move(Direction.RIGHT, Speed))
             {
-                GetFirstComponent<AnimatorComponent>().PlayAnimation("walking_right");
+                // Animator.PlayAnimation("walking_right");
             }
         }
 
         if (state.IsKeyUp(Keys.W) && state.IsKeyUp(Keys.A) && state.IsKeyUp(Keys.S) && state.IsKeyUp(Keys.D))
         {
-            GetFirstComponent<AnimatorComponent>().PlayAnimation("idle");
+            // Animator.PlayAnimation("idle");
         }
     }
 }

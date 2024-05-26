@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame;
@@ -30,109 +31,141 @@ public class Tile : ITile
     public void UpdateTextureCoordinates()
     {
         ITile left = Globals.world.GetTileAt(1, PosX - 1, PosY);
-        ITile left_top = Globals.world.GetTileAt(1, PosX - 1, PosY + 1);
-        ITile left_bottom = Globals.world.GetTileAt(1, PosX - 1, PosY - 1);
         ITile right = Globals.world.GetTileAt(1, PosX + 1, PosY);
-        ITile right_top = Globals.world.GetTileAt(1, PosX + 1, PosY + 1);
-        ITile right_bottom = Globals.world.GetTileAt(1, PosX + 1, PosY - 1);
         ITile up = Globals.world.GetTileAt(1, PosX, PosY - 1);
         ITile down = Globals.world.GetTileAt(1, PosX, PosY + 1);
 
-        if (!IsSameType(left) && !IsSameType(right) && !IsSameType(up) && !IsSameType(down))
+        ITile left_top = Globals.world.GetTileAt(1, PosX - 1, PosY - 1);
+        ITile right_top = Globals.world.GetTileAt(1, PosX + 1, PosY - 1);
+        ITile left_bottom = Globals.world.GetTileAt(1, PosX - 1, PosY + 1);
+        ITile right_bottom = Globals.world.GetTileAt(1, PosX + 1, PosY + 1);
+
+        bool leftIsSame = IsSameType(left);
+        bool rightIsSame = IsSameType(right);
+        bool upIsSame = IsSameType(up);
+        bool downIsSame = IsSameType(down);
+
+        bool left_topIsSame = IsSameType(left_top);
+        bool right_topIsSame = IsSameType(right_top);
+        bool left_bottomIsSame = IsSameType(left_bottom);
+        bool right_bottomIsSame = IsSameType(right_bottom);
+
+        Vector2 coordinates;
+
+        if (leftIsSame && rightIsSame && upIsSame && downIsSame)
         {
-            TextureX = 3;
-            TextureY = 2;
+            if (!left_bottomIsSame && !right_bottomIsSame)
+            {
+                coordinates = new Vector2(4, 1);
+            }
+            else if (!right_topIsSame && !right_bottomIsSame)
+            {
+                coordinates = new Vector2(7, 1);
+            }
+            else if (!left_topIsSame && !left_bottomIsSame)
+            {
+                coordinates = new Vector2(7, 2);
+            }
+            else
+            {
+                coordinates = new Vector2(1, 1);
+            }
+        }
+        else if (leftIsSame && rightIsSame && upIsSame)
+        {
+            coordinates = new Vector2(1, 2);
+        }
+        else if (leftIsSame && rightIsSame && downIsSame)
+        {
+            if (!right_bottomIsSame)
+            {
+                coordinates = new Vector2(6, 2);
+            }
+            else if (!left_bottomIsSame)
+            {
+                coordinates = new Vector2(6, 1);
+            }
+            else
+            {
+                coordinates = new Vector2(1, 0);
+            }
+        }
+        else if (upIsSame && downIsSame && rightIsSame)
+        {
+            if (!right_bottomIsSame)
+            {
+                coordinates = new Vector2(5, 2);
+            }
+            else
+            {
+                coordinates = new Vector2(0, 1);
+            }
+        }
+        else if (upIsSame && downIsSame && leftIsSame)
+        {
+            coordinates = new Vector2(2, 1);
+        }
+        else if (leftIsSame && rightIsSame && !upIsSame && !downIsSame)
+        {
+            coordinates = new Vector2(5, 0);
+        }
+        else if (upIsSame && downIsSame)
+        {
+            coordinates = new Vector2(3, 1);
+        }
+        else if (leftIsSame && upIsSame)
+        {
+            coordinates = new Vector2(2, 2);
+        }
+        else if (rightIsSame && upIsSame)
+        {
+            coordinates = new Vector2(0, 2);
+        }
+        else if (leftIsSame && downIsSame)
+        {
+            if (!left_bottomIsSame)
+            {
+                coordinates = new Vector2(9, 2);
+            }
+            else
+            {
+                coordinates = new Vector2(2, 0);
+            }
+        }
+        else if (rightIsSame && downIsSame)
+        {
+            if (!right_bottomIsSame)
+            {
+                coordinates = new Vector2(9, 0);
+            }
+            else
+            {
+                coordinates = new Vector2(0, 0);
+            }
+        }
+        else if (leftIsSame)
+        {
+            coordinates = new Vector2(6, 0);
+        }
+        else if (rightIsSame)
+        {
+            coordinates = new Vector2(4, 0);
+        }
+        else if (upIsSame)
+        {
+            coordinates = new Vector2(3, 2);
+        }
+        else if (downIsSame)
+        {
+            coordinates = new Vector2(3, 0);
+        }
+        else
+        {
+            coordinates = new Vector2(7, 0);
         }
 
-        if (!IsSameType(left) && IsSameType(right) && IsSameType(up) && IsSameType(down))
-        {
-            TextureX = 0;
-            TextureY = 1;
-        }
-
-        if (IsSameType(left) && IsSameType(right) && IsSameType(up) && IsSameType(down))
-        {
-            TextureX = 1;
-            TextureY = 1;
-        }
-
-        if (IsSameType(left) && !IsSameType(right) && !IsSameType(up) && !IsSameType(down))
-        {
-            TextureX = 5;
-            TextureY = 2;
-        }
-
-        if (!IsSameType(left) && IsSameType(right) && !IsSameType(up) && !IsSameType(down))
-        {
-            TextureX = 4;
-            TextureY = 2;
-        }
-
-        if (!IsSameType(left) && !IsSameType(right) && IsSameType(up) && !IsSameType(down))
-        {
-            TextureX = 3;
-            TextureY = 1;
-        }
-
-        if (!IsSameType(left) && !IsSameType(right) && !IsSameType(up) && IsSameType(down))
-        {
-            TextureX = 3;
-            TextureY = 0;
-        }
-
-        if (!IsSameType(left) && IsSameType(right) && !IsSameType(up) && IsSameType(down))
-        {
-            TextureX = 0;
-            TextureY = 0;
-        }
-
-        if (IsSameType(left) && !IsSameType(right) && !IsSameType(up) && IsSameType(down))
-        {
-            TextureX = 2;
-            TextureY = 0;
-        }
-
-        if (!IsSameType(left) && IsSameType(right) && IsSameType(up) && !IsSameType(down))
-        {
-            TextureX = 0;
-            TextureY = 2;
-        }
-
-        if (IsSameType(left) && !IsSameType(right) && IsSameType(up) && !IsSameType(down))
-        {
-            TextureX = 2;
-            TextureY = 2;
-        }
-
-        if (IsSameType(left) && IsSameType(right) && !IsSameType(up) && IsSameType(down))
-        {
-            TextureX = 1;
-            TextureY = 0;
-        }
-
-        if (IsSameType(left) && IsSameType(right) && IsSameType(up) && !IsSameType(down))
-        {
-            TextureX = 1;
-            TextureY = 2;
-        }
-
-        if (IsSameType(left) && !IsSameType(right) && IsSameType(up) && IsSameType(down))
-        {
-            TextureX = 2;
-            TextureY = 1;
-        }
-
-        if (IsSameType(left) && IsSameType(right) && !IsSameType(up) && !IsSameType(down))
-        {
-            TextureX = 6;
-            TextureY = 2;
-        }
-
-        if (!IsSameType(left) && !IsSameType(right) && IsSameType(up) && IsSameType(down))
-        {
-            TextureX = 6;
-            TextureY = 1;
-        }
+        TextureX = (int)coordinates.X;
+        TextureY = (int)coordinates.Y;
     }
 
     private bool IsSameType(ITile tile)

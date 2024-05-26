@@ -41,7 +41,7 @@ public class Camera
         {
             float delta = (currentScrollValue - previousScrollValue) / 120;
             ScaleFactor += delta * 0.1f;
-            ScaleFactor = MathHelper.Clamp(ScaleFactor, 0.1f, 10f);
+            ScaleFactor = MathHelper.Clamp(ScaleFactor, 0.1f, 100f);
 
             previousScrollValue = currentScrollValue;
         }

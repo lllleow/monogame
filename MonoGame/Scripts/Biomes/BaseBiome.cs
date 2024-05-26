@@ -12,7 +12,7 @@ public class BaseBiome : IBiome
         Id = "base.biome";
         Name = "Base Biome";
         Enabled = true;
-        BiomeGenerationConditions = new BiomeGenerationConditions(temperatureThreshold: 1, elevationThreshold: 0.5, urbanizationThreshold: 1, radiationThreshold: 1);
+        BiomeGenerationConditions = new BiomeGenerationConditions(temperatureThreshold: 1, elevationThreshold: 0.6, urbanizationThreshold: 1, radiationThreshold: 1);
     }
 
     public string SampleBiomeTile(int x, int y)

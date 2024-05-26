@@ -7,7 +7,6 @@ namespace MonoGame;
 
 public class Main : Game
 {
-    private Camera camera;
     private const int ScreenSizeX = 640;
     private const int ScreenSizeY = 480;
     private FrameCounter _frameCounter = new FrameCounter();
@@ -23,7 +22,7 @@ public class Main : Game
         Globals.graphicsDevice.PreferMultiSampling = false;
         Globals.graphicsDevice.ApplyChanges();
 
-        camera = new Camera(ScreenSizeX, ScreenSizeY);
+        Globals.camera = new Camera(ScreenSizeX, ScreenSizeY);
     }
 
     protected override void Initialize()
@@ -50,8 +49,8 @@ public class Main : Game
             Exit();
 
         Globals.world.Update(gameTime);
-        camera.Follow(Globals.world.Player);
-        camera.Update(gameTime);
+        Globals.camera.Follow(Globals.world.Player);
+        Globals.camera.Update(gameTime);
         base.Update(gameTime);
     }
 
@@ -61,11 +60,10 @@ public class Main : Game
         _frameCounter.Update(deltaTime);
 
         var fps = string.Format("FPS: {0}", _frameCounter.AverageFramesPerSecond);
-        Console.Write(fps);
 
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        Globals.spriteBatch.Begin(transformMatrix: camera.Transform, sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+        Globals.spriteBatch.Begin(transformMatrix: Globals.camera.Transform, sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
         Globals.world.Draw(Globals.spriteBatch);
         Globals.spriteBatch.End();
 

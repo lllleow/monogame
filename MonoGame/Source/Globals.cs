@@ -9,4 +9,5 @@ public class Globals
     public static SpriteBatch spriteBatch { get; set; }
     public static World world { get; set; }
     public static Microsoft.Xna.Framework.GraphicsDeviceManager graphicsDevice { get; set; }
+    public static Camera camera;
 }
