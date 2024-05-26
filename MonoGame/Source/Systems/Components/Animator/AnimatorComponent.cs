@@ -1,0 +1,58 @@
+﻿using System;
+using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Source.Systems.Animation;
+using MonoGame.Source.Systems.Components.Interfaces;
+using MonoGame.Source.Systems.Entity.Interfaces;
+using MonoGame.Source.Util.Loaders;
+
+namespace MonoGame.Source.Systems.Components.Animator;
+
+public class AnimatorComponent : IEntityComponent
+{
+    int CurrentTime;
+    public IGameEntity Entity { get; set; }
+    public IAnimationBundle AnimationBundle;
+    public string CurrentAnimation;
+
+    public AnimatorComponent(IGameEntity entity, IAnimationBundle animation)
+    {
+        Entity = entity;
+        AnimationBundle = animation;
+    }
+
+    public void Draw(SpriteBatch spriteBatch)
+    {
+        Rectangle spriteRectangle = GetSpriteRectangle();
+        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(AnimationBundle.SpriteSheet), Entity.Position, spriteRectangle, Color.White);
+    }
+
+    public Rectangle GetSpriteRectangle()
+    {
+        return AnimationBundle.GetSpriteRectangle(CurrentAnimation, CurrentTime / (double)AnimationBundle.Animations[CurrentAnimation].Duration);
+    }
+
+    public void Initialize()
+    {
+        CurrentAnimation ??= AnimationBundle.Animations.Keys.ToList().First();
+    }
+
+    public void PlayAnimation(string animationId)
+    {
+        if (animationId != CurrentAnimation)
+        {
+            CurrentTime = 0;
+            CurrentAnimation = animationId;
+        }
+    }
+
+    public void Update(GameTime gameTime)
+    {
+        CurrentTime++;
+        if (CurrentTime > AnimationBundle.Animations[CurrentAnimation].Duration)
+        {
+            CurrentTime = 0;
+        }
+    }
+}

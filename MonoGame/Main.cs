@@ -2,6 +2,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Source.Rendering.Camera;
+using MonoGame.Source.Systems.Animation;
+using MonoGame.Source.Systems.Scripts;
 
 namespace MonoGame;
 
@@ -9,7 +12,6 @@ public class Main : Game
 {
     private const int ScreenSizeX = 1080;
     private const int ScreenSizeY = 720;
-    private FrameCounter _frameCounter = new FrameCounter();
 
     public Main()
     {
@@ -20,7 +22,6 @@ public class Main : Game
         Globals.graphicsDevice.PreferredBackBufferWidth = ScreenSizeX;
         Globals.graphicsDevice.PreferredBackBufferHeight = ScreenSizeY;
         Globals.graphicsDevice.PreferMultiSampling = false;
-        // Globals.graphicsDevice.IsFullScreen = true;
         Globals.graphicsDevice.ApplyChanges();
 
         Globals.camera = new Camera(ScreenSizeX, ScreenSizeY);
@@ -57,11 +58,6 @@ public class Main : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        _frameCounter.Update(deltaTime);
-
-        var fps = string.Format("FPS: {0}", _frameCounter.AverageFramesPerSecond);
-
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         Globals.spriteBatch.Begin(transformMatrix: Globals.camera.Transform, sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
