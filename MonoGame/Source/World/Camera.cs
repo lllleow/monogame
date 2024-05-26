@@ -7,7 +7,7 @@ public class Camera
 {
     public Matrix Transform { get; set; } = Matrix.Identity;
 
-    float ScaleFactor = 2.5f;
+    float ScaleFactor = 6f;
     float ScreenSizeX { get; set; }
     float ScreenSizeY { get; set; }
     private int previousScrollValue;
@@ -19,17 +19,21 @@ public class Camera
         previousScrollValue = Mouse.GetState().ScrollWheelValue;
     }
 
-    public void Follow(IGameEntity entity)
+    private float followSpeed = 7f; 
+    public void Follow(IGameEntity entity, GameTime gameTime)
     {
+        float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
         Vector2 entityCenter = new Vector2(entity.Position.X + Tile.PixelSizeX / 2, entity.Position.Y + Tile.PixelSizeY / 2);
         Vector2 screenCenter = new Vector2(ScreenSizeX / 2f, ScreenSizeY / 2f);
-        Matrix scale = Matrix.CreateScale(ScaleFactor, ScaleFactor, 1f);
-        Matrix translation = Matrix.CreateTranslation(
+
+        Matrix targetTranslation = Matrix.CreateTranslation(
             screenCenter.X - entityCenter.X * ScaleFactor,
             screenCenter.Y - entityCenter.Y * ScaleFactor,
-        0);
+            0);
 
-        Transform = Matrix.Multiply(scale, translation);
+        Matrix targetTransform = Matrix.Multiply(Matrix.CreateScale(ScaleFactor, ScaleFactor, 1f), targetTranslation);
+
+        Transform = Matrix.Lerp(Transform, targetTransform, followSpeed * deltaTime);
     }
 
     public void Update(GameTime gameTime)
@@ -41,7 +45,7 @@ public class Camera
         {
             float delta = (currentScrollValue - previousScrollValue) / 120;
             ScaleFactor += delta * 0.1f;
-            ScaleFactor = MathHelper.Clamp(ScaleFactor, 0.1f, 100f);
+            ScaleFactor = MathHelper.Clamp(ScaleFactor, 0.1f, 10f);
 
             previousScrollValue = currentScrollValue;
         }

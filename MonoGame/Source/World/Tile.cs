@@ -16,6 +16,8 @@ public class Tile : ITile
     public Texture2D Texture { get; set; }
     public int SizeX { get; set; } = 1;
     public int SizeY { get; set; } = 1;
+    public float Scale { get; set; } = 1;
+    public float Opacity { get; set; } = 1;
     public static int PixelSizeX { get; set; } = 16;
     public static int PixelSizeY { get; set; } = 16;
     public List<TileCollisionCriteria> CollisionCriteria { get; set; } = new List<TileCollisionCriteria> { TileCollisionCriteria.PassableBottom, TileCollisionCriteria.PassableLeft, TileCollisionCriteria.PassableRight, TileCollisionCriteria.PassableTop };

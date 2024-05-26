@@ -7,8 +7,8 @@ namespace MonoGame;
 
 public class Main : Game
 {
-    private const int ScreenSizeX = 640;
-    private const int ScreenSizeY = 480;
+    private const int ScreenSizeX = 1080;
+    private const int ScreenSizeY = 720;
     private FrameCounter _frameCounter = new FrameCounter();
 
     public Main()
@@ -17,9 +17,10 @@ public class Main : Game
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
 
-        Globals.graphicsDevice.PreferredBackBufferWidth = 640;
-        Globals.graphicsDevice.PreferredBackBufferHeight = 480;
+        Globals.graphicsDevice.PreferredBackBufferWidth = ScreenSizeX;
+        Globals.graphicsDevice.PreferredBackBufferHeight = ScreenSizeY;
         Globals.graphicsDevice.PreferMultiSampling = false;
+        // Globals.graphicsDevice.IsFullScreen = true;
         Globals.graphicsDevice.ApplyChanges();
 
         Globals.camera = new Camera(ScreenSizeX, ScreenSizeY);
@@ -49,8 +50,9 @@ public class Main : Game
             Exit();
 
         Globals.world.Update(gameTime);
-        Globals.camera.Follow(Globals.world.Player);
+        Globals.camera.Follow(Globals.world.Player, gameTime);
         Globals.camera.Update(gameTime);
+        AnimationManager.Update(gameTime);
         base.Update(gameTime);
     }
 

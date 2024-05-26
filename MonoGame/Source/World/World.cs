@@ -169,7 +169,11 @@ public class World
                     int endTileX = Math.Min(Chunk.SizeX - 1, (rectangle.Right - chunkX * chunkSizeInPixelsX) / Tile.PixelSizeX);
                     int endTileY = Math.Min(Chunk.SizeY - 1, (rectangle.Bottom - chunkY * chunkSizeInPixelsY) / Tile.PixelSizeY);
 
-                    foreach (TileDrawLayer layer in chunk.Tiles.Keys.Reverse())
+                    List<TileDrawLayer> layers = chunk.Tiles.Keys.ToList();
+                    layers.Reverse();
+                    layers.Remove(TileDrawLayer.Background);
+
+                    foreach (TileDrawLayer layer in layers)
                     {
                         for (int tileX = startTileX; tileX <= endTileX; tileX++)
                         {

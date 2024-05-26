@@ -10,6 +10,8 @@ public interface ITile
     public string SpritesheetName { get; set; }
     public int TextureX { get; set; }
     public int TextureY { get; set; }
+    float Scale { get; set; }
+    public float Opacity { get; set; }
     public int SizeX { get; set; }
     public int SizeY { get; set; }
     public TileTextureType TextureType { get; set; }

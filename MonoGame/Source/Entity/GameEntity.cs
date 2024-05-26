@@ -86,10 +86,11 @@ public abstract class GameEntity : IGameEntity
         }
     }
 
-    public bool Move(Direction direction, Vector2 speed)
+    public bool Move(GameTime gameTime, Direction direction, Vector2 speed)
     {
-        Vector2 displacement = GetDisplacement(direction, speed);
-        Vector2 newPosition = Position + displacement;
+        float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        Vector2 displacement = GetDisplacement(direction, speed) * deltaTime * 1000;
+        Vector2 newPosition = Vector2.Lerp(Position, Position + displacement, deltaTime);
 
         if (CanMove(newPosition, direction))
         {

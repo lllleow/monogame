@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using DotnetNoise;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -34,6 +36,7 @@ public class Chunk : IChunk
 
     public void Generate()
     {
+        FastNoise noise = new FastNoise(seed: new Tuple<int, int>(X, Y).GetHashCode());
         foreach (TileDrawLayer layer in TileDrawLayerPriority.GetPriority())
         {
             Tiles[layer] = new ITile[SizeX, SizeY];
@@ -44,8 +47,16 @@ public class Chunk : IChunk
         {
             for (int y = 0; y < SizeY; y++)
             {
-                SetTile("base.water", TileDrawLayer.Background, x, y);
-                SetTile("base.grass", TileDrawLayer.Terrain, x, y);
+                SetTile("base.grass", TileDrawLayer.Background, x, y);
+                noise.Frequency = 0.1f;
+
+                float noiseValue = noise.GetNoise(x, y);
+                float normalizedValue = (noiseValue + 1) / 2;
+
+                if (normalizedValue > 0.7f)
+                {
+                    SetTile("base.grass", TileDrawLayer.Terrain, x, y);
+                }
             }
         }
     }
@@ -74,8 +85,12 @@ public class Chunk : IChunk
     public void DeleteTile(TileDrawLayer layer, int x, int y)
     {
         if (x > SizeX || y > SizeY || x < 0 || y < 0) return;
-        Tiles[layer][x, y] = null;
-        UpdateNeighborChunks();
+        AnimateTileOpacity(Tiles[layer][x, y], 1, 0, 0.15f, null);
+        AnimateTileScale(Tiles[layer][x, y], 1, 0, GetWorldPosition(X, y), 0.15f, () =>
+        {
+            Tiles[layer][x, y] = null;
+            UpdateNeighborChunks();
+        });
     }
 
     public ITile SetTile(string id, TileDrawLayer layer, int x, int y)
@@ -83,9 +98,64 @@ public class Chunk : IChunk
         if (x > SizeX || y > SizeY || x < 0 || y < 0) return null;
         ITile tile = TileRegistry.GetTile(id);
         Vector2 worldPosition = GetWorldPosition(x, y);
+
         tile.Initialize((int)worldPosition.X, (int)worldPosition.Y);
+        tile.Scale = 0;
+
+
+        AnimateTileOpacity(tile, 0, 1, 0.15f, null);
+        AnimateTileScale(tile, 0, 1, worldPosition, 0.15f, null);
+
         Tiles[layer][x, y] = tile;
         return tile;
+    }
+
+    public void AnimateTileScale(ITile tile, int start, int stop, Vector2 startPosition, float duration, Action callback)
+    {
+        float currentTime = 0;
+        tile.Scale = start;
+
+        Action<float> updateScale = _ => { };
+        updateScale = (deltaTime) =>
+         {
+             if (currentTime < duration)
+             {
+                 currentTime += deltaTime;
+                 tile.Scale = MathHelper.Lerp(start, stop, currentTime / duration);
+             }
+             else
+             {
+                 tile.Scale = stop;
+                 AnimationManager.Remove(updateScale);
+                 callback?.Invoke();
+             }
+         };
+
+        AnimationManager.Add(updateScale);
+    }
+
+    public void AnimateTileOpacity(ITile tile, float start, float stop, float duration, Action callback)
+    {
+        float currentTime = 0;
+        tile.Opacity = start;
+
+        Action<float> updateOpacity = _ => { };
+        updateOpacity = (deltaTime) =>
+         {
+             if (currentTime < duration)
+             {
+                 currentTime += deltaTime;
+                 tile.Opacity = MathHelper.Lerp(start, stop, currentTime / duration);
+             }
+             else
+             {
+                 tile.Opacity = stop;
+                 AnimationManager.Remove(updateOpacity);
+                 callback?.Invoke();
+             }
+         };
+
+        AnimationManager.Add(updateOpacity);
     }
 
     public ITile SetTileAndUpdateNeighbors(string id, TileDrawLayer layer, int x, int y)
@@ -172,7 +242,24 @@ public class Chunk : IChunk
                     {
                         int x = (X * SizeX * Tile.PixelSizeX) + (chunkX * tile.SizeX * Tile.PixelSizeX);
                         int y = (Y * SizeY * Tile.PixelSizeY) + (chunkY * tile.SizeY * Tile.PixelSizeY);
-                        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(tile.SpritesheetName), new Vector2(x, y), tile.GetSpriteRectangle(), Color.White);
+
+                        Vector2 scale = new Vector2(tile.Scale, tile.Scale);
+                        Vector2 origin = new Vector2(tile.SizeX * Tile.PixelSizeX / 2, tile.SizeY * Tile.PixelSizeY / 2);
+                        Vector2 position = new Vector2(x, y) + origin;
+
+                        Color colorWithOpacity = Color.White * tile.Opacity;
+
+                        spriteBatch.Draw(
+                            SpritesheetLoader.GetSpritesheet(tile.SpritesheetName),
+                            position,
+                            tile.GetSpriteRectangle(),
+                            colorWithOpacity,
+                            0f,
+                            origin,
+                            scale,
+                            SpriteEffects.None,
+                            0f
+                        );
                     }
                 }
             }

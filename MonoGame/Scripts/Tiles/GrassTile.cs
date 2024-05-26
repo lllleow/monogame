@@ -10,6 +10,7 @@ public class GrassTile : Tile
         TextureX = 1;
         TextureY = 1;
         TextureType = TileTextureType.CompleteConnecting;
+        Walkable = false;
     }
 }
 
