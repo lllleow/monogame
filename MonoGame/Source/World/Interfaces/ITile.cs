@@ -11,7 +11,7 @@ public interface ITile
     public int TextureY { get; set; }
     public int SizeX { get; set; }
     public int SizeY { get; set; }
-    public bool IsConnectingTexture { get; set; }
+    public TileTextureType TextureType { get; set; }
     public int PosX { get; set; }
     public int PosY { get; set; }
     public bool Walkable { get; set; }

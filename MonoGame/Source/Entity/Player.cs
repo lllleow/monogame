@@ -40,7 +40,7 @@ public class Player : GameEntity
         }
         else
         {
-            chunk.SetTileAndUpdateNeighbors("base.grass", 1, localX, localY);
+            chunk.SetTileAndUpdateNeighbors("base.fence", 1, localX, localY);
         }
     }
 

@@ -14,9 +14,9 @@ public class Tile : ITile
     public Texture2D Texture { get; set; }
     public int SizeX { get; set; } = 1;
     public int SizeY { get; set; } = 1;
-    public bool IsConnectingTexture { get; set; } = false;
     public static int PixelSizeX { get; set; } = 16;
     public static int PixelSizeY { get; set; } = 16;
+    public TileTextureType TextureType { get; set; } = TileTextureType.Basic;
     public int PosX { get; set; }
     public int PosY { get; set; }
     public bool DoubleTextureSize { get; set; } = false;
@@ -50,133 +50,203 @@ public class Tile : ITile
         bool left_bottomIsSame = IsSameType(left_bottom);
         bool right_bottomIsSame = IsSameType(right_bottom);
 
-        Vector2 coordinates;
+        Vector2 coordinates = new Vector2(0, 0);
 
-        if (leftIsSame && rightIsSame && upIsSame && downIsSame)
+        if (TextureType == TileTextureType.CompleteConnecting)
         {
-            if (!left_bottomIsSame && !right_bottomIsSame)
+            if (leftIsSame && rightIsSame && upIsSame && downIsSame)
             {
-                coordinates = new Vector2(4, 1);
+                if (!left_bottomIsSame && !right_bottomIsSame)
+                {
+                    coordinates = new Vector2(4, 1);
+                }
+                else if (!left_bottomIsSame)
+                {
+                    coordinates = new Vector2(7, 2);
+                }
+                else if (!right_topIsSame && !right_bottomIsSame)
+                {
+                    coordinates = new Vector2(7, 1);
+                }
+                else if (!left_topIsSame && !left_bottomIsSame)
+                {
+                    coordinates = new Vector2(7, 2);
+                }
+                else
+                {
+                    coordinates = new Vector2(1, 1);
+                }
             }
-            else if (!left_bottomIsSame)
+            else if (leftIsSame && rightIsSame && upIsSame)
             {
-                coordinates = new Vector2(7, 2);
+                coordinates = new Vector2(1, 2);
             }
-            else if (!right_topIsSame && !right_bottomIsSame)
+            else if (leftIsSame && rightIsSame && downIsSame)
             {
-                coordinates = new Vector2(7, 1);
+                if (!right_bottomIsSame && !left_bottomIsSame)
+                {
+                    coordinates = new Vector2(4, 2);
+                }
+                else if (!right_bottomIsSame)
+                {
+                    coordinates = new Vector2(6, 2);
+                }
+                else if (!left_bottomIsSame)
+                {
+                    coordinates = new Vector2(6, 1);
+                }
+                else
+                {
+                    coordinates = new Vector2(1, 0);
+                }
             }
-            else if (!left_topIsSame && !left_bottomIsSame)
+            else if (upIsSame && downIsSame && rightIsSame)
             {
-                coordinates = new Vector2(7, 2);
+                if (!right_bottomIsSame)
+                {
+                    coordinates = new Vector2(5, 2);
+                }
+                else
+                {
+                    coordinates = new Vector2(0, 1);
+                }
+            }
+            else if (upIsSame && downIsSame && leftIsSame)
+            {
+                if (!left_bottomIsSame)
+                {
+                    coordinates = new Vector2(5, 1);
+                }
+                else
+                {
+                    coordinates = new Vector2(2, 1);
+                }
+            }
+            else if (leftIsSame && rightIsSame && !upIsSame && !downIsSame)
+            {
+                coordinates = new Vector2(5, 0);
+            }
+            else if (upIsSame && downIsSame)
+            {
+                coordinates = new Vector2(3, 1);
+            }
+            else if (leftIsSame && upIsSame)
+            {
+                coordinates = new Vector2(2, 2);
+            }
+            else if (rightIsSame && upIsSame)
+            {
+                coordinates = new Vector2(0, 2);
+            }
+            else if (leftIsSame && downIsSame)
+            {
+                if (!left_bottomIsSame)
+                {
+                    coordinates = new Vector2(9, 2);
+                }
+                else
+                {
+                    coordinates = new Vector2(2, 0);
+                }
+            }
+            else if (rightIsSame && downIsSame)
+            {
+                if (!right_bottomIsSame)
+                {
+                    coordinates = new Vector2(9, 0);
+                }
+                else
+                {
+                    coordinates = new Vector2(0, 0);
+                }
+            }
+            else if (leftIsSame)
+            {
+                coordinates = new Vector2(6, 0);
+            }
+            else if (rightIsSame)
+            {
+                coordinates = new Vector2(4, 0);
+            }
+            else if (upIsSame)
+            {
+                coordinates = new Vector2(3, 2);
+            }
+            else if (downIsSame)
+            {
+                coordinates = new Vector2(3, 0);
             }
             else
+            {
+                coordinates = new Vector2(7, 0);
+            }
+        }
+        else if (TextureType == TileTextureType.SimpleConnecting)
+        {
+            if (leftIsSame && rightIsSame && upIsSame && downIsSame)
             {
                 coordinates = new Vector2(1, 1);
             }
-        }
-        else if (leftIsSame && rightIsSame && upIsSame)
-        {
-            coordinates = new Vector2(1, 2);
-        }
-        else if (leftIsSame && rightIsSame && downIsSame)
-        {
-            if (!right_bottomIsSame && !left_bottomIsSame)
+            else if (leftIsSame && rightIsSame && upIsSame)
             {
-                coordinates = new Vector2(4, 2);
+                coordinates = new Vector2(1, 2);
             }
-            else if (!right_bottomIsSame)
-            {
-                coordinates = new Vector2(6, 2);
-            }
-            else if (!left_bottomIsSame)
-            {
-                coordinates = new Vector2(6, 1);
-            }
-            else
+            else if (leftIsSame && rightIsSame && downIsSame)
             {
                 coordinates = new Vector2(1, 0);
             }
-        }
-        else if (upIsSame && downIsSame && rightIsSame)
-        {
-            if (!right_bottomIsSame)
-            {
-                coordinates = new Vector2(5, 2);
-            }
-            else
+            else if (upIsSame && downIsSame && rightIsSame)
             {
                 coordinates = new Vector2(0, 1);
             }
-        }
-        else if (upIsSame && downIsSame && leftIsSame)
-        {
-            if (!left_bottomIsSame)
-            {
-                coordinates = new Vector2(5, 1);
-            }
-            else
+            else if (upIsSame && downIsSame && leftIsSame)
             {
                 coordinates = new Vector2(2, 1);
             }
-        }
-        else if (leftIsSame && rightIsSame && !upIsSame && !downIsSame)
-        {
-            coordinates = new Vector2(5, 0);
-        }
-        else if (upIsSame && downIsSame)
-        {
-            coordinates = new Vector2(3, 1);
-        }
-        else if (leftIsSame && upIsSame)
-        {
-            coordinates = new Vector2(2, 2);
-        }
-        else if (rightIsSame && upIsSame)
-        {
-            coordinates = new Vector2(0, 2);
-        }
-        else if (leftIsSame && downIsSame)
-        {
-            if (!left_bottomIsSame)
+            else if (leftIsSame && rightIsSame && !upIsSame && !downIsSame)
             {
-                coordinates = new Vector2(9, 2);
+                coordinates = new Vector2(5, 0);
             }
-            else
+            else if (upIsSame && downIsSame)
+            {
+                coordinates = new Vector2(3, 1);
+            }
+            else if (leftIsSame && upIsSame)
+            {
+                coordinates = new Vector2(2, 2);
+            }
+            else if (rightIsSame && upIsSame)
+            {
+                coordinates = new Vector2(0, 2);
+            }
+            else if (leftIsSame && downIsSame)
             {
                 coordinates = new Vector2(2, 0);
             }
-        }
-        else if (rightIsSame && downIsSame)
-        {
-            if (!right_bottomIsSame)
-            {
-                coordinates = new Vector2(9, 0);
-            }
-            else
+            else if (rightIsSame && downIsSame)
             {
                 coordinates = new Vector2(0, 0);
             }
-        }
-        else if (leftIsSame)
-        {
-            coordinates = new Vector2(6, 0);
-        }
-        else if (rightIsSame)
-        {
-            coordinates = new Vector2(4, 0);
-        }
-        else if (upIsSame)
-        {
-            coordinates = new Vector2(3, 2);
-        }
-        else if (downIsSame)
-        {
-            coordinates = new Vector2(3, 0);
-        }
-        else
-        {
-            coordinates = new Vector2(7, 0);
+            else if (leftIsSame)
+            {
+                coordinates = new Vector2(6, 0);
+            }
+            else if (rightIsSame)
+            {
+                coordinates = new Vector2(4, 0);
+            }
+            else if (upIsSame)
+            {
+                coordinates = new Vector2(3, 2);
+            }
+            else if (downIsSame)
+            {
+                coordinates = new Vector2(3, 0);
+            }
+            else
+            {
+                coordinates = new Vector2(7, 0);
+            }
         }
 
         TextureX = (int)coordinates.X;
@@ -190,14 +260,9 @@ public class Tile : ITile
 
     public void OnNeighborChanged(ITile neighbor, Direction direction)
     {
-        if (IsConnectingTexture)
+        if (TextureType != TileTextureType.Basic)
         {
             UpdateTextureCoordinates();
-        }
-        else
-        {
-            TextureX = 1;
-            TextureY = 1;
         }
     }
 }

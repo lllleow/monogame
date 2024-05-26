@@ -9,7 +9,7 @@ public class GrassTile : Tile
         SpritesheetName = "textures/grass_spritesheet";
         TextureX = 1;
         TextureY = 1;
-        IsConnectingTexture = true;
+        TextureType = TileTextureType.CompleteConnecting;
     }
 }
 
