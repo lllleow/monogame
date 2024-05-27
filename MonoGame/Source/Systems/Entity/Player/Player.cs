@@ -36,16 +36,29 @@ public class Player : GameEntity
         AddComponent(SpriteRenderer);
         AddComponent(Animator);
         AddComponent(new PixelBoundsComponent());
-        AddComponent(new CollisionComponent("textures/player_sprite_2_collision_mask"));  
+        AddComponent(new CollisionComponent("textures/player_sprite_2_collision_mask"));
     }
 
     /// <summary>
-    /// Handles the mouse click event at the specified coordinates.
+    /// Handles the mouse click event at the specified coordinates, ensuring it occurs within the window bounds and when the window is active.
     /// </summary>
     /// <param name="x">The x-coordinate of the mouse click.</param>
     /// <param name="y">The y-coordinate of the mouse click.</param>
     private void HandleMouseClick(int x, int y)
     {
+        int windowWidth = Globals.graphicsDevice.PreferredBackBufferWidth; 
+        int windowHeight = Globals.graphicsDevice.PreferredBackBufferHeight; 
+
+        if (!Globals.game.IsActive)
+        {
+            return;
+        }
+
+        if (x < 0 || y < 0 || x >= windowWidth || y >= windowHeight)
+        {
+            return;
+        }
+
         Vector2 worldPosition = new Vector2(x, y);
         worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.camera.Transform));
 

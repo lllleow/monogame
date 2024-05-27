@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.Camera;
@@ -33,4 +34,9 @@ public class Globals
     /// Gets or sets the camera object used for viewing the game world.
     /// </summary>
     public static Camera camera;
+
+    /// <summary>
+    /// Gets or sets the game object.
+    /// </summary>
+    public static Game game;
 }

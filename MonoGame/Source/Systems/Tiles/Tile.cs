@@ -365,13 +365,13 @@ public class Tile : ITile
         {
             foreach (string connectableTile in ConnectableTiles)
             {
-                if (tile.GetType().Name == connectableTile)
+                if (tile.Id == connectableTile)
                 {
                     return true;
                 }
             }
         }
-        
+
         return false;
     }
 

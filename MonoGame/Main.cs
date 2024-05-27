@@ -21,6 +21,7 @@ public class Main : Game
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
 
+        Globals.game = this;
         Globals.graphicsDevice.PreferredBackBufferWidth = ScreenSizeX;
         Globals.graphicsDevice.PreferredBackBufferHeight = ScreenSizeY;
         Globals.graphicsDevice.PreferMultiSampling = false;
