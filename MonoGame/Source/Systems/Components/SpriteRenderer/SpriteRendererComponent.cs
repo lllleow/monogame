@@ -67,7 +67,7 @@ public class SpriteRendererComponent : EntityComponent
     /// <param name="spriteBatch">The sprite batch used for drawing.</param>
     public override void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(SpriteSheet), Entity.Position, TextureRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
+        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(SpriteSheet), Entity.Position, TextureRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0.5f);
     }
 
     public Rectangle GetRectangle()

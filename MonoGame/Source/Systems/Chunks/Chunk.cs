@@ -263,6 +263,19 @@ public class Chunk : IChunk
 
                         Color colorWithOpacity = Color.White * tile.Opacity;
 
+                        Vector2 playerPosition = Globals.world.Player.Position + new Vector2(Tile.PixelSizeX / 2, Tile.PixelSizeY);
+                        Vector2 tilePosition = position;
+
+                        float layerDepth;
+                        if (playerPosition.Y < tilePosition.Y)
+                        {
+                            layerDepth = 1f;
+                        }
+                        else
+                        {
+                            layerDepth = 0f;
+                        }
+
                         spriteBatch.Draw(
                             SpritesheetLoader.GetSpritesheet(tile.SpritesheetName),
                             position,
@@ -272,7 +285,7 @@ public class Chunk : IChunk
                             origin,
                             scale,
                             SpriteEffects.None,
-                            1f
+                            layerDepth
                         );
 
                         if (layer.Key != TileDrawLayer.Background)
@@ -299,7 +312,7 @@ public class Chunk : IChunk
                             primitiveBatch.AddVertex(topLeft, Color.Red);
 
                             primitiveBatch.End();
-                            Globals.spriteBatch.Begin(transformMatrix: Globals.camera.Transform, sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+                            Globals.spriteBatch.Begin(transformMatrix: Globals.camera.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
                         }
                     }
                 }

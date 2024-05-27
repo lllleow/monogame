@@ -114,6 +114,11 @@ public class Tile : ITile
     }
 
     /// <summary>
+    /// Gets or sets an array of connectable tiles.
+    /// </summary>
+    public string[] ConnectableTiles { get; set; } = System.Array.Empty<string>();
+
+    /// <summary>
     /// Updates the texture coordinates of the tile based on its neighbors.
     /// </summary>
     /// <param name="layer">The draw layer of the tile.</param>
@@ -129,15 +134,15 @@ public class Tile : ITile
         ITile left_bottom = Globals.world.GetTileAt(layer, PosX - 1, PosY + 1);
         ITile right_bottom = Globals.world.GetTileAt(layer, PosX + 1, PosY + 1);
 
-        bool leftIsSame = IsSameType(left);
-        bool rightIsSame = IsSameType(right);
-        bool upIsSame = IsSameType(up);
-        bool downIsSame = IsSameType(down);
+        bool leftIsSame = IsSameType(left) || IsWhitelistedToConnect(left);
+        bool rightIsSame = IsSameType(right) || IsWhitelistedToConnect(right);
+        bool upIsSame = IsSameType(up) || IsWhitelistedToConnect(up);
+        bool downIsSame = IsSameType(down) || IsWhitelistedToConnect(down);
 
-        bool left_topIsSame = IsSameType(left_top);
-        bool right_topIsSame = IsSameType(right_top);
-        bool left_bottomIsSame = IsSameType(left_bottom);
-        bool right_bottomIsSame = IsSameType(right_bottom);
+        bool left_topIsSame = IsSameType(left_top) || IsWhitelistedToConnect(left_top);
+        bool right_topIsSame = IsSameType(right_top) || IsWhitelistedToConnect(right_top);
+        bool left_bottomIsSame = IsSameType(left_bottom) || IsWhitelistedToConnect(left_bottom);
+        bool right_bottomIsSame = IsSameType(right_bottom) || IsWhitelistedToConnect(right_bottom);
 
         Vector2 coordinates = new Vector2(0, 0);
 
@@ -269,7 +274,6 @@ public class Tile : ITile
             {
                 coordinates = new Vector2(7, 0);
             }
-            // ... (omitted for brevity)
         }
         else if (TextureType == TileTextureType.SimpleConnecting)
         {
@@ -353,6 +357,22 @@ public class Tile : ITile
     private bool IsSameType(ITile tile)
     {
         return tile != null && tile.GetType() == GetType();
+    }
+
+    private bool IsWhitelistedToConnect(ITile tile)
+    {
+        if (tile != null)
+        {
+            foreach (string connectableTile in ConnectableTiles)
+            {
+                if (tile.GetType().Name == connectableTile)
+                {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
 
     /// <summary>

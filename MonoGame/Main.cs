@@ -61,7 +61,7 @@ public class Main : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        Globals.spriteBatch.Begin(transformMatrix: Globals.camera.Transform, sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+        Globals.spriteBatch.Begin(transformMatrix: Globals.camera.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
         Globals.world.Draw(Globals.spriteBatch);
         Globals.spriteBatch.End();
 

@@ -83,6 +83,11 @@ public interface ITile
     public bool Walkable { get; set; }
 
     /// <summary>
+    /// Gets or sets an array of connectable tiles.
+    /// </summary>
+    public string[] ConnectableTiles { get; set; }
+
+    /// <summary>
     /// Updates the texture coordinates of the tile for a specific draw layer.
     /// </summary>
     /// <param name="layer">The draw layer to update the texture coordinates for.</param>
