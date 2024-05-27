@@ -71,6 +71,7 @@ public abstract class GameEntity : IGameEntity
     public void AddComponent(IEntityComponent component)
     {
         components.Add(component);
+        component.SetEntity(this);
         component.Initialize();
     }
 
@@ -183,11 +184,29 @@ public abstract class GameEntity : IGameEntity
     /// <returns>True if the entity can move to the specified position, otherwise false.</returns>
     public bool CanMove(Vector2 newPosition, Direction direction)
     {
-        AnimatorComponent animator = GetFirstComponent<AnimatorComponent>();
-        Rectangle entityRectangle = new Rectangle((int)newPosition.X, (int)newPosition.Y, Tile.PixelSizeX, Tile.PixelSizeY);
-        bool[,] mask = CollisionMaskHandler.GetMaskForTexture(animator.AnimationBundle.SpriteSheet, animator.GetSpriteRectangle());
+        // if (ContainsComponent<CollisionComponent>())
+        // {
+        //     CollisionComponent collisionComponent = GetFirstComponent<CollisionComponent>();
+        //     Rectangle entityRectangle = GetEntityBoundsAtPosition(newPosition);
+        //     bool[,] mask = CollisionMaskHandler.GetMaskForTexture(animator.AnimationBundle.SpriteSheet, animator.GetSpriteRectangle());
 
-        List<ITile> tiles = Globals.world.GetTilesIntersecting(mask, entityRectangle);
-        return tiles.Count == 0;
+        //     List<ITile> tiles = collisionComponent.GetTilesCollidingWithMask(mask, entityRectangle);
+        //     return tiles.Count == 0;
+        // }
+
+        return true;
+    }
+
+    public Rectangle GetEntityBoundsAtPosition(Vector2 position)
+    {
+        if (ContainsComponent<AnimatorComponent>())
+        {
+            AnimatorComponent animator = GetFirstComponent<AnimatorComponent>();
+            return new Rectangle((int)position.X, (int)position.Y, Tile.PixelSizeX, Tile.PixelSizeY);
+        }
+        else
+        {
+            return Rectangle.Empty;
+        }
     }
 }

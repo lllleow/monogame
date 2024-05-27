@@ -20,6 +20,16 @@ public interface IEntityComponent
     /// </summary>
     void Initialize();
 
+
+    /// <summary>
+    /// Sets the entity associated with this component.
+    /// </summary>
+    /// <param name="entity">The game entity to set.</param>
+    public virtual void SetEntity(IGameEntity entity)
+    {
+        Entity = entity;
+    }
+
     /// <summary>
     /// Updates the component.
     /// </summary>

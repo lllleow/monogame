@@ -16,6 +16,16 @@ public class AnimatorComponent : IEntityComponent
     int CurrentTime;
 
     /// <summary>
+    /// The current X texture index.
+    /// </summary>
+    int CurrentTextureX = 0;
+
+    /// <summary>
+    /// The current Y texture index.
+    /// </summary>
+    int CurrentTextureY = 0;
+
+    /// <summary>
     /// The entity associated with this animator component.
     /// </summary>
     public IGameEntity Entity { get; set; }
@@ -47,8 +57,6 @@ public class AnimatorComponent : IEntityComponent
     /// <param name="spriteBatch">The sprite batch used for drawing.</param>
     public void Draw(SpriteBatch spriteBatch)
     {
-        Rectangle spriteRectangle = GetSpriteRectangle();
-        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(AnimationBundle.SpriteSheet), Entity.Position, spriteRectangle, Color.White);
     }
 
     /// <summary>
@@ -61,10 +69,15 @@ public class AnimatorComponent : IEntityComponent
     }
 
     /// <summary>
-    /// Initializes the animator component.
+    /// Initializes the AnimatorComponent.
     /// </summary>
     public void Initialize()
     {
+        if (!Entity.ContainsComponent<SpriteRendererComponent>())
+        {
+            throw new Exception("AnimatorComponent requires a SpriteRendererComponent to be present on the entity.");
+        }
+
         CurrentAnimation ??= AnimationBundle.Animations.Keys.ToList().First();
     }
 
@@ -91,6 +104,16 @@ public class AnimatorComponent : IEntityComponent
         if (CurrentTime > AnimationBundle.Animations[CurrentAnimation].Duration)
         {
             CurrentTime = 0;
+        }
+
+        int NewTextureX = AnimationBundle.GetSpritesheetColumnForAnimationPercentage(CurrentAnimation, CurrentTime / (double)AnimationBundle.Animations[CurrentAnimation].Duration);
+        int NewTextureY = AnimationBundle.GetSpritesheetRowForAnimation(CurrentAnimation);
+
+        if (NewTextureX != CurrentTextureX || NewTextureY != CurrentTextureY)
+        {
+            CurrentTextureX = NewTextureX;
+            CurrentTextureY = NewTextureY;
+            Entity.GetFirstComponent<SpriteRendererComponent>()?.UpdateTexture(AnimationBundle.SpriteSheet, new Rectangle(CurrentTextureX * AnimationBundle.SizeX, CurrentTextureY * AnimationBundle.SizeY, AnimationBundle.SizeX, AnimationBundle.SizeY));
         }
     }
 }

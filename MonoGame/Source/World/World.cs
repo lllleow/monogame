@@ -217,7 +217,7 @@ public class World
     /// <param name="mask">The mask to check for intersection.</param>
     /// <param name="rectangle">The rectangle to check for intersection.</param>
     /// <returns>A list of tiles that intersect with the specified mask and rectangle.</returns>
-    public List<ITile> GetTilesIntersecting(bool[,] mask, Rectangle rectangle)
+    public List<ITile> GetTilesIntersectingWithMask(bool[,] mask, Rectangle rectangle)
     {
         Dictionary<string, ITile> intersectingTiles = new Dictionary<string, ITile>();
 
@@ -278,6 +278,99 @@ public class World
         }
 
         return intersectingTiles.Values.ToList();
+    }
+
+    /// <summary>
+    /// Retrieves a list of tiles that intersect with the specified rectangle.
+    /// </summary>
+    /// <param name="rectangle">The rectangle to check for intersection.</param>
+    /// <returns>A list of tiles that intersect with the specified rectangle.</returns>
+    public List<ITile> GetTilesIntersectingWithRectangle(Rectangle rectangle)
+    {
+        List<ITile> intersectingTiles = new List<ITile>();
+
+        int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
+        int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+
+        int startChunkX = rectangle.Left / chunkSizeInPixelsX;
+        int startChunkY = rectangle.Top / chunkSizeInPixelsY;
+        int endChunkX = rectangle.Right / chunkSizeInPixelsX;
+        int endChunkY = rectangle.Bottom / chunkSizeInPixelsY;
+
+        for (int chunkX = startChunkX; chunkX <= endChunkX; chunkX++)
+        {
+            for (int chunkY = startChunkY; chunkY <= endChunkY; chunkY++)
+            {
+                IChunk chunk = GetChunkAt(chunkX, chunkY);
+                if (chunk != null)
+                {
+                    int startTileX = Math.Max(0, (rectangle.Left - chunkX * chunkSizeInPixelsX) / Tile.PixelSizeX);
+                    int startTileY = Math.Max(0, (rectangle.Top - chunkY * chunkSizeInPixelsY) / Tile.PixelSizeY);
+                    int endTileX = Math.Min(Chunk.SizeX - 1, (rectangle.Right - chunkX * chunkSizeInPixelsX) / Tile.PixelSizeX);
+                    int endTileY = Math.Min(Chunk.SizeY - 1, (rectangle.Bottom - chunkY * chunkSizeInPixelsY) / Tile.PixelSizeY);
+
+                    for (int tileX = startTileX; tileX <= endTileX; tileX++)
+                    {
+                        for (int tileY = startTileY; tileY <= endTileY; tileY++)
+                        {
+                            ITile tile = chunk.GetTile(TileDrawLayer.Terrain, tileX, tileY);
+                            if (tile != null)
+                            {
+                                intersectingTiles.Add(tile);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return intersectingTiles;
+    }
+
+    public List<ITile> GetTilesIntersectingWithCircle(Vector2 position, float radius)
+    {
+        List<ITile> intersectingTiles = new List<ITile>();
+
+        int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
+        int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+
+        int startChunkX = (int)((position.X - radius) / chunkSizeInPixelsX);
+        int startChunkY = (int)((position.Y - radius) / chunkSizeInPixelsY);
+        int endChunkX = (int)((position.X + radius) / chunkSizeInPixelsX);
+        int endChunkY = (int)((position.Y + radius) / chunkSizeInPixelsY);
+
+        for (int chunkX = startChunkX; chunkX <= endChunkX; chunkX++)
+        {
+            for (int chunkY = startChunkY; chunkY <= endChunkY; chunkY++)
+            {
+                IChunk chunk = GetChunkAt(chunkX, chunkY);
+                if (chunk != null)
+                {
+                    int chunkStartX = chunkX * Chunk.SizeX;
+                    int chunkStartY = chunkY * Chunk.SizeY;
+                    int chunkEndX = chunkStartX + Chunk.SizeX;
+                    int chunkEndY = chunkStartY + Chunk.SizeY;
+
+                    for (int tileX = chunkStartX; tileX < chunkEndX; tileX++)
+                    {
+                        for (int tileY = chunkStartY; tileY < chunkEndY; tileY++)
+                        {
+                            Vector2 tilePosition = new Vector2(tileX * Tile.PixelSizeX, tileY * Tile.PixelSizeY);
+                            if (Vector2.Distance(tilePosition, position) <= radius)
+                            {
+                                foreach (TileDrawLayer layer in chunk.Tiles.Keys)
+                                {
+                                    ITile tile = chunk.GetTile(layer, tileX - chunkStartX, tileY - chunkStartY);
+                                    intersectingTiles.Add(tile);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return intersectingTiles;
     }
 
     /// <summary>

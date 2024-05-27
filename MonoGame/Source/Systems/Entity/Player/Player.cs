@@ -15,6 +15,7 @@ namespace MonoGame;
 public class Player : GameEntity
 {
     AnimatorComponent Animator;
+    SpriteRendererComponent SpriteRenderer;
     MouseState currentMouseState;
     MouseState previousMouseState;
 
@@ -26,7 +27,11 @@ public class Player : GameEntity
     {
         Position = position;
         Speed = new Vector2(4, 4);
+
         Animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
+        SpriteRenderer = new SpriteRendererComponent();
+
+        AddComponent(SpriteRenderer);
         AddComponent(Animator);
     }
 

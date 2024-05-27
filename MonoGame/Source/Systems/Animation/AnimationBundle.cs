@@ -12,8 +12,8 @@ public class AnimationBundle : IAnimationBundle
 {
     public string Id { get; set; }
     public string SpriteSheet { get; set; }
-    public int SizeX { get; set; } = 1;
-    public int SizeY { get; set; } = 1;
+    public int SizeX { get; set; } = 16;
+    public int SizeY { get; set; } = 16;
     public Dictionary<string, Animation> Animations { get; set; } = new Dictionary<string, Animation>();
 
     /// <summary>
@@ -51,7 +51,7 @@ public class AnimationBundle : IAnimationBundle
     /// <returns>The spritesheet row.</returns>
     public int GetSpritesheetRowForAnimation(string animationName)
     {
-        return Animations.Keys.ToList().IndexOf(animationName);
+        return Animations[animationName].SpritesheetRow;
     }
 
     /// <summary>

@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Components.Interfaces;
 
-namespace MonoGame.Source.Systems.Entity.Interfaces;
+namespace MonoGame;
 
 /// <summary>
 /// Represents a game entity in the game world.

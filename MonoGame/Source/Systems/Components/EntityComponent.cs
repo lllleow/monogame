@@ -34,16 +34,25 @@ public abstract class EntityComponent : IEntityComponent
     /// Draws the entity component using the specified sprite batch.
     /// </summary>
     /// <param name="spriteBatch">The sprite batch used for drawing.</param>
-    public abstract void Draw(SpriteBatch spriteBatch);
+    public virtual void Draw(SpriteBatch spriteBatch)
+    {
+
+    }
 
     /// <summary>
     /// Initializes the entity component.
     /// </summary>
-    public abstract void Initialize();
+    public virtual void Initialize()
+    {
+
+    }
 
     /// <summary>
     /// Updates the entity component based on the specified game time.
     /// </summary>
     /// <param name="gameTime">The game time.</param>
-    public abstract void Update(Microsoft.Xna.Framework.GameTime gameTime);
+    public virtual void Update(Microsoft.Xna.Framework.GameTime gameTime)
+    {
+
+    }
 }
