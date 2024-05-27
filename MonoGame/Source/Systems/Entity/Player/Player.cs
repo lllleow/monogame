@@ -98,34 +98,34 @@ public class Player : GameEntity
         {
             if (Move(gameTime, Direction.Up, Speed))
             {
-                Animator.PlayAnimation("walking_back");
+                Animator?.PlayAnimation("walking_back");
             }
         }
         if (state.IsKeyDown(Keys.A))
         {
             if (Move(gameTime, Direction.Left, Speed))
             {
-                Animator.PlayAnimation("walking_left");
+                Animator?.PlayAnimation("walking_left");
             }
         }
         if (state.IsKeyDown(Keys.S))
         {
             if (Move(gameTime, Direction.Down, Speed))
             {
-                Animator.PlayAnimation("walking_front");
+                Animator?.PlayAnimation("walking_front");
             }
         }
         if (state.IsKeyDown(Keys.D))
         {
             if (Move(gameTime, Direction.Right, Speed))
             {
-                Animator.PlayAnimation("walking_right");
+                Animator?.PlayAnimation("walking_right");
             }
         }
 
         if (state.IsKeyUp(Keys.W) && state.IsKeyUp(Keys.A) && state.IsKeyUp(Keys.S) && state.IsKeyUp(Keys.D))
         {
-            Animator.PlayAnimation("idle");
+            Animator?.PlayAnimation("idle");
         }
 
         base.Update(gameTime);
