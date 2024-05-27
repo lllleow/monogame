@@ -9,8 +9,6 @@ public class FenceTile : Tile
         SpritesheetName = "textures/fence_spritesheet";
         CollisionMaskSpritesheetName = "textures/fence_spritesheet_collision_mask";
         CollisionMode = CollisionMode.CollisionMask;
-        TextureX = 1;
-        TextureY = 1;
         TextureType = TileTextureType.SimpleConnecting;
         Walkable = false;
     }

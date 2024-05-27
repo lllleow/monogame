@@ -272,7 +272,7 @@ public class Chunk : IChunk
                             origin,
                             scale,
                             SpriteEffects.None,
-                            0f
+                            1f
                         );
 
                         if (layer.Key != TileDrawLayer.Background)
