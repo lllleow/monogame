@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 public class StoneTile : Tile
 {
@@ -6,7 +6,9 @@ public class StoneTile : Tile
     {
         Id = "base.stone";
         Name = "Stone";
-        SpritesheetName = "textures/spritesheet";
+        SpritesheetName = "textures/stone_spritesheet";
+        TextureType = TileTextureType.CompleteConnecting;
+        Walkable = false;
     }
 }
 

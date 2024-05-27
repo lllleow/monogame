@@ -44,10 +44,13 @@ public class Player : GameEntity
     /// </summary>
     /// <param name="x">The x-coordinate of the mouse click.</param>
     /// <param name="y">The y-coordinate of the mouse click.</param>
-    private void HandleMouseClick(int x, int y)
+
+    int lastLocalX;
+    int lastLocalY;
+    private void HandleMouseClick(bool add, int x, int y)
     {
-        int windowWidth = Globals.graphicsDevice.PreferredBackBufferWidth; 
-        int windowHeight = Globals.graphicsDevice.PreferredBackBufferHeight; 
+        int windowWidth = Globals.graphicsDevice.PreferredBackBufferWidth;
+        int windowHeight = Globals.graphicsDevice.PreferredBackBufferHeight;
 
         if (!Globals.game.IsActive)
         {
@@ -71,21 +74,24 @@ public class Player : GameEntity
         int localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
         int localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
 
-        IChunk chunk = Globals.world.CreateOrGetChunk(chunkX, chunkY);
+        if (lastLocalX != localX || lastLocalY != localY)
+        {
+            IChunk chunk = Globals.world.CreateOrGetChunk(chunkX, chunkY);
 
-        if (chunk.GetTile(TileDrawLayer.Tiles, localX, localY) != null)
-        {
-            chunk.DeleteTile(TileDrawLayer.Tiles, localX, localY);
-        }
-        else
-        {
-            if (chunk.GetTile(TileDrawLayer.Terrain, localX, localY) != null)
+            if (chunk.GetTile(TileDrawLayer.Tiles, localX, localY) != null && !add)
             {
-                chunk.DeleteTile(TileDrawLayer.Terrain, localX, localY);
+                lastLocalX = localX;
+                lastLocalY = localY;
+                chunk.DeleteTile(TileDrawLayer.Tiles, localX, localY);
             }
             else
             {
-                chunk.SetTileAndUpdateNeighbors("base.fence", TileDrawLayer.Tiles, localX, localY);
+                if (add)
+                {
+                    lastLocalX = localX;
+                    lastLocalY = localY;
+                    chunk.SetTileAndUpdateNeighbors("base.stone", TileDrawLayer.Tiles, localX, localY);
+                }
             }
         }
     }
@@ -101,12 +107,12 @@ public class Player : GameEntity
 
         currentMouseState = Mouse.GetState();
 
-        if (currentMouseState.LeftButton == ButtonState.Pressed && previousMouseState.LeftButton == ButtonState.Released)
+        if (currentMouseState.LeftButton == ButtonState.Pressed || currentMouseState.RightButton == ButtonState.Pressed)
         {
             int mouseX = currentMouseState.X;
             int mouseY = currentMouseState.Y;
 
-            HandleMouseClick(mouseX, mouseY);
+            HandleMouseClick(currentMouseState.LeftButton == ButtonState.Pressed, mouseX, mouseY);
         }
 
         previousMouseState = currentMouseState;

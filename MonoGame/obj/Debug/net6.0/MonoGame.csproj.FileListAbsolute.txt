@@ -91,3 +91,4 @@ C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Cont
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\player_sprite_2.xnb
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\player_sprite_2_collision_mask.xnb
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\fence_spritesheet_collision_mask.xnb
+C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\stone_spritesheet.xnb

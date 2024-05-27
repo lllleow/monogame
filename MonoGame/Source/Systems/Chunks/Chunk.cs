@@ -91,7 +91,7 @@ public class Chunk : IChunk
 
                 if (normalizedValue > 0.7f)
                 {
-                    SetTile("base.grass", TileDrawLayer.Tiles, x, y);
+                    SetTile("base.stone", TileDrawLayer.Tiles, x, y);
                 }
             }
         }
