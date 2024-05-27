@@ -16,11 +16,16 @@ public interface IEntityComponent
     IGameEntity Entity { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether the entity component is initialized.
+    /// </summary>
+    bool Initialized { get; set; }
+
+    /// <summary>
     /// Initializes the component.
     /// </summary>
     virtual void Initialize()
     {
-        
+
     }
 
     /// <summary>

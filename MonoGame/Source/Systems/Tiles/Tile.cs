@@ -80,7 +80,12 @@ public class Tile : ITile
     /// <summary>
     /// Gets or sets the collision type of the tile.
     /// </summary>
-    public CollisionMode CollisionType { get; set; } = CollisionMode.BoundingBox;
+    public CollisionMode CollisionMode { get; set; } = CollisionMode.BoundingBox;
+
+    /// <summary>
+    /// Gets or sets the spritesheet used for collision masks.
+    /// </summary>
+    public string CollisionMaskSpritesheetName { get; set; }
 
     /// <summary>
     /// Gets or sets the X position of the tile.

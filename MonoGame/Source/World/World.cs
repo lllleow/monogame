@@ -27,11 +27,10 @@ public class World
     /// </summary>
     public void InitWorld()
     {
-        Player = new Player(new Vector2(0, 0));
+        Player = new Player(new Vector2(500, 500));
         Entities.Add(Player);
 
         InitializeChunks();
-        Player.Teleport(new Vector2(500, 500));
     }
 
     /// <summary>
@@ -219,55 +218,109 @@ public class World
     /// <returns>A list of tiles that intersect with the specified mask and rectangle.</returns>
     public List<ITile> GetTilesIntersectingWithMask(bool[,] mask, Rectangle rectangle)
     {
-        Dictionary<string, ITile> intersectingTiles = new Dictionary<string, ITile>();
+        List<ITile> intersectingTiles = new List<ITile>();
 
         int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
         int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
 
         int startChunkX = rectangle.Left / chunkSizeInPixelsX;
         int startChunkY = rectangle.Top / chunkSizeInPixelsY;
-        int endChunkX = rectangle.Right / chunkSizeInPixelsX;
-        int endChunkY = rectangle.Bottom / chunkSizeInPixelsY;
+        int endChunkX = (rectangle.Right - 1) / chunkSizeInPixelsX;
+        int endChunkY = (rectangle.Bottom - 1) / chunkSizeInPixelsY;
 
         for (int chunkX = startChunkX; chunkX <= endChunkX; chunkX++)
         {
             for (int chunkY = startChunkY; chunkY <= endChunkY; chunkY++)
             {
-                IChunk chunk = Globals.world.GetChunkAt(chunkX, chunkY);
+                IChunk chunk = GetChunkAt(chunkX, chunkY);
                 if (chunk != null)
                 {
                     int startTileX = Math.Max(0, (rectangle.Left - chunkX * chunkSizeInPixelsX) / Tile.PixelSizeX);
                     int startTileY = Math.Max(0, (rectangle.Top - chunkY * chunkSizeInPixelsY) / Tile.PixelSizeY);
-                    int endTileX = Math.Min(Chunk.SizeX - 1, (rectangle.Right - chunkX * chunkSizeInPixelsX) / Tile.PixelSizeX);
-                    int endTileY = Math.Min(Chunk.SizeY - 1, (rectangle.Bottom - chunkY * chunkSizeInPixelsY) / Tile.PixelSizeY);
+                    int endTileX = Math.Min(Chunk.SizeX - 1, (rectangle.Right - 1 - chunkX * chunkSizeInPixelsX) / Tile.PixelSizeX);
+                    int endTileY = Math.Min(Chunk.SizeY - 1, (rectangle.Bottom - 1 - chunkY * chunkSizeInPixelsY) / Tile.PixelSizeY);
 
-                    List<TileDrawLayer> layers = chunk.Tiles.Keys.ToList();
-                    layers.Reverse();
-                    layers.Remove(TileDrawLayer.Background);
-
-                    foreach (TileDrawLayer layer in layers)
+                    for (int tileX = startTileX; tileX <= endTileX; tileX++)
                     {
-                        for (int tileX = startTileX; tileX <= endTileX; tileX++)
+                        for (int tileY = startTileY; tileY <= endTileY; tileY++)
                         {
-                            for (int tileY = startTileY; tileY <= endTileY; tileY++)
+                            ITile tile = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
+                            if (tile != null)
                             {
-                                ITile tile = chunk.GetTile(layer: layer, x: tileX, y: tileY);
-                                if (tile != null && !tile.Walkable)
+                                if (tile.CollisionMode == CollisionMode.CollisionMask || tile.CollisionMode == CollisionMode.PixelPerfect)
                                 {
-                                    Rectangle tileRect = new Rectangle(
-                                        chunkX * chunkSizeInPixelsX + tileX * Tile.PixelSizeX,
-                                        chunkY * chunkSizeInPixelsY + tileY * Tile.PixelSizeY,
-                                        Tile.PixelSizeX,
-                                        Tile.PixelSizeY
-                                    );
+                                    Rectangle tileRect = new Rectangle(chunkX * chunkSizeInPixelsX + tileX * Tile.PixelSizeX,
+                                                                       chunkY * chunkSizeInPixelsY + tileY * Tile.PixelSizeY,
+                                                                       Tile.PixelSizeX, Tile.PixelSizeY);
 
-                                    bool[,] tileMask = CollisionMaskHandler.GetMaskForTexture(tile.SpritesheetName, tile.GetSpriteRectangle());
-                                    if (CollisionMaskHandler.CheckMaskCollision(tileMask, rectangle, tileMask, tileRect))
+                                    bool[,] tileMask;
+                                    if (tile.CollisionMode == CollisionMode.CollisionMask && tile.CollisionMaskSpritesheetName != null)
                                     {
-                                        if (!intersectingTiles.ContainsKey(tile.Id))
+                                        tileMask = CollisionMaskHandler.GetMaskForTexture(tile.CollisionMaskSpritesheetName, tile.GetSpriteRectangle());
+                                    }
+                                    else
+                                    {
+                                        tileMask = CollisionMaskHandler.GetMaskForTexture(tile.SpritesheetName, tile.GetSpriteRectangle());
+                                    }
+
+                                    bool intersects = false;
+                                    for (int mx = 0; mx < mask.GetLength(0); mx++)
+                                    {
+                                        for (int my = 0; my < mask.GetLength(1); my++)
                                         {
-                                            intersectingTiles.Add(tile.Id, tile);
+                                            if (mask[mx, my])
+                                            {
+                                                int globalMaskX = rectangle.Left + mx;
+                                                int globalMaskY = rectangle.Top + my;
+
+                                                int localTileX = globalMaskX - tileRect.Left;
+                                                int localTileY = globalMaskY - tileRect.Top;
+
+                                                if (localTileX >= 0 && localTileX < Tile.PixelSizeX && localTileY >= 0 && localTileY < Tile.PixelSizeY)
+                                                {
+                                                    if (tileMask[localTileX, localTileY])
+                                                    {
+                                                        intersects = true;
+                                                        break;
+                                                    }
+                                                }
+                                            }
                                         }
+                                        if (intersects) break;
+                                    }
+
+                                    if (intersects && !intersectingTiles.Contains(tile))
+                                    {
+                                        intersectingTiles.Add(tile);
+                                    }
+                                }
+                                else
+                                {
+                                    Rectangle tileRect = new Rectangle(chunkX * chunkSizeInPixelsX + tileX * Tile.PixelSizeX,
+                                                                   chunkY * chunkSizeInPixelsY + tileY * Tile.PixelSizeY,
+                                                                   Tile.PixelSizeX, Tile.PixelSizeY);
+
+                                    bool intersects = false;
+                                    for (int mx = 0; mx < mask.GetLength(0); mx++)
+                                    {
+                                        for (int my = 0; my < mask.GetLength(1); my++)
+                                        {
+                                            if (mask[mx, my])
+                                            {
+                                                Rectangle maskRect = new Rectangle(rectangle.Left + mx, rectangle.Top + my, 1, 1);
+                                                if (tileRect.Intersects(maskRect))
+                                                {
+                                                    intersects = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        if (intersects) break;
+                                    }
+
+                                    if (intersects && !intersectingTiles.Contains(tile))
+                                    {
+                                        intersectingTiles.Add(tile);
                                     }
                                 }
                             }
@@ -277,7 +330,16 @@ public class World
             }
         }
 
-        return intersectingTiles.Values.ToList();
+        return intersectingTiles;
+    }
+
+
+    public bool Intersects(Rectangle rectA, Rectangle rectB)
+    {
+        return rectA.X < rectB.X + rectB.Width &&
+               rectA.X + rectA.Width > rectB.X &&
+               rectA.Y < rectB.Y + rectB.Height &&
+               rectA.Y + rectA.Height > rectB.Y;
     }
 
     /// <summary>

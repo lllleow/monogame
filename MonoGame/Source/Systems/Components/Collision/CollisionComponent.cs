@@ -10,10 +10,18 @@ namespace MonoGame.Source.Systems.Components.Collision;
 public class CollisionComponent : EntityComponent
 {
     public CollisionMode Mode;
+    public string CollisionMaskSpritesheet;
 
     public CollisionComponent(CollisionMode mode)
     {
         Mode = mode;
+    }
+
+    public CollisionComponent(string collisionMaskSpritesheet)
+    {
+
+        Mode = CollisionMode.CollisionMask;
+        CollisionMaskSpritesheet = collisionMaskSpritesheet;
     }
 
     /// <summary>
@@ -25,9 +33,9 @@ public class CollisionComponent : EntityComponent
         {
             throw new Exception("CollisionComponent in BoundingBox mode requires a BoundingBoxComponent to be present on the entity.");
         }
-        else if ((Mode == CollisionMode.CollisionMask || Mode == CollisionMode.PixelPerfect) && !Entity.ContainsComponent<SpriteRendererComponent>())
+        else if ((Mode == CollisionMode.CollisionMask || Mode == CollisionMode.PixelPerfect) && !Entity.ContainsComponent<PixelBoundsComponent>())
         {
-            throw new Exception("CollisionComponent in CollisionMask or PixelPerfect mode requires a SpriteRendererComponent to be present on the entity.");
+            throw new Exception("CollisionComponent in CollisionMask or PixelPerfect mode requires a PixelBoundsComponent to be present on the entity.");
         }
     }
 

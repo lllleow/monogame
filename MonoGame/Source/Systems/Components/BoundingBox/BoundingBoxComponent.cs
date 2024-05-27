@@ -23,7 +23,7 @@ public class BoundingBoxComponent : EntityComponent
     public override void Draw(SpriteBatch spriteBatch)
     {
         Globals.spriteBatch.End();
-        Globals.graphicsDevice.GraphicsDevice.DepthStencilState = DepthStencilState.None;
+        // Globals.graphicsDevice.GraphicsDevice.DepthStencilState = DepthStencilState.None;
         primitiveBatch.Begin(PrimitiveType.LineList);
 
         Rectangle rectangle = GetRectangle();

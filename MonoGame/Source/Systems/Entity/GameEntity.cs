@@ -73,6 +73,7 @@ public abstract class GameEntity : IGameEntity
         components.Add(component);
         component.SetEntity(this);
         component.Initialize();
+        component.Initialized = true;
     }
 
     /// <summary>
@@ -154,9 +155,8 @@ public abstract class GameEntity : IGameEntity
     /// <returns>True if the entity successfully moved, otherwise false.</returns>
     public bool Move(GameTime gameTime, Direction direction, Vector2 speed)
     {
-        float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        Vector2 displacement = GetDisplacement(direction, speed) * deltaTime * 1000;
-        Vector2 newPosition = Vector2.Lerp(Position, Position + displacement, deltaTime);
+        Vector2 displacement = GetDisplacement(direction, speed);
+        Vector2 newPosition = Position + displacement;
 
         if (CanMove(newPosition, direction))
         {
@@ -184,15 +184,28 @@ public abstract class GameEntity : IGameEntity
     /// <returns>True if the entity can move to the specified position, otherwise false.</returns>
     public bool CanMove(Vector2 newPosition, Direction direction)
     {
-        // if (ContainsComponent<CollisionComponent>())
-        // {
-        //     CollisionComponent collisionComponent = GetFirstComponent<CollisionComponent>();
-        //     Rectangle entityRectangle = GetEntityBoundsAtPosition(newPosition);
-        //     bool[,] mask = CollisionMaskHandler.GetMaskForTexture(animator.AnimationBundle.SpriteSheet, animator.GetSpriteRectangle());
+        if (ContainsComponent<CollisionComponent>())
+        {
+            Rectangle entityRectangle = GetEntityBoundsAtPosition(newPosition);
+            CollisionComponent collisionComponent = GetFirstComponent<CollisionComponent>();
+            List<ITile> tiles;
 
-        //     List<ITile> tiles = collisionComponent.GetTilesCollidingWithMask(mask, entityRectangle);
-        //     return tiles.Count == 0;
-        // }
+            if (collisionComponent.Mode == CollisionMode.BoundingBox)
+            {
+                tiles = collisionComponent.GetTilesCollidingWithRectangle(entityRectangle);
+            }
+            else if (collisionComponent.Mode == CollisionMode.PixelPerfect || collisionComponent.Mode == CollisionMode.CollisionMask)
+            {
+                PixelBoundsComponent pixelBounds = GetFirstComponent<PixelBoundsComponent>();
+                tiles = collisionComponent.GetTilesCollidingWithMask(pixelBounds.Mask, entityRectangle);
+            }
+            else
+            {
+                return true;
+            }
+
+            return tiles.Count == 0;
+        }
 
         return true;
     }

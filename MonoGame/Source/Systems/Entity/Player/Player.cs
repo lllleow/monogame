@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Components.Animator;
+using MonoGame.Source.Systems.Components.Collision;
 using MonoGame.Source.Systems.Entity;
 using MonoGame.Source.Systems.Scripts;
 namespace MonoGame;
@@ -26,14 +27,16 @@ public class Player : GameEntity
     public Player(Vector2 position)
     {
         Position = position;
-        Speed = new Vector2(4, 4);
+        Speed = new Vector2(1, 1);
 
         Animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
         SpriteRenderer = new SpriteRendererComponent();
 
-        AddComponent(new BoundingBoxComponent(new Vector2(16, 16)));
+        // AddComponent(new BoundingBoxComponent(new Vector2(16, 16)));
         AddComponent(SpriteRenderer);
         AddComponent(Animator);
+        AddComponent(new PixelBoundsComponent());
+        AddComponent(new CollisionComponent("textures/player_sprite_2_collision_mask"));  
     }
 
     /// <summary>

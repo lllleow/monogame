@@ -60,7 +60,12 @@ public interface ITile
     /// <summary>
     /// Gets or sets the collision type of the tile.
     /// </summary>
-    public CollisionMode CollisionType { get; set; }
+    public CollisionMode CollisionMode { get; set; }
+
+    /// <summary>
+    /// Gets or sets the spritesheet used for collision masks.
+    /// </summary>
+    public string CollisionMaskSpritesheetName { get; set; }
 
     /// <summary>
     /// Gets or sets the X position of the tile in the game world.
@@ -105,5 +110,13 @@ public interface ITile
     public Rectangle GetSpriteRectangle()
     {
         return new Rectangle(TextureX * Tile.PixelSizeX, TextureY * Tile.PixelSizeY, SizeX * Tile.PixelSizeX, SizeY * Tile.PixelSizeY);
+    }
+
+    /// <summary>
+    /// Represents a rectangle in a two-dimensional space.
+    /// </summary>
+    public Rectangle GetRectangle()
+    {
+        return new Rectangle(PosX, PosY, SizeX * Tile.PixelSizeX, SizeY * Tile.PixelSizeY);
     }
 }

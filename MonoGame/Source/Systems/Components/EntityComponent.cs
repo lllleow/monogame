@@ -22,6 +22,11 @@ public abstract class EntityComponent : IEntityComponent
     }
 
     /// <summary>
+    /// Gets or sets a value indicating whether the entity component is initialized.
+    /// </summary>
+    public bool Initialized { get; set; } = false;
+
+    /// <summary>
     /// Initializes the entity component with the specified game entity.
     /// </summary>
     /// <param name="entity">The game entity to associate with this component.</param>

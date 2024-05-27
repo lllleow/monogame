@@ -2,13 +2,10 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Source.Systems.Components.Interfaces;
-using MonoGame.Source.Systems.Entity.Interfaces;
-using MonoGame.Source.Util.Loaders;
 
 namespace MonoGame.Source.Systems.Components.Animator;
 
-public class AnimatorComponent : IEntityComponent
+public class AnimatorComponent : EntityComponent
 {
     /// <summary>
     /// The current time of the animation.
@@ -24,11 +21,6 @@ public class AnimatorComponent : IEntityComponent
     /// The current Y texture index.
     /// </summary>
     int CurrentTextureY = 0;
-
-    /// <summary>
-    /// The entity associated with this animator component.
-    /// </summary>
-    public IGameEntity Entity { get; set; }
 
     /// <summary>
     /// The animation bundle containing all the animations for this component.
@@ -52,14 +44,6 @@ public class AnimatorComponent : IEntityComponent
     }
 
     /// <summary>
-    /// Draws the current frame of the animation.
-    /// </summary>
-    /// <param name="spriteBatch">The sprite batch used for drawing.</param>
-    public void Draw(SpriteBatch spriteBatch)
-    {
-    }
-
-    /// <summary>
     /// Gets the rectangle representing the current frame of the animation.
     /// </summary>
     /// <returns>The rectangle representing the current frame of the animation.</returns>
@@ -71,7 +55,7 @@ public class AnimatorComponent : IEntityComponent
     /// <summary>
     /// Initializes the AnimatorComponent.
     /// </summary>
-    public void Initialize()
+    public override void Initialize()
     {
         if (!Entity.ContainsComponent<SpriteRendererComponent>())
         {
@@ -98,7 +82,7 @@ public class AnimatorComponent : IEntityComponent
     /// Updates the animator component.
     /// </summary>
     /// <param name="gameTime">The game time.</param>
-    public void Update(GameTime gameTime)
+    public override void Update(GameTime gameTime)
     {
         CurrentTime++;
         if (CurrentTime > AnimationBundle.Animations[CurrentAnimation].Duration)
