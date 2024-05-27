@@ -260,20 +260,24 @@ public class Chunk : IChunk
                         Vector2 position = new Vector2(x, y) + origin;
 
                         Rectangle tileRectangle = new Rectangle(x, y, tile.SizeX * Tile.PixelSizeX, tile.SizeY * Tile.PixelSizeY);
-
                         Color colorWithOpacity = Color.White * tile.Opacity;
 
-                        Vector2 playerPosition = Globals.world.Player.Position + new Vector2(Tile.PixelSizeX / 2, Tile.PixelSizeY);
-                        Vector2 tilePosition = position;
-
-                        float layerDepth;
-                        if (playerPosition.Y < tilePosition.Y)
+                        float layerDepth = 0f;
+                        if (layer.Key == TileDrawLayer.Terrain)
                         {
-                            layerDepth = 1f;
+                            layerDepth = 0.1f;
                         }
-                        else
+                        else if (layer.Key == TileDrawLayer.Tiles)
                         {
-                            layerDepth = 0f;
+                            Vector2 playerPosition = Globals.world.Player.Position + new Vector2(Tile.PixelSizeX / 2, Tile.PixelSizeY);
+                            if (playerPosition.Y < tileRectangle.Bottom)
+                            {
+                                layerDepth = 0.6f;
+                            }
+                            else
+                            {
+                                layerDepth = 0.2f;
+                            }
                         }
 
                         spriteBatch.Draw(
@@ -288,32 +292,32 @@ public class Chunk : IChunk
                             layerDepth
                         );
 
-                        if (layer.Key != TileDrawLayer.Background)
-                        {
-                            Globals.spriteBatch.End();
-                            primitiveBatch.Begin(PrimitiveType.LineList);
+                        // if (layer.Key != TileDrawLayer.Background)
+                        // {
+                        //     Globals.spriteBatch.End();
+                        //     primitiveBatch.Begin(PrimitiveType.LineList);
 
-                            Rectangle rectangle = tileRectangle;
-                            Vector2 topLeft = rectangle.Location.ToVector2();
-                            Vector2 topRight = new Vector2(rectangle.Right, rectangle.Top);
-                            Vector2 bottomLeft = new Vector2(rectangle.Left, rectangle.Bottom);
-                            Vector2 bottomRight = new Vector2(rectangle.Right, rectangle.Bottom);
+                        //     Rectangle rectangle = tileRectangle;
+                        //     Vector2 topLeft = rectangle.Location.ToVector2();
+                        //     Vector2 topRight = new Vector2(rectangle.Right, rectangle.Top);
+                        //     Vector2 bottomLeft = new Vector2(rectangle.Left, rectangle.Bottom);
+                        //     Vector2 bottomRight = new Vector2(rectangle.Right, rectangle.Bottom);
 
-                            primitiveBatch.AddVertex(topLeft, Color.Red);
-                            primitiveBatch.AddVertex(topRight, Color.Red);
+                        //     primitiveBatch.AddVertex(topLeft, Color.Red);
+                        //     primitiveBatch.AddVertex(topRight, Color.Red);
 
-                            primitiveBatch.AddVertex(topRight, Color.Red);
-                            primitiveBatch.AddVertex(bottomRight, Color.Red);
+                        //     primitiveBatch.AddVertex(topRight, Color.Red);
+                        //     primitiveBatch.AddVertex(bottomRight, Color.Red);
 
-                            primitiveBatch.AddVertex(bottomRight, Color.Red);
-                            primitiveBatch.AddVertex(bottomLeft, Color.Red);
+                        //     primitiveBatch.AddVertex(bottomRight, Color.Red);
+                        //     primitiveBatch.AddVertex(bottomLeft, Color.Red);
 
-                            primitiveBatch.AddVertex(bottomLeft, Color.Red);
-                            primitiveBatch.AddVertex(topLeft, Color.Red);
+                        //     primitiveBatch.AddVertex(bottomLeft, Color.Red);
+                        //     primitiveBatch.AddVertex(topLeft, Color.Red);
 
-                            primitiveBatch.End();
-                            Globals.spriteBatch.Begin(transformMatrix: Globals.camera.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
-                        }
+                        //     primitiveBatch.End();
+                        //     Globals.spriteBatch.Begin(transformMatrix: Globals.camera.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+                        // }
                     }
                 }
             }

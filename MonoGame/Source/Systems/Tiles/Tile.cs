@@ -63,12 +63,12 @@ public class Tile : ITile
     public float Opacity { get; set; } = 1;
 
     /// <summary>
-    /// Gets or sets the width of a pixel in the tile.
+    /// Gets or sets the width of the tile in pixels.
     /// </summary>
     public static int PixelSizeX { get; set; } = 16;
 
     /// <summary>
-    /// Gets or sets the height of a pixel in the tile.
+    /// Gets or sets the height of the tile in pixels.
     /// </summary>
     public static int PixelSizeY { get; set; } = 16;
 

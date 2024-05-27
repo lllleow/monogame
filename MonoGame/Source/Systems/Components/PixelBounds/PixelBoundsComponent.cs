@@ -66,35 +66,35 @@ public class PixelBoundsComponent : EntityComponent
     PrimitiveBatch primitiveBatch = new PrimitiveBatch(Globals.graphicsDevice.GraphicsDevice);
     public override void Draw(SpriteBatch spriteBatch)
     {
-        primitiveBatch.Begin(PrimitiveType.LineList);
-        Rectangle drawingArea = GetRectangle();
+        // primitiveBatch.Begin(PrimitiveType.LineList);
+        // Rectangle drawingArea = GetRectangle();
 
-        for (int x = 0; x < Mask.GetLength(0); x++)
-        {
-            for (int y = 0; y < Mask.GetLength(1); y++)
-            {
-                if (Mask[x, y])
-                {
-                    Vector2 topLeft = new Vector2(drawingArea.X + x, drawingArea.Y + y);
-                    Vector2 topRight = new Vector2(topLeft.X + 1, topLeft.Y);
-                    Vector2 bottomLeft = new Vector2(topLeft.X, topLeft.Y + 1);
-                    Vector2 bottomRight = new Vector2(topRight.X, bottomLeft.Y);
+        // for (int x = 0; x < Mask.GetLength(0); x++)
+        // {
+        //     for (int y = 0; y < Mask.GetLength(1); y++)
+        //     {
+        //         if (Mask[x, y])
+        //         {
+        //             Vector2 topLeft = new Vector2(drawingArea.X + x, drawingArea.Y + y);
+        //             Vector2 topRight = new Vector2(topLeft.X + 1, topLeft.Y);
+        //             Vector2 bottomLeft = new Vector2(topLeft.X, topLeft.Y + 1);
+        //             Vector2 bottomRight = new Vector2(topRight.X, bottomLeft.Y);
 
-                    primitiveBatch.AddVertex(topLeft, Color.Red);
-                    primitiveBatch.AddVertex(topRight, Color.Red);
+        //             primitiveBatch.AddVertex(topLeft, Color.Red);
+        //             primitiveBatch.AddVertex(topRight, Color.Red);
 
-                    primitiveBatch.AddVertex(topRight, Color.Red);
-                    primitiveBatch.AddVertex(bottomRight, Color.Red);
+        //             primitiveBatch.AddVertex(topRight, Color.Red);
+        //             primitiveBatch.AddVertex(bottomRight, Color.Red);
 
-                    primitiveBatch.AddVertex(bottomRight, Color.Red);
-                    primitiveBatch.AddVertex(bottomLeft, Color.Red);
+        //             primitiveBatch.AddVertex(bottomRight, Color.Red);
+        //             primitiveBatch.AddVertex(bottomLeft, Color.Red);
 
-                    primitiveBatch.AddVertex(bottomLeft, Color.Red);
-                    primitiveBatch.AddVertex(topLeft, Color.Red);
-                }
-            }
-        }
+        //             primitiveBatch.AddVertex(bottomLeft, Color.Red);
+        //             primitiveBatch.AddVertex(topLeft, Color.Red);
+        //         }
+        //     }
+        // }
 
-        primitiveBatch.End();
+        // primitiveBatch.End();
     }
 }
