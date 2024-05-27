@@ -65,6 +65,7 @@ public class Main : Game
         Globals.world.Draw(Globals.spriteBatch);
         Globals.spriteBatch.End();
 
+
         base.Draw(gameTime);
     }
 }

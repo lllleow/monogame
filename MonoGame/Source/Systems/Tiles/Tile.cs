@@ -80,7 +80,7 @@ public class Tile : ITile
     /// <summary>
     /// Gets or sets the collision type of the tile.
     /// </summary>
-    public CollisionType CollisionType { get; set; } = CollisionType.FullTile;
+    public CollisionMode CollisionType { get; set; } = CollisionMode.BoundingBox;
 
     /// <summary>
     /// Gets or sets the X position of the tile.

@@ -18,8 +18,10 @@ public interface IEntityComponent
     /// <summary>
     /// Initializes the component.
     /// </summary>
-    void Initialize();
-
+    virtual void Initialize()
+    {
+        
+    }
 
     /// <summary>
     /// Sets the entity associated with this component.
@@ -34,11 +36,17 @@ public interface IEntityComponent
     /// Updates the component.
     /// </summary>
     /// <param name="gameTime">The game time.</param>
-    void Update(GameTime gameTime);
+    virtual void Update(GameTime gameTime)
+    {
+
+    }
 
     /// <summary>
     /// Draws the component.
     /// </summary>
     /// <param name="spriteBatch">The sprite batch used for drawing.</param>
-    void Draw(SpriteBatch spriteBatch);
+    virtual void Draw(SpriteBatch spriteBatch)
+    {
+
+    }
 }

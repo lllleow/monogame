@@ -236,6 +236,7 @@ public class Chunk : IChunk
         }
     }
 
+    PrimitiveBatch primitiveBatch = new PrimitiveBatch(Globals.graphicsDevice.GraphicsDevice);
     /// <summary>
     /// Draws the tiles in the chunk using the specified sprite batch.
     /// </summary>
@@ -258,6 +259,8 @@ public class Chunk : IChunk
                         Vector2 origin = new Vector2(tile.SizeX * Tile.PixelSizeX / 2, tile.SizeY * Tile.PixelSizeY / 2);
                         Vector2 position = new Vector2(x, y) + origin;
 
+                        Rectangle tileRectangle = new Rectangle(x, y, tile.SizeX * Tile.PixelSizeX, tile.SizeY * Tile.PixelSizeY);
+
                         Color colorWithOpacity = Color.White * tile.Opacity;
 
                         spriteBatch.Draw(
@@ -271,6 +274,33 @@ public class Chunk : IChunk
                             SpriteEffects.None,
                             0f
                         );
+
+                        if (layer.Key != TileDrawLayer.Background)
+                        {
+                            Globals.spriteBatch.End();
+                            primitiveBatch.Begin(PrimitiveType.LineList);
+
+                            Rectangle rectangle = tileRectangle;
+                            Vector2 topLeft = rectangle.Location.ToVector2();
+                            Vector2 topRight = new Vector2(rectangle.Right, rectangle.Top);
+                            Vector2 bottomLeft = new Vector2(rectangle.Left, rectangle.Bottom);
+                            Vector2 bottomRight = new Vector2(rectangle.Right, rectangle.Bottom);
+
+                            primitiveBatch.AddVertex(topLeft, Color.Red);
+                            primitiveBatch.AddVertex(topRight, Color.Red);
+
+                            primitiveBatch.AddVertex(topRight, Color.Red);
+                            primitiveBatch.AddVertex(bottomRight, Color.Red);
+
+                            primitiveBatch.AddVertex(bottomRight, Color.Red);
+                            primitiveBatch.AddVertex(bottomLeft, Color.Red);
+
+                            primitiveBatch.AddVertex(bottomLeft, Color.Red);
+                            primitiveBatch.AddVertex(topLeft, Color.Red);
+
+                            primitiveBatch.End();
+                            Globals.spriteBatch.Begin(transformMatrix: Globals.camera.Transform, sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+                        }
                     }
                 }
             }

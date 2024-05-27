@@ -3,12 +3,12 @@
 /// <summary>
 /// Represents the type of collision used in the game.
 /// </summary>
-public enum CollisionType
+public enum CollisionMode
 {
     /// <summary>
-    /// Collision detection is based on full tiles.
+    /// Collision detection is based on a bounding box.
     /// </summary>
-    FullTile,
+    BoundingBox,
 
     /// <summary>
     /// Collision detection is based on pixel-perfect accuracy.
@@ -16,7 +16,7 @@ public enum CollisionType
     PixelPerfect,
 
     /// <summary>
-    /// Collision detection is based on collision masks.
+    /// Collision detection is based on collision masks with pixel-perfect accuracy.
     /// </summary>
     CollisionMask
 }

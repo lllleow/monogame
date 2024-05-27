@@ -60,7 +60,7 @@ public interface ITile
     /// <summary>
     /// Gets or sets the collision type of the tile.
     /// </summary>
-    public CollisionType CollisionType { get; set; }
+    public CollisionMode CollisionType { get; set; }
 
     /// <summary>
     /// Gets or sets the X position of the tile in the game world.

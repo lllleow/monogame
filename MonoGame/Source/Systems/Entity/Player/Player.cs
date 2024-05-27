@@ -31,6 +31,7 @@ public class Player : GameEntity
         Animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
         SpriteRenderer = new SpriteRendererComponent();
 
+        AddComponent(new BoundingBoxComponent(new Vector2(16, 16)));
         AddComponent(SpriteRenderer);
         AddComponent(Animator);
     }

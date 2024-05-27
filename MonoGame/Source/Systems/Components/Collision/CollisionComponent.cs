@@ -1,26 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using MonoGame.Source.Systems.Entity.Interfaces;
+using MonoGame.Source.Systems.Components.Interfaces;
 
 namespace MonoGame.Source.Systems.Components.Collision;
 /// <summary>
 /// Represents a component responsible for handling collision detection and response.
 /// </summary>
-public class CollisionComponent
+public class CollisionComponent : EntityComponent
 {
-    /// <summary>
-    /// Gets or sets the game entity associated with this collision component.
-    /// </summary>
-    public IGameEntity Entity { get; set; }
+    public CollisionMode Mode;
+
+    public CollisionComponent(CollisionMode mode)
+    {
+        Mode = mode;
+    }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="CollisionComponent"/> class.
+    /// Initializes the AnimatorComponent.
     /// </summary>
-    /// <param name="entity">The game entity to associate with this collision component.</param>
-    public CollisionComponent(IGameEntity entity)
+    public override void Initialize()
     {
-        Entity = entity;
+        if (Mode == CollisionMode.BoundingBox && !Entity.ContainsComponent<BoundingBoxComponent>())
+        {
+            throw new Exception("CollisionComponent in BoundingBox mode requires a BoundingBoxComponent to be present on the entity.");
+        }
+        else if ((Mode == CollisionMode.CollisionMask || Mode == CollisionMode.PixelPerfect) && !Entity.ContainsComponent<SpriteRendererComponent>())
+        {
+            throw new Exception("CollisionComponent in CollisionMask or PixelPerfect mode requires a SpriteRendererComponent to be present on the entity.");
+        }
     }
 
     /// <summary>
