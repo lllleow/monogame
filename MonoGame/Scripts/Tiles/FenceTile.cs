@@ -9,7 +9,7 @@ public class FenceTile : Tile
         SpritesheetName = "textures/fence_spritesheet";
         CollisionMaskSpritesheetName = "textures/fence_spritesheet_collision_mask";
         CollisionMode = CollisionMode.CollisionMask;
-        TextureType = TileTextureType.SimpleConnecting;
+        TextureProcessor = SimpleConnectionTileTextureProcessor.standard;
         ConnectableTiles = ["base.grass", "base.stone"];
         Walkable = false;
     }

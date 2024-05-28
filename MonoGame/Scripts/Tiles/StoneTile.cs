@@ -7,7 +7,7 @@ public class StoneTile : Tile
         Id = "base.stone";
         Name = "Stone";
         SpritesheetName = "textures/stone_spritesheet";
-        TextureType = TileTextureType.CompleteConnecting;
+        TextureProcessor = ComplexConnectionTileTextureProcessor.standard;
         Walkable = false;
     }
 }

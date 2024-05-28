@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using Microsoft.Xna.Framework.Graphics;
 namespace MonoGame;
 
@@ -35,7 +36,7 @@ public class Tile : ITile
     /// <summary>
     /// Gets or sets the current texture index of the tile.
     /// </summary>
-    public Vector2 CurrentTextureIndex { get; set; }
+    public (int, int) CurrentTextureIndex { get; set; }
 
     /// <summary>
     /// Gets or sets the texture associated with the tile.
@@ -73,9 +74,9 @@ public class Tile : ITile
     public static int PixelSizeY { get; set; } = 16;
 
     /// <summary>
-    /// Gets or sets the type of texture for the tile.
+    /// Gets or sets the tile processor used for the tile.
     /// </summary>
-    public TileTextureType TextureType { get; set; } = TileTextureType.Basic;
+    public ITileTextureProcessor TextureProcessor { get; set; }
 
     /// <summary>
     /// Gets or sets the collision type of the tile.
@@ -124,6 +125,20 @@ public class Tile : ITile
     /// <param name="layer">The draw layer of the tile.</param>
     public void UpdateTextureCoordinates(TileDrawLayer layer)
     {
+        TileNeighborConfiguration configuration = GetNeighborConfiguration(layer);
+        (int, int) coordinates = TextureProcessor?.Process(configuration) ?? (0, 0);
+
+        CurrentTextureIndex = coordinates;
+
+        TextureX = coordinates.Item1;
+        TextureY = coordinates.Item2;
+    }
+
+    /// <summary>
+    /// Represents the configuration of neighboring tiles for a specific tile.
+    /// </summary>
+    public TileNeighborConfiguration GetNeighborConfiguration(TileDrawLayer layer)
+    {
         ITile left = Globals.world.GetTileAt(layer, PosX - 1, PosY);
         ITile right = Globals.world.GetTileAt(layer, PosX + 1, PosY);
         ITile up = Globals.world.GetTileAt(layer, PosX, PosY - 1);
@@ -134,245 +149,7 @@ public class Tile : ITile
         ITile left_bottom = Globals.world.GetTileAt(layer, PosX - 1, PosY + 1);
         ITile right_bottom = Globals.world.GetTileAt(layer, PosX + 1, PosY + 1);
 
-        bool leftIsSame = IsSameType(left) || IsWhitelistedToConnect(left);
-        bool rightIsSame = IsSameType(right) || IsWhitelistedToConnect(right);
-        bool upIsSame = IsSameType(up) || IsWhitelistedToConnect(up);
-        bool downIsSame = IsSameType(down) || IsWhitelistedToConnect(down);
-
-        bool left_topIsSame = IsSameType(left_top) || IsWhitelistedToConnect(left_top);
-        bool right_topIsSame = IsSameType(right_top) || IsWhitelistedToConnect(right_top);
-        bool left_bottomIsSame = IsSameType(left_bottom) || IsWhitelistedToConnect(left_bottom);
-        bool right_bottomIsSame = IsSameType(right_bottom) || IsWhitelistedToConnect(right_bottom);
-
-        Vector2 coordinates = new Vector2(0, 0);
-
-        if (TextureType == TileTextureType.CompleteConnecting)
-        {
-            if (leftIsSame && rightIsSame && upIsSame && downIsSame)
-            {
-                if (!left_bottomIsSame && !right_bottomIsSame)
-                {
-                    coordinates = new Vector2(4, 1);
-                }
-                else if (!left_bottomIsSame)
-                {
-                    coordinates = new Vector2(7, 2);
-                }
-                else if (!right_topIsSame && !right_bottomIsSame)
-                {
-                    coordinates = new Vector2(7, 1);
-                }
-                else if (!left_topIsSame && !left_bottomIsSame)
-                {
-                    coordinates = new Vector2(7, 2);
-                }
-                else
-                {
-                    coordinates = new Vector2(1, 1);
-                }
-            }
-            else if (leftIsSame && rightIsSame && upIsSame)
-            {
-                coordinates = new Vector2(1, 2);
-            }
-            else if (leftIsSame && rightIsSame && downIsSame)
-            {
-                if (!right_bottomIsSame && !left_bottomIsSame)
-                {
-                    coordinates = new Vector2(4, 2);
-                }
-                else if (!right_bottomIsSame)
-                {
-                    coordinates = new Vector2(6, 2);
-                }
-                else if (!left_bottomIsSame)
-                {
-                    coordinates = new Vector2(6, 1);
-                }
-                else
-                {
-                    coordinates = new Vector2(1, 0);
-                }
-            }
-            else if (upIsSame && downIsSame && rightIsSame)
-            {
-                if (!right_bottomIsSame)
-                {
-                    coordinates = new Vector2(5, 2);
-                }
-                else
-                {
-                    coordinates = new Vector2(0, 1);
-                }
-            }
-            else if (upIsSame && downIsSame && leftIsSame)
-            {
-                if (!left_bottomIsSame)
-                {
-                    coordinates = new Vector2(5, 1);
-                }
-                else
-                {
-                    coordinates = new Vector2(2, 1);
-                }
-            }
-            else if (leftIsSame && rightIsSame && !upIsSame && !downIsSame)
-            {
-                coordinates = new Vector2(5, 0);
-            }
-            else if (upIsSame && downIsSame)
-            {
-                coordinates = new Vector2(3, 1);
-            }
-            else if (leftIsSame && upIsSame)
-            {
-                coordinates = new Vector2(2, 2);
-            }
-            else if (rightIsSame && upIsSame)
-            {
-                coordinates = new Vector2(0, 2);
-            }
-            else if (leftIsSame && downIsSame)
-            {
-                if (!left_bottomIsSame)
-                {
-                    coordinates = new Vector2(9, 2);
-                }
-                else
-                {
-                    coordinates = new Vector2(2, 0);
-                }
-            }
-            else if (rightIsSame && downIsSame)
-            {
-                if (!right_bottomIsSame)
-                {
-                    coordinates = new Vector2(9, 0);
-                }
-                else
-                {
-                    coordinates = new Vector2(0, 0);
-                }
-            }
-            else if (leftIsSame)
-            {
-                coordinates = new Vector2(6, 0);
-            }
-            else if (rightIsSame)
-            {
-                coordinates = new Vector2(4, 0);
-            }
-            else if (upIsSame)
-            {
-                coordinates = new Vector2(3, 2);
-            }
-            else if (downIsSame)
-            {
-                coordinates = new Vector2(3, 0);
-            }
-            else
-            {
-                coordinates = new Vector2(7, 0);
-            }
-        }
-        else if (TextureType == TileTextureType.SimpleConnecting)
-        {
-            if (leftIsSame && rightIsSame && upIsSame && downIsSame)
-            {
-                coordinates = new Vector2(1, 1);
-            }
-            else if (leftIsSame && rightIsSame && upIsSame)
-            {
-                coordinates = new Vector2(1, 2);
-            }
-            else if (leftIsSame && rightIsSame && downIsSame)
-            {
-                coordinates = new Vector2(1, 0);
-            }
-            else if (upIsSame && downIsSame && rightIsSame)
-            {
-                coordinates = new Vector2(0, 1);
-            }
-            else if (upIsSame && downIsSame && leftIsSame)
-            {
-                coordinates = new Vector2(2, 1);
-            }
-            else if (leftIsSame && rightIsSame && !upIsSame && !downIsSame)
-            {
-                coordinates = new Vector2(5, 0);
-            }
-            else if (upIsSame && downIsSame)
-            {
-                coordinates = new Vector2(3, 1);
-            }
-            else if (leftIsSame && upIsSame)
-            {
-                coordinates = new Vector2(2, 2);
-            }
-            else if (rightIsSame && upIsSame)
-            {
-                coordinates = new Vector2(0, 2);
-            }
-            else if (leftIsSame && downIsSame)
-            {
-                coordinates = new Vector2(2, 0);
-            }
-            else if (rightIsSame && downIsSame)
-            {
-                coordinates = new Vector2(0, 0);
-            }
-            else if (leftIsSame)
-            {
-                coordinates = new Vector2(6, 0);
-            }
-            else if (rightIsSame)
-            {
-                coordinates = new Vector2(4, 0);
-            }
-            else if (upIsSame)
-            {
-                coordinates = new Vector2(3, 2);
-            }
-            else if (downIsSame)
-            {
-                coordinates = new Vector2(3, 0);
-            }
-            else
-            {
-                coordinates = new Vector2(7, 0);
-            }
-        }
-
-        CurrentTextureIndex = coordinates;
-
-        TextureX = (int)coordinates.X;
-        TextureY = (int)coordinates.Y;
-    }
-
-    /// <summary>
-    /// Checks if the specified tile is of the same type as the current tile.
-    /// </summary>
-    /// <param name="tile">The tile to compare.</param>
-    /// <returns><c>true</c> if the tiles are of the same type; otherwise, <c>false</c>.</returns>
-    private bool IsSameType(ITile tile)
-    {
-        return tile != null && tile.GetType() == GetType();
-    }
-
-    private bool IsWhitelistedToConnect(ITile tile)
-    {
-        if (tile != null)
-        {
-            foreach (string connectableTile in ConnectableTiles)
-            {
-                if (tile.Id == connectableTile)
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return new TileNeighborConfiguration(this, left, right, up, down, left_top, right_top, left_bottom, right_bottom);
     }
 
     /// <summary>
@@ -383,7 +160,7 @@ public class Tile : ITile
     /// <param name="direction">The direction of the neighbor tile.</param>
     public void OnNeighborChanged(ITile neighbor, TileDrawLayer layer, Direction direction)
     {
-        if (TextureType != TileTextureType.Basic)
+        if (TextureProcessor != null)
         {
             UpdateTextureCoordinates(layer);
         }

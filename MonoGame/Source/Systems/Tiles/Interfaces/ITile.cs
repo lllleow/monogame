@@ -53,9 +53,9 @@ public interface ITile
     public int SizeY { get; set; }
 
     /// <summary>
-    /// Gets or sets the type of texture used by the tile.
+    /// Gets or sets the type of texture processor used by the tile.
     /// </summary>
-    public TileTextureType TextureType { get; set; }
+    public ITileTextureProcessor TextureProcessor { get; set; }
 
     /// <summary>
     /// Gets or sets the collision type of the tile.

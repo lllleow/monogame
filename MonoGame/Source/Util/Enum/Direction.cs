@@ -41,4 +41,23 @@ public class DirectionHelper
                 return Direction.Up;
         }
     }
+
+    /// <summary>
+    /// Gets the direction based on the specified X and Y coordinates.
+    /// </summary>
+    /// <param name="x">The X coordinate.</param>
+    /// <param name="y">The Y coordinate.</param>
+    /// <returns>The direction.</returns>
+    public static Direction GetDirection(int x, int y)
+    {
+        if (x == 0 && y > 0) return Direction.Up;
+        if (x == 0 && y < 0) return Direction.Down;
+        if (x > 0 && y == 0) return Direction.Right;
+        if (x > 0 && y > 0) return Direction.RightUp;
+        if (x > 0 && y < 0) return Direction.RightDown;
+        if (x < 0 && y == 0) return Direction.Left;
+        if (x < 0 && y > 0) return Direction.LeftUp;
+        if (x < 0 && y < 0) return Direction.LeftDown;
+        return Direction.Up;
+    }
 }
