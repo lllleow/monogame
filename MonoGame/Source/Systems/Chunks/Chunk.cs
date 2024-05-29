@@ -4,6 +4,7 @@ using DotnetNoise;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Chunks.Interfaces;
+using MonoGame.Source.Systems.Components.Collision;
 using MonoGame.Source.Systems.Scripts;
 using MonoGame.Source.Util.Loaders;
 
@@ -251,8 +252,12 @@ public class Chunk : IChunk
                         else if (layer.Key == TileDrawLayer.Tiles)
                         {
                             Vector2 playerPosition = Globals.world.Player.Position + new Vector2(Tile.PixelSizeX / 2, Tile.PixelSizeY);
-                            if (playerPosition.Y < tileRectangle.Bottom)
+                            if (playerPosition.Y - 2 <= tileRectangle.Bottom)
                             {
+                                if (Math.Abs(position.X - playerPosition.X) < (Tile.PixelSizeX * 1) && Math.Abs(position.Y - playerPosition.Y) < Tile.PixelSizeY && tile.CollisionMode == CollisionMode.CollisionMask)
+                                {
+                                    colorWithOpacity = Color.White * 0.9f;
+                                }
                                 layerDepth = 0.6f;
                             }
                             else
@@ -273,7 +278,7 @@ public class Chunk : IChunk
                             layerDepth
                         );
 
-                        if (tile.CollisionMaskSpritesheetName != null && tile.CollisionMode == CollisionMode.CollisionMask)
+                        if (tile.CollisionMaskSpritesheetName != null && tile.CollisionMode == CollisionMode.CollisionMask && CollisionComponent.ShowCollisionMasks)
                         {
                             spriteBatch.Draw(
                                 SpritesheetLoader.GetSpritesheet(tile.CollisionMaskSpritesheetName),
@@ -288,7 +293,7 @@ public class Chunk : IChunk
                             );
                         }
 
-                        if (layer.Key != TileDrawLayer.Background)
+                        if (layer.Key != TileDrawLayer.Background && Tile.ShowTileBoundingBox)
                         {
                             Globals.spriteBatch.End();
                             primitiveBatch.Begin(PrimitiveType.LineList);

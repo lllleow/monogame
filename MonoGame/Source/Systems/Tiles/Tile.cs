@@ -114,6 +114,11 @@ public class Tile : ITile
     public bool Walkable { get; set; } = true;
 
     /// <summary>
+    /// Gets or sets a value indicating whether the tile bounding box should be shown.
+    /// </summary>
+    public static bool ShowTileBoundingBox = false;
+
+    /// <summary>
     /// Initializes the tile with the specified position.
     /// </summary>
     /// <param name="x">The X position of the tile.</param>

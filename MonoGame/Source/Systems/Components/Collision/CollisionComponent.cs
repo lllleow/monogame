@@ -11,6 +11,7 @@ public class CollisionComponent : EntityComponent
 {
     public CollisionMode Mode;
     public string CollisionMaskSpritesheet;
+    public static bool ShowCollisionMasks = false;
 
     public CollisionComponent(CollisionMode mode)
     {
