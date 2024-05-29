@@ -9,6 +9,7 @@
       "MonoGame/1.0.0": {
         "dependencies": {
           "DotnetNoise": "1.0.0",
+          "MessagePack": "2.5.140",
           "Microsoft.CodeAnalysis.CSharp": "4.9.2",
           "Microsoft.CodeAnalysis.CSharp.Scripting": "4.9.2",
           "MonoGame.Content.Builder.Task": "3.8.1.303",
@@ -23,6 +24,27 @@
           "lib/netstandard2.0/DotnetNoise.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "MessagePack/2.5.140": {
+        "dependencies": {
+          "MessagePack.Annotations": "2.5.140",
+          "Microsoft.NET.StringTools": "17.6.3",
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        },
+        "runtime": {
+          "lib/net6.0/MessagePack.dll": {
+            "assemblyVersion": "2.5.0.0",
+            "fileVersion": "2.5.140.61180"
+          }
+        }
+      },
+      "MessagePack.Annotations/2.5.140": {
+        "runtime": {
+          "lib/netstandard2.0/MessagePack.Annotations.dll": {
+            "assemblyVersion": "2.5.0.0",
+            "fileVersion": "2.5.140.61180"
           }
         }
       },
@@ -242,6 +264,18 @@
         }
       },
       "Microsoft.CSharp/4.7.0": {},
+      "Microsoft.NET.StringTools/17.6.3": {
+        "dependencies": {
+          "System.Memory": "4.5.5",
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.NET.StringTools.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "17.6.3.22601"
+          }
+        }
+      },
       "MonoGame.Content.Builder.Task/3.8.1.303": {},
       "MonoGame.Framework.DesktopGL/3.8.1.303": {
         "runtime": {
@@ -304,6 +338,7 @@
           }
         }
       },
+      "System.Memory/4.5.5": {},
       "System.Reflection.Metadata/8.0.0": {
         "dependencies": {
           "System.Collections.Immutable": "8.0.0"
@@ -330,6 +365,20 @@
       "sha512": "sha512-GdEL8YZXceS39AsanUUwZCX/lRseX26xhbQIhB0/+yz4+rx8eWy+0vkP6isPuAecEvd0PVkXO4peNRW0wMlzhg==",
       "path": "dotnetnoise/1.0.0",
       "hashPath": "dotnetnoise.1.0.0.nupkg.sha512"
+    },
+    "MessagePack/2.5.140": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-nkIsgy8BkIfv40bSz9XZb4q//scI1PF3AYeB5X66nSlIhBIqbdpLz8Qk3gHvnjV3RZglQLO/ityK3eNfLii2NA==",
+      "path": "messagepack/2.5.140",
+      "hashPath": "messagepack.2.5.140.nupkg.sha512"
+    },
+    "MessagePack.Annotations/2.5.140": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JE3vwluOrsJ4t3hnfXzIxJUh6lhx6M/KR8Sark/HOUw1DJ5UKu5JsAnnuaQngg6poFkRx1lzHSLTkxHNJO7+uQ==",
+      "path": "messagepack.annotations/2.5.140",
+      "hashPath": "messagepack.annotations.2.5.140.nupkg.sha512"
     },
     "Microsoft.CodeAnalysis.Analyzers/3.3.4": {
       "type": "package",
@@ -373,6 +422,13 @@
       "path": "microsoft.csharp/4.7.0",
       "hashPath": "microsoft.csharp.4.7.0.nupkg.sha512"
     },
+    "Microsoft.NET.StringTools/17.6.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-N0ZIanl1QCgvUumEL1laasU0a7sOE5ZwLZVTn0pAePnfhq8P7SvTjF8Axq+CnavuQkmdQpGNXQ1efZtu5kDFbA==",
+      "path": "microsoft.net.stringtools/17.6.3",
+      "hashPath": "microsoft.net.stringtools.17.6.3.nupkg.sha512"
+    },
     "MonoGame.Content.Builder.Task/3.8.1.303": {
       "type": "package",
       "serviceable": true,
@@ -393,6 +449,13 @@
       "sha512": "sha512-AurL6Y5BA1WotzlEvVaIDpqzpIPvYnnldxru8oXJU2yFxFUy3+pNXjXd1ymO+RA0rq0+590Q8gaz2l3Sr7fmqg==",
       "path": "system.collections.immutable/8.0.0",
       "hashPath": "system.collections.immutable.8.0.0.nupkg.sha512"
+    },
+    "System.Memory/4.5.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XIWiDvKPXaTveaB7HVganDlOCRoj03l+jrwNvcge/t8vhGYKvqV+dMv6G4SAX2NoNmN0wZfVPTAlFwZcZvVOUw==",
+      "path": "system.memory/4.5.5",
+      "hashPath": "system.memory.4.5.5.nupkg.sha512"
     },
     "System.Reflection.Metadata/8.0.0": {
       "type": "package",

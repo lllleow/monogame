@@ -74,6 +74,16 @@ public class Tile : ITile
     public static int PixelSizeY { get; set; } = 16;
 
     /// <summary>
+    /// Gets or sets the pixel offset in the X axis of the tile in relation to the grid.
+    /// </summary>
+    public int PixelOffsetX { get; set; }
+
+    /// <summary>
+    /// Gets or sets the pixel offset in the  axis of the tile in relation to the grid.
+    /// </summary>
+    public int PixelOffsetY { get; set; }
+
+    /// <summary>
     /// Gets or sets the tile processor used for the tile.
     /// </summary>
     public ITileTextureProcessor TextureProcessor { get; set; }

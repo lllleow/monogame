@@ -7,7 +7,7 @@ public class GrassTile : Tile
         Id = "base.grass";
         Name = "Grass";
         SpritesheetName = "textures/grass_spritesheet";
-        TextureProcessor = ComplexConnectionTileTextureProcessor.standard;
+        TextureProcessor = ComplexConnectionTileTextureProcessor.instance;
         Walkable = false;
     }
 }

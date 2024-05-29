@@ -90,7 +90,7 @@ public class Player : GameEntity
                 {
                     lastLocalX = localX;
                     lastLocalY = localY;
-                    chunk.SetTileAndUpdateNeighbors("base.fence", TileDrawLayer.Tiles, localX, localY);
+                    chunk.SetTileAndUpdateNeighbors("base.wall", TileDrawLayer.Tiles, localX, localY);
                 }
             }
         }

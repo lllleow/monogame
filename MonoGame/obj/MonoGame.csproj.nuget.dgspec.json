@@ -49,6 +49,10 @@
               "target": "Package",
               "version": "[1.0.0, )"
             },
+            "MessagePack": {
+              "target": "Package",
+              "version": "[2.5.140, )"
+            },
             "Microsoft.CodeAnalysis.CSharp": {
               "target": "Package",
               "version": "[4.9.2, )"
