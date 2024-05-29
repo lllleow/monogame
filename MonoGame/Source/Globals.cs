@@ -28,7 +28,11 @@ public class Globals
     /// <summary>
     /// Gets or sets the graphics device manager used for managing the graphics device.
     /// </summary>
-    public static Microsoft.Xna.Framework.GraphicsDeviceManager graphicsDevice { get; set; }
+    public static GraphicsDeviceManager graphicsDevice { get; set; }
+    /// <summary>
+    /// Gets or sets a value indicating whether the game is running in full-screen mode.
+    /// </summary>
+    public static bool FullScreen { get; internal set; } = false;
 
     /// <summary>
     /// Gets or sets the camera object used for viewing the game world.

@@ -16,9 +16,10 @@ public class UserInterface : IUserInterface
     {
         foreach (IUserInterfaceComponent component in Components)
         {
+            component.Draw(spriteBatch);
             foreach (IUserInterfaceComponent childComponent in component.ChildComponents)
             {
-                component.Draw(spriteBatch);
+                childComponent.Draw(spriteBatch);
             }
         }
     }
@@ -27,9 +28,10 @@ public class UserInterface : IUserInterface
     {
         foreach (IUserInterfaceComponent component in Components)
         {
+            component.Update(gameTime);
             foreach (IUserInterfaceComponent childComponent in component.ChildComponents)
             {
-                component.Update(gameTime);
+                childComponent.Update(gameTime);
             }
         }
     }
@@ -37,6 +39,7 @@ public class UserInterface : IUserInterface
     public void AddComponent(IUserInterfaceComponent component)
     {
         component.SetCallbackFunction(OnComponentChanged);
+        component.InitializeComponent();
         Components.Add(component);
     }
 

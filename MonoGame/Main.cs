@@ -25,6 +25,7 @@ public class Main : Game
         Globals.graphicsDevice.PreferredBackBufferWidth = ScreenSizeX;
         Globals.graphicsDevice.PreferredBackBufferHeight = ScreenSizeY;
         Globals.graphicsDevice.PreferMultiSampling = false;
+        Globals.graphicsDevice.IsFullScreen = Globals.FullScreen;
         Globals.graphicsDevice.ApplyChanges();
 
         Globals.camera = new Camera(ScreenSizeX, ScreenSizeY);

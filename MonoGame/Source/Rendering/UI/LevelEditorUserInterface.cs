@@ -9,14 +9,14 @@ public class LevelEditorUserInterface : UserInterface
 {
     public LevelEditorUserInterface()
     {
-        Name = "Level Editor";
+        Name = "level_editor_user_interface";
 
         AddComponent(
             new DirectionalListUserInterfaceComponent(
                 "row_1",
                 ListDirection.Horizontal,
                 null,
-                new List<IUserInterfaceComponent> { new TileSlotComponent("slot_1", new Rectangle(0, 0, 16, 16)), new TileSlotComponent("slot_1", new Rectangle(0, 0, 16, 16)), new TileSlotComponent("slot_1", new Rectangle(0, 0, 16, 16)), new TileSlotComponent("slot_1", new Rectangle(0, 0, 16, 16)) }
+                new List<IUserInterfaceComponent> { new TileSlotComponent("slot_1", new Rectangle(0, 0, 16, 16)), new TileSlotComponent("slot_1", new Rectangle(0, 0, 16, 16)),  new TileSlotComponent("slot_1", new Rectangle(0, 0, 16, 16)), new TileSlotComponent("slot_1", new Rectangle(0, 0, 16, 16)),  new TileSlotComponent("slot_1", new Rectangle(0, 0, 16, 16)), new TileSlotComponent("slot_1", new Rectangle(0, 0, 16, 16)) }
             )
         );
     }

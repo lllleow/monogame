@@ -88,6 +88,29 @@ public class PrimitiveBatch : IDisposable
         };
     }
 
+    public PrimitiveBatch(GraphicsDevice graphicsDevice, Matrix transform)
+    {
+        if (graphicsDevice == null)
+            throw new ArgumentNullException(nameof(graphicsDevice));
+
+        device = graphicsDevice;
+
+        // Set up a new BasicEffect and enable vertex colors
+        basicEffect = new BasicEffect(graphicsDevice)
+        {
+            VertexColorEnabled = true,
+
+            // Setup the projection matrix for 2D projection with 0,0 in the upper left.
+            Projection = Matrix.CreateOrthographicOffCenter(0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height, 0, 0, 1),
+
+            // Set the World matrix to Identity as default
+            World = Matrix.Identity,
+
+            // Initially set the View matrix to use the camera's transformation matrix
+            View = transform
+        };
+    }
+
     public void Dispose()
     {
         this.Dispose(true);
@@ -116,6 +139,41 @@ public class PrimitiveBatch : IDisposable
         }
 
         basicEffect.View = Globals.camera.Transform;
+
+        // these three types reuse vertices, so we can't flush properly without more
+        // complex logic. Since that's a bit too complicated for this sample, we'll
+        // simply disallow them.
+        if (primitiveType == PrimitiveType.LineStrip ||
+            primitiveType == PrimitiveType.TriangleStrip)
+        {
+            throw new NotSupportedException
+                ("The specified primitiveType is not supported by PrimitiveBatch.");
+        }
+
+        this.primitiveType = primitiveType;
+
+        // how many verts will each of these primitives require?
+        this.numVertsPerPrimitive = NumVertsPerPrimitive(primitiveType);
+
+        //tell our basic effect to begin.
+        basicEffect.CurrentTechnique.Passes[0].Apply();
+
+        // flip the error checking boolean. It's now ok to call AddVertex, Flush,
+        // and End.
+        hasBegun = true;
+    }
+
+    // Begin is called to tell the PrimitiveBatch what kind of primitives will be
+    // drawn, and to prepare the graphics card to render those primitives.
+    public void Begin(PrimitiveType primitiveType, Matrix transform)
+    {
+        if (hasBegun)
+        {
+            throw new InvalidOperationException
+                ("End must be called before Begin can be called again.");
+        }
+
+        basicEffect.View = transform;
 
         // these three types reuse vertices, so we can't flush properly without more
         // complex logic. Since that's a bit too complicated for this sample, we'll
