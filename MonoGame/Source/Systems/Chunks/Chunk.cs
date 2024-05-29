@@ -317,7 +317,8 @@ public class Chunk : IChunk
                             primitiveBatch.AddVertex(topLeft, Color.Red);
 
                             primitiveBatch.End();
-                            Globals.spriteBatch.Begin(transformMatrix: Globals.camera.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+
+                            Globals.DefaultSpriteBatchBegin();
                         }
                     }
                 }

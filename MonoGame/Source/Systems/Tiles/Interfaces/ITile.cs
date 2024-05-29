@@ -134,4 +134,12 @@ public interface ITile
     {
         return new Rectangle(PosX, PosY, SizeX * Tile.PixelSizeX, SizeY * Tile.PixelSizeY);
     }
+
+    /// <summary>
+    /// Represents the location of a texture within a spritesheet.
+    /// </summary>
+    public TextureLocation GetTextureLocation()
+    {
+        return new TextureLocation(SpritesheetName, GetSpriteRectangle());
+    }
 }

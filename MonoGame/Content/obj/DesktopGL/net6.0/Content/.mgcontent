@@ -11,12 +11,14 @@
     <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/player_sprite_2_collision_mask.png</File>
     <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/player_sprite_2.png</File>
     <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/player_spritesheet.png</File>
+    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/slot.png</File>
     <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/spritesheet.png</File>
     <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/stone_spritesheet.png</File>
     <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/wall_spritesheet_collision_mask.png</File>
     <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/wall_spritesheet.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

@@ -52,6 +52,11 @@ public abstract class EntityComponent : IEntityComponent
 
     }
 
+    public void SetEntity(IGameEntity entity)
+    {
+        Entity = entity;
+    }
+
     /// <summary>
     /// Updates the entity component based on the specified game time.
     /// </summary>

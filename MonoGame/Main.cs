@@ -39,9 +39,12 @@ public class Main : Game
     {
         Globals.contentManager = this.Content;
         Globals.spriteBatch = new SpriteBatch(GraphicsDevice);
+        Globals.userInterfaceHandler = new UserInterfaceHandler();
 
         TileRegistry.LoadTileScripts();
         AnimationBundleRegistry.LoadAnimationBundleScripts();
+
+        Globals.userInterfaceHandler.Initialize();
 
         Globals.world = new World();
         Globals.world.InitWorld();
@@ -55,6 +58,7 @@ public class Main : Game
         Globals.world.Update(gameTime);
         Globals.camera.Follow(Globals.world.Player, gameTime);
         Globals.camera.Update(gameTime);
+        Globals.userInterfaceHandler.Update(gameTime);
         base.Update(gameTime);
     }
 
@@ -62,10 +66,13 @@ public class Main : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        Globals.spriteBatch.Begin(transformMatrix: Globals.camera.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+        Globals.DefaultSpriteBatchBegin();
         Globals.world.Draw(Globals.spriteBatch);
         Globals.spriteBatch.End();
 
+        Globals.spriteBatch.Begin(transformMatrix: Globals.userInterfaceHandler.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+        Globals.userInterfaceHandler.Draw(Globals.spriteBatch);
+        Globals.spriteBatch.End();
 
         base.Draw(gameTime);
     }

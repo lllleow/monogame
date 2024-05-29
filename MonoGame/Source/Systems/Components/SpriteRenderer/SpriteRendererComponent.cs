@@ -70,8 +70,19 @@ public class SpriteRendererComponent : EntityComponent
         spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(SpriteSheet), Entity.Position, TextureRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0.5f);
     }
 
+    /// <summary>
+    /// Represents the sprite renderer rectangle in a two-dimensional space.
+    /// </summary>
     public Rectangle GetRectangle()
     {
         return new Rectangle((int)Entity.Position.X, (int)Entity.Position.Y, (int)Size.X, (int)Size.Y);
+    }
+
+    /// <summary>
+    /// Represents the location of a texture within a sprite sheet.
+    /// </summary>
+    public TextureLocation GetTextureLocation()
+    {
+        return new TextureLocation(SpriteSheet, TextureRectangle);
     }
 }

@@ -39,4 +39,11 @@ public class Globals
     /// Gets or sets the game object.
     /// </summary>
     public static Game game;
+
+    public static UserInterfaceHandler userInterfaceHandler;
+
+    public static void DefaultSpriteBatchBegin()
+    {
+        Globals.spriteBatch.Begin(transformMatrix: camera.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+    }
 }

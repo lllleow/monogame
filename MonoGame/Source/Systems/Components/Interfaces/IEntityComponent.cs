@@ -23,35 +23,23 @@ public interface IEntityComponent
     /// <summary>
     /// Initializes the component.
     /// </summary>
-    virtual void Initialize()
-    {
-
-    }
+    abstract void Initialize();
 
     /// <summary>
     /// Sets the entity associated with this component.
     /// </summary>
     /// <param name="entity">The game entity to set.</param>
-    public virtual void SetEntity(IGameEntity entity)
-    {
-        Entity = entity;
-    }
+    public abstract void SetEntity(IGameEntity entity);
 
     /// <summary>
     /// Updates the component.
     /// </summary>
     /// <param name="gameTime">The game time.</param>
-    virtual void Update(GameTime gameTime)
-    {
-
-    }
+    public abstract void Update(GameTime gameTime);
 
     /// <summary>
     /// Draws the component.
     /// </summary>
     /// <param name="spriteBatch">The sprite batch used for drawing.</param>
-    virtual void Draw(SpriteBatch spriteBatch)
-    {
-
-    }
+    public abstract void Draw(SpriteBatch spriteBatch);
 }
