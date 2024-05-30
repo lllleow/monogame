@@ -4,26 +4,26 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame;
 
-public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceComponent
+public class DirectionalListUserInterfaceComponent : GridUserInterfaceComponent
 {
     public ListDirection Direction = ListDirection.Horizontal;
-    public int Spacing = 2;
-    public DirectionalListUserInterfaceComponent(string name, ListDirection direction, Vector2 position, Vector2 size, UserInterfaceAlignment childAlignment, List<IUserInterfaceComponent> children) : base(name, position, size, childAlignment, children)
+
+    public DirectionalListUserInterfaceComponent(string name, ListDirection direction, int spacing, Vector2 position, Vector2 size, UserInterfaceAlignment childAlignment, List<IUserInterfaceComponent> children) : base(name, 0, 0, position, size, childAlignment, children)
     {
         Direction = direction;
-    }
 
-    public override Vector2 GetOffsetForChild(IUserInterfaceComponent child)
-    {
-        float index = Children.IndexOf(child);
         switch (Direction)
         {
             case ListDirection.Horizontal:
-                return new Vector2((index * child.Size.X) + (index * Spacing), 0);
+                Columns = children.Count;
+                Rows = 1;
+                Spacing = new Vector2(spacing, 0);
+                break;
             case ListDirection.Vertical:
-                return new Vector2(0, (index * child.Size.Y) + (index * Spacing));
-            default:
-                return Vector2.Zero;
+                Columns = 1;
+                Rows = children.Count;
+                Spacing = new Vector2(0, spacing);
+                break;
         }
     }
 }
