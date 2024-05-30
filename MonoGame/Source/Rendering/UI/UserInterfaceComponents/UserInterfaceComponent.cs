@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame;
@@ -29,13 +30,13 @@ public class UserInterfaceComponent : IUserInterfaceComponent
 
     public virtual Vector2 GetRelativePosition()
     {
-        Vector2 parentPosition = Parent?.Position ?? Vector2.Zero;
+        Vector2 parentPosition = Parent?.GetRelativePosition() ?? Vector2.Zero;
         Vector2 relativePosition = parentPosition + Position;
         relativePosition += GetRelativeContentPadding() / 2;
 
         if (Parent is IParentUserInterfaceComponent parentUserInterfaceComponent)
         {
-            relativePosition += parentUserInterfaceComponent.GetOriginForAlignment(Size);
+            relativePosition += parentUserInterfaceComponent.GetChildPositionForAlignment(this);
         }
 
         if (Parent is IMultipleChildUserInterfaceComponent multipleChildUserInterfaceComponent)

@@ -10,5 +10,5 @@ public interface IMultipleChildUserInterfaceComponent
     public void AddChild(IUserInterfaceComponent child);
     public void RemoveChild(IUserInterfaceComponent child);
     public Vector2 GetOffsetForChild(IUserInterfaceComponent child);
-    public Rectangle GetBoundsOfChildren();
+    public Rectangle GetBoundsOfChildren(List<IUserInterfaceComponent> excluding = null);
 }

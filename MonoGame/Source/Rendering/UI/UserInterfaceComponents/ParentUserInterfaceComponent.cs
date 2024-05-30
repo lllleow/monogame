@@ -17,24 +17,21 @@ public class ParentUserInterfaceComponent : UserInterfaceComponent, IParentUserI
 
     public UserInterfaceAlignment ChildAlignment { get; set; }
 
-    public virtual Vector2 GetOriginForAlignment(Vector2 componentSize)
+    public virtual Vector2 GetChildPositionForAlignment(IUserInterfaceComponent component)
     {
         Vector2 origin;
-        int SizeX = (int)Size.X;
-        int SizeY = (int)Size.Y;
 
-        int componentWidth = (int)componentSize.X;
-        int componentHeight = (int)componentSize.Y;
+        int componentWidth = (int)component.Size.X;
+        int componentHeight = (int)component.Size.Y;
 
-        if (this is IMultipleChildUserInterfaceComponent multipleChildUserInterfaceComponent)
+        if (this is IMultipleChildUserInterfaceComponent multiChild)
         {
-            Rectangle childrenSize = multipleChildUserInterfaceComponent.GetBoundsOfChildren();
-            componentWidth = (int)childrenSize.Size.X;
-            componentHeight = (int)childrenSize.Size.Y;
+            componentWidth = multiChild.GetBoundsOfChildren().Size.X;
+            componentHeight = multiChild.GetBoundsOfChildren().Size.Y;
         }
 
-        int centerX = (int)((SizeX / 2) - (componentWidth / 2));
-        int centerY = (int)((SizeY / 2) - (componentHeight / 2));
+        int centerX = (int)((Size.X / 2) - (componentWidth / 2));
+        int centerY = (int)((Size.Y / 2) - (componentHeight / 2));
 
         switch (ChildAlignment)
         {
@@ -48,22 +45,22 @@ public class ParentUserInterfaceComponent : UserInterfaceComponent, IParentUserI
                 origin = new Vector2(centerX, centerY);
                 break;
             case UserInterfaceAlignment.RightCenter:
-                origin = new Vector2(SizeX - componentWidth, centerY);
+                origin = new Vector2(Size.X - componentWidth, centerY);
                 break;
             case UserInterfaceAlignment.CenterDown:
-                origin = new Vector2(centerX, SizeY - componentHeight);
+                origin = new Vector2(centerX, Size.Y - componentHeight);
                 break;
             case UserInterfaceAlignment.LeftUp:
                 origin = new Vector2(0, 0);
                 break;
             case UserInterfaceAlignment.RightUp:
-                origin = new Vector2(SizeX - componentWidth, 0);
+                origin = new Vector2(Size.X - componentWidth, 0);
                 break;
             case UserInterfaceAlignment.LeftDown:
-                origin = new Vector2(0, SizeY - componentHeight);
+                origin = new Vector2(0, Size.Y - componentHeight);
                 break;
             case UserInterfaceAlignment.RightDown:
-                origin = new Vector2(SizeX - componentWidth, SizeY - componentHeight);
+                origin = new Vector2(Size.X - componentWidth, Size.Y - componentHeight);
                 break;
             default:
                 origin = new Vector2(Position.X, Position.Y);
@@ -72,10 +69,12 @@ public class ParentUserInterfaceComponent : UserInterfaceComponent, IParentUserI
 
         if (Parent is IParentUserInterfaceComponent parentUserInterfaceComponent)
         {
-            origin += parentUserInterfaceComponent.GetOriginForAlignment(Size);
+            origin += parentUserInterfaceComponent.GetPositionForAlignment(this);
             return origin;
         }
-
-        return origin;
+        else
+        {
+            return origin;
+        }
     }
 }

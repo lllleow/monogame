@@ -17,7 +17,7 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
     public override void Draw(SpriteBatch spriteBatch)
     {
         base.Draw(spriteBatch);
-        
+
         TextureLocation textureLocation = GetDrawable();
         Vector2 position = GetRelativePosition();
 

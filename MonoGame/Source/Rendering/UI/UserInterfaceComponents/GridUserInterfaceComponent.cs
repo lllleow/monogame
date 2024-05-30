@@ -23,7 +23,8 @@ public class GridUserInterfaceComponent : MultipleChildUserInterfaceComponent
 
         int column = index % Columns;
         int row = index / Columns;
-
-        return new Vector2((column * child.Size.X) + (column * Spacing.X), (row * child.Size.Y) + (row * Spacing.Y));
+        
+        Vector2 size = child.Size;
+        return new Vector2((column * size.X) + (column * Spacing.X), (row * size.Y) + (row * Spacing.Y));
     }
 }

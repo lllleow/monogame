@@ -48,7 +48,7 @@ public class MultipleChildUserInterfaceComponent : ParentUserInterfaceComponent,
         }
     }
 
-    public Rectangle GetBoundsOfChildren()
+    public Rectangle GetBoundsOfChildren(List<IUserInterfaceComponent> excluding = null)
     {
         if (Children.Count == 0)
         {
@@ -60,7 +60,16 @@ public class MultipleChildUserInterfaceComponent : ParentUserInterfaceComponent,
         int maxX = int.MinValue;
         int maxY = int.MinValue;
 
-        foreach (var child in Children)
+        List<IUserInterfaceComponent> children = new List<IUserInterfaceComponent>(Children);
+        if (excluding != null)
+        {
+            foreach (var child in excluding)
+            {
+                children.Remove(child);
+            }
+        }
+
+        foreach (var child in children)
         {
             Vector2 childPosition = GetOffsetForChild(child);
             Rectangle childBounds = new Rectangle((int)childPosition.X, (int)childPosition.Y, (int)child.Size.X, (int)child.Size.Y);
