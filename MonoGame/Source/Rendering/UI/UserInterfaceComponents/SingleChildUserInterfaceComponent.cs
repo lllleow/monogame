@@ -4,16 +4,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame;
 
-public class SingleChildUserInterfaceComponent : UserInterfaceComponent, ISingleChildUserInterfaceComponent
+public class SingleChildUserInterfaceComponent : ParentUserInterfaceComponent, ISingleChildUserInterfaceComponent
 {
     public IUserInterfaceComponent Child { get; set; }
-    public SingleChildUserInterfaceComponent(string name, Vector2 position, Vector2 size, IUserInterfaceComponent child) : base(name, position, size)
+    public SingleChildUserInterfaceComponent(string name, Vector2 position, Vector2 size, UserInterfaceAlignment childAlignment, IUserInterfaceComponent child) : base(name, position, size, childAlignment)
     {
         child.Initialize(this);
         Child = child;
     }
 
-    public SingleChildUserInterfaceComponent(string name, Vector2 position, Vector2 size, Vector2 contentPadding, IUserInterfaceComponent child) : base(name, position, size, contentPadding)
+    public SingleChildUserInterfaceComponent(string name, Vector2 position, Vector2 size, Vector2 contentPadding, UserInterfaceAlignment childAlignment, IUserInterfaceComponent child) : base(name, position, size, contentPadding, childAlignment)
     {
         child.Initialize(this);
         Child = child;

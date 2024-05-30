@@ -28,12 +28,18 @@ public class UserInterfaceComponent : IUserInterfaceComponent
 
     public virtual Vector2 GetRelativePosition()
     {
-        Vector2 relativePosition = (Parent?.Position ?? Vector2.Zero) + Position;
+        Vector2 parentPosition = Parent?.Position ?? Vector2.Zero;
+        Vector2 relativePosition = parentPosition + Position;
         relativePosition += GetRelativeContentPadding() / 2;
 
         if (Parent is IMultipleChildUserInterfaceComponent multipleChildUserInterfaceComponent)
         {
             relativePosition += multipleChildUserInterfaceComponent.GetOffsetForChild(this);
+        }
+
+        if (Parent is IParentUserInterfaceComponent parentUserInterfaceComponent)
+        {
+            relativePosition += parentUserInterfaceComponent.GetOriginForAlignment();
         }
 
         return relativePosition;

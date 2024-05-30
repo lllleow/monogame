@@ -8,8 +8,7 @@ public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceC
 {
     public ListDirection Direction = ListDirection.Horizontal;
     public int Spacing = 2;
-
-    public DirectionalListUserInterfaceComponent(string name, ListDirection direction, Vector2 position, Vector2 size, List<IUserInterfaceComponent> children) : base(name, position, size, children)
+    public DirectionalListUserInterfaceComponent(string name, ListDirection direction, Vector2 position, Vector2 size, UserInterfaceAlignment childAlignment, List<IUserInterfaceComponent> children) : base(name, position, size, childAlignment, children)
     {
         Direction = direction;
     }

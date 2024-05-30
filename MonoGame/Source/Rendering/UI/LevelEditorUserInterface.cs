@@ -15,18 +15,17 @@ public class LevelEditorUserInterface : UserInterface
             new ContainerUserInterfaceComponent(
                 "container",
                 position: new Vector2(0, 0),
-                size: new Vector2(32, 32),
-                contentPadding: new Vector2(16, 16),
+                size: new Vector2(100, 100),
+                contentPadding: new Vector2(0, 0),
+                childAlignment: UserInterfaceAlignment.RightCenter,
                 new DirectionalListUserInterfaceComponent(
                     "row",
                     ListDirection.Horizontal,
                     position: new Vector2(0, 0),
-                    size: new Vector2(32, 128),
+                    size: new Vector2(16, 16),
+                    childAlignment: UserInterfaceAlignment.LeftUp,
                     children: new List<IUserInterfaceComponent>
                     {
-                        new TileSlotComponent("tile_slot", position: new Vector2(0, 0), size: new Vector2(16, 16)),
-                        new TileSlotComponent("tile_slot", position: new Vector2(0, 0), size: new Vector2(16, 16)),
-                        new TileSlotComponent("tile_slot", position: new Vector2(0, 0), size: new Vector2(16, 16)),
                         new TileSlotComponent("tile_slot", position: new Vector2(0, 0), size: new Vector2(16, 16))
                     }
                 )

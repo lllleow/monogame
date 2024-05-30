@@ -5,13 +5,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame;
 
-public class MultipleChildUserInterfaceComponent : UserInterfaceComponent, IMultipleChildUserInterfaceComponent
+public class MultipleChildUserInterfaceComponent : ParentUserInterfaceComponent, IMultipleChildUserInterfaceComponent
 {
     public List<IUserInterfaceComponent> Children { get; set; }
 
-    public MultipleChildUserInterfaceComponent(string name, Vector2 position, Vector2 size, List<IUserInterfaceComponent> children) : base(name, position, size)
+    public MultipleChildUserInterfaceComponent(string name, Vector2 position, Vector2 size, UserInterfaceAlignment childAlignment, List<IUserInterfaceComponent> children) : base(name, position, size, childAlignment)
     {
         Children = children;
+
         foreach (var child in Children)
         {
             child.Initialize(this);

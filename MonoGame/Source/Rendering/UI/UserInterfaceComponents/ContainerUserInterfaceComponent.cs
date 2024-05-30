@@ -6,14 +6,12 @@ namespace MonoGame;
 
 public class ContainerUserInterfaceComponent : SingleChildUserInterfaceComponent
 {
-    public ContainerUserInterfaceComponent(string name, Vector2 position, Vector2 size, IUserInterfaceComponent child) : base(name, position, size, child)
+    public ContainerUserInterfaceComponent(string name, Vector2 position, Vector2 size, UserInterfaceAlignment childAlignment, IUserInterfaceComponent child) : base(name, position, size, childAlignment, child)
     {
-
     }
 
-    public ContainerUserInterfaceComponent(string name, Vector2 position, Vector2 size, Vector2 contentPadding, IUserInterfaceComponent child) : base(name, position, size, contentPadding, child)
+    public ContainerUserInterfaceComponent(string name, Vector2 position, Vector2 size, Vector2 contentPadding, UserInterfaceAlignment childAlignment, IUserInterfaceComponent child) : base(name, position, size, contentPadding, childAlignment, child)
     {
-
     }
 
     public override void Draw(SpriteBatch spriteBatch)
