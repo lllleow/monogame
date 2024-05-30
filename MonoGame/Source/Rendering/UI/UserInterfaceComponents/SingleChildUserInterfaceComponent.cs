@@ -4,19 +4,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame;
 
-public class SingleChildUserInterfaceComponent : ParentUserInterfaceComponent, ISingleChildUserInterfaceComponent, IParentUserInterfaceComponent
+public class SingleChildUserInterfaceComponent : UserInterfaceComponent
 {
     public IUserInterfaceComponent Child { get; set; }
-    public SingleChildUserInterfaceComponent(string name, Vector2 position, Vector2 size, UserInterfaceAlignment childAlignment, IUserInterfaceComponent child) : base(name, position, size, childAlignment)
+    
+    public SingleChildUserInterfaceComponent(string name, Vector2 position, Vector2 size, IUserInterfaceComponent child) : base(name, position, size)
     {
         child.Initialize(this);
         Child = child;
-    }
-
-    public SingleChildUserInterfaceComponent(string name, Vector2 position, Vector2 size, Vector2 contentPadding, UserInterfaceAlignment childAlignment, IUserInterfaceComponent child) : base(name, position, size, contentPadding, childAlignment)
-    {
-        Child = child;
-        Child?.Initialize(this);
     }
 
     public void RemoveChild()
@@ -30,10 +25,10 @@ public class SingleChildUserInterfaceComponent : ParentUserInterfaceComponent, I
         Child = child;
     }
 
-    public override void Draw(SpriteBatch spriteBatch)
+    public override void Draw(SpriteBatch spriteBatch, Vector2 origin)
     {
-        base.Draw(spriteBatch);
-        Child?.Draw(spriteBatch);
+        base.Draw(spriteBatch, origin);
+        Child?.Draw(spriteBatch, origin);
     }
 
     public override void Update(GameTime gameTime)

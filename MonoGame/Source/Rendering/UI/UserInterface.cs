@@ -15,7 +15,7 @@ public class UserInterface : IUserInterface
     {
         foreach (IUserInterfaceComponent component in Components)
         {
-            component.Draw(spriteBatch);
+            component.Draw(spriteBatch, Vector2.Zero);
         }
     }
 

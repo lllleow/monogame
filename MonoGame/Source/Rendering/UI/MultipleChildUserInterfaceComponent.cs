@@ -5,11 +5,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame;
 
-public class MultipleChildUserInterfaceComponent : ParentUserInterfaceComponent, IMultipleChildUserInterfaceComponent
+public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
 {
     public List<IUserInterfaceComponent> Children { get; set; }
 
-    public MultipleChildUserInterfaceComponent(string name, Vector2 position, Vector2 size, UserInterfaceAlignment childAlignment, List<IUserInterfaceComponent> children) : base(name, position, size, childAlignment)
+    public MultipleChildUserInterfaceComponent(string name, Vector2 position, Vector2 size, List<IUserInterfaceComponent> children) : base(name, position, size)
     {
         Children = children;
 
@@ -30,12 +30,12 @@ public class MultipleChildUserInterfaceComponent : ParentUserInterfaceComponent,
         Children.Remove(child);
     }
 
-    public override void Draw(SpriteBatch spriteBatch)
+    public override void Draw(SpriteBatch spriteBatch, Vector2 origin)
     {
-        base.Draw(spriteBatch);
+        base.Draw(spriteBatch, origin);
         foreach (var child in Children)
         {
-            child.Draw(spriteBatch);
+            child.Draw(spriteBatch, origin);
         }
     }
 
@@ -46,44 +46,5 @@ public class MultipleChildUserInterfaceComponent : ParentUserInterfaceComponent,
         {
             child.Update(gameTime);
         }
-    }
-
-    public Rectangle GetBoundsOfChildren(List<IUserInterfaceComponent> excluding = null)
-    {
-        if (Children.Count == 0)
-        {
-            return Rectangle.Empty;
-        }
-
-        int minX = int.MaxValue;
-        int minY = int.MaxValue;
-        int maxX = int.MinValue;
-        int maxY = int.MinValue;
-
-        List<IUserInterfaceComponent> children = new List<IUserInterfaceComponent>(Children);
-        if (excluding != null)
-        {
-            foreach (var child in excluding)
-            {
-                children.Remove(child);
-            }
-        }
-
-        foreach (var child in children)
-        {
-            Vector2 childPosition = GetOffsetForChild(child);
-            Rectangle childBounds = new Rectangle((int)childPosition.X, (int)childPosition.Y, (int)child.Size.X, (int)child.Size.Y);
-            minX = Math.Min(minX, childBounds.Left);
-            minY = Math.Min(minY, childBounds.Top);
-            maxX = Math.Max(maxX, childBounds.Right);
-            maxY = Math.Max(maxY, childBounds.Bottom);
-        }
-
-        return new Rectangle(minX, minY, maxX - minX, maxY - minY);
-    }
-
-    public virtual Vector2 GetOffsetForChild(IUserInterfaceComponent child)
-    {
-        return Vector2.Zero;
     }
 }

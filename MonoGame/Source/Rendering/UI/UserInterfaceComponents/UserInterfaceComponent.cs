@@ -7,54 +7,26 @@ namespace MonoGame;
 public class UserInterfaceComponent : IUserInterfaceComponent
 {
     public string Name { get; set; }
-    public Vector2 Position { get; set; }
+    public Vector2 LocalPosition { get; set; }
     public Vector2 Size { get; set; }
-    public Vector2 ContentPadding { get; set; }
     public IUserInterfaceComponent Parent { get; set; }
     public static bool ShowBounds { get; set; } = true;
 
     public UserInterfaceComponent(string name, Vector2 position, Vector2 size)
     {
         Name = name;
-        Position = position;
+        LocalPosition = position;
         Size = size;
-    }
-
-    public UserInterfaceComponent(string name, Vector2 position, Vector2 size, Vector2 contentPadding)
-    {
-        Name = name;
-        Position = position;
-        Size = size;
-        ContentPadding = contentPadding;
-    }
-
-    public virtual Vector2 GetRelativePosition()
-    {
-        Vector2 parentPosition = Parent?.GetRelativePosition() ?? Vector2.Zero;
-        Vector2 relativePosition = parentPosition + Position;
-        relativePosition += GetRelativeContentPadding() / 2;
-
-        if (Parent is IParentUserInterfaceComponent parentUserInterfaceComponent)
-        {
-            relativePosition += parentUserInterfaceComponent.GetChildPositionForAlignment(this);
-        }
-
-        if (Parent is IMultipleChildUserInterfaceComponent multipleChildUserInterfaceComponent)
-        {
-            relativePosition += multipleChildUserInterfaceComponent.GetOffsetForChild(this);
-        }
-
-        return relativePosition;
     }
 
     PrimitiveBatch primitiveBatch = new PrimitiveBatch(Globals.graphicsDevice.GraphicsDevice, transform: Globals.userInterfaceHandler.Transform);
-    public virtual void Draw(SpriteBatch spriteBatch)
+    public virtual void Draw(SpriteBatch spriteBatch, Vector2 origin)
     {
         if (ShowBounds)
         {
             primitiveBatch.Begin(PrimitiveType.LineList, transform: Globals.userInterfaceHandler.Transform);
 
-            Vector2 position = GetRelativePosition();
+            Vector2 position = origin + GetPositionRelativeToParent();
             Rectangle rectangle = new Rectangle((int)position.X, (int)position.Y, (int)Size.X, (int)Size.Y);
             Vector2 topLeft = rectangle.Location.ToVector2();
             Vector2 topRight = new Vector2(rectangle.Right, rectangle.Top);
@@ -87,8 +59,8 @@ public class UserInterfaceComponent : IUserInterfaceComponent
         Parent = parent;
     }
 
-    public Vector2 GetRelativeContentPadding()
+    public Vector2 GetPositionRelativeToParent()
     {
-        return ContentPadding + (Parent?.GetRelativeContentPadding() ?? Vector2.Zero);
+        return Parent?.GetPositionRelativeToParent() + LocalPosition ?? LocalPosition;
     }
 }
