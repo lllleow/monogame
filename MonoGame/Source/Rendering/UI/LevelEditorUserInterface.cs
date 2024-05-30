@@ -13,24 +13,25 @@ public class LevelEditorUserInterface : UserInterface
 
         AddComponent(
             new ContainerUserInterfaceComponent(
-                "container",
-                position: new Vector2(10, 10),
-                size: new Vector2(100, 100),
-                new GridUserInterfaceComponent(
-                            name: "column",
-                            spacing: new Vector2(8, 8),
-                            columns: 3,
-                            rows: 2,
-                            position: new Vector2(0, 0),
-                            size: new Vector2(64, 64),
-                            children: new List<IUserInterfaceComponent>
-                            {
-                                new TileSlotComponent("tile_slot", position: new Vector2(0, 0), size: new Vector2(16, 16)),
-                                new TileSlotComponent("tile_slot", position: new Vector2(0, 0), size: new Vector2(16, 16)),
-                                new TileSlotComponent("tile_slot", position: new Vector2(0, 0), size: new Vector2(16, 16)),
-                                new TileSlotComponent("tile_slot", position: new Vector2(0, 0), size: new Vector2(16, 16)),
-                            }
-                        )
+                localPosition: new Vector2(0, 0),
+                child: new PaddingUserInterfaceComponent(
+                    localPosition: new Vector2(0, 0),
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                    child: new DirectionalListUserInterfaceComponent(
+                        name: "list",
+                        spacing: 0,
+                        localPosition: new Vector2(0, 0),
+                        direction: ListDirection.Horizontal,
+                        children: new List<IUserInterfaceComponent>
+                        {
+                            new TileSlotComponent("tile_slot", localPosition: new Vector2(0, 0)),
+                            new TileSlotComponent("tile_slot", localPosition: new Vector2(0, 0))
+                        }
+                    )
+                )
             )
         );
     }

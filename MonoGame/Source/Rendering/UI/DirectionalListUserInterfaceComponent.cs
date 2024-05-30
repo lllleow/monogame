@@ -9,9 +9,29 @@ public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceC
     public ListDirection Direction = ListDirection.Horizontal;
     public int Spacing = 2;
 
-    public DirectionalListUserInterfaceComponent(string name, ListDirection direction, Vector2 position, Vector2 size, int spacing, List<IUserInterfaceComponent> children) : base(name, position, size, children)
+    public DirectionalListUserInterfaceComponent(string name, ListDirection direction, Vector2 localPosition, int spacing, List<IUserInterfaceComponent> children) : base(name, localPosition, children)
     {
         Direction = direction;
         Spacing = spacing;
+    }
+
+    public override Vector2 GetChildOffset(IUserInterfaceComponent child)
+    {
+        int index = Children.IndexOf(child);
+        Vector2 offset = Vector2.Zero;
+
+        for (int i = 0; i < index; i++)
+        {
+            if (Direction == ListDirection.Horizontal)
+            {
+                offset.X += Children[i].GetPreferredSize().X + Spacing;
+            }
+            else
+            {
+                offset.Y += Children[i].GetPreferredSize().Y + Spacing;
+            }
+        }
+
+        return offset + base.GetChildOffset(child);
     }
 }

@@ -8,8 +8,9 @@ namespace MonoGame;
 public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
 {
     public List<IUserInterfaceComponent> Children { get; set; }
+    private RectangleHelper rectangleHelper = new RectangleHelper();
 
-    public MultipleChildUserInterfaceComponent(string name, Vector2 position, Vector2 size, List<IUserInterfaceComponent> children) : base(name, position, size)
+    public MultipleChildUserInterfaceComponent(string name, Vector2 localPosition, List<IUserInterfaceComponent> children) : base(name, localPosition)
     {
         Children = children;
 
@@ -46,5 +47,18 @@ public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
         {
             child.Update(gameTime);
         }
+    }
+
+    public override Vector2 GetPreferredSize()
+    {
+        Rectangle[] rectangles = new Rectangle[Children.Count];
+        for (int i = 0; i < Children.Count; i++)
+        {
+            Vector2 size = Children[i].GetPreferredSize();
+            rectangles[i] = new Rectangle((int)Children[i].GetPositionRelativeToParent().X, (int)Children[i].GetPositionRelativeToParent().Y, (int)size.X, (int)size.Y);
+        }
+
+        Rectangle minimumBoundingRectangle = rectangleHelper.GetMinimumBoundingRectangle(rectangles);
+        return new Vector2(minimumBoundingRectangle.Width, minimumBoundingRectangle.Height);
     }
 }

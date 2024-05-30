@@ -7,8 +7,8 @@ namespace MonoGame;
 public class SingleChildUserInterfaceComponent : UserInterfaceComponent
 {
     public IUserInterfaceComponent Child { get; set; }
-    
-    public SingleChildUserInterfaceComponent(string name, Vector2 position, Vector2 size, IUserInterfaceComponent child) : base(name, position, size)
+
+    public SingleChildUserInterfaceComponent(string name, Vector2 localPosition, IUserInterfaceComponent child) : base(name, localPosition)
     {
         child.Initialize(this);
         Child = child;
@@ -35,5 +35,10 @@ public class SingleChildUserInterfaceComponent : UserInterfaceComponent
     {
         base.Update(gameTime);
         Child?.Update(gameTime);
+    }
+
+    public override Vector2 GetPreferredSize()
+    {
+        return Child?.GetPreferredSize() ?? Vector2.Zero;
     }
 }
