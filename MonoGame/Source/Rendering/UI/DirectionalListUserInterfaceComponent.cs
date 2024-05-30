@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -33,5 +34,29 @@ public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceC
         }
 
         return offset + base.GetChildOffset(child);
+    }
+
+    public override Vector2 GetPreferredSize()
+    {
+        float maxWidth = 0;
+        float totalHeight = 0;
+
+        foreach (var child in Children)
+        {
+            Vector2 childPreferredSize = child.GetPreferredSize();
+
+            if (Direction == ListDirection.Vertical)
+            {
+                maxWidth = Math.Max(maxWidth, childPreferredSize.X);
+                totalHeight += childPreferredSize.Y;
+            }
+            else
+            {
+                maxWidth += childPreferredSize.X;
+                totalHeight = Math.Max(totalHeight, childPreferredSize.Y);
+            }
+        }
+
+        return new Vector2((int)maxWidth, (int)totalHeight);
     }
 }

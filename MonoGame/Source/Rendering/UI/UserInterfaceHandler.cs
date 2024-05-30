@@ -10,10 +10,14 @@ public class UserInterfaceHandler
     public List<IUserInterface> UserInterfaces { get; set; } = new List<IUserInterface>();
     public float ScaleFactor { get; set; } = 6f;
     public Matrix Transform { get; set; } = Matrix.CreateScale(6f, 6f, 1f);
+    public Vector2 UIScreenSize { get; set; } = new Vector2(1280, 720);
 
     public void Initialize()
     {
         UserInterfaces.Add(new LevelEditorUserInterface());
+
+        Vector2 transformed = Vector2.Transform(UIScreenSize, Matrix.Invert(GetUITransform()));
+        UIScreenSize = new Vector2((int) transformed.X + 4, (int) transformed.Y);
     }
 
     public void Draw(SpriteBatch spriteBatch)
