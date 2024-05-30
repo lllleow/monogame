@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame;
 
-public class SingleChildUserInterfaceComponent : ParentUserInterfaceComponent, ISingleChildUserInterfaceComponent
+public class SingleChildUserInterfaceComponent : ParentUserInterfaceComponent, ISingleChildUserInterfaceComponent, IParentUserInterfaceComponent
 {
     public IUserInterfaceComponent Child { get; set; }
     public SingleChildUserInterfaceComponent(string name, Vector2 position, Vector2 size, UserInterfaceAlignment childAlignment, IUserInterfaceComponent child) : base(name, position, size, childAlignment)
@@ -15,8 +15,8 @@ public class SingleChildUserInterfaceComponent : ParentUserInterfaceComponent, I
 
     public SingleChildUserInterfaceComponent(string name, Vector2 position, Vector2 size, Vector2 contentPadding, UserInterfaceAlignment childAlignment, IUserInterfaceComponent child) : base(name, position, size, contentPadding, childAlignment)
     {
-        child.Initialize(this);
         Child = child;
+        Child?.Initialize(this);
     }
 
     public void RemoveChild()

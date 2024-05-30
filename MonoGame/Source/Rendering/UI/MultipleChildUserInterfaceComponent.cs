@@ -48,6 +48,31 @@ public class MultipleChildUserInterfaceComponent : ParentUserInterfaceComponent,
         }
     }
 
+    public Rectangle GetBoundsOfChildren()
+    {
+        if (Children.Count == 0)
+        {
+            return Rectangle.Empty;
+        }
+
+        int minX = int.MaxValue;
+        int minY = int.MaxValue;
+        int maxX = int.MinValue;
+        int maxY = int.MinValue;
+
+        foreach (var child in Children)
+        {
+            Vector2 childPosition = GetOffsetForChild(child);
+            Rectangle childBounds = new Rectangle((int)childPosition.X, (int)childPosition.Y, (int)child.Size.X, (int)child.Size.Y);
+            minX = Math.Min(minX, childBounds.Left);
+            minY = Math.Min(minY, childBounds.Top);
+            maxX = Math.Max(maxX, childBounds.Right);
+            maxY = Math.Max(maxY, childBounds.Bottom);
+        }
+
+        return new Rectangle(minX, minY, maxX - minX, maxY - minY);
+    }
+
     public virtual Vector2 GetOffsetForChild(IUserInterfaceComponent child)
     {
         return Vector2.Zero;
