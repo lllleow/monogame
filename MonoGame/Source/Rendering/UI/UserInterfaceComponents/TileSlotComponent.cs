@@ -10,9 +10,9 @@ public class TileSlotComponent : SlotComponent
 {
     ITile tile;
 
-    public TileSlotComponent(string name, Rectangle bounds) : base(name, bounds)
+    public TileSlotComponent(string name, Vector2 position, Vector2 size) : base(name, position, size)
     {
-
+        
     }
 
     /// <summary>

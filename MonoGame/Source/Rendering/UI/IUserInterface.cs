@@ -12,7 +12,6 @@ public interface IUserInterface
     public abstract void Draw(SpriteBatch spriteBatch);
     public abstract void Update(GameTime gameTime);
     public List<IUserInterfaceComponent> Components { get; set; }
-    public Action<IUserInterfaceComponent> OnComponentChanged { get; set; }
     public abstract void AddComponent(IUserInterfaceComponent component);
     public abstract void RemoveComponent(IUserInterfaceComponent component);
 }

@@ -9,7 +9,6 @@ public class UserInterface : IUserInterface
 {
     public string Name { get; set; }
     public List<IUserInterfaceComponent> Components { get; set; } = new List<IUserInterfaceComponent>();
-    public Action<IUserInterfaceComponent> OnComponentChanged { get; set; } = (component) => { };
     public bool Visible { get; set; } = true;
 
     public virtual void Draw(SpriteBatch spriteBatch)
@@ -17,10 +16,6 @@ public class UserInterface : IUserInterface
         foreach (IUserInterfaceComponent component in Components)
         {
             component.Draw(spriteBatch);
-            foreach (IUserInterfaceComponent childComponent in component.ChildComponents)
-            {
-                childComponent.Draw(spriteBatch);
-            }
         }
     }
 
@@ -29,17 +24,12 @@ public class UserInterface : IUserInterface
         foreach (IUserInterfaceComponent component in Components)
         {
             component.Update(gameTime);
-            foreach (IUserInterfaceComponent childComponent in component.ChildComponents)
-            {
-                childComponent.Update(gameTime);
-            }
         }
     }
 
     public void AddComponent(IUserInterfaceComponent component)
     {
-        component.SetCallbackFunction(OnComponentChanged);
-        component.InitializeComponent();
+        component.Initialize(null);
         Components.Add(component);
     }
 

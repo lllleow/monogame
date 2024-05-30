@@ -7,24 +7,23 @@ namespace MonoGame;
 
 public class SlotComponent : UserInterfaceComponent, ISlotComponent
 {
-    public TextureLocation SlotTexture;
+    public TextureLocation SlotTexture = TextureLocation.FirstTextureCoordinate("textures/slot");
 
-    public SlotComponent(string name, Rectangle bounds) : base(name, bounds)
+    public SlotComponent(string name, Vector2 position, Vector2 size) : base(name, position, size)
     {
-        SlotTexture = TextureLocation.FirstTextureCoordinate("textures/slot");
+
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
         TextureLocation textureLocation = GetDrawable();
-        Rectangle bounds = GetBounds();
-        bounds.Location = ParentComponent != null ? ParentComponent.GetBounds().Location + bounds.Location : bounds.Location;
+        Vector2 position = GetRelativePosition();
 
-        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(SlotTexture.Spritesheet), new Vector2(bounds.Location.X, bounds.Location.Y), SlotTexture.TextureRectangle, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.5f);
+        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(SlotTexture.Spritesheet), new Rectangle((int)position.X, (int)position.Y, (int)Size.X, (int)Size.Y), SlotTexture.TextureRectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1f);
 
         if (textureLocation != null)
         {
-            spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(textureLocation.Spritesheet), new Vector2(bounds.Location.X, bounds.Location.Y), textureLocation.TextureRectangle, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.5f);
+            spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(textureLocation.Spritesheet), new Rectangle((int)position.X, (int)position.Y, (int)Size.X, (int)Size.Y), textureLocation.TextureRectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1f);
         }
     }
 
