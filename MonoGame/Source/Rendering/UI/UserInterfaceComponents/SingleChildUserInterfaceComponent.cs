@@ -39,6 +39,6 @@ public class SingleChildUserInterfaceComponent : UserInterfaceComponent
 
     public override Vector2 GetPreferredSize()
     {
-        return Child?.GetPreferredSize() ?? Vector2.Zero;
+        return (Child?.GetPreferredSize() ?? Vector2.Zero) + (Child?.LocalPosition ?? Vector2.Zero);
     }
 }
