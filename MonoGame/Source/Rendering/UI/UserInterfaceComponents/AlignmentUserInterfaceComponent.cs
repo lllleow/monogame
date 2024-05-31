@@ -28,33 +28,15 @@ public class AlignmentUserInterfaceComponent : SingleChildUserInterfaceComponent
                     parentPosition.Y
                 );
                 break;
-            case UserInterfaceAlignment.CenterUp:
+            case UserInterfaceAlignment.RightCenter:
                 position = new Vector2(
-                    parentPosition.X + (parentSize.X / 2) - componentSize.X,
-                    parentPosition.Y + (parentSize.Y / 2) - componentSize.Y
-                );
-                break;
-            case UserInterfaceAlignment.RightUp:
-                position = new Vector2(
-                    parentPosition.X + parentSize.X - componentSize.X * 2,
-                    parentPosition.Y + parentSize.Y - componentSize.Y * 2
+                    parentPosition.X + parentSize.X - componentSize.X,
+                    parentPosition.Y + (parentSize.Y / 2) - (componentSize.Y / 2)
                 );
                 break;
             case UserInterfaceAlignment.LeftCenter:
                 position = new Vector2(
-                    parentPosition.X + 0,
-                    parentPosition.Y + (parentSize.Y / 2) - (componentSize.Y / 2)
-                );
-                break;
-            case UserInterfaceAlignment.Center:
-                position = new Vector2(
-                    parentPosition.X + (parentSize.X / 2) - componentSize.X,
-                    parentPosition.Y + (parentSize.Y / 2) - (componentSize.Y / 2)
-                );
-                break;
-            case UserInterfaceAlignment.RightCenter:
-                position = new Vector2(
-                    parentPosition.X + parentSize.X - componentSize.X * 2,
+                    parentPosition.X,
                     parentPosition.Y + (parentSize.Y / 2) - (componentSize.Y / 2)
                 );
                 break;
@@ -64,16 +46,34 @@ public class AlignmentUserInterfaceComponent : SingleChildUserInterfaceComponent
                     parentPosition.Y + parentSize.Y - componentSize.Y
                 );
                 break;
+            case UserInterfaceAlignment.CenterUp:
+                position = new Vector2(
+                    parentPosition.X + (parentSize.X / 2) - (componentSize.X / 2),
+                    parentPosition.Y
+                );
+                break;
+            case UserInterfaceAlignment.Center:
+                position = new Vector2(
+                    parentPosition.X + (parentSize.X / 2) - (componentSize.X / 2),
+                    parentPosition.Y + (parentSize.Y / 2) - (componentSize.Y / 2)
+                );
+                break;
             case UserInterfaceAlignment.CenterDown:
                 position = new Vector2(
-                    parentPosition.X + (parentSize.X / 2) - componentSize.X,
-                    parentPosition.Y + (parentSize.Y / 2)
+                    parentPosition.X + (parentSize.X / 2) - (componentSize.X / 2),
+                    parentPosition.Y + parentSize.Y - componentSize.Y
+                );
+                break;
+            case UserInterfaceAlignment.RightUp:
+                position = new Vector2(
+                    parentPosition.X + parentSize.X - componentSize.X,
+                    parentPosition.Y
                 );
                 break;
             case UserInterfaceAlignment.RightDown:
                 position = new Vector2(
-                    parentPosition.X + parentSize.X - componentSize.X * 2,
-                    parentPosition.Y + (parentSize.Y / 2)
+                    parentPosition.X + parentSize.X - componentSize.X,
+                    parentPosition.Y + parentSize.Y - componentSize.Y
                 );
                 break;
         }

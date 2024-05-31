@@ -20,13 +20,13 @@ public class UserInterfaceComponent : IUserInterfaceComponent
     }
 
     PrimitiveBatch primitiveBatch = new PrimitiveBatch(Globals.graphicsDevice.GraphicsDevice, transform: Globals.userInterfaceHandler.Transform);
-    public virtual void Draw(SpriteBatch spriteBatch, Vector2 origin)
+    public virtual void Draw(SpriteBatch spriteBatch)
     {
         if (ShowBounds && !BoundRenderOffForTypes.Contains(this.GetType()))
         {
             primitiveBatch.Begin(PrimitiveType.LineList, transform: Globals.userInterfaceHandler.Transform);
 
-            Vector2 position = origin + GetPositionRelativeToParent();
+            Vector2 position = GetPositionRelativeToParent();
             Vector2 size = GetPreferredSize();
 
             Rectangle rectangle = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);

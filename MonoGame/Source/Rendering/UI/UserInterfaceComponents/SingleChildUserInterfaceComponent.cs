@@ -25,10 +25,10 @@ public class SingleChildUserInterfaceComponent : UserInterfaceComponent
         Child = child;
     }
 
-    public override void Draw(SpriteBatch spriteBatch, Vector2 origin)
+    public override void Draw(SpriteBatch spriteBatch)
     {
-        base.Draw(spriteBatch, origin);
-        Child?.Draw(spriteBatch, origin);
+        base.Draw(spriteBatch);
+        Child?.Draw(spriteBatch);
     }
 
     public override void Update(GameTime gameTime)

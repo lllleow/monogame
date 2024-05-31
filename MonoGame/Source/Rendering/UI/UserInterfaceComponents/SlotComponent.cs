@@ -14,12 +14,12 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
 
     }
 
-    public override void Draw(SpriteBatch spriteBatch, Vector2 origin)
+    public override void Draw(SpriteBatch spriteBatch)
     {
-        base.Draw(spriteBatch, origin);
+        base.Draw(spriteBatch);
 
         TextureLocation textureLocation = GetDrawable();
-        Vector2 position = origin + GetPositionRelativeToParent();
+        Vector2 position = GetPositionRelativeToParent();
         Vector2 size = GetPreferredSize();
 
         spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(SlotTexture.Spritesheet), new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y), SlotTexture.TextureRectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1f);

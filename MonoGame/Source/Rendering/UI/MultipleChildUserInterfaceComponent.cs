@@ -31,12 +31,12 @@ public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
         Children.Remove(child);
     }
 
-    public override void Draw(SpriteBatch spriteBatch, Vector2 origin)
+    public override void Draw(SpriteBatch spriteBatch)
     {
-        base.Draw(spriteBatch, origin);
+        base.Draw(spriteBatch);
         foreach (var child in Children)
         {
-            child.Draw(spriteBatch, origin);
+            child.Draw(spriteBatch);
         }
     }
 

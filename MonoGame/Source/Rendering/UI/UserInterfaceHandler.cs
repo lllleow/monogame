@@ -16,8 +16,8 @@ public class UserInterfaceHandler
     {
         UserInterfaces.Add(new LevelEditorUserInterface());
 
-        Vector2 transformed = Vector2.Transform(UIScreenSize, Matrix.Invert(GetUITransform()));
-        UIScreenSize = new Vector2((int) transformed.X + 4, (int) transformed.Y);
+        Vector2 transformed = Vector2.Transform(new Vector2(Globals.graphicsDevice.GraphicsDevice.Viewport.Width, Globals.graphicsDevice.GraphicsDevice.Viewport.Height), Matrix.Invert(Transform));
+        UIScreenSize = new Vector2(transformed.X, transformed.Y);
     }
 
     public void Draw(SpriteBatch spriteBatch)
