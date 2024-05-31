@@ -8,11 +8,11 @@ namespace MonoGame;
 /// </summary>
 public class TileSlotComponent : SlotComponent
 {
-    ITile tile;
+    ITile Tile;
 
-    public TileSlotComponent(string name, Vector2 localPosition) : base(name, localPosition)
+    public TileSlotComponent(string name, ITile tile, Vector2 localPosition) : base(name, localPosition)
     {
-        
+        Tile = tile;
     }
 
     /// <summary>
@@ -21,7 +21,7 @@ public class TileSlotComponent : SlotComponent
     /// <param name="tile">The tile to set.</param>
     public void SetTile(ITile tile)
     {
-        this.tile = tile;
+        Tile = tile;
     }
 
     /// <summary>
@@ -30,6 +30,6 @@ public class TileSlotComponent : SlotComponent
     /// <returns>The texture location of the tile.</returns>
     public override TextureLocation GetDrawable()
     {
-        return tile?.GetTextureLocation();
+        return Tile?.GetTextureLocation();
     }
 }

@@ -24,9 +24,12 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
 
         spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(SlotTexture.Spritesheet), new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y), SlotTexture.TextureRectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1f);
 
+        Vector2 iconSize = size * 0.5f;
+
         if (textureLocation != null)
         {
-            spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(textureLocation.Spritesheet), new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y), textureLocation.TextureRectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1f);
+            Vector2 iconPosition = new Vector2(position.X + ((size.X / 2) - (iconSize.X / 2)), position.Y + ((size.Y / 2) - (iconSize.Y / 2)));
+            spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(textureLocation.Spritesheet), new Rectangle((int)iconPosition.X, (int)iconPosition.Y, (int)iconSize.X, (int)iconSize.Y), textureLocation.TextureRectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1f);
         }
     }
 

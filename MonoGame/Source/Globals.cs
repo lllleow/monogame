@@ -46,6 +46,8 @@ public class Globals
 
     public static UserInterfaceHandler userInterfaceHandler;
 
+    public static SpriteFont defaultFont;
+
     public static void DefaultSpriteBatchBegin()
     {
         Globals.spriteBatch.Begin(transformMatrix: camera.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);

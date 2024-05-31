@@ -11,7 +11,7 @@ public class PaddingUserInterfaceComponent : SingleChildUserInterfaceComponent
     int PaddingUp { get; set; }
     int PaddingDown { get; set; }
 
-    public PaddingUserInterfaceComponent(Vector2 localPosition, int paddingLeft, int paddingRight, int paddingTop, int paddingBottom, IUserInterfaceComponent child) : base("padding", localPosition, child)
+    public PaddingUserInterfaceComponent(int paddingLeft, int paddingRight, int paddingTop, int paddingBottom, IUserInterfaceComponent child) : base("padding", new Vector2(0, 0), child)
     {
         PaddingLeft = paddingLeft;
         PaddingRight = paddingRight;

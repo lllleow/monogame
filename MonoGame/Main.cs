@@ -41,6 +41,8 @@ public class Main : Game
         Globals.contentManager = this.Content;
         Globals.spriteBatch = new SpriteBatch(GraphicsDevice);
         Globals.userInterfaceHandler = new UserInterfaceHandler();
+        Globals.defaultFont = Content.Load<SpriteFont>("PixelifySans");
+
 
         TileRegistry.LoadTileScripts();
         AnimationBundleRegistry.LoadAnimationBundleScripts();

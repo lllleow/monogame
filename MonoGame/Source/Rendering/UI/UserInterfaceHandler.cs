@@ -8,8 +8,8 @@ namespace MonoGame;
 public class UserInterfaceHandler
 {
     public List<IUserInterface> UserInterfaces { get; set; } = new List<IUserInterface>();
-    public float ScaleFactor { get; set; } = 6f;
-    public Matrix Transform { get; set; } = Matrix.CreateScale(6f, 6f, 1f);
+    public float ScaleFactor { get; set; } = 3f;
+    public Matrix Transform { get; set; } = Matrix.CreateScale(3f, 3f, 1f);
     public Vector2 UIScreenSize { get; set; } = new Vector2(1280, 720);
 
     public void Initialize()

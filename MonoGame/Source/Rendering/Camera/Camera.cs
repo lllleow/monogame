@@ -15,7 +15,7 @@ public class Camera
     /// </summary>
     public Matrix Transform { get; set; } = Matrix.Identity;
 
-    private float ScaleFactor = 6f;
+    private float ScaleFactor = 3f;
     private float ScreenSizeX { get; set; }
     private float ScreenSizeY { get; set; }
     private float FollowSpeed = 7f;
