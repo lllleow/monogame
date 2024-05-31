@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace MonoGame;
 
 public class UserInterfaceComponent : IUserInterfaceComponent
 {
     public string Name { get; set; }
+    public bool IsClickable { get; set; } = false;
     public Vector2 LocalPosition { get; set; }
     public IUserInterfaceComponent Parent { get; set; }
     public static bool ShowBounds { get; set; } = false;
     public static List<Type> BoundRenderOffForTypes = new List<Type>() { typeof(PaddingUserInterfaceComponent) };
+    MouseState currentMouseState;
+    public Action OnClick;
 
     public UserInterfaceComponent(string name, Vector2 localPosition)
     {
@@ -53,7 +57,38 @@ public class UserInterfaceComponent : IUserInterfaceComponent
 
     public virtual void Update(GameTime gameTime)
     {
+        currentMouseState = Mouse.GetState();
+        if (currentMouseState.LeftButton == ButtonState.Pressed || currentMouseState.RightButton == ButtonState.Pressed)
+        {
+            int mouseX = currentMouseState.X;
+            int mouseY = currentMouseState.Y;
 
+            HandleMouseClick(currentMouseState.LeftButton == ButtonState.Pressed, mouseX, mouseY);
+        }
+    }
+
+    private void HandleMouseClick(bool add, int x, int y)
+    {
+        int windowWidth = Globals.graphicsDevice.PreferredBackBufferWidth;
+        int windowHeight = Globals.graphicsDevice.PreferredBackBufferHeight;
+
+        if (!Globals.game.IsActive)
+        {
+            return;
+        }
+
+        if (x < 0 || y < 0 || x >= windowWidth || y >= windowHeight)
+        {
+            return;
+        }
+
+        Vector2 worldPosition = new Vector2(x, y);
+        Vector2 screenPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.userInterfaceHandler.GetUITransform()));
+
+        if (screenPosition.X >= GetPositionRelativeToParent().X && screenPosition.X <= GetPositionRelativeToParent().X + GetPreferredSize().X && screenPosition.Y >= GetPositionRelativeToParent().Y && screenPosition.Y <= GetPositionRelativeToParent().Y + GetPreferredSize().Y)
+        {
+            OnClick?.Invoke();
+        }
     }
 
     public virtual void Initialize(IUserInterfaceComponent parent)
