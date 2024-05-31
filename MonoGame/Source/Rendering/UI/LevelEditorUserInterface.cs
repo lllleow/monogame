@@ -14,15 +14,15 @@ public class LevelEditorUserInterface : UserInterface
         Name = "level_editor_user_interface";
         AddComponent(
             new AlignmentUserInterfaceComponent(
-                alignment: UserInterfaceAlignment.LeftUp,
+                alignment: UserInterfaceAlignment.CenterDown,
                 child: new PaddingUserInterfaceComponent(
-                    paddingLeft: 4,
-                    paddingRight: 4,
-                    paddingTop: 4,
+                    paddingLeft: 0,
+                    paddingRight: 0,
+                    paddingTop: 0,
                     paddingBottom: 4,
                     child: new DirectionalListUserInterfaceComponent(
                         name: "list",
-                        spacing: 4,
+                        spacing: 2,
                         localPosition: new Vector2(0, 0),
                         direction: ListDirection.Horizontal,
                         children: TileRegistry.Tiles.Keys.Select(tile => (IUserInterfaceComponent)new TileSlotComponent("tile_slot", tile: TileRegistry.GetTile(tile), localPosition: new Vector2(0, 0))).ToList()

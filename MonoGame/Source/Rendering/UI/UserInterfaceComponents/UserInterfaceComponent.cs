@@ -10,7 +10,7 @@ public class UserInterfaceComponent : IUserInterfaceComponent
     public string Name { get; set; }
     public Vector2 LocalPosition { get; set; }
     public IUserInterfaceComponent Parent { get; set; }
-    public static bool ShowBounds { get; set; } = true;
+    public static bool ShowBounds { get; set; } = false;
     public static List<Type> BoundRenderOffForTypes = new List<Type>() { typeof(PaddingUserInterfaceComponent) };
 
     public UserInterfaceComponent(string name, Vector2 localPosition)

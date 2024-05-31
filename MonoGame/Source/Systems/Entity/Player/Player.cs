@@ -19,6 +19,7 @@ public class Player : GameEntity
     SpriteRendererComponent SpriteRenderer;
     MouseState currentMouseState;
     MouseState previousMouseState;
+    public string selectedTile = "base.grass";
 
     /// <summary>
     /// Represents a player in the game.
@@ -90,7 +91,7 @@ public class Player : GameEntity
                 {
                     lastLocalX = localX;
                     lastLocalY = localY;
-                    chunk.SetTileAndUpdateNeighbors("base.wall", TileDrawLayer.Tiles, localX, localY);
+                    chunk.SetTileAndUpdateNeighbors(selectedTile, TileDrawLayer.Tiles, localX, localY);
                 }
             }
         }

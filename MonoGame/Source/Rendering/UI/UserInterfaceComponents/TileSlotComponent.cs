@@ -13,6 +13,11 @@ public class TileSlotComponent : SlotComponent
     public TileSlotComponent(string name, ITile tile, Vector2 localPosition) : base(name, localPosition)
     {
         Tile = tile;
+
+        OnClick = () =>
+        {
+            Globals.world.Player.selectedTile = tile.Id;
+        };
     }
 
     /// <summary>
