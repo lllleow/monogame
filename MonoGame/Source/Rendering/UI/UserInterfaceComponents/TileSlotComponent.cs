@@ -8,16 +8,11 @@ namespace MonoGame;
 /// </summary>
 public class TileSlotComponent : SlotComponent
 {
-    ITile Tile;
+    public ITile Tile;
 
     public TileSlotComponent(string name, ITile tile, Vector2 localPosition) : base(name, localPosition)
     {
         Tile = tile;
-
-        OnClick = () =>
-        {
-            Globals.world.Player.selectedTile = tile.Id;
-        };
     }
 
     /// <summary>

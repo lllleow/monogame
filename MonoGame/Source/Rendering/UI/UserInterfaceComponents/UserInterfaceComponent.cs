@@ -14,8 +14,9 @@ public class UserInterfaceComponent : IUserInterfaceComponent
     public IUserInterfaceComponent Parent { get; set; }
     public static bool ShowBounds { get; set; } = false;
     public static List<Type> BoundRenderOffForTypes = new List<Type>() { typeof(PaddingUserInterfaceComponent) };
-    MouseState currentMouseState;
-    public Action OnClick;
+    public MouseState currentMouseState;
+    public MouseState previousMouseState;
+    public Action<IUserInterfaceComponent> OnClick;
 
     public UserInterfaceComponent(string name, Vector2 localPosition)
     {
@@ -58,6 +59,7 @@ public class UserInterfaceComponent : IUserInterfaceComponent
     public virtual void Update(GameTime gameTime)
     {
         currentMouseState = Mouse.GetState();
+
         if (currentMouseState.LeftButton == ButtonState.Pressed || currentMouseState.RightButton == ButtonState.Pressed)
         {
             int mouseX = currentMouseState.X;
@@ -87,7 +89,7 @@ public class UserInterfaceComponent : IUserInterfaceComponent
 
         if (screenPosition.X >= GetPositionRelativeToParent().X && screenPosition.X <= GetPositionRelativeToParent().X + GetPreferredSize().X && screenPosition.Y >= GetPositionRelativeToParent().Y && screenPosition.Y <= GetPositionRelativeToParent().Y + GetPreferredSize().Y)
         {
-            OnClick?.Invoke();
+            OnClick?.Invoke(this);
         }
     }
 

@@ -19,13 +19,9 @@ public class LevelEditorUserInterface : UserInterface
                     paddingLeft: 0,
                     paddingRight: 0,
                     paddingTop: 0,
-                    paddingBottom: 4,
-                    child: new DirectionalListUserInterfaceComponent(
-                        name: "list",
-                        spacing: 2,
-                        localPosition: new Vector2(0, 0),
-                        direction: ListDirection.Horizontal,
-                        children: TileRegistry.Tiles.Keys.Select(tile => (IUserInterfaceComponent)new TileSlotComponent("tile_slot", tile: TileRegistry.GetTile(tile), localPosition: new Vector2(0, 0))).ToList()
+                    paddingBottom: 8,
+                    child: new HotbarUserInterfaceComponent(
+                        localPosition: new Vector2(0, 0)
                     )
                 )
             )

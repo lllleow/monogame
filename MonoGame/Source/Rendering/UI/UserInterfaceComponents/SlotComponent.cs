@@ -9,6 +9,8 @@ namespace MonoGame;
 public class SlotComponent : UserInterfaceComponent, ISlotComponent
 {
     public TextureLocation SlotTexture = TextureLocation.FirstTextureCoordinate("textures/slot");
+    public bool IsSelected = false;
+    public RectangleHelper rectangleHelper = new RectangleHelper();
 
     public SlotComponent(string name, Vector2 localPosition) : base(name, localPosition)
     {
@@ -23,8 +25,16 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
         Vector2 position = GetPositionRelativeToParent();
         Vector2 size = GetPreferredSize();
 
-        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(SlotTexture.Spritesheet), new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y), SlotTexture.TextureRectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1f);
+        if (IsSelected)
+        {
+            SlotTexture.TextureRectangle = rectangleHelper.GetTextureRectangleFromCoordinates(1, 0);
+        }
+        else
+        {
+            SlotTexture.TextureRectangle = rectangleHelper.GetTextureRectangleFromCoordinates(0, 0);
+        }
 
+        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(SlotTexture.Spritesheet), new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y), SlotTexture.TextureRectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1f);
         Vector2 iconSize = size * 0.75f;
 
         if (textureLocation != null)

@@ -47,10 +47,10 @@ public class Main : Game
         TileRegistry.LoadTileScripts();
         AnimationBundleRegistry.LoadAnimationBundleScripts();
 
-        Globals.userInterfaceHandler.Initialize();
 
         Globals.world = new World();
         Globals.world.InitWorld();
+        Globals.userInterfaceHandler.Initialize();
     }
 
     protected override void Update(GameTime gameTime)

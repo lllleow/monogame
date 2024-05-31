@@ -26,5 +26,10 @@ namespace MonoGame
 
             return new Rectangle(minX, minY, width, height);
         }
+
+        public Rectangle GetTextureRectangleFromCoordinates(int x, int y)
+        {
+            return new Rectangle(x * Tile.PixelSizeX, y * Tile.PixelSizeX, Tile.PixelSizeX, Tile.PixelSizeY);
+        }
     }
 }
