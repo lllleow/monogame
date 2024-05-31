@@ -10,7 +10,7 @@ public class SingleChildUserInterfaceComponent : UserInterfaceComponent
 
     public SingleChildUserInterfaceComponent(string name, Vector2 localPosition, IUserInterfaceComponent child) : base(name, localPosition)
     {
-        child.Initialize(this);
+        child?.Initialize(this);
         Child = child;
     }
 
@@ -21,7 +21,7 @@ public class SingleChildUserInterfaceComponent : UserInterfaceComponent
 
     public void SetChild(IUserInterfaceComponent child)
     {
-        child.Initialize(this);
+        child?.Initialize(this);
         Child = child;
     }
 
