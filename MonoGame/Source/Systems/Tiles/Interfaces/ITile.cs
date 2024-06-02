@@ -92,6 +92,8 @@ public interface ITile
     /// </summary>
     public bool Walkable { get; set; }
 
+    public (int, int) DefaultTextureCoordinates { get; set; }
+
     /// <summary>
     /// Gets or sets an array of connectable tiles.
     /// </summary>

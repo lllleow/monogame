@@ -118,6 +118,7 @@ public class Tile : ITile
     /// </summary>
     public static bool ShowTileBoundingBox = false;
 
+
     /// <summary>
     /// Initializes the tile with the specified position.
     /// </summary>
@@ -133,6 +134,8 @@ public class Tile : ITile
     /// Gets or sets an array of connectable tiles.
     /// </summary>
     public string[] ConnectableTiles { get; set; } = System.Array.Empty<string>();
+
+    public (int, int) DefaultTextureCoordinates { get; set; }
 
     /// <summary>
     /// Updates the texture coordinates of the tile based on its neighbors.
