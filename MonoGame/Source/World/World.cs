@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Components.Collision;
+using MonoGame.Source.Systems.Entity;
 using MonoGame.Source.Systems.Entity.Interfaces;
 
 namespace MonoGame;
@@ -22,6 +23,18 @@ public class World
     private List<IChunk> Chunks { get; set; } = new List<IChunk>();
     public Player Player;
 
+    public World(PlayerState playerState, List<EntityState> entityStates, List<ChunkState> chunkStates)
+    {
+        Player = new Player(playerState);
+        Entities.Add(Player);
+        Chunks = chunkStates.Select(c => new Chunk(c) as IChunk).ToList();
+    }
+
+    public World()
+    {
+
+    }
+
     /// <summary>
     /// Initializes the game world by creating a player entity, initializing chunks, and teleporting the player.
     /// </summary>
@@ -29,8 +42,6 @@ public class World
     {
         Player = new Player(new Vector2(500, 500));
         Entities.Add(Player);
-
-        InitializeChunks();
     }
 
     /// <summary>
@@ -42,6 +53,14 @@ public class World
         foreach (var entity in Entities)
         {
             entity.Update(gameTime);
+        }
+    }
+
+    public void UpdateAllTextureCoordinates()
+    {
+        foreach (IChunk chunk in Chunks)
+        {
+            chunk.UpdateTextureCoordinates();
         }
     }
 
@@ -490,5 +509,13 @@ public class World
         {
             chunk.Draw(Globals.spriteBatch);
         }
+    }
+
+    public (PlayerState, List<EntityState>, List<ChunkState>) GetWorldState()
+    {
+        var playerState = new PlayerState(Player);
+        var entityStates = Entities.Select(e => new EntityState(e)).ToList();
+        var chunkStates = Chunks.Select(c => new ChunkState(c)).ToList();
+        return (playerState, entityStates, chunkStates);
     }
 }

@@ -40,6 +40,13 @@ public abstract class GameEntity : IGameEntity
         Speed = Vector2.Zero;
     }
 
+    public GameEntity(EntityState state)
+    {
+        components = new List<IEntityComponent>();
+        Position = state.Position;
+        Speed = Vector2.Zero;
+    }
+
     /// <summary>
     /// Updates the entity's components.
     /// </summary>

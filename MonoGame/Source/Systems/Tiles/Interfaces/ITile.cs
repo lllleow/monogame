@@ -80,12 +80,22 @@ public interface ITile
     /// <summary>
     /// Gets or sets the X position of the tile in the game world.
     /// </summary>
-    public int PosX { get; set; }
+    public int WorldX { get; set; }
 
     /// <summary>
     /// Gets or sets the Y position of the tile in the game world.
     /// </summary>
-    public int PosY { get; set; }
+    public int WorldY { get; set; }
+
+    /// <summary>
+    /// Gets or sets the X position of the tile in the chunk.
+    /// </summary>
+    public int LocalX { get; set; }
+
+    /// <summary>
+    /// Gets or sets the Y position of the tile in the chunk.
+    /// </summary>
+    public int LocalY { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the tile is walkable.
@@ -110,7 +120,7 @@ public interface ITile
     /// </summary>
     /// <param name="x">The X position of the tile.</param>
     /// <param name="y">The Y position of the tile.</param>
-    public void Initialize(int x, int y);
+    public void Initialize(int localX, int localY, int worldX, int worldY);
 
     /// <summary>
     /// Called when a neighboring tile has changed.
@@ -134,7 +144,7 @@ public interface ITile
     /// </summary>
     public Rectangle GetRectangle()
     {
-        return new Rectangle(PosX, PosY, SizeX * Tile.PixelSizeX, SizeY * Tile.PixelSizeY);
+        return new Rectangle(WorldX, WorldY, SizeX * Tile.PixelSizeX, SizeY * Tile.PixelSizeY);
     }
 
     /// <summary>

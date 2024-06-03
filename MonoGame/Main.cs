@@ -47,10 +47,20 @@ public class Main : Game
         TileRegistry.LoadTileScripts();
         AnimationBundleRegistry.LoadAnimationBundleScripts();
 
+        if (!SaveManager.LoadGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\"))
+        {
+            Globals.world = new World();
+            Globals.world.InitWorld();
+        }
 
-        Globals.world = new World();
-        Globals.world.InitWorld();
         Globals.userInterfaceHandler.Initialize();
+        Globals.world.UpdateAllTextureCoordinates();
+    }
+
+    protected override void OnExiting(Object sender, EventArgs args)
+    {
+        SaveManager.SaveGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\");
+        base.OnExiting(sender, args);
     }
 
     protected override void Update(GameTime gameTime)

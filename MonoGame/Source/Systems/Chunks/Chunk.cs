@@ -42,6 +42,32 @@ public class Chunk : IChunk
 
     private World World;
 
+    public Chunk(ChunkState state)
+    {
+        X = state.X;
+        Y = state.Y;
+        Tiles = new Dictionary<TileDrawLayer, ITile[,]>();
+        World = Globals.world;
+
+        foreach (TileDrawLayer layer in TileDrawLayerPriority.GetPriority())
+        {
+            Tiles[layer] = new ITile[SizeX, SizeY];
+        }
+
+        for (int x = 0; x < SizeX; x++)
+        {
+            for (int y = 0; y < SizeY; y++)
+            {
+                SetTile("base.grass", TileDrawLayer.Background, x, y);
+            }
+        }
+
+        foreach (TileState tileState in state.Tiles)
+        {
+            SetTile(tileState.Id, tileState.Layer, tileState.LocalX, tileState.LocalY);
+        }
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Chunk"/> class.
     /// </summary>
@@ -139,7 +165,7 @@ public class Chunk : IChunk
         ITile tile = TileRegistry.GetTile(id);
         Vector2 worldPosition = GetWorldPosition(x, y);
 
-        tile.Initialize((int)worldPosition.X, (int)worldPosition.Y);
+        tile.Initialize(x, y, (int)worldPosition.X, (int)worldPosition.Y);
 
         Tiles[layer][x, y] = tile;
         return tile;

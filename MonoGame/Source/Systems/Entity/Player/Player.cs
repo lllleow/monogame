@@ -21,6 +21,20 @@ public class Player : GameEntity
     MouseState previousMouseState;
     public string selectedTile = "base.grass";
 
+    public Player(PlayerState state)
+    {
+        selectedTile = state.SelectedTile;
+        Position = state.Position;
+        Speed = new Vector2(1, 1);
+
+        Animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
+        SpriteRenderer = new SpriteRendererComponent();
+        AddComponent(SpriteRenderer);
+        AddComponent(Animator);
+        AddComponent(new PixelBoundsComponent());
+        AddComponent(new CollisionComponent("textures/player_sprite_2_collision_mask"));
+    }
+
     /// <summary>
     /// Represents a player in the game.
     /// </summary>

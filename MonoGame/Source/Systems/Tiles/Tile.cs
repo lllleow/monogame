@@ -101,12 +101,12 @@ public class Tile : ITile
     /// <summary>
     /// Gets or sets the X position of the tile.
     /// </summary>
-    public int PosX { get; set; }
+    public int WorldX { get; set; }
 
     /// <summary>
     /// Gets or sets the Y position of the tile.
     /// </summary>
-    public int PosY { get; set; }
+    public int WorldY { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the tile is walkable.
@@ -118,24 +118,38 @@ public class Tile : ITile
     /// </summary>
     public static bool ShowTileBoundingBox = false;
 
-
-    /// <summary>
-    /// Initializes the tile with the specified position.
-    /// </summary>
-    /// <param name="x">The X position of the tile.</param>
-    /// <param name="y">The Y position of the tile.</param>
-    public void Initialize(int x, int y)
-    {
-        PosX = x;
-        PosY = y;
-    }
-
     /// <summary>
     /// Gets or sets an array of connectable tiles.
     /// </summary>
     public string[] ConnectableTiles { get; set; } = System.Array.Empty<string>();
 
     public (int, int) DefaultTextureCoordinates { get; set; }
+    public int LocalX { get; set; }
+    public int LocalY { get; set; }
+
+    public Tile()
+    {
+
+    }
+
+    public Tile(TileState state)
+    {
+        Id = state.Id;
+        Name = state.Name;
+    }
+
+    /// <summary>
+    /// Initializes the tile with the specified position.
+    /// </summary>
+    /// <param name="x">The X position of the tile.</param>
+    /// <param name="y">The Y position of the tile.</param>
+    public void Initialize(int localX, int localY, int worldX, int worldY)
+    {
+        WorldX = worldX;
+        WorldY = worldY;
+        LocalX = localX;
+        LocalY = localY;
+    }
 
     /// <summary>
     /// Updates the texture coordinates of the tile based on its neighbors.
@@ -157,15 +171,15 @@ public class Tile : ITile
     /// </summary>
     public TileNeighborConfiguration GetNeighborConfiguration(TileDrawLayer layer)
     {
-        ITile left = Globals.world.GetTileAt(layer, PosX - 1, PosY);
-        ITile right = Globals.world.GetTileAt(layer, PosX + 1, PosY);
-        ITile up = Globals.world.GetTileAt(layer, PosX, PosY - 1);
-        ITile down = Globals.world.GetTileAt(layer, PosX, PosY + 1);
+        ITile left = Globals.world.GetTileAt(layer, WorldX - 1, WorldY);
+        ITile right = Globals.world.GetTileAt(layer, WorldX + 1, WorldY);
+        ITile up = Globals.world.GetTileAt(layer, WorldX, WorldY - 1);
+        ITile down = Globals.world.GetTileAt(layer, WorldX, WorldY + 1);
 
-        ITile left_top = Globals.world.GetTileAt(layer, PosX - 1, PosY - 1);
-        ITile right_top = Globals.world.GetTileAt(layer, PosX + 1, PosY - 1);
-        ITile left_bottom = Globals.world.GetTileAt(layer, PosX - 1, PosY + 1);
-        ITile right_bottom = Globals.world.GetTileAt(layer, PosX + 1, PosY + 1);
+        ITile left_top = Globals.world.GetTileAt(layer, WorldX - 1, WorldY - 1);
+        ITile right_top = Globals.world.GetTileAt(layer, WorldX + 1, WorldY - 1);
+        ITile left_bottom = Globals.world.GetTileAt(layer, WorldX - 1, WorldY + 1);
+        ITile right_bottom = Globals.world.GetTileAt(layer, WorldX + 1, WorldY + 1);
 
         return new TileNeighborConfiguration(this, left, right, up, down, left_top, right_top, left_bottom, right_bottom);
     }
