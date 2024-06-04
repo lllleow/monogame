@@ -62,7 +62,7 @@ public class AnimatorComponent : EntityComponent
             throw new Exception("AnimatorComponent requires a SpriteRendererComponent to be present on the entity.");
         }
 
-        CurrentAnimation ??= AnimationBundle.Animations.Keys.ToList().First();
+        CurrentAnimation ??= AnimationBundle.Animations.Keys.ToList().FirstOrDefault();
     }
 
     /// <summary>

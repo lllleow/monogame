@@ -52,7 +52,13 @@ public class Globals
 
     public static NetworkManager networkManager;
 
-    public static NetworkMode networkMode = NetworkMode.Server;
+    public static NetworkMode networkMode = NetworkMode.Client;
+    internal static Vector2 spawnPosition = new Vector2(500, 500);
+
+    public static NetworkManager GetNetworkManager()
+    {
+        return networkManager;
+    }
 
     public static void DefaultSpriteBatchBegin()
     {

@@ -40,6 +40,7 @@ public class Camera
     /// <param name="gameTime">The current game time.</param>
     public void Follow(IGameEntity entity, GameTime gameTime)
     {
+        if (entity == null) return;
         float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
         Vector2 entityCenter = new Vector2(entity.Position.X + Tile.PixelSizeX / 2, entity.Position.Y + Tile.PixelSizeY / 2);
         Vector2 screenCenter = new Vector2(ScreenSizeX / 2f, ScreenSizeY / 2f);

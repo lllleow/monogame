@@ -20,9 +20,14 @@ public class NetworkServer
         server = new NetManager(listener);
         server.Start(9050);
 
+        SetupListeners();
+    }
+
+    public void SetupListeners()
+    {
         listener.ConnectionRequestEvent += request =>
         {
-            if (server.ConnectedPeersCount < 10)
+            if (ShouldAcceptConnection())
             {
                 request.Accept();
             }
@@ -32,51 +37,73 @@ public class NetworkServer
 
         listener.PeerConnectedEvent += peer =>
         {
-            Console.WriteLine("We got connection: {0}", peer);
-            NetDataWriter writer = new NetDataWriter();
-            writer.Put("Hello client!");
-            peer.Send(writer, DeliveryMethod.ReliableOrdered);
+            Console.WriteLine("New connection: {0}", peer);
         };
 
-        listener.NetworkReceiveEvent += (fromPeer, reader, deliveryMethod, channel) =>
+        listener.NetworkReceiveEvent += (peer, reader, channel, deliveryMethod) =>
         {
             if (reader.AvailableBytes > 0)
             {
-                byte messageType = reader.GetByte();
-                if (messageType == 1)
-                {
-                    string uuid = reader.GetString();
-                    Player player = new Player(new Vector2(500, 500))
-                    {
-                        UUID = uuid
-                    };
+                INetworkMessage message = (INetworkMessage)Activator.CreateInstance(NetworkMessageTypeHelper.GetTypeFromMessageType((NetworkMessageTypes)reader.GetByte()));
+                message.Deserialize(reader);
 
-                    Globals.world.Players.Add(player);
-                    Connections.Add(fromPeer, uuid);
+                Console.Write("Server: " + message);
+
+                if (message is IServerExecutableMessage serverMessage)
+                {
+                    serverMessage.ExecuteOnServer(peer, reader, deliveryMethod, channel);
                 }
 
-                if (messageType == 2)
+                if (message is IClientExecutableMessage clientMessage)
                 {
-                    float posX = reader.GetFloat();
-                    float posY = reader.GetFloat();
-                    string uuid = Connections[fromPeer];
-
-                    Player player = Globals.world.Players.Where(p => p.UUID == uuid).First();
-                    player.Position = new Vector2(posX, posY);
-
-                    foreach (var p in Connections)
-                    {
-                        NetDataWriter writer = new NetDataWriter();
-                        writer.Put(2);
-                        writer.Put(player.UUID);
-                        writer.Put(player.Position.X);
-                        writer.Put(player.Position.Y);
-                        p.Key.Send(writer, DeliveryMethod.ReliableOrdered);
-                    }
+                    clientMessage.ExecuteOnClient();
                 }
             }
             reader.Recycle();
         };
+    }
+
+    public NetPeer GetConnection(string UUID)
+    {
+        return Connections.FirstOrDefault(x => x.Value == UUID).Key;
+    }
+
+    public NetPeer RegisterConnection(string UUID, NetPeer peer)
+    {
+        Connections.Add(peer, UUID);
+        return peer;
+    }
+
+    public void SendMessage(string uuid, INetworkMessage message)
+    {
+        if (message is IClientExecutableMessage clientMessage && uuid == Globals.world.GetLocalPlayer()?.UUID)
+        {
+            clientMessage.ExecuteOnClient();
+        }
+
+        var peer = Connections.FirstOrDefault(x => x.Value == uuid).Key;
+        if (peer != null)
+        {
+            peer.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
+        }
+    }
+
+    public void BroadcastMessage(INetworkMessage message)
+    {
+        if (message is IClientExecutableMessage clientMessage)
+        {
+            clientMessage.ExecuteOnClient();
+        }
+
+        foreach (var peer in Connections.Keys)
+        {
+            peer.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
+        }
+    }
+
+    public bool ShouldAcceptConnection()
+    {
+        return server.ConnectedPeersCount < 10;
     }
 
     public void Update()

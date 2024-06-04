@@ -166,19 +166,16 @@ public abstract class GameEntity : IGameEntity
     /// <returns>True if the entity successfully moved, otherwise false.</returns>
     public bool Move(GameTime gameTime, Direction direction, Vector2 speed)
     {
-        Vector2 displacement = GetDisplacement(direction, speed);
-        Vector2 newPosition = Position + displacement;
-
-        if (CanMove(newPosition, direction))
+        if (this is Player && (Player)this == Globals.world.GetLocalPlayer())
         {
-            NetDataWriter writer = new NetDataWriter();
-            writer.Put((byte)2);
-            writer.Put(newPosition.X);
-            writer.Put(newPosition.Y);
-            Globals.networkManager.GetClient()?.SendMessage(writer);
+            Vector2 displacement = GetDisplacement(direction, speed);
+            Vector2 newPosition = Position + displacement;
 
-            Position = newPosition;
-            return true;
+            if (CanMove(newPosition, direction))
+            {
+                Position = newPosition;
+                return true;
+            }
         }
 
         return false;

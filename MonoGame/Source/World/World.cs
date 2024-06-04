@@ -30,7 +30,7 @@ public class World
         {
             Players.Add(new Player(state));
         }
-        
+
         Chunks = chunkStates.Select(c => new Chunk(c) as IChunk).ToList();
     }
 
@@ -44,10 +44,13 @@ public class World
     /// </summary>
     public void InitWorld()
     {
-        Player player = new Player(new Vector2(500, 500));
-        Players.Add(player);
+        if (Globals.networkMode != NetworkMode.Client)
+        {
+            Player player = new Player(new Vector2(500, 500));
+            Players.Add(player);
 
-        InitializeChunks();
+            InitializeChunks();
+        }
     }
 
     /// <summary>
@@ -119,6 +122,16 @@ public class World
         {
             entity.Draw(spriteBatch);
         }
+    }
+
+    public Player GetPlayerByUUID(string id)
+    {
+        return Players.Find(p => p.UUID == id);
+    }
+
+    public Player GetLocalPlayer()
+    {
+        return Players.FirstOrDefault();
     }
 
     /// <summary>

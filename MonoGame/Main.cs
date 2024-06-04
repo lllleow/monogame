@@ -39,16 +39,19 @@ public class Main : Game
 
     protected override void LoadContent()
     {
-        NetworkMode mode = NetworkMode.Server;
         if (Globals.args.Length > 0)
         {
             if (Globals.args[0] == "client")
             {
-                mode = NetworkMode.Client;
+                Globals.networkMode = NetworkMode.Client;
+            }
+            else if (Globals.args[0] == "server")
+            {
+                Globals.networkMode = NetworkMode.Server;
             }
         }
 
-        Window.Title = mode.ToString() + " - " + "MonoGame";
+        Window.Title = Globals.networkMode.ToString() + " - " + "MonoGame";
 
         Globals.contentManager = this.Content;
         Globals.spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -61,10 +64,15 @@ public class Main : Game
         TileRegistry.LoadTileScripts();
         AnimationBundleRegistry.LoadAnimationBundleScripts();
 
-        if (!SaveManager.LoadGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\") && Globals.networkMode != NetworkMode.Client)
+        if (Globals.networkMode != NetworkMode.Client)
         {
+            if (!SaveManager.LoadGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\"))
+            {
+                Globals.world = new World();
+                Globals.world.InitWorld();
+            }
+        } else {
             Globals.world = new World();
-            Globals.world.InitWorld();
         }
 
         Globals.userInterfaceHandler.Initialize();
@@ -84,7 +92,7 @@ public class Main : Game
 
         Globals.networkManager.Update();
         Globals.world.Update(gameTime);
-        Globals.camera.Follow(Globals.world.Players.First(), gameTime);
+        Globals.camera.Follow(Globals.world.GetLocalPlayer(), gameTime);
         Globals.camera.Update(gameTime);
         Globals.userInterfaceHandler.Update(gameTime);
 

@@ -51,4 +51,9 @@ public class NetworkManager
     {
         return client;
     }
+
+    public NetworkServer GetServer()
+    {
+        return server;
+    }
 }

@@ -56,6 +56,11 @@ public class Player : GameEntity
         AddComponent(new CollisionComponent("textures/player_sprite_2_collision_mask"));
     }
 
+    public void SetSelectedTile(string selectedTileId)
+    {
+        selectedTile = selectedTileId;
+    }
+
     /// <summary>
     /// Handles the mouse click event at the specified coordinates, ensuring it occurs within the window bounds and when the window is active.
     /// </summary>

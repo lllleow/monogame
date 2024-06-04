@@ -20,27 +20,37 @@ public class NetworkClient
 
         listener.PeerConnectedEvent += peer =>
         {
-            SendUUID();
+            SendHandshake();
         };
 
-        listener.NetworkReceiveEvent += (fromPeer, dataReader, deliveryMethod, channel) =>
+        listener.NetworkReceiveEvent += (peer, reader, channel, deliveryMethod) =>
         {
-            Console.WriteLine("We got: {0}", dataReader.GetString(100));
-            dataReader.Recycle();
+            if (reader.AvailableBytes > 0)
+            {
+                INetworkMessage message = (INetworkMessage)Activator.CreateInstance(NetworkMessageTypeHelper.GetTypeFromMessageType((NetworkMessageTypes)reader.GetByte()));
+                message.Deserialize(reader);
+
+                Console.Write("Client: " + client);
+
+                if (message is IClientExecutableMessage clientMessage)
+                {
+                    clientMessage.ExecuteOnClient();
+                }
+            }
+
+            reader.Recycle();
         };
     }
 
-    public void SendUUID()
+    public void SendHandshake()
     {
-        NetDataWriter writer = new NetDataWriter();
-        writer.Put((byte)1);
-        writer.Put(Globals.world.Players.First().UUID);
-        Globals.networkManager.GetClient()?.SendMessage(writer);
+        HandshakeMessage handshake = new HandshakeMessage(Globals.world.GetLocalPlayer()?.UUID ?? Guid.NewGuid().ToString());
+        Globals.networkManager.GetClient()?.SendMessage(handshake);
     }
 
-    public void SendMessage(NetDataWriter reader)
+    public void SendMessage(INetworkMessage message)
     {
-        client.FirstPeer.Send(reader, DeliveryMethod.ReliableOrdered);
+        client.FirstPeer.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
     }
 
     public void Update()

@@ -278,7 +278,7 @@ public class Chunk : IChunk
                         }
                         else if (layer.Key == TileDrawLayer.Tiles)
                         {
-                            Vector2 playerPosition = Globals.world.Players.First().Position + new Vector2(Tile.PixelSizeX / 2, Tile.PixelSizeY);
+                            Vector2 playerPosition = Globals.world.GetLocalPlayer().Position + new Vector2(Tile.PixelSizeX / 2, Tile.PixelSizeY);
                             if (playerPosition.Y - 2 <= tileRectangle.Bottom)
                             {
                                 if (Math.Abs(position.X - playerPosition.X) < (Tile.PixelSizeX * 1) && Math.Abs(position.Y - playerPosition.Y) < Tile.PixelSizeY && tile.CollisionMode == CollisionMode.CollisionMask)

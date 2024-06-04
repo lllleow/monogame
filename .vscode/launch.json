@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Core Launch (server)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\bin\\Debug\\netcoreapp3.1\\MonoGame.dll",
+            "args": ["server"],
+            "cwd": "${workspaceFolder}/MonoGame",
+            "console": "externalTerminal",
+            "stopAtEntry": false
+        },
+        {
+            "name": ".NET Core Launch (client)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\bin\\Debug\\netcoreapp3.1\\MonoGame.dll",
+            "args": ["client"],
+            "cwd": "${workspaceFolder}/MonoGame",
+            "console": "externalTerminal",
+            "stopAtEntry": false
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Run Both Server and Client",
+            "configurations": [".NET Core Launch (server)", ".NET Core Launch (client)"]
+        }
+    ]
+}
