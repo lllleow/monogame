@@ -49,6 +49,10 @@
               "target": "Package",
               "version": "[1.0.0, )"
             },
+            "LiteNetLib": {
+              "target": "Package",
+              "version": "[1.2.0, )"
+            },
             "Microsoft.CodeAnalysis.CSharp": {
               "target": "Package",
               "version": "[4.9.2, )"

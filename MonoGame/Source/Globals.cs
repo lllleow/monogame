@@ -44,9 +44,15 @@ public class Globals
     /// </summary>
     public static Game game;
 
+    public static string[] args;
+
     public static UserInterfaceHandler userInterfaceHandler;
 
     public static SpriteFont defaultFont;
+
+    public static NetworkManager networkManager;
+
+    public static NetworkMode networkMode = NetworkMode.Server;
 
     public static void DefaultSpriteBatchBegin()
     {

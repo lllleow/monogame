@@ -9,6 +9,7 @@
       "MonoGame/1.0.0": {
         "dependencies": {
           "DotnetNoise": "1.0.0",
+          "LiteNetLib": "1.2.0",
           "Microsoft.CodeAnalysis.CSharp": "4.9.2",
           "Microsoft.CodeAnalysis.CSharp.Scripting": "4.9.2",
           "MonoGame.Content.Builder.Task": "3.8.1.303",
@@ -24,6 +25,14 @@
           "lib/netstandard2.0/DotnetNoise.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "LiteNetLib/1.2.0": {
+        "runtime": {
+          "lib/net6.0/LiteNetLib.dll": {
+            "assemblyVersion": "1.2.0.0",
+            "fileVersion": "1.2.0.0"
           }
         }
       },
@@ -339,6 +348,13 @@
       "sha512": "sha512-GdEL8YZXceS39AsanUUwZCX/lRseX26xhbQIhB0/+yz4+rx8eWy+0vkP6isPuAecEvd0PVkXO4peNRW0wMlzhg==",
       "path": "dotnetnoise/1.0.0",
       "hashPath": "dotnetnoise.1.0.0.nupkg.sha512"
+    },
+    "LiteNetLib/1.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-N4pJ6Drzdt7M7Ok//J1YB1t2jBNQikKud3OEgllUwK2qcu6elLyvb+vgOy4WJy9xbyobYg7oav1g5vuoaDHLuw==",
+      "path": "litenetlib/1.2.0",
+      "hashPath": "litenetlib.1.2.0.nupkg.sha512"
     },
     "Microsoft.CodeAnalysis.Analyzers/3.3.4": {
       "type": "package",

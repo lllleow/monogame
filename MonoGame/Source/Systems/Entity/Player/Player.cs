@@ -26,6 +26,7 @@ public class Player : GameEntity
         selectedTile = state.SelectedTile;
         Position = state.Position;
         Speed = new Vector2(1, 1);
+        UUID = state.UUID;
 
         Animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
         SpriteRenderer = new SpriteRendererComponent();
@@ -43,6 +44,7 @@ public class Player : GameEntity
     {
         Position = position;
         Speed = new Vector2(1, 1);
+        UUID = Guid.NewGuid().ToString();
 
         Animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
         SpriteRenderer = new SpriteRendererComponent();

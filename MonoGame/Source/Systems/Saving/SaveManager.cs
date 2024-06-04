@@ -11,10 +11,24 @@ namespace MonoGame
     {
         public static void SaveGame(string dirPath)
         {
-            (PlayerState, List<EntityState>, List<ChunkState>) worldState = Globals.world.GetWorldState();
+            if (Globals.networkMode == NetworkMode.Client)
+            {
+                return;
+            }
+
+            (List<PlayerState>, List<EntityState>, List<ChunkState>) worldState = Globals.world.GetWorldState();
 
             string json = JsonConvert.SerializeObject(worldState.Item1);
-            File.WriteAllText(dirPath + "player.json", json);
+
+            string playersFolderPath = Path.Combine(dirPath, "players");
+            Directory.CreateDirectory(playersFolderPath);
+
+            for (int i = 0; i < worldState.Item1.Count; i++)
+            {
+                string playerJson = JsonConvert.SerializeObject(worldState.Item1[i]);
+                string chunkFilePath = Path.Combine(playersFolderPath, $"player_{worldState.Item1[i].UUID}.json");
+                File.WriteAllText(chunkFilePath, playerJson);
+            }
 
             json = JsonConvert.SerializeObject(worldState.Item2);
             File.WriteAllText(dirPath + "entities.json", json);
@@ -32,10 +46,8 @@ namespace MonoGame
 
         public static bool LoadGame(string dirPath)
         {
-            if (Directory.Exists(dirPath) && File.Exists(dirPath + "player.json") && Directory.Exists(dirPath + "chunks") && File.Exists(dirPath + "entities.json"))
+            if (Directory.Exists(dirPath) && Directory.Exists(dirPath + "players") && Directory.Exists(dirPath + "chunks") && File.Exists(dirPath + "entities.json"))
             {
-                string playerJson = File.ReadAllText(dirPath + "player.json");
-
                 List<string> chunksJson = new List<string>();
                 string chunksFolderPath = Path.Combine(dirPath, "chunks");
                 if (Directory.Exists(chunksFolderPath))
@@ -48,9 +60,27 @@ namespace MonoGame
                     }
                 }
 
+                List<string> playersJson = new List<string>();
+                string playersFolderPath = Path.Combine(dirPath, "players");
+                if (Directory.Exists(playersFolderPath))
+                {
+                    string[] playerFiles = Directory.GetFiles(playersFolderPath, "*.json");
+                    foreach (string playerFilesPath in playerFiles)
+                    {
+                        string playerJson = File.ReadAllText(playerFilesPath);
+                        playersJson.Add(playerJson);
+                    }
+                }
+
                 string entitiesJson = File.ReadAllText(dirPath + "entities.json");
 
-                PlayerState playerState = JsonConvert.DeserializeObject<PlayerState>(playerJson);
+                List<PlayerState> playerStates = new List<PlayerState>();
+                foreach (string playerJson in playersJson)
+                {
+                    PlayerState playerState = JsonConvert.DeserializeObject<PlayerState>(playerJson);
+                    playerStates.Add(playerState);
+                }
+
                 List<ChunkState> chunkStates = new List<ChunkState>();
                 foreach (string chunkJson in chunksJson)
                 {
@@ -59,7 +89,7 @@ namespace MonoGame
                 }
                 List<EntityState> entityStates = JsonConvert.DeserializeObject<List<EntityState>>(entitiesJson);
 
-                World world = new World(playerState, entityStates, chunkStates);
+                World world = new World(playerStates, entityStates, chunkStates);
 
                 Globals.world = world;
                 return true;

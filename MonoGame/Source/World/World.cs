@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LiteNetLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Chunks;
@@ -20,13 +21,16 @@ public class World
     /// Represents a game world that contains entities and chunks.
     /// </summary>
     private List<IGameEntity> Entities { get; set; } = new List<IGameEntity>();
+    public List<Player> Players { get; set; } = new List<Player>();
     private List<IChunk> Chunks { get; set; } = new List<IChunk>();
-    public Player Player;
 
-    public World(PlayerState playerState, List<EntityState> entityStates, List<ChunkState> chunkStates)
+    public World(List<PlayerState> playerState, List<EntityState> entityStates, List<ChunkState> chunkStates)
     {
-        Player = new Player(playerState);
-        Entities.Add(Player);
+        foreach (PlayerState state in playerState)
+        {
+            Players.Add(new Player(state));
+        }
+        
         Chunks = chunkStates.Select(c => new Chunk(c) as IChunk).ToList();
     }
 
@@ -40,8 +44,8 @@ public class World
     /// </summary>
     public void InitWorld()
     {
-        Player = new Player(new Vector2(500, 500));
-        Entities.Add(Player);
+        Player player = new Player(new Vector2(500, 500));
+        Players.Add(player);
 
         InitializeChunks();
     }
@@ -52,7 +56,7 @@ public class World
     /// <param name="gameTime">The game time.</param>
     public void Update(GameTime gameTime)
     {
-        foreach (var entity in Entities)
+        foreach (var entity in GetEntities())
         {
             entity.Update(gameTime);
         }
@@ -64,6 +68,11 @@ public class World
         {
             chunk.UpdateTextureCoordinates();
         }
+    }
+
+    public List<IGameEntity> GetEntities()
+    {
+        return Players.Cast<IGameEntity>().Concat(Entities).ToList();
     }
 
     /// <summary>
@@ -106,7 +115,7 @@ public class World
     public void Draw(SpriteBatch spriteBatch)
     {
         DrawWorld();
-        foreach (var entity in Entities)
+        foreach (var entity in GetEntities())
         {
             entity.Draw(spriteBatch);
         }
@@ -513,11 +522,12 @@ public class World
         }
     }
 
-    public (PlayerState, List<EntityState>, List<ChunkState>) GetWorldState()
+    public (List<PlayerState>, List<EntityState>, List<ChunkState>) GetWorldState()
     {
-        var playerState = new PlayerState(Player);
+        var playerState = Players.Select(p => new PlayerState(p)).ToList();
         var entityStates = Entities.Select(e => new EntityState(e)).ToList();
         var chunkStates = Chunks.Select(c => new ChunkState(c)).ToList();
+
         return (playerState, entityStates, chunkStates);
     }
 }

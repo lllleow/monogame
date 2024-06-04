@@ -16,6 +16,8 @@ public interface IGameEntity
     /// </summary>
     List<IEntityComponent> components { get; set; }
 
+    string UUID { get; set; }
+
     /// <summary>
     /// Gets or sets the position of the entity.
     /// </summary>

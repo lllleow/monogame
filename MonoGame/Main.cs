@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -38,16 +39,29 @@ public class Main : Game
 
     protected override void LoadContent()
     {
+        NetworkMode mode = NetworkMode.Server;
+        if (Globals.args.Length > 0)
+        {
+            if (Globals.args[0] == "client")
+            {
+                mode = NetworkMode.Client;
+            }
+        }
+
+        Window.Title = mode.ToString() + " - " + "MonoGame";
+
         Globals.contentManager = this.Content;
         Globals.spriteBatch = new SpriteBatch(GraphicsDevice);
         Globals.userInterfaceHandler = new UserInterfaceHandler();
+        Globals.networkManager = new NetworkManager();
         Globals.defaultFont = Content.Load<SpriteFont>("PixelifySans");
 
+        Globals.networkManager.Initialize();
 
         TileRegistry.LoadTileScripts();
         AnimationBundleRegistry.LoadAnimationBundleScripts();
 
-        if (!SaveManager.LoadGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\"))
+        if (!SaveManager.LoadGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\") && Globals.networkMode != NetworkMode.Client)
         {
             Globals.world = new World();
             Globals.world.InitWorld();
@@ -68,10 +82,12 @@ public class Main : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
+        Globals.networkManager.Update();
         Globals.world.Update(gameTime);
-        Globals.camera.Follow(Globals.world.Player, gameTime);
+        Globals.camera.Follow(Globals.world.Players.First(), gameTime);
         Globals.camera.Update(gameTime);
         Globals.userInterfaceHandler.Update(gameTime);
+
         base.Update(gameTime);
     }
 

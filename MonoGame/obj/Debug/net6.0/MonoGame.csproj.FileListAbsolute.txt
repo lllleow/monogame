@@ -98,3 +98,4 @@ C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Cont
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\textures\ui_background.xnb
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Content\PixelifySans.xnb
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net6.0\LiteNetLib.dll

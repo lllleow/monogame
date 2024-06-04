@@ -65,6 +65,6 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
         component.IsSelected = true;
         component.LocalPosition = new Vector2(0, 0);
 
-        Globals.world.Player.selectedTile = component.Tile.Id;
+        Globals.world.Players.First().selectedTile = component.Tile.Id;
     }
 }

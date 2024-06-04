@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LiteNetLib;
+using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Components.Animator;
@@ -29,6 +31,8 @@ public abstract class GameEntity : IGameEntity
     /// Gets or sets the speed of the entity.
     /// </summary>
     public Vector2 Speed { get; set; }
+
+    public string UUID { get; set; } = Guid.NewGuid().ToString();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GameEntity"/> class.
@@ -167,6 +171,12 @@ public abstract class GameEntity : IGameEntity
 
         if (CanMove(newPosition, direction))
         {
+            NetDataWriter writer = new NetDataWriter();
+            writer.Put((byte)2);
+            writer.Put(newPosition.X);
+            writer.Put(newPosition.Y);
+            Globals.networkManager.GetClient()?.SendMessage(writer);
+
             Position = newPosition;
             return true;
         }
