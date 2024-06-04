@@ -42,6 +42,8 @@ public class World
     {
         Player = new Player(new Vector2(500, 500));
         Entities.Add(Player);
+
+        InitializeChunks();
     }
 
     /// <summary>
