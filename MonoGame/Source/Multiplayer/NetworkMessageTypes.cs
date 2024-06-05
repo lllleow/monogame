@@ -45,6 +45,8 @@ public static class NetworkMessageTypeClientHelper
                 return typeof(RequestToPlaceTileNetworkMessage);
             case NetworkMessageTypes.PlaceTileNetworkMessage:
                 return typeof(PlaceTileNetworkMessage);
+            case NetworkMessageTypes.DeleteTileNetworkMessage:
+                return typeof(DeleteTileNetworkMessage);
 
         }
 
@@ -67,6 +69,8 @@ public static class NetworkMessageTypeClientHelper
                 return typeof(MovePlayerNetworkMessageHandler);
             case NetworkMessageTypes.PlaceTileNetworkMessage:
                 return typeof(PlaceTileNetworkMessageHandler);
+            case NetworkMessageTypes.DeleteTileNetworkMessage:
+                return typeof(DeleteTileNetworkMessageHandler);
         }
 
         return null;

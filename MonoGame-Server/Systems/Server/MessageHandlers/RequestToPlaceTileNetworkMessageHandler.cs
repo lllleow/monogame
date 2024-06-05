@@ -11,7 +11,15 @@ public class RequestToPlaceTileNetworkMessageHandler : IServerMessageHandler
     public void Execute(NetPeer peer, byte channel, INetworkMessage message)
     {
         RequestToPlaceTileNetworkMessage requestToPlaceTileNetworkMessage = (RequestToPlaceTileNetworkMessage)message;
-        NetworkServer.Instance.ServerWorld.SetTileAtPosition(requestToPlaceTileNetworkMessage.TileId, requestToPlaceTileNetworkMessage.Layer, requestToPlaceTileNetworkMessage.PosX, requestToPlaceTileNetworkMessage.PosY);
+        TileState? tile = NetworkServer.Instance.ServerWorld.GetTileAtPosition(requestToPlaceTileNetworkMessage.Layer, requestToPlaceTileNetworkMessage.PosX, requestToPlaceTileNetworkMessage.PosY);
+        if (tile == null)
+        {
+            NetworkServer.Instance.ServerWorld.SetTileAtPosition(requestToPlaceTileNetworkMessage.TileId, requestToPlaceTileNetworkMessage.Layer, requestToPlaceTileNetworkMessage.PosX, requestToPlaceTileNetworkMessage.PosY);
+        }
+        else
+        {
+            NetworkServer.Instance.ServerWorld.DestroyTileAtPosition(requestToPlaceTileNetworkMessage.Layer, requestToPlaceTileNetworkMessage.PosX, requestToPlaceTileNetworkMessage.PosY);
+        }
     }
 
     public bool Validate(NetPeer peer, byte channel, INetworkMessage message)

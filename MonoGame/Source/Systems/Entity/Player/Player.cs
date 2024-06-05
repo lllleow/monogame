@@ -91,52 +91,51 @@ public class Player : GameEntity
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-        KeyboardState state = Keyboard.GetState();
-
-        currentMouseState = Mouse.GetState();
-
-        if (currentMouseState.LeftButton == ButtonState.Pressed || currentMouseState.RightButton == ButtonState.Pressed)
+        if (this == Globals.world.GetLocalPlayer())
         {
-            if (!clicked) clicked = true;
-        }
+            KeyboardState state = Keyboard.GetState();
 
-        if (currentMouseState.LeftButton == ButtonState.Released)
-        {
-            if (clicked)
+            currentMouseState = Mouse.GetState();
+
+            if (currentMouseState.LeftButton == ButtonState.Pressed || currentMouseState.RightButton == ButtonState.Pressed)
             {
-                int mouseX = currentMouseState.X;
-                int mouseY = currentMouseState.Y;
-                HandleMouseClick(currentMouseState.LeftButton == ButtonState.Pressed, mouseX, mouseY);
-                clicked = false;
+                if (!clicked) clicked = true;
             }
-        }
 
-        previousMouseState = currentMouseState;
-        if (state.IsKeyDown(Keys.W))
-        {
-            NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Up));
-        }
-        if (state.IsKeyDown(Keys.A))
-        {
-            NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Left));
-        }
-        if (state.IsKeyDown(Keys.S))
-        {
-            NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Down));
-        }
-        if (state.IsKeyDown(Keys.D))
-        {
-            NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Right));
-        }
+            if (currentMouseState.LeftButton == ButtonState.Released)
+            {
+                if (clicked)
+                {
+                    int mouseX = currentMouseState.X;
+                    int mouseY = currentMouseState.Y;
+                    HandleMouseClick(currentMouseState.LeftButton == ButtonState.Pressed, mouseX, mouseY);
+                    clicked = false;
+                }
+            }
 
-        if (IsLocalPlayer())
-        {
+            previousMouseState = currentMouseState;
+            if (state.IsKeyDown(Keys.W))
+            {
+                NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Up));
+            }
+            if (state.IsKeyDown(Keys.A))
+            {
+                NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Left));
+            }
+            if (state.IsKeyDown(Keys.S))
+            {
+                NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Down));
+            }
+            if (state.IsKeyDown(Keys.D))
+            {
+                NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Right));
+            }
+
             if (state.IsKeyUp(Keys.W) && state.IsKeyUp(Keys.A) && state.IsKeyUp(Keys.S) && state.IsKeyUp(Keys.D))
             {
                 Animator?.PlayAnimation("idle");
             }
         }
-
         base.Update(gameTime);
     }
 }

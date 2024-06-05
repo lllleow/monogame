@@ -8,7 +8,7 @@ public class DeleteTileNetworkMessageHandler : IClientMessageHandler
 {
     public void Execute(byte channel, INetworkMessage message)
     {
-        PlaceTileNetworkMessage placeTileNetworkMessage = (PlaceTileNetworkMessage)message;
-        // Globals.world.DeleteTile(TileDrawLayer.Tiles, placeTileNetworkMessage.PosX, placeTileNetworkMessage.PosY);
+        DeleteTileNetworkMessage deleteTileNetworkMessage = (DeleteTileNetworkMessage)message;
+        Globals.world.DeleteTile(TileDrawLayer.Tiles, deleteTileNetworkMessage.PosX, deleteTileNetworkMessage.PosY);
     }
 }

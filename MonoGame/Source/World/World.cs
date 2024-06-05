@@ -523,4 +523,11 @@ public class World
             chunk.Draw(Globals.spriteBatch);
         }
     }
+
+    internal void DeleteTile(TileDrawLayer layer, int posX, int posY)
+    {
+        IChunk chunk = GetChunkFromGlobalPosition(posX, posY);
+        (int, int) localPosition = GetLocalPositionFromGlobal(posX, posY);
+        chunk.DeleteTile(layer, localPosition.Item1, localPosition.Item2);
+    }
 }

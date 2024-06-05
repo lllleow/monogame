@@ -31,6 +31,33 @@ public class ServerWorld
         return Players.FirstOrDefault(x => x.UUID == UUID);
     }
 
+    public TileState? GetTileAtPosition(TileDrawLayer layer, int posX, int posY)
+    {
+        int chunkX = posX / Chunk.SizeX;
+        int chunkY = posY / Chunk.SizeY;
+        int localX = posX % Chunk.SizeX;
+        int localY = posY % Chunk.SizeY;
+
+        ChunkState chunk = Chunks.FirstOrDefault(x => x.X == chunkX && x.Y == chunkY);
+        return chunk?.GetTile(layer, localX, localY);
+    }
+
+    public void DestroyTileAtPosition(TileDrawLayer layer, int posX, int posY)
+    {
+        int chunkX = posX / Chunk.SizeX;
+        int chunkY = posY / Chunk.SizeY;
+        int localX = posX % Chunk.SizeX;
+        int localY = posY % Chunk.SizeY;
+
+        ChunkState chunk = Chunks.FirstOrDefault(x => x.X == chunkX && x.Y == chunkY);
+        bool? removedAny = chunk?.DestroyTile(layer, localX, localY);
+        if (removedAny ?? true)
+        {
+            NetworkServer.Instance.BroadcastMessage(new DeleteTileNetworkMessage(layer, posX, posY));
+            SaveManager.SaveGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\");
+        }
+    }
+
     public void SetTileAtPosition(string tileId, TileDrawLayer layer, int posX, int posY)
     {
         Vector2 worldPosition = new Vector2(posX, posY);

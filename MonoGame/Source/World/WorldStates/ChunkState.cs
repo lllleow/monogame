@@ -64,6 +64,23 @@ public class ChunkState : INetSerializable
         }
     }
 
+    public bool DestroyTile(TileDrawLayer layer, int posX, int posY)
+    {
+        TileState tile = Tiles.FirstOrDefault(x => x.LocalX == posX && x.LocalY == posY && x.Layer == layer);
+        if (tile != null)
+        {
+            Tiles.Remove(tile);
+            return true;
+        }
+
+        return false;
+    }
+
+    public TileState GetTile(TileDrawLayer layer, int posX, int posY)
+    {
+        return Tiles.FirstOrDefault(x => x.LocalX == posX && x.LocalY == posY && x.Layer == layer);
+    }
+
     public void Serialize(NetDataWriter writer)
     {
         writer.Put(X);
