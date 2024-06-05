@@ -253,25 +253,25 @@ public class Chunk : IChunk
                         {
                             layerDepth = 0.1f;
                         }
-                        else if (layer.Key == TileDrawLayer.Tiles)
-                        {
-                            if (Globals.world.GetLocalPlayer() != null)
-                            {
-                                Vector2 playerPosition = Globals.world.GetLocalPlayer().Position + new Vector2(Tile.PixelSizeX / 2, Tile.PixelSizeY);
-                                if (playerPosition.Y - 2 <= tileRectangle.Bottom)
-                                {
-                                    if (Math.Abs(position.X - playerPosition.X) < (Tile.PixelSizeX * 1) && Math.Abs(position.Y - playerPosition.Y) < Tile.PixelSizeY && tile.CollisionMode == CollisionMode.CollisionMask)
-                                    {
-                                        colorWithOpacity = Color.White * 0.9f;
-                                    }
-                                    layerDepth = 0.6f;
-                                }
-                                else
-                                {
-                                    layerDepth = 0.2f;
-                                }
-                            }
-                        }
+                        // else if (layer.Key == TileDrawLayer.Tiles)
+                        // {
+                        //     if (Globals.world.GetLocalPlayer() != null)
+                        //     {
+                        //         Vector2 playerPosition = Globals.world.GetLocalPlayer().Position + new Vector2(Tile.PixelSizeX / 2, Tile.PixelSizeY);
+                        //         if (playerPosition.Y - 2 <= tileRectangle.Bottom)
+                        //         {
+                        //             if (Math.Abs(position.X - playerPosition.X) < (Tile.PixelSizeX * 1) && Math.Abs(position.Y - playerPosition.Y) < Tile.PixelSizeY && tile.CollisionMode == CollisionMode.CollisionMask)
+                        //             {
+                        //                 colorWithOpacity = Color.White * 0.9f;
+                        //             }
+                        //             layerDepth = 0.6f;
+                        //         }
+                        //         else
+                        //         {
+                        //             layerDepth = 0.2f;
+                        //         }
+                        //     }
+                        // }
 
                         spriteBatch.Draw(
                             SpritesheetLoader.GetSpritesheet(tile.SpritesheetName),
@@ -356,6 +356,10 @@ public class Chunk : IChunk
         IChunk chunkPlusX = Globals.world.GetChunkAt(chunkXPlus, Y);
         IChunk chunkMinusY = Globals.world.GetChunkAt(X, chunkYMinus);
         IChunk chunkPlusY = Globals.world.GetChunkAt(X, chunkYPlus);
+        IChunk chunkMinusXMinusY = Globals.world.GetChunkAt(chunkXMinus, chunkYMinus);
+        IChunk chunkMinusXPlusY = Globals.world.GetChunkAt(chunkXMinus, chunkYPlus);
+        IChunk chunkPlusXMinusY = Globals.world.GetChunkAt(chunkXPlus, chunkYMinus);
+        IChunk chunkPlusXPlusY = Globals.world.GetChunkAt(chunkXPlus, chunkYPlus);
 
         if (chunkMinusX != null)
         {
@@ -375,6 +379,26 @@ public class Chunk : IChunk
         if (chunkPlusY != null)
         {
             chunkPlusY.UpdateTextureCoordinates();
+        }
+
+        if (chunkMinusXMinusY != null)
+        {
+            chunkMinusXMinusY.UpdateTextureCoordinates();
+        }
+
+        if (chunkMinusXPlusY != null)
+        {
+            chunkMinusXPlusY.UpdateTextureCoordinates();
+        }
+
+        if (chunkPlusXMinusY != null)
+        {
+            chunkPlusXMinusY.UpdateTextureCoordinates();
+        }
+
+        if (chunkPlusXPlusY != null)
+        {
+            chunkPlusXPlusY.UpdateTextureCoordinates();
         }
     }
 }

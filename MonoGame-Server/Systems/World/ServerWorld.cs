@@ -35,14 +35,10 @@ public class ServerWorld
     {
         Vector2 worldPosition = new Vector2(posX, posY);
 
-        int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
-        int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
-
-        int chunkX = (int)(worldPosition.X / chunkSizeInPixelsX);
-        int chunkY = (int)(worldPosition.Y / chunkSizeInPixelsY);
-
-        int localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
-        int localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
+        int chunkX = posX / Chunk.SizeX;
+        int chunkY = posY / Chunk.SizeY;
+        int localX = posX % Chunk.SizeX;
+        int localY = posY % Chunk.SizeY;
 
         ChunkState chunk = Chunks.FirstOrDefault(x => x.X == chunkX && x.Y == chunkY);
 

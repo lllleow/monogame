@@ -73,13 +73,13 @@ public class Player : GameEntity
             return;
         }
 
-        Vector2 worldPosition = new Vector2(x, y);
-        worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.camera.Transform));
+        Vector2 screenPosition = new Vector2(x, y);
+        (int, int) globalPosition = Globals.world.GetGlobalPositionFromScreenPosition(screenPosition);
 
-        if (worldPosition != lastPosition)
+        if (screenPosition != lastPosition)
         {
-            lastPosition = worldPosition;
-            NetworkClient.Instance.SendMessage(new RequestToPlaceTileNetworkMessage(selectedTile, TileDrawLayer.Tiles, (int)worldPosition.X, (int)worldPosition.Y));
+            lastPosition = screenPosition;
+            NetworkClient.Instance.SendMessage(new RequestToPlaceTileNetworkMessage(selectedTile, TileDrawLayer.Tiles, (int)globalPosition.Item1, (int)globalPosition.Item2));
         }
     }
 

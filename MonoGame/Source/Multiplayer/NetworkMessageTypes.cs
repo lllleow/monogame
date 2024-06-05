@@ -15,7 +15,8 @@ public enum NetworkMessageTypes
     UpdatePlayerPositionNetworkMessage = 6,
     MovePlayerNetworkMessage = 7,
     RequestToPlaceTileNetworkMessage = 8,
-    PlaceTileNetworkMessage = 9
+    PlaceTileNetworkMessage = 9,
+    DeleteTileNetworkMessage = 10
 }
 
 public static class NetworkMessageTypeClientHelper

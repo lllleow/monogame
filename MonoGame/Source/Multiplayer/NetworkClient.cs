@@ -20,7 +20,7 @@ public class NetworkClient
         client = new NetManager(listener);
 
         client.Start();
-        client.Connect("localhost", 9050, "monogame");
+        client.Connect("192.168.0.123", 9050, "monogame");
 
         listener.PeerConnectedEvent += peer =>
         {

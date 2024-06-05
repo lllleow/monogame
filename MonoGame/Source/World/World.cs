@@ -33,6 +33,7 @@ public class World
     {
         IChunk chunk = new Chunk(chunkState);
         Chunks.Add(chunk);
+        chunk.UpdateNeighborChunks();
     }
 
     /// <summary>
@@ -137,19 +138,11 @@ public class World
     /// <returns>The set tile.</returns>
     public ITile SetTileAtPosition(string tile, TileDrawLayer layer, int globalX, int globalY)
     {
-        Vector2 worldPosition = new Vector2(globalX, globalY);
+        (int, int) localPosition = GetLocalPositionFromGlobal(globalX, globalY);
+        (int, int) chunkPosition = GetChunkPositionFromGlobal(globalX, globalY);
 
-        int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
-        int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
-
-        int chunkX = (int)(worldPosition.X / chunkSizeInPixelsX);
-        int chunkY = (int)(worldPosition.Y / chunkSizeInPixelsY);
-
-        int localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
-        int localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
-
-        IChunk chunk = Globals.world.CreateOrGetChunk(chunkX, chunkY);
-        return chunk.SetTileAndUpdateNeighbors(tile, layer, localX, localY);
+        IChunk chunk = Globals.world.CreateOrGetChunk(chunkPosition.Item1, chunkPosition.Item2);
+        return chunk.SetTileAndUpdateNeighbors(tile, layer, localPosition.Item1, localPosition.Item2);
     }
 
     /// <summary>
@@ -161,15 +154,12 @@ public class World
     /// <returns>The tile at the specified global position and layer, or null if no tile is found.</returns>
     public ITile GetTileAt(TileDrawLayer layer, int globalX, int globalY)
     {
-        int chunkX = globalX / Chunk.SizeX;
-        int chunkY = globalY / Chunk.SizeY;
-        int tileX = globalX % Chunk.SizeX;
-        int tileY = globalY % Chunk.SizeY;
-        var chunk = Chunks.Find(c => c.X == chunkX && c.Y == chunkY);
+        (int, int) localPosition = GetLocalPositionFromGlobal(globalX, globalY);
+        IChunk chunk = GetChunkFromGlobalPosition(globalX, globalY);
 
         if (chunk != null)
         {
-            return chunk.GetTile(layer: layer, x: tileX, y: tileY);
+            return chunk.GetTile(layer: layer, x: localPosition.Item1, y: localPosition.Item2);
         }
         else
         {
@@ -205,6 +195,29 @@ public class World
         {
             return null;
         }
+    }
+
+    public (int, int) GetLocalPositionFromGlobal(int posX, int posY)
+    {
+        int localX = posX % Chunk.SizeX;
+        int localY = posY % Chunk.SizeY;
+
+        return (localX, localY);
+    }
+
+
+    public (int, int) GetChunkPositionFromGlobal(int posX, int posY)
+    {
+        int chunkX = posX / Chunk.SizeX;
+        int chunkY = posY / Chunk.SizeY;
+
+        return (chunkX, chunkY);
+    }
+
+    public IChunk GetChunkFromGlobalPosition(int posX, int posY)
+    {
+        (int, int) chunkPosition = GetChunkPositionFromGlobal(posX, posY);
+        return GetChunkAt(chunkPosition.Item1, chunkPosition.Item2);
     }
 
     /// <summary>
@@ -466,20 +479,38 @@ public class World
     /// <returns>The chunk at the specified screen position, or null if no chunk is found.</returns>
     public IChunk GetChunkAtScreenPosition(int layer, int screenX, int screenY)
     {
-        Vector2 worldPosition = new Vector2(screenX, screenY);
-        worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.camera.Transform));
+        (int, int) chunkPosition = GetChunkFromScreenPosition(new Vector2(screenX, screenY));
+        IChunk chunk = Globals.world.GetChunkAt(chunkPosition.Item1, chunkPosition.Item2);
+        return chunk;
+    }
+
+    public (int, int) GetGlobalPositionFromScreenPosition(Vector2 screenPositionBeforeTransform)
+    {
+        Vector2 screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.camera.Transform));
 
         int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
         int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
 
-        int chunkX = (int)(worldPosition.X / chunkSizeInPixelsX);
-        int chunkY = (int)(worldPosition.Y / chunkSizeInPixelsY);
+        int chunkX = (int)(screenPosition.X / chunkSizeInPixelsX);
+        int chunkY = (int)(screenPosition.Y / chunkSizeInPixelsY);
 
-        int localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
-        int localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
+        int localX = (int)(screenPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
+        int localY = (int)(screenPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
 
-        IChunk chunk = Globals.world.GetChunkAt(chunkX, chunkY);
-        return chunk;
+        return (chunkX * Chunk.SizeX + localX, chunkY * Chunk.SizeY + localY);
+    }
+
+    public (int, int) GetChunkFromScreenPosition(Vector2 screenPositionBeforeTransform)
+    {
+        Vector2 screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.camera.Transform));
+
+        int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
+        int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+
+        int chunkX = (int)(screenPosition.X / chunkSizeInPixelsX);
+        int chunkY = (int)(screenPosition.Y / chunkSizeInPixelsY);
+
+        return (chunkX, chunkY);
     }
 
     /// <summary>
