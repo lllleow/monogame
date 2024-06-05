@@ -11,7 +11,8 @@ public class MovePlayerNetworkMessageHandler : IClientMessageHandler
     {
         MovePlayerNetworkMessage allowMovementNetworkMessage = (MovePlayerNetworkMessage)message;
         Player player = Globals.world.GetPlayerByUUID(allowMovementNetworkMessage.UUID);
-        if (Vector2.Distance(player.Position, allowMovementNetworkMessage.ExpectedPosition) > 0.1f)
+        
+        if (Vector2.Distance(player.Position, allowMovementNetworkMessage.ExpectedPosition) < 1f)
         {
             player.Position = allowMovementNetworkMessage.ExpectedPosition;
         }

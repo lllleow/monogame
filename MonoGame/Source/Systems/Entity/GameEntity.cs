@@ -163,6 +163,31 @@ public abstract class GameEntity : IGameEntity
         {
             Vector2 displacement = GetDisplacement(direction, speed);
             Vector2 newPosition = Position + displacement;
+
+            if (ContainsComponent<AnimatorComponent>())
+            {
+                AnimatorComponent animator = GetFirstComponent<AnimatorComponent>();
+
+                switch (direction)
+                {
+                    case Direction.Up:
+                        animator.PlayAnimation("walking_back");
+                        break;
+                    case Direction.Down:
+                        animator.PlayAnimation("walking_front");
+                        break;
+                    case Direction.Left:
+                        animator.PlayAnimation("walking_left");
+                        break;
+                    case Direction.Right:
+                        animator.PlayAnimation("walking_right");
+                        break;
+                    default:
+                        animator.PlayAnimation("idle");
+                        break;
+                }
+            }
+
             Position = newPosition;
         }
     }

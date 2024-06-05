@@ -30,7 +30,7 @@ public class AnimatorComponent : EntityComponent
     /// <summary>
     /// The ID of the current animation being played.
     /// </summary>
-    public string CurrentAnimation;
+    public string CurrentAnimation = "idle";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AnimatorComponent"/> class.

@@ -46,6 +46,11 @@ public class Player : GameEntity
         selectedTile = selectedTileId;
     }
 
+    public bool IsLocalPlayer()
+    {
+        return this == Globals.world.GetLocalPlayer();
+    }
+
     /// <summary>
     /// Handles the mouse click event at the specified coordinates, ensuring it occurs within the window bounds and when the window is active.
     /// </summary>
