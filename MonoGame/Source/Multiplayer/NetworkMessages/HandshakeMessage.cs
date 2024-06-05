@@ -3,6 +3,7 @@ using System.Linq;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
+using MonoGame.Source.Multiplayer.Interfaces;
 
 namespace MonoGame;
 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Source.Rendering.UI.Interfaces;
+using MonoGame.Source.Rendering.UI.UserInterfaces;
 
 namespace MonoGame;
 

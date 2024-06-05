@@ -6,7 +6,9 @@ public enum NetworkMessageTypes
 {
     HandshakeMessage = 0,
     SpawnPlayerMessage = 1,
-    ServerAbortClientConnectionMessage = 2
+    ServerAbortClientConnectionMessage = 2,
+    MovePlayerMessage = 3,
+    KeyClickedEvent = 4
 }
 
 public static class NetworkMessageTypeHelper

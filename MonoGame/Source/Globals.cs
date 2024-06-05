@@ -55,6 +55,8 @@ public class Globals
     public static NetworkMode networkMode = NetworkMode.Client;
     internal static Vector2 spawnPosition = new Vector2(500, 500);
 
+    public static string UUID = "1";
+
     public static NetworkManager GetNetworkManager()
     {
         return networkManager;

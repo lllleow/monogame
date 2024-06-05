@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+using MonoGame.Source.Rendering.UI.Interfaces;
+using MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 using MonoGame.Source.Systems.Scripts;
 
 namespace MonoGame;

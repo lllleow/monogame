@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Source.Rendering.Utils;
 using MonoGame.Source.Systems.Components;
 using MonoGame.Source.Util.Loaders;
 

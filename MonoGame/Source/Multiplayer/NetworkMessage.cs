@@ -1,5 +1,6 @@
 ﻿using System;
 using LiteNetLib.Utils;
+using MonoGame.Source.Multiplayer.Interfaces;
 
 namespace MonoGame;
 

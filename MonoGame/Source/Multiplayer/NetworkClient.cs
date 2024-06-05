@@ -2,6 +2,7 @@
 using System.Linq;
 using LiteNetLib;
 using LiteNetLib.Utils;
+using MonoGame.Source.Multiplayer.Interfaces;
 
 namespace MonoGame;
 
@@ -30,7 +31,7 @@ public class NetworkClient
                 INetworkMessage message = (INetworkMessage)Activator.CreateInstance(NetworkMessageTypeHelper.GetTypeFromMessageType((NetworkMessageTypes)reader.GetByte()));
                 message.Deserialize(reader);
 
-                Console.Write("Client: " + client);
+                Console.Write("Client Received: " + client);
 
                 if (message is IClientExecutableMessage clientMessage)
                 {
@@ -44,12 +45,13 @@ public class NetworkClient
 
     public void SendHandshake()
     {
-        HandshakeMessage handshake = new HandshakeMessage(Globals.world.GetLocalPlayer()?.UUID ?? Guid.NewGuid().ToString());
+        HandshakeMessage handshake = new HandshakeMessage(Globals.UUID);
         Globals.networkManager.GetClient()?.SendMessage(handshake);
     }
 
     public void SendMessage(INetworkMessage message)
     {
+        Console.Write("Client Sent: " + message);
         client.FirstPeer.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
     }
 

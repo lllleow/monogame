@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using MonoGame.Source.Rendering.UI.Interfaces;
 
 namespace MonoGame;
 
