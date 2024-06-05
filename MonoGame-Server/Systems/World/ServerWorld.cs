@@ -16,9 +16,9 @@ public class ServerWorld
     {
         (List<PlayerState>?, List<ChunkState>?, List<EntityState>?) worldState = SaveManager.LoadGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\");
 
-        Players = worldState.Item1;
-        Chunks = worldState.Item2;
-        Entities = worldState.Item3;
+        Chunks = worldState.Item2 ?? new List<ChunkState>();
+        Players = worldState.Item1 ?? new List<PlayerState>();
+        Entities = worldState.Item3 ?? new List<EntityState>();
     }
 
     public (List<PlayerState>?, List<ChunkState>?, List<EntityState>?) GetWorldState()
@@ -49,14 +49,15 @@ public class ServerWorld
         if (chunk == null)
         {
             ChunkState newChunk = new ChunkState(chunkX, chunkY);
-            newChunk.Tiles.Add(new TileState(tileId, layer, localX, localY));
             chunk = newChunk;
             Chunks.Add(newChunk);
         }
 
-        chunk.SetTile(tileId, layer, localX, localY);
-        SaveManager.SaveGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\");
-
-        NetworkServer.Instance.BroadcastMessage(new PlaceTileNetworkMessage(tileId, layer, posX, posY));
+        bool success = chunk.SetTile(tileId, layer, localX, localY);
+        if (success)
+        {
+            NetworkServer.Instance.BroadcastMessage(new PlaceTileNetworkMessage(tileId, layer, posX, posY));
+            SaveManager.SaveGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\");
+        }
     }
 }

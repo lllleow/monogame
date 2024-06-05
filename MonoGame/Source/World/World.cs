@@ -137,12 +137,19 @@ public class World
     /// <returns>The set tile.</returns>
     public ITile SetTileAtPosition(string tile, TileDrawLayer layer, int globalX, int globalY)
     {
-        int chunkX = globalX / Chunk.SizeX;
-        int chunkY = globalY / Chunk.SizeY;
-        int tileX = globalX % Chunk.SizeX;
-        int tileY = globalY % Chunk.SizeY;
-        var chunk = CreateOrGetChunk(chunkX, chunkY);
-        return chunk.SetTile(tile, layer, tileX, tileY);
+        Vector2 worldPosition = new Vector2(globalX, globalY);
+
+        int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
+        int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+
+        int chunkX = (int)(worldPosition.X / chunkSizeInPixelsX);
+        int chunkY = (int)(worldPosition.Y / chunkSizeInPixelsY);
+
+        int localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
+        int localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
+
+        IChunk chunk = Globals.world.CreateOrGetChunk(chunkX, chunkY);
+        return chunk.SetTileAndUpdateNeighbors(tile, layer, localX, localY);
     }
 
     /// <summary>

@@ -57,9 +57,7 @@ public class Player : GameEntity
     /// <param name="x">The x-coordinate of the mouse click.</param>
     /// <param name="y">The y-coordinate of the mouse click.</param>
 
-    float lastLocalX = -1;
-    float lastLocalY = -1;
-
+    Vector2 lastPosition = Vector2.Zero;
     private void HandleMouseClick(bool add, int x, int y)
     {
         int windowWidth = Globals.graphicsDevice.PreferredBackBufferWidth;
@@ -78,7 +76,11 @@ public class Player : GameEntity
         Vector2 worldPosition = new Vector2(x, y);
         worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.camera.Transform));
 
-        NetworkClient.Instance.SendMessage(new RequestToPlaceTileNetworkMessage(selectedTile, TileDrawLayer.Tiles, (int)worldPosition.X, (int)worldPosition.Y));
+        if (worldPosition != lastPosition)
+        {
+            lastPosition = worldPosition;
+            NetworkClient.Instance.SendMessage(new RequestToPlaceTileNetworkMessage(selectedTile, TileDrawLayer.Tiles, (int)worldPosition.X, (int)worldPosition.Y));
+        }
     }
 
     /// <summary>

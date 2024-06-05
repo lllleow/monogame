@@ -26,9 +26,17 @@
     ],
     "compounds": [
         {
-            "name": "Debug Both Server and Client",
+            "name": "Debug Server and Client",
             "configurations": [
                 "Debug Server",
+                "Debug Client"
+            ]
+        },
+        {
+            "name": "Debug Server and Client (x2)",
+            "configurations": [
+                "Debug Server",
+                "Debug Client",
                 "Debug Client"
             ]
         }

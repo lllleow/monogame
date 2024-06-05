@@ -49,16 +49,18 @@ public class ChunkState : INetSerializable
         }
     }
 
-    public void SetTile(string tileId, TileDrawLayer layer, int posX, int posY)
+    public bool SetTile(string tileId, TileDrawLayer layer, int posX, int posY)
     {
         TileState tile = Tiles.FirstOrDefault(x => x.LocalX == posX && x.LocalY == posY && x.Layer == layer);
+
         if (tile != null)
         {
-            tile.Id = tileId;
+            return false;
         }
         else
         {
             Tiles.Add(new TileState(tileId, layer, posX, posY));
+            return true;
         }
     }
 

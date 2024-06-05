@@ -55,9 +55,18 @@ public class Chunk : IChunk
         Y = y;
         World = world;
         Tiles = new Dictionary<TileDrawLayer, ITile[,]>();
+
         foreach (TileDrawLayer layer in TileDrawLayerPriority.GetPriority())
         {
             Tiles[layer] = new ITile[SizeX, SizeY];
+        }
+
+        for (int chunkX = 0; chunkX < SizeX; chunkX++)
+        {
+            for (int chunkY = 0; chunkY < SizeY; chunkY++)
+            {
+                SetTile("base.grass", TileDrawLayer.Terrain, x, y);
+            }
         }
     }
 
@@ -124,7 +133,7 @@ public class Chunk : IChunk
     /// </summary>
     /// <param name="id">The ID of the tile.</param>
     /// <param name="layer">The tile draw layer.</param>
-    /// <param name="x">The X coordinate of the tile.</param>
+    /// <param name="x">The X coordinate of the tile.</param>d
     /// <param name="y">The Y coordinate of the tile.</param>
     /// <returns>The tile that was set.</returns>
     public ITile SetTile(string id, TileDrawLayer layer, int x, int y)
