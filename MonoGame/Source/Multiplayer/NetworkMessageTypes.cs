@@ -13,7 +13,9 @@ public enum NetworkMessageTypes
     SpawnPlayerNetworkMessage = 4,
     RequestMovementNetworkMessage = 5,
     UpdatePlayerPositionNetworkMessage = 6,
-    MovePlayerNetworkMessage = 7
+    MovePlayerNetworkMessage = 7,
+    RequestToPlaceTileNetworkMessage = 8,
+    PlaceTileNetworkMessage = 9
 }
 
 public static class NetworkMessageTypeClientHelper
@@ -38,6 +40,10 @@ public static class NetworkMessageTypeClientHelper
                 return typeof(UpdatePlayerPositionNetworkMessage);
             case NetworkMessageTypes.MovePlayerNetworkMessage:
                 return typeof(MovePlayerNetworkMessage);
+            case NetworkMessageTypes.RequestToPlaceTileNetworkMessage:
+                return typeof(RequestToPlaceTileNetworkMessage);
+            case NetworkMessageTypes.PlaceTileNetworkMessage:
+                return typeof(PlaceTileNetworkMessage);
 
         }
 
@@ -58,6 +64,8 @@ public static class NetworkMessageTypeClientHelper
                 return typeof(UpdatePlayerPositionNetworkMessageHandler);
             case NetworkMessageTypes.MovePlayerNetworkMessage:
                 return typeof(MovePlayerNetworkMessageHandler);
+            case NetworkMessageTypes.PlaceTileNetworkMessage:
+                return typeof(PlaceTileNetworkMessageHandler);
         }
 
         return null;

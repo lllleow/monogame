@@ -32,7 +32,7 @@ namespace MonoGame
 
             for (int i = 0; i < worldState.Item2?.Count; i++)
             {
-                string chunkJson = JsonConvert.SerializeObject(worldState.Item3?[i]);
+                string chunkJson = JsonConvert.SerializeObject(worldState.Item2?[i]);
                 string chunkFilePath = Path.Combine(chunksFolderPath, $"chunk_{worldState.Item2?[i].X}_{worldState.Item2?[i].Y}.json");
                 File.WriteAllText(chunkFilePath, chunkJson);
             }

@@ -26,18 +26,21 @@ public class RequestToLoadWorldServerMessageHandler : IServerMessageHandler
             NetworkServer.SendMessageToPeer(peer, chunkDataNetworkMessage);
         }
 
-        string uuid = NetworkServer.GetUUIDByPeer(peer);
-
-        foreach (PlayerState playerState in NetworkServer.ServerWorld.Players!)
+        foreach (string uuid in NetworkServer.Connections.Values)
         {
-            SpawnPlayerNetworkMessage spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(playerState.UUID, playerState.Position ?? Globals.spawnPosition);
-            NetworkServer.SendMessageToPeer(peer, spawnPlayerNetworkMessage);
+            PlayerState playerState = NetworkServer.ServerWorld.Players.FirstOrDefault(p => p.UUID == uuid);
+            if (playerState != null)
+            {
+                SpawnPlayerNetworkMessage spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(playerState.UUID, playerState.Position ?? Globals.spawnPosition);
+                NetworkServer.SendMessageToPeer(peer, spawnPlayerNetworkMessage);
+            }
         }
 
-        PlayerState existingPlayer = NetworkServer.ServerWorld.Players.FirstOrDefault(p => p.UUID == uuid);
+        string existingPlayerUUID = NetworkServer.GetUUIDByPeer(peer);
+        PlayerState existingPlayer = NetworkServer.ServerWorld.Players.FirstOrDefault(p => p.UUID == existingPlayerUUID);
         if (existingPlayer == null)
         {
-            PlayerState newPlayer = new PlayerState(uuid);
+            PlayerState newPlayer = new PlayerState(existingPlayerUUID);
             NetworkServer.ServerWorld.Players.Add(newPlayer);
             SpawnPlayerNetworkMessage spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(newPlayer.UUID, newPlayer.Position ?? Globals.spawnPosition);
             NetworkServer.BroadcastMessage(spawnPlayerNetworkMessage);

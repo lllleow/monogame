@@ -57,8 +57,9 @@ public class Player : GameEntity
     /// <param name="x">The x-coordinate of the mouse click.</param>
     /// <param name="y">The y-coordinate of the mouse click.</param>
 
-    int lastLocalX;
-    int lastLocalY;
+    float lastLocalX = -1;
+    float lastLocalY = -1;
+
     private void HandleMouseClick(bool add, int x, int y)
     {
         int windowWidth = Globals.graphicsDevice.PreferredBackBufferWidth;
@@ -77,41 +78,14 @@ public class Player : GameEntity
         Vector2 worldPosition = new Vector2(x, y);
         worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.camera.Transform));
 
-        int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
-        int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
-
-        int chunkX = (int)(worldPosition.X / chunkSizeInPixelsX);
-        int chunkY = (int)(worldPosition.Y / chunkSizeInPixelsY);
-
-        int localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
-        int localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
-
-        if (lastLocalX != localX || lastLocalY != localY)
-        {
-            IChunk chunk = Globals.world.CreateOrGetChunk(chunkX, chunkY);
-
-            if (chunk.GetTile(TileDrawLayer.Tiles, localX, localY) != null && !add)
-            {
-                lastLocalX = localX;
-                lastLocalY = localY;
-                chunk.DeleteTile(TileDrawLayer.Tiles, localX, localY);
-            }
-            else
-            {
-                if (add)
-                {
-                    lastLocalX = localX;
-                    lastLocalY = localY;
-                    chunk.SetTileAndUpdateNeighbors(selectedTile, TileDrawLayer.Tiles, localX, localY);
-                }
-            }
-        }
+        NetworkClient.Instance.SendMessage(new RequestToPlaceTileNetworkMessage(selectedTile, TileDrawLayer.Tiles, (int)worldPosition.X, (int)worldPosition.Y));
     }
 
     /// <summary>
     /// Updates the player's state based on user input and game time.
     /// </summary>
     /// <param name="gameTime">The game time.</param>
+    bool clicked = false;
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
@@ -121,10 +95,18 @@ public class Player : GameEntity
 
         if (currentMouseState.LeftButton == ButtonState.Pressed || currentMouseState.RightButton == ButtonState.Pressed)
         {
-            int mouseX = currentMouseState.X;
-            int mouseY = currentMouseState.Y;
+            if (!clicked) clicked = true;
+        }
 
-            HandleMouseClick(currentMouseState.LeftButton == ButtonState.Pressed, mouseX, mouseY);
+        if (currentMouseState.LeftButton == ButtonState.Released)
+        {
+            if (clicked)
+            {
+                int mouseX = currentMouseState.X;
+                int mouseY = currentMouseState.Y;
+                HandleMouseClick(currentMouseState.LeftButton == ButtonState.Pressed, mouseX, mouseY);
+                clicked = false;
+            }
         }
 
         previousMouseState = currentMouseState;
@@ -145,9 +127,12 @@ public class Player : GameEntity
             NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Right));
         }
 
-        if (state.IsKeyUp(Keys.W) && state.IsKeyUp(Keys.A) && state.IsKeyUp(Keys.S) && state.IsKeyUp(Keys.D))
+        if (IsLocalPlayer())
         {
-            Animator?.PlayAnimation("idle");
+            if (state.IsKeyUp(Keys.W) && state.IsKeyUp(Keys.A) && state.IsKeyUp(Keys.S) && state.IsKeyUp(Keys.D))
+            {
+                Animator?.PlayAnimation("idle");
+            }
         }
 
         base.Update(gameTime);

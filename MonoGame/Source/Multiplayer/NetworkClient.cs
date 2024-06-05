@@ -41,7 +41,7 @@ public class NetworkClient
                 dynamic handler = Activator.CreateInstance(handlerType);
                 handler.Execute(channel, message);
 
-                Console.WriteLine("Client Received: " + client);
+                Console.WriteLine("Client Received: " + message);
             }
 
             reader.Recycle();
@@ -56,7 +56,7 @@ public class NetworkClient
 
     public void SendMessage(INetworkMessage message)
     {
-        Console.Write("Client Sent: " + message);
+        Console.WriteLine("Client Sent: " + message);
         client.FirstPeer?.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
     }
 

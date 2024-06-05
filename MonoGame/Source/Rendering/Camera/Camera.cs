@@ -61,17 +61,17 @@ public class Camera
     /// <param name="gameTime">The current game time.</param>
     public void Update(GameTime gameTime)
     {
-        // MouseState mouseState = Mouse.GetState();
-        // int currentScrollValue = mouseState.ScrollWheelValue;
+        MouseState mouseState = Mouse.GetState();
+        int currentScrollValue = mouseState.ScrollWheelValue;
 
-        // if (currentScrollValue != previousScrollValue)
-        // {
-        //     float delta = (currentScrollValue - previousScrollValue) / 120;
-        //     ScaleFactor += delta * 0.1f;
-        //     ScaleFactor = MathHelper.Clamp(ScaleFactor, 0.1f, 10f);
+        if (currentScrollValue != previousScrollValue)
+        {
+            float delta = (currentScrollValue - previousScrollValue) / 120;
+            ScaleFactor += delta * 0.1f;
+            ScaleFactor = MathHelper.Clamp(ScaleFactor, 0.1f, 100f);
 
-        //     previousScrollValue = currentScrollValue;
-        // }
+            previousScrollValue = currentScrollValue;
+        }
     }
 }
 

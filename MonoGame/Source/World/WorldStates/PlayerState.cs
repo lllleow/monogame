@@ -9,6 +9,11 @@ public class PlayerState : INetSerializable
     public string UUID { get; set; }
     public Vector2? Position { get; set; }
     public string SelectedTile { get; set; }
+    
+    public PlayerState()
+    {
+
+    }
 
     public PlayerState(string uuid)
     {

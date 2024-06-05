@@ -1,4 +1,7 @@
-﻿using MonoGame;
+﻿using Microsoft.Xna.Framework;
+using MonoGame;
+using MonoGame.Source.Systems.Chunks;
+using MonoGame_Server.Systems.Server;
 
 namespace MonoGame_Server;
 
@@ -26,5 +29,34 @@ public class ServerWorld
     public PlayerState GetPlayerByUUID(string UUID)
     {
         return Players.FirstOrDefault(x => x.UUID == UUID);
+    }
+
+    public void SetTileAtPosition(string tileId, TileDrawLayer layer, int posX, int posY)
+    {
+        Vector2 worldPosition = new Vector2(posX, posY);
+
+        int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
+        int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+
+        int chunkX = (int)(worldPosition.X / chunkSizeInPixelsX);
+        int chunkY = (int)(worldPosition.Y / chunkSizeInPixelsY);
+
+        int localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
+        int localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
+
+        ChunkState chunk = Chunks.FirstOrDefault(x => x.X == chunkX && x.Y == chunkY);
+
+        if (chunk == null)
+        {
+            ChunkState newChunk = new ChunkState(chunkX, chunkY);
+            newChunk.Tiles.Add(new TileState(tileId, layer, localX, localY));
+            chunk = newChunk;
+            Chunks.Add(newChunk);
+        }
+
+        chunk.SetTile(tileId, layer, localX, localY);
+        SaveManager.SaveGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\");
+
+        NetworkServer.Instance.BroadcastMessage(new PlaceTileNetworkMessage(tileId, layer, posX, posY));
     }
 }

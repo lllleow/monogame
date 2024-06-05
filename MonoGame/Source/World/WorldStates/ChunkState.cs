@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using LiteNetLib.Utils;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 
@@ -16,6 +17,12 @@ public class ChunkState : INetSerializable
         Tiles = new List<TileState>();
     }
 
+    public ChunkState(int x, int y)
+    {
+        Tiles = new List<TileState>();
+        X = x;
+        Y = y;
+    }
 
     public ChunkState(IChunk chunk)
     {
@@ -39,6 +46,19 @@ public class ChunkState : INetSerializable
                     }
                 }
             }
+        }
+    }
+
+    public void SetTile(string tileId, TileDrawLayer layer, int posX, int posY)
+    {
+        TileState tile = Tiles.FirstOrDefault(x => x.LocalX == posX && x.LocalY == posY && x.Layer == layer);
+        if (tile != null)
+        {
+            tile.Id = tileId;
+        }
+        else
+        {
+            Tiles.Add(new TileState(tileId, layer, posX, posY));
         }
     }
 
