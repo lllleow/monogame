@@ -14,6 +14,8 @@ public class NetworkMessageTypeServerHelper
                 return typeof(AuthenticateUserServerMessageHandler);
             case NetworkMessageTypes.RequestToLoadWorldNetworkMessage:
                 return typeof(RequestToLoadWorldServerMessageHandler);
+            case NetworkMessageTypes.RequestMovementNetworkMessage:
+                return typeof(RequestMovementNetworkMessageHandler);
             default:
                 throw new ArgumentException("Invalid network message type");
         }

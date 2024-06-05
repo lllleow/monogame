@@ -54,6 +54,8 @@ public class Globals
 
     public static string UUID = Guid.NewGuid().ToString();
 
+    public static GameTime gameTime;
+
     public static void DefaultSpriteBatchBegin()
     {
         Globals.spriteBatch.Begin(transformMatrix: camera.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);

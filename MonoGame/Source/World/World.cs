@@ -112,7 +112,7 @@ public class World
 
     public Player GetLocalPlayer()
     {
-        return Players.FirstOrDefault();
+        return Players.Where(p => p.UUID == Globals.UUID).FirstOrDefault();
     }
 
     /// <summary>

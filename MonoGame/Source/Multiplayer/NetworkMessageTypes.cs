@@ -11,6 +11,9 @@ public enum NetworkMessageTypes
     RequestToLoadWorldNetworkMessage = 2,
     ChunkDataNetworkMessage = 3,
     SpawnPlayerNetworkMessage = 4,
+    RequestMovementNetworkMessage = 5,
+    UpdatePlayerPositionNetworkMessage = 6,
+    MovePlayerNetworkMessage = 7
 }
 
 public static class NetworkMessageTypeClientHelper
@@ -29,6 +32,12 @@ public static class NetworkMessageTypeClientHelper
                 return typeof(ChunkDataNetworkMessage);
             case NetworkMessageTypes.SpawnPlayerNetworkMessage:
                 return typeof(SpawnPlayerNetworkMessage);
+            case NetworkMessageTypes.RequestMovementNetworkMessage:
+                return typeof(RequestMovementNetworkMessage);
+            case NetworkMessageTypes.UpdatePlayerPositionNetworkMessage:
+                return typeof(UpdatePlayerPositionNetworkMessage);
+            case NetworkMessageTypes.MovePlayerNetworkMessage:
+                return typeof(MovePlayerNetworkMessage);
 
         }
 
@@ -45,6 +54,10 @@ public static class NetworkMessageTypeClientHelper
                 return typeof(ChunkDataNetworkMessageHandler);
             case NetworkMessageTypes.SpawnPlayerNetworkMessage:
                 return typeof(SpawnPlayerNetworkMessageHandler);
+            case NetworkMessageTypes.UpdatePlayerPositionNetworkMessage:
+                return typeof(UpdatePlayerPositionNetworkMessageHandler);
+            case NetworkMessageTypes.MovePlayerNetworkMessage:
+                return typeof(MovePlayerNetworkMessageHandler);
         }
 
         return null;

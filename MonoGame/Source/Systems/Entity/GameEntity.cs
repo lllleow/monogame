@@ -157,21 +157,14 @@ public abstract class GameEntity : IGameEntity
     /// <param name="direction">The direction of movement.</param>
     /// <param name="speed">The speed of movement.</param>
     /// <returns>True if the entity successfully moved, otherwise false.</returns>
-    public bool Move(GameTime gameTime, Direction direction, Vector2 speed)
+    public void Move(GameTime gameTime, Direction direction, Vector2 speed)
     {
-        if (this is Player && (Player)this == Globals.world.GetLocalPlayer())
+        if (this is Player)
         {
             Vector2 displacement = GetDisplacement(direction, speed);
             Vector2 newPosition = Position + displacement;
-
-            if (CanMove(newPosition, direction))
-            {
-                Position = newPosition;
-                return true;
-            }
+            Position = newPosition;
         }
-
-        return false;
     }
 
     /// <summary>

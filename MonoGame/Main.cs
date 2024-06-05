@@ -63,6 +63,7 @@ public class Main : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
+        Globals.gameTime = gameTime;
         NetworkClient.Instance.Update();
         Globals.world.Update(gameTime);
         Globals.camera.Follow(Globals.world.GetLocalPlayer(), gameTime);

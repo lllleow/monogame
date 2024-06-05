@@ -22,4 +22,9 @@ public class ServerWorld
     {
         return (Players, Chunks, Entities);
     }
+
+    public PlayerState GetPlayerByUUID(string UUID)
+    {
+        return Players.FirstOrDefault(x => x.UUID == UUID);
+    }
 }

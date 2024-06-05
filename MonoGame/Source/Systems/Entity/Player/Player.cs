@@ -123,34 +123,21 @@ public class Player : GameEntity
         }
 
         previousMouseState = currentMouseState;
-
         if (state.IsKeyDown(Keys.W))
         {
-            if (Move(gameTime, Direction.Up, Speed))
-            {
-                Animator?.PlayAnimation("walking_back");
-            }
+            NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Up));
         }
         if (state.IsKeyDown(Keys.A))
         {
-            if (Move(gameTime, Direction.Left, Speed))
-            {
-                Animator?.PlayAnimation("walking_left");
-            }
+            NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Left));
         }
         if (state.IsKeyDown(Keys.S))
         {
-            if (Move(gameTime, Direction.Down, Speed))
-            {
-                Animator?.PlayAnimation("walking_front");
-            }
+            NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Down));
         }
         if (state.IsKeyDown(Keys.D))
         {
-            if (Move(gameTime, Direction.Right, Speed))
-            {
-                Animator?.PlayAnimation("walking_right");
-            }
+            NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Right));
         }
 
         if (state.IsKeyUp(Keys.W) && state.IsKeyUp(Keys.A) && state.IsKeyUp(Keys.S) && state.IsKeyUp(Keys.D))

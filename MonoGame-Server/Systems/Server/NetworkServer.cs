@@ -1,4 +1,5 @@
 ﻿using LiteNetLib;
+using MonoGame;
 using MonoGame.Source.Multiplayer.Interfaces;
 namespace MonoGame_Server.Systems.Server;
 
@@ -38,6 +39,11 @@ public class NetworkServer
     public string GetUUIDByPeer(NetPeer peer)
     {
         return Connections.FirstOrDefault(x => x.Key == peer).Value;
+    }
+
+    public PlayerState GetPlayerFromPeer(NetPeer peer)
+    {
+        return ServerWorld.GetPlayerByUUID(GetUUIDByPeer(peer));
     }
 
     public void SetupListeners()
