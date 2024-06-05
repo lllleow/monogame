@@ -24,16 +24,6 @@ public class World
     public List<Player> Players { get; set; } = new List<Player>();
     private List<IChunk> Chunks { get; set; } = new List<IChunk>();
 
-    public World(List<PlayerState> playerState, List<EntityState> entityStates, List<ChunkState> chunkStates)
-    {
-        foreach (PlayerState state in playerState)
-        {
-            Players.Add(new Player(state));
-        }
-
-        Chunks = chunkStates.Select(c => new Chunk(c) as IChunk).ToList();
-    }
-
     public World()
     {
 
@@ -488,14 +478,5 @@ public class World
         {
             chunk.Draw(Globals.spriteBatch);
         }
-    }
-
-    public (List<PlayerState>, List<EntityState>, List<ChunkState>) GetWorldState()
-    {
-        var playerState = Players.Select(p => new PlayerState(p)).ToList();
-        var entityStates = Entities.Select(e => new EntityState(e)).ToList();
-        var chunkStates = Chunks.Select(c => new ChunkState(c)).ToList();
-
-        return (playerState, entityStates, chunkStates);
     }
 }

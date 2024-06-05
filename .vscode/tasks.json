@@ -1,23 +1,95 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "build",
-            "command": "dotnet",
-            "type": "shell",
-            "args": [
-                "build",
-                "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "group": "build",
-            "presentation": {
-                "reveal": "silent",
-                "focus": false,
-                "panel": "dedicated"
-            },
-            "problemMatcher": "$msCompile"
-        }
-    ]
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build Server",
+			"command": "dotnet",
+			"args": [
+				"build",
+				"${workspaceFolder}\\MonoGame-Server\\MonoGame-Server.csproj",
+				"-p:Configuration=Debug"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}\\MonoGame-Server",
+				"shell": {
+					"executable": "powershell.exe",
+					"args": [
+						"-Command"
+					]
+				}
+			},
+			"problemMatcher": "$msCompile",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "Build Client",
+			"command": "dotnet",
+			"args": [
+				"build",
+				"${workspaceFolder}\\MonoGame\\MonoGame.csproj",
+				"-p:Configuration=Debug"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}\\MonoGame",
+				"shell": {
+					"executable": "powershell.exe",
+					"args": [
+						"-Command"
+					]
+				}
+			},
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "Run Server",
+			"command": "dotnet",
+			"args": [
+				"run",
+				"--project",
+				"${workspaceFolder}\\MonoGame-Server\\MonoGame-Server.csproj" // Ensure the path is correct
+			],
+			"type": "process",
+			"options": {
+				"cwd": "${workspaceFolder}\\MonoGame-Server",
+				"shell": {
+					"executable": "powershell.exe",
+					"args": [
+						"-Command"
+					]
+				}
+			},
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"Build Server"
+			]
+		},
+		{
+			"label": "Run Client",
+			"command": "dotnet",
+			"args": [
+				"run",
+				"--project",
+				"${workspaceFolder}\\MonoGame\\MonoGame.csproj" // Ensure the path is correct
+			],
+			"type": "process",
+			"options": {
+				"cwd": "${workspaceFolder}\\MonoGame",
+				"shell": {
+					"executable": "powershell.exe",
+					"args": [
+						"-Command"
+					]
+				}
+			},
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"Build Client"
+			]
+		}
+	]
 }

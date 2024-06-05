@@ -2,32 +2,35 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (server)",
+            "name": "Debug Server",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
-            "program": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\bin\\Debug\\netcoreapp3.1\\MonoGame.dll",
-            "args": ["server"],
-            "cwd": "${workspaceFolder}/MonoGame",
-            "console": "externalTerminal",
-            "stopAtEntry": false
+            "preLaunchTask": "Build Server", 
+            "program": "${workspaceFolder}/MonoGame-Server/bin/Debug/net8.0/MonoGame-Server.exe",
+            "args": [],
+            "cwd": "${workspaceFolder}/MonoGame-Server",
+            "stopAtEntry": false,
+            "console": "internalConsole"
         },
         {
-            "name": ".NET Core Launch (client)",
+            "name": "Debug Client",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
-            "program": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\bin\\Debug\\netcoreapp3.1\\MonoGame.dll",
-            "args": ["client"],
+            "preLaunchTask": "Build Client", 
+            "program": "${workspaceFolder}/MonoGame/bin/Debug/net8.0/MonoGame.exe",
+            "args": [],
             "cwd": "${workspaceFolder}/MonoGame",
-            "console": "externalTerminal",
-            "stopAtEntry": false
+            "stopAtEntry": false,
+            "console": "internalConsole"
         }
     ],
     "compounds": [
         {
-            "name": "Run Both Server and Client",
-            "configurations": [".NET Core Launch (server)", ".NET Core Launch (client)"]
+            "name": "Debug Both Server and Client",
+            "configurations": [
+                "Debug Server",
+                "Debug Client"
+            ]
         }
     ]
 }

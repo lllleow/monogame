@@ -55,7 +55,6 @@ public class Main : Game
 
     protected override void OnExiting(Object sender, EventArgs args)
     {
-        SaveManager.SaveGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\");
         base.OnExiting(sender, args);
     }
 

@@ -133,12 +133,6 @@ public class Tile : ITile
 
     }
 
-    public Tile(TileState state)
-    {
-        Id = state.Id;
-        Name = state.Name;
-    }
-
     /// <summary>
     /// Initializes the tile with the specified position.
     /// </summary>

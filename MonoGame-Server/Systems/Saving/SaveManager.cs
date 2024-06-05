@@ -4,6 +4,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using MonoGame_Server;
 
 namespace MonoGame
 {
@@ -11,35 +12,35 @@ namespace MonoGame
     {
         public static void SaveGame(string dirPath)
         {
-            (List<PlayerState>, List<EntityState>, List<ChunkState>) worldState = Globals.world.GetWorldState();
+            (List<PlayerState>?, List<ChunkState>?, List<EntityState>?) worldState = ServerWorld.Instance.GetWorldState();
 
             string json = JsonConvert.SerializeObject(worldState.Item1);
 
             string playersFolderPath = Path.Combine(dirPath, "players");
             Directory.CreateDirectory(playersFolderPath);
 
-            for (int i = 0; i < worldState.Item1.Count; i++)
+            for (int i = 0; i < worldState.Item1?.Count; i++)
             {
                 string playerJson = JsonConvert.SerializeObject(worldState.Item1[i]);
                 string chunkFilePath = Path.Combine(playersFolderPath, $"player_{worldState.Item1[i].UUID}.json");
                 File.WriteAllText(chunkFilePath, playerJson);
             }
 
-            json = JsonConvert.SerializeObject(worldState.Item2);
-            File.WriteAllText(dirPath + "entities.json", json);
-
             string chunksFolderPath = Path.Combine(dirPath, "chunks");
             Directory.CreateDirectory(chunksFolderPath);
 
-            for (int i = 0; i < worldState.Item3.Count; i++)
+            for (int i = 0; i < worldState.Item2?.Count; i++)
             {
-                string chunkJson = JsonConvert.SerializeObject(worldState.Item3[i]);
-                string chunkFilePath = Path.Combine(chunksFolderPath, $"chunk_{worldState.Item3[i].X}_{worldState.Item3[i].Y}.json");
+                string chunkJson = JsonConvert.SerializeObject(worldState.Item3?[i]);
+                string chunkFilePath = Path.Combine(chunksFolderPath, $"chunk_{worldState.Item2?[i].X}_{worldState.Item2?[i].Y}.json");
                 File.WriteAllText(chunkFilePath, chunkJson);
             }
+
+            json = JsonConvert.SerializeObject(worldState.Item3);
+            File.WriteAllText(dirPath + "entities.json", json);
         }
 
-        public static bool LoadGame(string dirPath)
+        public (List<PlayerState>?, List<ChunkState>?, List<EntityState>?) LoadGame(string dirPath)
         {
             if (Directory.Exists(dirPath) && Directory.Exists(dirPath + "players") && Directory.Exists(dirPath + "chunks") && File.Exists(dirPath + "entities.json"))
             {
@@ -72,27 +73,22 @@ namespace MonoGame
                 List<PlayerState> playerStates = new List<PlayerState>();
                 foreach (string playerJson in playersJson)
                 {
-                    PlayerState playerState = JsonConvert.DeserializeObject<PlayerState>(playerJson);
-                    playerStates.Add(playerState);
+                    PlayerState? playerState = JsonConvert.DeserializeObject<PlayerState>(playerJson);
+                    if (playerState != null)
+                    {
+                        playerStates.Add(playerState);
+                    }
                 }
 
                 List<ChunkState> chunkStates = new List<ChunkState>();
-                foreach (string chunkJson in chunksJson)
-                {
-                    ChunkState chunkState = JsonConvert.DeserializeObject<ChunkState>(chunkJson);
-                    chunkStates.Add(chunkState);
-                }
-                List<EntityState> entityStates = JsonConvert.DeserializeObject<List<EntityState>>(entitiesJson);
+                List<EntityState>? entityStates = JsonConvert.DeserializeObject<List<EntityState>>(entitiesJson ?? string.Empty);
 
-                World world = new World(playerStates, entityStates, chunkStates);
-
-                Globals.world = world;
-                return true;
+                return (playerStates, chunkStates, entityStates);
             }
             else
             {
                 Console.WriteLine("Save file not found.");
-                return false;
+                return (null, null, null);
             }
         }
     }

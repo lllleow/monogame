@@ -7,7 +7,7 @@ class Server
 {
     public static void Main(string[] args)
     {
-        var server = NetworkServer.Instance;
+        NetworkServer server = NetworkServer.Instance;
         server.InitializeServer();
 
         while (true)

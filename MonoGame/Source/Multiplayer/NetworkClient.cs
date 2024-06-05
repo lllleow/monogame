@@ -41,7 +41,7 @@ public class NetworkClient
 
     public void AuthenticateUser()
     {
-        AuthenticateUserClientMessage authenticateUser = new AuthenticateUserClientMessage(Globals.UUID);
+        AuthenticateUserNetworkMessage authenticateUser = new AuthenticateUserNetworkMessage(Globals.UUID);
         SendMessage(authenticateUser);
     }
 

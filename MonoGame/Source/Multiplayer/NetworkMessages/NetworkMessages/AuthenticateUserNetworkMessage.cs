@@ -19,6 +19,7 @@ public class AuthenticateUserNetworkMessage : NetworkMessage
     public override NetDataWriter Serialize()
     {
         NetDataWriter data = new NetDataWriter();
+        data.Put((byte)NetworkMessageTypes.AuthenticateUserNetworkMessage);
         data.Put(UUID);
 
         return data;
