@@ -65,7 +65,7 @@ public class Chunk : IChunk
         {
             for (int chunkY = 0; chunkY < SizeY; chunkY++)
             {
-                SetTile("base.grass", TileDrawLayer.Terrain, x, y);
+                SetTile("base.grass", TileDrawLayer.Background, chunkX, chunkY);
             }
         }
     }
@@ -84,6 +84,14 @@ public class Chunk : IChunk
         foreach (TileState tileState in chunkState.Tiles)
         {
             SetTile(tileState.Id, tileState.Layer.Value, tileState.LocalX.Value, tileState.LocalY.Value);
+        }
+
+        for (int chunkX = 0; chunkX < SizeX; chunkX++)
+        {
+            for (int chunkY = 0; chunkY < SizeY; chunkY++)
+            {
+                SetTile("base.grass", TileDrawLayer.Background, chunkX, chunkY);
+            }
         }
 
         Globals.world.UpdateAllTextureCoordinates();
@@ -248,10 +256,16 @@ public class Chunk : IChunk
                         Rectangle tileRectangle = new Rectangle(x, y, tile.SizeX * Tile.PixelSizeX, tile.SizeY * Tile.PixelSizeY);
                         Color colorWithOpacity = Color.White * tile.Opacity;
 
-                        float layerDepth = 0f;
+                        float layerDepth = 1f;
+
                         if (layer.Key == TileDrawLayer.Terrain)
                         {
                             layerDepth = 0.1f;
+                        }
+
+                        if (layer.Key == TileDrawLayer.Background)
+                        {
+                            layerDepth = 0f;
                         }
                         // else if (layer.Key == TileDrawLayer.Tiles)
                         // {

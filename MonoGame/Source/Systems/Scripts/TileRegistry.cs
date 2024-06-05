@@ -58,7 +58,7 @@ public static class TileRegistry
     /// </summary>
     public static void LoadTileScripts()
     {
-        string[] files = FileLoader.LoadAllFilesFromFolder(@"C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\Scripts\Tiles");
+        string[] files = FileLoader.LoadAllFilesFromFolder(@"Scripts\Tiles");
         foreach (string file in files)
         {
             string code = File.ReadAllText(file);

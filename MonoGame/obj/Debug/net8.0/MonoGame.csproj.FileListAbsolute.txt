@@ -97,3 +97,9 @@ C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\obj\Debug\net8.0\refi
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\obj\Debug\net8.0\MonoGame.pdb
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\obj\Debug\net8.0\MonoGame.genruntimeconfig.cache
 C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\obj\Debug\net8.0\ref\MonoGame.dll
+C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net8.0\Scripts\AnimationBundles\PlayerMovementAnimationBundle.cs
+C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net8.0\Scripts\Tiles\FenceTile.cs
+C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net8.0\Scripts\Tiles\GrassTile.cs
+C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net8.0\Scripts\Tiles\PipeTile.cs
+C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net8.0\Scripts\Tiles\StoneTile.cs
+C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\bin\Debug\net8.0\Scripts\Tiles\WallTile.cs

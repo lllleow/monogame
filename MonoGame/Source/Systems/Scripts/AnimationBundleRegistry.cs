@@ -50,7 +50,7 @@ public static class AnimationBundleRegistry
     /// </summary>
     public static void LoadAnimationBundleScripts()
     {
-        string[] files = FileLoader.LoadAllFilesFromFolder(@"C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\Scripts\AnimationBundles");
+        string[] files = FileLoader.LoadAllFilesFromFolder(@"Scripts\AnimationBundles");
         foreach (string file in files)
         {
             string code = File.ReadAllText(file);

@@ -50,7 +50,7 @@ public class Globals
 
     public static SpriteFont defaultFont;
 
-    public static Vector2 spawnPosition = new Vector2(500, 500);
+    public static Vector2 spawnPosition = new Vector2(128, 128);
 
     public static string UUID = Guid.NewGuid().ToString();
 
