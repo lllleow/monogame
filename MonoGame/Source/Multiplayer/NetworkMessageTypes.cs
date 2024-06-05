@@ -4,11 +4,7 @@ namespace MonoGame;
 
 public enum NetworkMessageTypes
 {
-    HandshakeMessage = 0,
-    SpawnPlayerMessage = 1,
-    ServerAbortClientConnectionMessage = 2,
-    MovePlayerMessage = 3,
-    KeyClickedEvent = 4
+    AuthenticateUserNetworkMessage = 0,
 }
 
 public static class NetworkMessageTypeHelper
@@ -17,12 +13,8 @@ public static class NetworkMessageTypeHelper
     {
         switch (messageType)
         {
-            case NetworkMessageTypes.HandshakeMessage:
-                return typeof(HandshakeMessage);
-            case NetworkMessageTypes.SpawnPlayerMessage:
-                return typeof(SpawnPlayerMessage);
-            case NetworkMessageTypes.ServerAbortClientConnectionMessage:
-                return typeof(ServerAbortClientConnectionMessage);
+            case NetworkMessageTypes.AuthenticateUserNetworkMessage:
+                return typeof(AuthenticateUserNetworkMessage);
             default:
                 throw new ArgumentException("Invalid network message type");
         }

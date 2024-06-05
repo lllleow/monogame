@@ -8,6 +8,7 @@ using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Components.Collision;
 using MonoGame.Source.Systems.Scripts;
 using MonoGame.Source.Util.Loaders;
+using MonoGame;
 
 namespace MonoGame.Source.Systems.Chunks;
 
@@ -94,35 +95,6 @@ public class Chunk : IChunk
     {
         if (x >= SizeX || y >= SizeY || x < 0 || y < 0) return null;
         return Tiles[layer][x, y];
-    }
-
-    /// <summary>
-    /// Generates the tiles for the chunk.
-    /// </summary>
-    public void Generate()
-    {
-        FastNoise noise = new FastNoise(seed: new Tuple<int, int>(X, Y).GetHashCode());
-        foreach (TileDrawLayer layer in TileDrawLayerPriority.GetPriority())
-        {
-            Tiles[layer] = new ITile[SizeX, SizeY];
-        }
-
-        for (int x = 0; x < SizeX; x++)
-        {
-            for (int y = 0; y < SizeY; y++)
-            {
-                SetTile("base.grass", TileDrawLayer.Background, x, y);
-                noise.Frequency = 0.1f;
-
-                float noiseValue = noise.GetNoise(x, y);
-                float normalizedValue = (noiseValue + 1) / 2;
-
-                if (normalizedValue > 0.7f)
-                {
-                    SetTile("base.stone", TileDrawLayer.Tiles, x, y);
-                }
-            }
-        }
     }
 
     /// <summary>

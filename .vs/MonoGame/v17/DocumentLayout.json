@@ -1,12 +1,71 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4839FBE7-35D3-444F-ACCE-313A63A12FE7}|MonoGame\\MonoGame.csproj|c:\\users\\leonardo\\documents\\repositories\\monogame\\monogame\\source\\systems\\chunks\\chunk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4839FBE7-35D3-444F-ACCE-313A63A12FE7}|MonoGame\\MonoGame.csproj|solutionrelative:monogame\\source\\systems\\chunks\\chunk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4940B631-3227-4B28-AEA0-0BE844B43447}|MonoGame-Server\\MonoGame-Server.csproj|c:\\users\\leonardo\\documents\\repositories\\monogame\\monogame-server\\systems\\saving\\savestates\\chunkstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4940B631-3227-4B28-AEA0-0BE844B43447}|MonoGame-Server\\MonoGame-Server.csproj|solutionrelative:monogame-server\\systems\\saving\\savestates\\chunkstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4940B631-3227-4B28-AEA0-0BE844B43447}|MonoGame-Server\\MonoGame-Server.csproj|c:\\users\\leonardo\\documents\\repositories\\monogame\\monogame-server\\systems\\server\\networkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4940B631-3227-4B28-AEA0-0BE844B43447}|MonoGame-Server\\MonoGame-Server.csproj|solutionrelative:monogame-server\\systems\\server\\networkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ChunkState.cs",
+              "DocumentMoniker": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame-Server\\Systems\\Saving\\SaveStates\\ChunkState.cs",
+              "RelativeDocumentMoniker": "MonoGame-Server\\Systems\\Saving\\SaveStates\\ChunkState.cs",
+              "ToolTip": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame-Server\\Systems\\Saving\\SaveStates\\ChunkState.cs",
+              "RelativeToolTip": "MonoGame-Server\\Systems\\Saving\\SaveStates\\ChunkState.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T02:08:46.577Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Chunk.cs",
+              "DocumentMoniker": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\Source\\Systems\\Chunks\\Chunk.cs",
+              "RelativeDocumentMoniker": "MonoGame\\Source\\Systems\\Chunks\\Chunk.cs",
+              "ToolTip": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\Source\\Systems\\Chunks\\Chunk.cs",
+              "RelativeToolTip": "MonoGame\\Source\\Systems\\Chunks\\Chunk.cs",
+              "ViewState": "AQIAACYAAAAAAAAAAAAIwDkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T02:01:21.837Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "NetworkServer.cs",
+              "DocumentMoniker": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame-Server\\Systems\\Server\\NetworkServer.cs",
+              "RelativeDocumentMoniker": "MonoGame-Server\\Systems\\Server\\NetworkServer.cs",
+              "ToolTip": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame-Server\\Systems\\Server\\NetworkServer.cs",
+              "RelativeToolTip": "MonoGame-Server\\Systems\\Server\\NetworkServer.cs",
+              "ViewState": "AQIAACAAAAAAAAAAAAAwwCgAAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T01:57:59.555Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

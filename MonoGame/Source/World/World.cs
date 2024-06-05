@@ -40,20 +40,6 @@ public class World
     }
 
     /// <summary>
-    /// Initializes the game world by creating a player entity, initializing chunks, and teleporting the player.
-    /// </summary>
-    public void InitWorld()
-    {
-        if (Globals.networkMode != NetworkMode.Client)
-        {
-            Player player = new Player(new Vector2(500, 500));
-            Players.Add(player);
-
-            InitializeChunks();
-        }
-    }
-
-    /// <summary>
     /// Updates the game world by updating all entities.
     /// </summary>
     /// <param name="gameTime">The game time.</param>
@@ -101,7 +87,6 @@ public class World
         if (existingChunk == null)
         {
             var chunk = new Chunk(this, x, y);
-            chunk.Generate();
             Chunks.Add(chunk);
             return chunk;
         }
@@ -160,16 +145,7 @@ public class World
         int chunkY = globalY / Chunk.SizeY;
         int tileX = globalX % Chunk.SizeX;
         int tileY = globalY % Chunk.SizeY;
-        var chunk = Chunks.Find(c => c.X == chunkX && c.Y == chunkY);
-
-        if (chunk == null)
-        {
-            var newChunk = new Chunk(this, tileX, tileY);
-            newChunk.Generate();
-            Chunks.Add(newChunk);
-            chunk = newChunk;
-        }
-
+        var chunk = CreateOrGetChunk(chunkX, chunkY);
         return chunk.SetTile(tile, layer, tileX, tileY);
     }
 
@@ -501,27 +477,6 @@ public class World
 
         IChunk chunk = Globals.world.GetChunkAt(chunkX, chunkY);
         return chunk;
-    }
-
-    /// <summary>
-    /// Initializes the chunks in the world.
-    /// </summary>
-    private void InitializeChunks()
-    {
-        for (int x = 0; x < 4; x++)
-        {
-            for (int y = 0; y < 4; y++)
-            {
-                var chunk = new Chunk(this, x, y);
-                chunk.Generate();
-                Chunks.Add(chunk);
-            }
-        }
-
-        foreach (IChunk chunk in Chunks)
-        {
-            chunk.UpdateTextureCoordinates();
-        }
     }
 
     /// <summary>

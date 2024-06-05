@@ -20,12 +20,17 @@ public class NetworkMessage : INetworkMessage
         throw new NotImplementedException();
     }
 
-    public virtual int GetMessageTypeId()
+    public void Execute()
     {
         throw new NotImplementedException();
     }
 
     public virtual NetDataWriter Serialize()
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool Validate()
     {
         throw new NotImplementedException();
     }

@@ -50,16 +50,15 @@ public class Globals
 
     public static SpriteFont defaultFont;
 
-    public static NetworkManager networkManager;
+    public static NetworkClient networkClient = new NetworkClient();
 
-    public static NetworkMode networkMode = NetworkMode.Client;
     internal static Vector2 spawnPosition = new Vector2(500, 500);
 
     public static string UUID = "1";
 
-    public static NetworkManager GetNetworkManager()
+    public static NetworkClient GetNetworkClient()
     {
-        return networkManager;
+        return networkClient;
     }
 
     public static void DefaultSpriteBatchBegin()

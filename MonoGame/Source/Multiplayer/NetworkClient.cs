@@ -11,8 +11,9 @@ public class NetworkClient
     EventBasedNetListener listener;
     public NetManager client;
 
-    public void InitializeClient()
+    public NetworkClient()
     {
+
         listener = new EventBasedNetListener();
         client = new NetManager(listener);
 
@@ -21,7 +22,7 @@ public class NetworkClient
 
         listener.PeerConnectedEvent += peer =>
         {
-            SendHandshake();
+            AuthenticateUser();
         };
 
         listener.NetworkReceiveEvent += (peer, reader, channel, deliveryMethod) =>
@@ -32,21 +33,16 @@ public class NetworkClient
                 message.Deserialize(reader);
 
                 Console.Write("Client Received: " + client);
-
-                if (message is IClientExecutableMessage clientMessage)
-                {
-                    clientMessage.ExecuteOnClient();
-                }
             }
 
             reader.Recycle();
         };
     }
 
-    public void SendHandshake()
+    public void AuthenticateUser()
     {
-        HandshakeMessage handshake = new HandshakeMessage(Globals.UUID);
-        Globals.networkManager.GetClient()?.SendMessage(handshake);
+        AuthenticateUserClientMessage authenticateUser = new AuthenticateUserClientMessage(Globals.UUID);
+        SendMessage(authenticateUser);
     }
 
     public void SendMessage(INetworkMessage message)
