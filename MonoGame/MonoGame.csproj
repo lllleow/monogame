@@ -33,7 +33,7 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Source\Multiplayer\NetworkMessages\ClientNetworkMessageHandler\" />
+		<Folder Include="Source\Multiplayer\NetworkMessages\NetworkMessageHandler\Server\" />
 		<Folder Include="Source\Multiplayer\NetworkMessages\ServerMessages\" />
 		<Folder Include="Source\Systems\Components\Collision\Handlers\" />
 	</ItemGroup>

@@ -22,7 +22,7 @@
             "cwd": "${workspaceFolder}/MonoGame",
             "stopAtEntry": false,
             "console": "internalConsole"
-        }
+        },
     ],
     "compounds": [
         {

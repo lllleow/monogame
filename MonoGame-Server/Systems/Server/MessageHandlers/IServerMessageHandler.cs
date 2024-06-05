@@ -1,7 +1,10 @@
-﻿namespace MonoGame_Server.Systems.Server.MessageHandlers;
+﻿using LiteNetLib;
+using MonoGame.Source.Multiplayer.Interfaces;
 
-public interface IServerMessageHandler<T>
+namespace MonoGame_Server.Systems.Server.MessageHandlers;
+
+public interface IServerMessageHandler
 {
-    public abstract void Validate(T message);
-    public abstract void Execute(T message);
+    public abstract bool Validate(NetPeer peer, byte channel, INetworkMessage message);
+    public abstract void Execute(NetPeer peer, byte channel, INetworkMessage message);
 }

@@ -4,11 +4,11 @@ namespace MonoGame;
 
 public class TileState
 {
-    public string Id { get; set; }
-    public string Name { get; set; }
-    public int LocalX { get; set; }
-    public int LocalY { get; set; }
-    public TileDrawLayer Layer { get; set; }
+    public string? Id { get; set; }
+    public string? Name { get; set; }
+    public int? LocalX { get; set; }
+    public int? LocalY { get; set; }
+    public TileDrawLayer? Layer { get; set; }
 
     public TileState()
     {

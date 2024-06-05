@@ -12,8 +12,9 @@ public class ChunkState
 
     public ChunkState()
     {
-
+        Tiles = new List<TileState>();
     }
+
 
     public ChunkState(IChunk chunk)
     {

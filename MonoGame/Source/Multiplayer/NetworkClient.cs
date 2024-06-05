@@ -3,11 +3,13 @@ using System.Linq;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using MonoGame.Source.Multiplayer.Interfaces;
+using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
 
 namespace MonoGame;
 
 public class NetworkClient
 {
+    public static NetworkClient Instance = new NetworkClient();
     EventBasedNetListener listener;
     public NetManager client;
 
@@ -29,10 +31,17 @@ public class NetworkClient
         {
             if (reader.AvailableBytes > 0)
             {
-                INetworkMessage message = (INetworkMessage)Activator.CreateInstance(NetworkMessageTypeHelper.GetTypeFromMessageType((NetworkMessageTypes)reader.GetByte()));
+                NetworkMessageTypes messageType = (NetworkMessageTypes)reader.GetByte();
+                Type messageObjectType = NetworkMessageTypeClientHelper.GetTypeFromMessageType(messageType);
+
+                INetworkMessage message = (INetworkMessage)Activator.CreateInstance(messageObjectType);
                 message.Deserialize(reader);
 
-                Console.Write("Client Received: " + client);
+                Type handlerType = NetworkMessageTypeClientHelper.GetHandlerForClientMessageType(messageType);
+                dynamic handler = Activator.CreateInstance(handlerType);
+                handler.Execute(channel, message);
+
+                Console.WriteLine("Client Received: " + message);
             }
 
             reader.Recycle();

@@ -15,7 +15,7 @@ public class NetworkMessage : INetworkMessage
         Deserialize(reader);
     }
 
-    public virtual NetDataReader Deserialize(NetDataReader reader)
+    public virtual void Deserialize(NetDataReader reader)
     {
         throw new NotImplementedException();
     }

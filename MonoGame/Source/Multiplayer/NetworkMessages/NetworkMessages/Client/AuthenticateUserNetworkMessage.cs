@@ -1,7 +1,7 @@
 ﻿using System;
 using LiteNetLib.Utils;
 
-namespace MonoGame;
+namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
 
 public class AuthenticateUserNetworkMessage : NetworkMessage
 {
@@ -25,9 +25,8 @@ public class AuthenticateUserNetworkMessage : NetworkMessage
         return data;
     }
 
-    public override NetDataReader Deserialize(NetDataReader reader)
+    public override void Deserialize(NetDataReader reader)
     {
         UUID = reader.GetString();
-        return reader;
     }
 }

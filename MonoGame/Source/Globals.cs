@@ -50,16 +50,9 @@ public class Globals
 
     public static SpriteFont defaultFont;
 
-    public static NetworkClient networkClient = new NetworkClient();
+    public static Vector2 spawnPosition = new Vector2(500, 500);
 
-    internal static Vector2 spawnPosition = new Vector2(500, 500);
-
-    public static string UUID = "1";
-
-    public static NetworkClient GetNetworkClient()
-    {
-        return networkClient;
-    }
+    public static string UUID = Guid.NewGuid().ToString();
 
     public static void DefaultSpriteBatchBegin()
     {

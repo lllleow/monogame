@@ -1,19 +1,31 @@
-﻿using MonoGame;
+﻿using LiteNetLib;
+using MonoGame;
+using MonoGame.Source.Multiplayer.Interfaces;
+using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
 
 namespace MonoGame_Server.Systems.Server.MessageHandlers;
 
-public class AuthenticateUserServerMessageHandler : IServerMessageHandler<AuthenticateUserNetworkMessage>
+public class AuthenticateUserServerMessageHandler : IServerMessageHandler
 {
-    public void Validate(AuthenticateUserNetworkMessage message)
+    private NetworkServer NetworkServer = NetworkServer.Instance;
+
+    public bool Validate(NetPeer peer, byte channel, INetworkMessage message)
     {
-        if (message.UUID == null)
+        AuthenticateUserNetworkMessage authMessage = (AuthenticateUserNetworkMessage)message;
+        NetPeer existingPeer = NetworkServer.GetPeerByUUID(authMessage.UUID);
+        if (existingPeer != null)
         {
-            throw new Exception("UUID is null");
+            NetworkServer.SendMessageToPeer(peer, new AuthenticationResultNetworkMessage(false, "Player with UUID already connected"));
+            return false;
         }
+
+        return true;
     }
 
-    public void Execute(AuthenticateUserNetworkMessage message)
+    public void Execute(NetPeer peer, byte channel, INetworkMessage message)
     {
-        Console.WriteLine("Server received AuthenticateUserNetworkMessage: " + message.UUID);
+        AuthenticateUserNetworkMessage authMessage = (AuthenticateUserNetworkMessage)message;
+        NetworkServer.Connections[peer] = authMessage.UUID;
+        NetworkServer.SendMessageToPeer(peer, new AuthenticationResultNetworkMessage(true, "Player authenticated"));
     }
 }

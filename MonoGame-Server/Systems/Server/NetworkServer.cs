@@ -10,11 +10,14 @@ public class NetworkServer
     NetManager server;
     public Dictionary<NetPeer, string> Connections = new Dictionary<NetPeer, string>();
     public MessageHandler MessageHandler = new MessageHandler();
+    public ServerWorld ServerWorld;
 
     public NetworkServer()
     {
         listener = new EventBasedNetListener();
         server = new NetManager(listener);
+        ServerWorld = new ServerWorld();
+        ServerWorld.Initialize();
     }
 
     public void InitializeServer()
@@ -25,6 +28,16 @@ public class NetworkServer
 
         Console.WriteLine("Server started at port " + port);
         SetupListeners();
+    }
+
+    public NetPeer GetPeerByUUID(string UUID)
+    {
+        return Connections.FirstOrDefault(x => x.Value == UUID).Key;
+    }
+
+    public string GetUUIDByPeer(NetPeer peer)
+    {
+        return Connections.FirstOrDefault(x => x.Key == peer).Value;
     }
 
     public void SetupListeners()
@@ -74,6 +87,11 @@ public class NetworkServer
         {
             peer.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
         }
+    }
+
+    public void SendMessageToPeer(NetPeer peer, INetworkMessage message)
+    {
+        peer.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
     }
 
     public void BroadcastMessage(INetworkMessage message)

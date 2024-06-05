@@ -25,11 +25,11 @@ public class Player : GameEntity
     /// Represents a player in the game.
     /// </summary>
     /// <param name="position">The initial position of the player.</param>
-    public Player(Vector2 position)
+    public Player(string uuid, Vector2 position)
     {
         Position = position;
         Speed = new Vector2(1, 1);
-        UUID = Guid.NewGuid().ToString();
+        UUID = uuid;
 
         Animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
         SpriteRenderer = new SpriteRendererComponent();

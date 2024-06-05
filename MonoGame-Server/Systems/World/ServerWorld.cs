@@ -4,14 +4,12 @@ namespace MonoGame_Server;
 
 public class ServerWorld
 {
-    public static ServerWorld Instance = new ServerWorld();
     public List<ChunkState>? Chunks;
     public List<PlayerState>? Players;
     public List<EntityState>? Entities;
-
     private SaveManager SaveManager = new SaveManager();
 
-    public ServerWorld()
+    public void Initialize()
     {
         (List<PlayerState>?, List<ChunkState>?, List<EntityState>?) worldState = SaveManager.LoadGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\");
 

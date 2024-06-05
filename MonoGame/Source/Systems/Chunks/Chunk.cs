@@ -42,7 +42,7 @@ public class Chunk : IChunk
     /// </summary>
     public static int SizeY { get; set; } = 16;
 
-    private World World;
+    private World World = Globals.world;
 
     /// Initializes a new instance of the <see cref="Chunk"/> class.
     /// </summary>
@@ -55,6 +55,29 @@ public class Chunk : IChunk
         Y = y;
         World = world;
         Tiles = new Dictionary<TileDrawLayer, ITile[,]>();
+        foreach (TileDrawLayer layer in TileDrawLayerPriority.GetPriority())
+        {
+            Tiles[layer] = new ITile[SizeX, SizeY];
+        }
+    }
+
+    public Chunk(ChunkState chunkState)
+    {
+        X = chunkState.X;
+        Y = chunkState.Y;
+        Tiles = new Dictionary<TileDrawLayer, ITile[,]>();
+
+        foreach (TileDrawLayer layer in TileDrawLayerPriority.GetPriority())
+        {
+            Tiles[layer] = new ITile[SizeX, SizeY];
+        }
+
+        foreach (TileState tileState in chunkState.Tiles)
+        {
+            SetTile(tileState.Id, tileState.Layer.Value, tileState.LocalX.Value, tileState.LocalY.Value);
+        }
+
+        Globals.world.UpdateAllTextureCoordinates();
     }
 
     /// <summary>
@@ -223,18 +246,21 @@ public class Chunk : IChunk
                         }
                         else if (layer.Key == TileDrawLayer.Tiles)
                         {
-                            Vector2 playerPosition = Globals.world.GetLocalPlayer().Position + new Vector2(Tile.PixelSizeX / 2, Tile.PixelSizeY);
-                            if (playerPosition.Y - 2 <= tileRectangle.Bottom)
+                            if (Globals.world.GetLocalPlayer() != null)
                             {
-                                if (Math.Abs(position.X - playerPosition.X) < (Tile.PixelSizeX * 1) && Math.Abs(position.Y - playerPosition.Y) < Tile.PixelSizeY && tile.CollisionMode == CollisionMode.CollisionMask)
+                                Vector2 playerPosition = Globals.world.GetLocalPlayer().Position + new Vector2(Tile.PixelSizeX / 2, Tile.PixelSizeY);
+                                if (playerPosition.Y - 2 <= tileRectangle.Bottom)
                                 {
-                                    colorWithOpacity = Color.White * 0.9f;
+                                    if (Math.Abs(position.X - playerPosition.X) < (Tile.PixelSizeX * 1) && Math.Abs(position.Y - playerPosition.Y) < Tile.PixelSizeY && tile.CollisionMode == CollisionMode.CollisionMask)
+                                    {
+                                        colorWithOpacity = Color.White * 0.9f;
+                                    }
+                                    layerDepth = 0.6f;
                                 }
-                                layerDepth = 0.6f;
-                            }
-                            else
-                            {
-                                layerDepth = 0.2f;
+                                else
+                                {
+                                    layerDepth = 0.2f;
+                                }
                             }
                         }
 

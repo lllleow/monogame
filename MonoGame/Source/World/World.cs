@@ -29,6 +29,12 @@ public class World
 
     }
 
+    public void LoadChunkFromChunkState(ChunkState chunkState)
+    {
+        IChunk chunk = new Chunk(chunkState);
+        Chunks.Add(chunk);
+    }
+
     /// <summary>
     /// Updates the game world by updating all entities.
     /// </summary>
