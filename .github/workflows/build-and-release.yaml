@@ -40,11 +40,11 @@ jobs:
 
       - name: Copy MonoGame binaries
         run: |
-          Copy-Item MonoGame/bin/Release/* artifacts/MonoGame/
+          Copy-Item MonoGame/bin/Any CPU/Release/net8.0/* artifacts/MonoGame/
 
       - name: Copy MonoGame-Server binaries
         run: |
-          Copy-Item MonoGame-Server/bin/Release/* artifacts/MonoGame-Server/
+          Copy-Item MonoGame-Server/bin/Any CPU/Release/net8.0/* artifacts/MonoGame-Server/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
