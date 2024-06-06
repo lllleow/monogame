@@ -1,26 +1,18 @@
-﻿using System;
-using MonoGame.Source.Systems.Tiles.Utils;
+﻿using MonoGame.Source.Systems.Tiles.Utils;
+using MonoGame.Source.Util.Enum;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Tiles.TextureProcessors;
 
 public class SimpleConnectionTileTextureProcessor : TileTextureProcessor
 {
-    /// <summary>
-    /// Represents a texture processor for complex connection tiles.
-    /// </summary>
-    public static SimpleConnectionTileTextureProcessor instance = new SimpleConnectionTileTextureProcessor();
+    public static SimpleConnectionTileTextureProcessor Instance { get; set; } = new();
 
-    /// <summary>
-    /// Processes the tile neighbor configuration and returns the corresponding texture coordinates.
-    /// </summary>
-    /// <param name="configuration">The tile neighbor configuration.</param>
-    /// <returns>The texture coordinates as a tuple of integers.</returns>
-    public override (int, int) Process(TileNeighborConfiguration configuration)
+    public override (int TextureCoordinateX, int TextureCoordinateY) Process(TileNeighborConfiguration configuration)
     {
-        bool leftCanConnect = CanConnect(configuration, Direction.Left);
-        bool rightCanConnect = CanConnect(configuration, Direction.Right);
-        bool upCanConnect = CanConnect(configuration, Direction.Up);
-        bool downCanConnect = CanConnect(configuration, Direction.Down);
+        var leftCanConnect = CanConnect(configuration, Direction.Left);
+        var rightCanConnect = CanConnect(configuration, Direction.Right);
+        var upCanConnect = CanConnect(configuration, Direction.Up);
+        var downCanConnect = CanConnect(configuration, Direction.Down);
 
         if (leftCanConnect && rightCanConnect && upCanConnect && downCanConnect)
         {
@@ -66,25 +58,9 @@ public class SimpleConnectionTileTextureProcessor : TileTextureProcessor
         {
             return (0, 0);
         }
-        else if (leftCanConnect)
-        {
-            return (6, 0);
-        }
-        else if (rightCanConnect)
-        {
-            return (4, 0);
-        }
-        else if (upCanConnect)
-        {
-            return (3, 2);
-        }
-        else if (downCanConnect)
-        {
-            return (3, 0);
-        }
         else
         {
-            return (7, 0);
+            return leftCanConnect ? (6, 0) : rightCanConnect ? (4, 0) : upCanConnect ? (3, 2) : downCanConnect ? (3, 0) : (7, 0);
         }
     }
 }

@@ -2,7 +2,7 @@
 using LiteNetLib.Utils;
 using MonoGame.Source.Multiplayer.Interfaces;
 
-namespace MonoGame;
+namespace MonoGame.Source.Multiplayer;
 
 public class NetworkMessage : INetworkMessage
 {

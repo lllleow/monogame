@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.UI.Interfaces;
+using MonoGame.Source.Util.Helpers;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
 {
     public List<IUserInterfaceComponent> Children { get; set; }
-    private RectangleHelper rectangleHelper = new RectangleHelper();
+    private readonly RectangleHelper rectangleHelper = new();
 
     public MultipleChildUserInterfaceComponent(string name, Vector2 localPosition, List<IUserInterfaceComponent> children) : base(name, localPosition)
     {
@@ -29,7 +29,7 @@ public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
 
     public void RemoveChild(IUserInterfaceComponent child)
     {
-        Children.Remove(child);
+        _ = Children.Remove(child);
     }
 
     public override void Draw(SpriteBatch spriteBatch)

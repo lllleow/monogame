@@ -1,4 +1,7 @@
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Source.Systems.Tiles;
+using MonoGame.Source.Systems.Tiles.TextureProcessors;
+using MonoGame.Source.Systems.Components.Collision.Enum;
 
 public class FenceTile : Tile
 {
@@ -9,7 +12,7 @@ public class FenceTile : Tile
         SpritesheetName = "textures/fence_spritesheet";
         CollisionMaskSpritesheetName = "textures/fence_spritesheet_collision_mask";
         CollisionMode = CollisionMode.CollisionMask;
-        TextureProcessor = SimpleConnectionTileTextureProcessor.instance;
+        TextureProcessor = SimpleConnectionTileTextureProcessor.Instance;
         ConnectableTiles = ["base.grass", "base.stone"];
         PixelOffsetY = 8;
         PixelOffsetX = 8;

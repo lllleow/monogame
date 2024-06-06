@@ -1,17 +1,15 @@
 ﻿using LiteNetLib;
-using MonoGame;
 using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame_Server.Systems.Server;
-using MonoGame_Server.Systems.Server.MessageHandlers;
+using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
 
-namespace MonoGame_Server;
+namespace MonoGame_Server.Systems.Server.MessageHandlers;
 
 public class RequestToPlaceTileNetworkMessageHandler : IServerMessageHandler
 {
     public void Execute(NetPeer peer, byte channel, INetworkMessage message)
     {
-        RequestToPlaceTileNetworkMessage requestToPlaceTileNetworkMessage = (RequestToPlaceTileNetworkMessage)message;
-        TileState? tile = NetworkServer.Instance.ServerWorld.GetTileAtPosition(requestToPlaceTileNetworkMessage.Layer, requestToPlaceTileNetworkMessage.PosX, requestToPlaceTileNetworkMessage.PosY);
+        var requestToPlaceTileNetworkMessage = (RequestToPlaceTileNetworkMessage)message;
+        var tile = NetworkServer.Instance.ServerWorld.GetTileAtPosition(requestToPlaceTileNetworkMessage.Layer, requestToPlaceTileNetworkMessage.PosX, requestToPlaceTileNetworkMessage.PosY);
         if (tile == null)
         {
             NetworkServer.Instance.ServerWorld.SetTileAtPosition(requestToPlaceTileNetworkMessage.TileId, requestToPlaceTileNetworkMessage.Layer, requestToPlaceTileNetworkMessage.PosX, requestToPlaceTileNetworkMessage.PosY);

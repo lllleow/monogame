@@ -1,14 +1,14 @@
-﻿using System;
-using MonoGame.Source.Multiplayer.Interfaces;
+﻿using MonoGame.Source.Multiplayer.Interfaces;
 using MonoGame.Source.Multiplayer.NetworkMessageHandler;
+using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server;
 
-namespace MonoGame;
+namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessageHandler.Client;
 
 public class ChunkDataNetworkMessageHandler : IClientMessageHandler
 {
     public void Execute(byte channel, INetworkMessage message)
     {
-        ChunkDataNetworkMessage chunkDataNetworkMessage = (ChunkDataNetworkMessage)message;
-        Globals.world.LoadChunkFromChunkState(chunkDataNetworkMessage.ChunkState);
+        var chunkDataNetworkMessage = (ChunkDataNetworkMessage)message;
+        Globals.World.LoadChunkFromChunkState(chunkDataNetworkMessage.ChunkState);
     }
 }

@@ -3,61 +3,40 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.Camera;
-namespace MonoGame;
+using MonoGame.Source.Rendering.UI;
+using MonoGame.Source.WorldNamespace;
+namespace MonoGame.Source;
 
-/// <summary>
-/// Represents a class that holds global variables and objects used throughout the application.
-/// </summary>
 public class Globals
 {
-    /// <summary>
-    /// Gets or sets the content manager used for loading and managing game content.
-    /// </summary>
-    public static ContentManager contentManager { get; set; }
+    public static ContentManager ContentManager { get; set; }
 
-    /// <summary>
-    /// Gets or sets the sprite batch used for rendering 2D graphics.
-    /// </summary>
-    public static SpriteBatch spriteBatch { get; set; }
+    public static SpriteBatch SpriteBatch { get; set; }
 
-    /// <summary>
-    /// Gets or sets the world object representing the game world.
-    /// </summary>
-    public static World world { get; set; }
+    public static World World { get; set; }
 
-    /// <summary>
-    /// Gets or sets the graphics device manager used for managing the graphics device.
-    /// </summary>
-    public static GraphicsDeviceManager graphicsDevice { get; set; }
-    /// <summary>
-    /// Gets or sets a value indicating whether the game is running in full-screen mode.
-    /// </summary>
+    public static GraphicsDeviceManager GraphicsDevice { get; set; }
+
     public static bool FullScreen { get; internal set; } = false;
 
-    /// <summary>
-    /// Gets or sets the camera object used for viewing the game world.
-    /// </summary>
-    public static Camera camera;
+    public static Camera Camera { get; set; }
 
-    /// <summary>
-    /// Gets or sets the game object.
-    /// </summary>
-    public static Game game;
+    public static Game Game { get; set; }
 
-    public static string[] args;
+    public static string[] Args { get; set; }
 
-    public static UserInterfaceHandler userInterfaceHandler;
+    public static UserInterfaceHandler UserInterfaceHandler { get; set; }
 
-    public static SpriteFont defaultFont;
+    public static SpriteFont DefaultFont { get; set; }
 
-    public static Vector2 spawnPosition = new Vector2(128, 128);
+    public static Vector2 SpawnPosition { get; set; } = new(128, 128);
 
-    public static string UUID = Guid.NewGuid().ToString();
+    public static string UUID { get; set; } = Guid.NewGuid().ToString();
 
-    public static GameTime gameTime;
+    public static GameTime GameTime { get; set; }
 
     public static void DefaultSpriteBatchBegin()
     {
-        Globals.spriteBatch.Begin(transformMatrix: camera.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+        SpriteBatch.Begin(transformMatrix: Camera.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
     }
 }

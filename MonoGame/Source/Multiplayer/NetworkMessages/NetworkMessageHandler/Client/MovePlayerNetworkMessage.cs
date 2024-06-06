@@ -1,19 +1,18 @@
-﻿using System;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
+using MonoGame.Source.Util.Enum;
 
-namespace MonoGame
+namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessageHandler.Client
 {
     public class MovePlayerNetworkMessage : NetworkMessage
     {
-        public string UUID;
-        public Vector2 Speed;
-        public Direction Direction;
-        public Vector2 ExpectedPosition;
+        public string UUID { get; set; }
+        public Vector2 Speed { get; set; }
+        public Direction Direction { get; set; }
+        public Vector2 ExpectedPosition { get; set; }
 
         public MovePlayerNetworkMessage()
         {
-
         }
 
         public MovePlayerNetworkMessage(string uuid, Vector2 speed, Direction direction, Vector2 expectedPosition)
@@ -34,7 +33,7 @@ namespace MonoGame
 
         public override NetDataWriter Serialize()
         {
-            NetDataWriter data = new NetDataWriter();
+            var data = new NetDataWriter();
             data.Put((byte)NetworkMessageTypes.MovePlayerNetworkMessage);
             data.Put(UUID);
             data.Put(Speed.X);

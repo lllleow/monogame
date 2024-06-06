@@ -1,7 +1,8 @@
-﻿using System;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
+using MonoGame.Source.Rendering.Enum;
+using MonoGame.Source.Systems.Tiles.Interfaces;
 
-namespace MonoGame;
+namespace MonoGame.Source.WorldNamespace.WorldStates;
 
 public class TileState : INetSerializable
 {
@@ -12,7 +13,6 @@ public class TileState : INetSerializable
 
     public TileState()
     {
-
     }
 
     public TileState(string id, TileDrawLayer layer, int x, int y)

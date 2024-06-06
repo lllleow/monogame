@@ -1,5 +1,4 @@
-﻿using System;
-using MonoGame.Source.Multiplayer.Interfaces;
+﻿using MonoGame.Source.Multiplayer.Interfaces;
 
 namespace MonoGame.Source.Multiplayer.NetworkMessageHandler;
 

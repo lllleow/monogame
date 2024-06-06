@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MonoGame;
+﻿namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public enum ListDirection
 {

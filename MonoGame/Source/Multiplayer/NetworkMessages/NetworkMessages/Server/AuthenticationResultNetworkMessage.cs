@@ -1,7 +1,6 @@
-﻿using System;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 
-namespace MonoGame;
+namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server;
 
 public class AuthenticationResultNetworkMessage : NetworkMessage
 {
@@ -10,7 +9,6 @@ public class AuthenticationResultNetworkMessage : NetworkMessage
 
     public AuthenticationResultNetworkMessage()
     {
-
     }
 
     public AuthenticationResultNetworkMessage(bool success, string reason)
@@ -27,7 +25,7 @@ public class AuthenticationResultNetworkMessage : NetworkMessage
 
     public override NetDataWriter Serialize()
     {
-        NetDataWriter data = new NetDataWriter();
+        var data = new NetDataWriter();
         data.Put((byte)NetworkMessageTypes.AuthenticationResultNetworkMessage);
         data.Put(Success);
         data.Put(Reason);

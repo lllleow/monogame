@@ -1,9 +1,8 @@
-﻿using MonoGame;
-using MonoGame_Server.Systems.Server;
+﻿using MonoGame_Server.Systems.Server;
 
 namespace MonoGame_Server;
 
-class Server
+internal class Server
 {
     public static void Main(string[] args)
     {

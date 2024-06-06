@@ -1,8 +1,8 @@
-﻿using System;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
+using MonoGame.Source.Systems.Entity.Interfaces;
 
-namespace MonoGame;
+namespace MonoGame.Source.WorldNamespace.WorldStates;
 
 public class EntityState : INetSerializable
 {
@@ -10,7 +10,6 @@ public class EntityState : INetSerializable
 
     public EntityState()
     {
-
     }
 
     public EntityState(IGameEntity entity)

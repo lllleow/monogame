@@ -1,17 +1,17 @@
-﻿
-using System;
+﻿using System;
 using Microsoft.Xna.Framework;
+using MonoGame.Source.Systems.Tiles;
 
-namespace MonoGame
+namespace MonoGame.Source.Util.Helpers
 {
     public class RectangleHelper
     {
         public Rectangle GetMinimumBoundingRectangle(Rectangle[] rectangles)
         {
-            int minX = int.MaxValue;
-            int minY = int.MaxValue;
-            int maxX = int.MinValue;
-            int maxY = int.MinValue;
+            var minX = int.MaxValue;
+            var minY = int.MaxValue;
+            var maxX = int.MinValue;
+            var maxY = int.MinValue;
 
             foreach (var rectangle in rectangles)
             {
@@ -21,8 +21,8 @@ namespace MonoGame
                 maxY = Math.Max(maxY, rectangle.Bottom);
             }
 
-            int width = maxX - minX;
-            int height = maxY - minY;
+            var width = maxX - minX;
+            var height = maxY - minY;
 
             return new Rectangle(minX, minY, width, height);
         }

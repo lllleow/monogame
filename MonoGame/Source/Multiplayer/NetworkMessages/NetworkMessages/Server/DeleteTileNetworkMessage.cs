@@ -1,17 +1,16 @@
-﻿using System;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
+using MonoGame.Source.Rendering.Enum;
 
-namespace MonoGame
+namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
 {
     public class DeleteTileNetworkMessage : NetworkMessage
     {
-        public TileDrawLayer Layer;
-        public int PosX;
-        public int PosY;
+        public TileDrawLayer Layer { get; set; }
+        public int PosX { get; set; }
+        public int PosY { get; set; }
 
         public DeleteTileNetworkMessage()
         {
-
         }
 
         public DeleteTileNetworkMessage(TileDrawLayer layer, int posX, int posY)
@@ -30,7 +29,7 @@ namespace MonoGame
 
         public override NetDataWriter Serialize()
         {
-            NetDataWriter data = new NetDataWriter();
+            var data = new NetDataWriter();
             data.Put((byte)NetworkMessageTypes.DeleteTileNetworkMessage);
             data.Put((byte)Layer);
             data.Put(PosX);

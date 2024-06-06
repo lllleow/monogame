@@ -1,12 +1,12 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using MonoGame.Source.Systems.Tiles;
 
 namespace MonoGame.Source.Rendering.Utils;
 
 public class TextureLocation
 {
-    public string Spritesheet;
-    public Rectangle TextureRectangle;
+    public string Spritesheet { get; set; }
+    public Rectangle TextureRectangle { get; set; }
 
     public TextureLocation(string spritesheet, Rectangle textureRectangle)
     {

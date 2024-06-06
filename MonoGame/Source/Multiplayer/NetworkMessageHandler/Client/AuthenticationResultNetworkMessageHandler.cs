@@ -1,7 +1,7 @@
 ﻿using System;
 using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame.Source.Multiplayer.NetworkMessageHandler;
 using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
+using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server;
 
 namespace MonoGame.Source.Multiplayer.NetworkMessageHandler.Client;
 

@@ -1,17 +1,16 @@
-﻿using System;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
+using MonoGame.Source.Util.Enum;
 
-namespace MonoGame
+namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client
 {
     public class RequestMovementNetworkMessage : NetworkMessage
     {
-        public Vector2 Speed;
-        public Direction Direction;
+        public Vector2 Speed { get; set; }
+        public Direction Direction { get; set; }
 
         public RequestMovementNetworkMessage()
         {
-
         }
 
         public RequestMovementNetworkMessage(Vector2 displacement, Direction direction)
@@ -28,7 +27,7 @@ namespace MonoGame
 
         public override NetDataWriter Serialize()
         {
-            NetDataWriter data = new NetDataWriter();
+            var data = new NetDataWriter();
             data.Put((byte)NetworkMessageTypes.RequestMovementNetworkMessage);
             data.Put(Speed.X);
             data.Put(Speed.Y);

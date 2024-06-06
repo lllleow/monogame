@@ -1,17 +1,17 @@
 ﻿using LiteNetLib;
-using MonoGame;
+using MonoGame_Server.Systems.World;
 using MonoGame.Source.Multiplayer.Interfaces;
+using MonoGame.Source.WorldNamespace.WorldStates;
 namespace MonoGame_Server.Systems.Server;
 
 public class NetworkServer
 {
-    public static NetworkServer Instance = new NetworkServer();
-
-    EventBasedNetListener listener;
-    NetManager server;
-    public Dictionary<NetPeer, string> Connections = new Dictionary<NetPeer, string>();
-    public MessageHandler MessageHandler = new MessageHandler();
-    public ServerWorld ServerWorld;
+    public static NetworkServer Instance { get; set; } = new();
+    private readonly EventBasedNetListener listener;
+    private readonly NetManager server;
+    public Dictionary<NetPeer, string> Connections { get; set; } = [];
+    public MessageHandler MessageHandler { get; set; } = new();
+    public ServerWorld ServerWorld { get; set; }
 
     public NetworkServer()
     {
@@ -25,7 +25,7 @@ public class NetworkServer
     {
         Console.WriteLine("Initializing server");
         int port = 9050;
-        server.Start(port);
+        _ = server.Start(port);
 
         Console.WriteLine("Server started at port " + port);
         SetupListeners();
@@ -41,7 +41,7 @@ public class NetworkServer
         return Connections.FirstOrDefault(x => x.Key == peer).Value;
     }
 
-    public PlayerState GetPlayerFromPeer(NetPeer peer)
+    public PlayerState? GetPlayerFromPeer(NetPeer peer)
     {
         return ServerWorld.GetPlayerByUUID(GetUUIDByPeer(peer));
     }
@@ -53,10 +53,12 @@ public class NetworkServer
         {
             if (ShouldAcceptConnection())
             {
-                request.Accept();
+                _ = request.Accept();
             }
             else
+            {
                 request.Reject();
+            }
         };
 
         listener.PeerConnectedEvent += peer =>
@@ -71,6 +73,7 @@ public class NetworkServer
             {
                 MessageHandler.HandleMessage(peer, reader, deliveryMethod, channel);
             }
+
             reader.Recycle();
         };
     }
@@ -89,10 +92,7 @@ public class NetworkServer
     public void SendMessage(string uuid, INetworkMessage message)
     {
         var peer = Connections.FirstOrDefault(x => x.Value == uuid).Key;
-        if (peer != null)
-        {
-            peer.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
-        }
+        peer?.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
     }
 
     public void SendMessageToPeer(NetPeer peer, INetworkMessage message)

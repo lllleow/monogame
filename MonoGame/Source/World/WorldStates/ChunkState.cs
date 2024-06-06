@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using LiteNetLib.Utils;
+using MonoGame.Source.Rendering.Enum;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 
-namespace MonoGame;
+namespace MonoGame.Source.WorldNamespace.WorldStates;
 
 public class ChunkState : INetSerializable
 {
@@ -14,31 +14,31 @@ public class ChunkState : INetSerializable
 
     public ChunkState()
     {
-        Tiles = new List<TileState>();
+        Tiles = [];
     }
 
     public ChunkState(int x, int y)
     {
-        Tiles = new List<TileState>();
+        Tiles = [];
         X = x;
         Y = y;
     }
 
     public ChunkState(IChunk chunk)
     {
-        Tiles = new List<TileState>();
+        Tiles = [];
         X = chunk.X;
         Y = chunk.Y;
 
-        foreach (KeyValuePair<TileDrawLayer, ITile[,]> layer in chunk.Tiles)
+        foreach (var layer in chunk.Tiles)
         {
             if (layer.Key != TileDrawLayer.Background)
             {
-                for (int x = 0; x < layer.Value.GetLength(0); x++)
+                for (var x = 0; x < layer.Value.GetLength(0); x++)
                 {
-                    for (int y = 0; y < layer.Value.GetLength(1); y++)
+                    for (var y = 0; y < layer.Value.GetLength(1); y++)
                     {
-                        ITile tile = layer.Value[x, y];
+                        var tile = layer.Value[x, y];
                         if (tile != null)
                         {
                             Tiles.Add(new TileState(layer.Key, tile));
@@ -51,7 +51,7 @@ public class ChunkState : INetSerializable
 
     public bool SetTile(string tileId, TileDrawLayer layer, int posX, int posY)
     {
-        TileState tile = Tiles.FirstOrDefault(x => x.LocalX == posX && x.LocalY == posY && x.Layer == layer);
+        var tile = Tiles.FirstOrDefault(x => x.LocalX == posX && x.LocalY == posY && x.Layer == layer);
 
         if (tile != null)
         {
@@ -66,10 +66,10 @@ public class ChunkState : INetSerializable
 
     public bool DestroyTile(TileDrawLayer layer, int posX, int posY)
     {
-        TileState tile = Tiles.FirstOrDefault(x => x.LocalX == posX && x.LocalY == posY && x.Layer == layer);
+        var tile = Tiles.FirstOrDefault(x => x.LocalX == posX && x.LocalY == posY && x.Layer == layer);
         if (tile != null)
         {
-            Tiles.Remove(tile);
+            _ = Tiles.Remove(tile);
             return true;
         }
 
@@ -86,7 +86,7 @@ public class ChunkState : INetSerializable
         writer.Put(X);
         writer.Put(Y);
         writer.Put(Tiles.Count);
-        foreach (TileState tile in Tiles)
+        foreach (var tile in Tiles)
         {
             tile.Serialize(writer);
         }
@@ -96,11 +96,11 @@ public class ChunkState : INetSerializable
     {
         X = reader.GetInt();
         Y = reader.GetInt();
-        int tileCount = reader.GetInt();
-        Tiles = new List<TileState>();
-        for (int i = 0; i < tileCount; i++)
+        var tileCount = reader.GetInt();
+        Tiles = [];
+        for (var i = 0; i < tileCount; i++)
         {
-            TileState tile = new TileState();
+            var tile = new TileState();
             tile.Deserialize(reader);
             Tiles.Add(tile);
         }

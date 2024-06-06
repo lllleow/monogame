@@ -1,19 +1,17 @@
 ﻿using System;
 using System.IO;
-using MonoGame;
+using MonoGame.Source;
 
 public static class Program
 {
     [STAThread]
-    static void Main(string[] args)
+    public static void Main(string[] args)
     {
         try
         {
-            Globals.args = args;
-            using (var game = new MonoGame.Main())
-            {
-                game.Run();
-            }
+            Globals.Args = args;
+            using var game = new MonoGame.Main();
+            game.Run();
         }
         catch (Exception ex)
         {

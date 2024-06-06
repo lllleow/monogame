@@ -1,54 +1,31 @@
-﻿using System;
-using MonoGame.Source.Systems.Tiles.Utils;
+﻿using MonoGame.Source.Systems.Tiles.Utils;
+using MonoGame.Source.Util.Enum;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Tiles.TextureProcessors;
 
 public class ComplexConnectionTileTextureProcessor : TileTextureProcessor
 {
-    /// <summary>
-    /// Represents a texture processor for complex connection tiles.
-    /// </summary>
-    public static ComplexConnectionTileTextureProcessor instance = new ComplexConnectionTileTextureProcessor();
+    public static ComplexConnectionTileTextureProcessor Instance { get; set; } = new();
 
-    /// <summary>
-    /// Processes the tile neighbor configuration and returns the corresponding texture coordinates.
-    /// </summary>
-    /// <param name="configuration">The tile neighbor configuration.</param>
-    /// <returns>The texture coordinates as a tuple of integers.</returns>
-    public override (int, int) Process(TileNeighborConfiguration configuration)
+    public override (int TextureCoordinateX, int TextureCoordinateY) Process(TileNeighborConfiguration configuration)
     {
-        bool leftCanConnect = CanConnect(configuration, Direction.Left);
-        bool rightCanConnect = CanConnect(configuration, Direction.Right);
-        bool upCanConnect = CanConnect(configuration, Direction.Up);
-        bool downCanConnect = CanConnect(configuration, Direction.Down);
+        var leftCanConnect = CanConnect(configuration, Direction.Left);
+        var rightCanConnect = CanConnect(configuration, Direction.Right);
+        var upCanConnect = CanConnect(configuration, Direction.Up);
+        var downCanConnect = CanConnect(configuration, Direction.Down);
 
-        bool left_topCanConnect = CanConnect(configuration, Direction.LeftUp);
-        bool right_topCanConnect = CanConnect(configuration, Direction.RightUp);
-        bool left_bottomCanConnect = CanConnect(configuration, Direction.LeftDown);
-        bool right_bottomCanConnect = CanConnect(configuration, Direction.RightDown);
+        var left_topCanConnect = CanConnect(configuration, Direction.LeftUp);
+        var right_topCanConnect = CanConnect(configuration, Direction.RightUp);
+        var left_bottomCanConnect = CanConnect(configuration, Direction.LeftDown);
+        var right_bottomCanConnect = CanConnect(configuration, Direction.RightDown);
 
         if (leftCanConnect && rightCanConnect && upCanConnect && downCanConnect)
         {
-            if (!left_bottomCanConnect && !right_bottomCanConnect)
-            {
-                return (4, 1);
-            }
-            else if (!left_bottomCanConnect)
-            {
-                return (7, 2);
-            }
-            else if (!right_topCanConnect && !right_bottomCanConnect)
-            {
-                return (7, 1);
-            }
-            else if (!left_topCanConnect && !left_bottomCanConnect)
-            {
-                return (7, 2);
-            }
-            else
-            {
-                return (1, 1);
-            }
+            return !left_bottomCanConnect && !right_bottomCanConnect
+                ? (4, 1)
+                : !left_bottomCanConnect
+                    ? (7, 2)
+                    : !right_topCanConnect && !right_bottomCanConnect ? (7, 1) : !left_topCanConnect && !left_bottomCanConnect ? (7, 2) : (1, 1);
         }
         else if (leftCanConnect && rightCanConnect && upCanConnect)
         {
@@ -56,44 +33,17 @@ public class ComplexConnectionTileTextureProcessor : TileTextureProcessor
         }
         else if (leftCanConnect && rightCanConnect && downCanConnect)
         {
-            if (!right_bottomCanConnect && !left_bottomCanConnect)
-            {
-                return (4, 2);
-            }
-            else if (!right_bottomCanConnect)
-            {
-                return (6, 2);
-            }
-            else if (!left_bottomCanConnect)
-            {
-                return (6, 1);
-            }
-            else
-            {
-                return (1, 0);
-            }
+            return !right_bottomCanConnect && !left_bottomCanConnect
+                ? (4, 2)
+                : !right_bottomCanConnect ? (6, 2) : !left_bottomCanConnect ? (6, 1) : (1, 0);
         }
         else if (upCanConnect && downCanConnect && rightCanConnect)
         {
-            if (!right_bottomCanConnect)
-            {
-                return (5, 2);
-            }
-            else
-            {
-                return (0, 1);
-            }
+            return !right_bottomCanConnect ? (5, 2) : (0, 1);
         }
         else if (upCanConnect && downCanConnect && leftCanConnect)
         {
-            if (!left_bottomCanConnect)
-            {
-                return (5, 1);
-            }
-            else
-            {
-                return (2, 1);
-            }
+            return !left_bottomCanConnect ? (5, 1) : (2, 1);
         }
         else if (leftCanConnect && rightCanConnect && !upCanConnect && !downCanConnect)
         {
@@ -113,46 +63,15 @@ public class ComplexConnectionTileTextureProcessor : TileTextureProcessor
         }
         else if (leftCanConnect && downCanConnect)
         {
-            if (!left_bottomCanConnect)
-            {
-                return (9, 2);
-            }
-            else
-            {
-                return (2, 0);
-            }
+            return !left_bottomCanConnect ? (9, 2) : (2, 0);
         }
         else if (rightCanConnect && downCanConnect)
         {
-            if (!right_bottomCanConnect)
-            {
-                return (9, 0);
-            }
-            else
-            {
-                return (0, 0);
-            }
-        }
-        else if (leftCanConnect)
-        {
-            return (6, 0);
-        }
-        else if (rightCanConnect)
-        {
-            return (4, 0);
-        }
-        else if (upCanConnect)
-        {
-            return (3, 2);
-        }
-        else if (downCanConnect)
-        {
-            return (3, 0);
+            return !right_bottomCanConnect ? (9, 0) : (0, 0);
         }
         else
         {
-            return (7, 0);
+            return leftCanConnect ? (6, 0) : rightCanConnect ? (4, 0) : upCanConnect ? (3, 2) : downCanConnect ? (3, 0) : (7, 0);
         }
     }
 }
-

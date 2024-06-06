@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using MonoGame.Source.Systems.Tiles;
+using MonoGame.Source.Systems.Tiles.TextureProcessors;
 
 public class PipeTile : Tile
 {
@@ -8,7 +10,7 @@ public class PipeTile : Tile
         Id = "base.pipe";
         Name = "Pipe";
         SpritesheetName = "textures/pipe_spritesheet";
-        TextureProcessor = SimpleConnectionTileTextureProcessor.instance;
+        TextureProcessor = SimpleConnectionTileTextureProcessor.Instance;
     }
 }
 

@@ -1,69 +1,56 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Source.Systems.Chunks;
-using MonoGame.Source.Systems.Chunks.Interfaces;
+using MonoGame.Source.Multiplayer;
+using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
+using MonoGame.Source.Rendering.Enum;
 using MonoGame.Source.Systems.Components.Animator;
 using MonoGame.Source.Systems.Components.Collision;
-using MonoGame.Source.Systems.Entity;
+using MonoGame.Source.Systems.Components.PixelBounds;
+using MonoGame.Source.Systems.Components.SpriteRenderer;
 using MonoGame.Source.Systems.Scripts;
-namespace MonoGame;
+using MonoGame.Source.Util.Enum;
+namespace MonoGame.Source.Systems.Entity.PlayerNamespace;
 
-/// <summary>
-/// Represents a player entity in the game.
-/// </summary>
 public class Player : GameEntity
 {
-    AnimatorComponent Animator;
-    SpriteRendererComponent SpriteRenderer;
-    MouseState currentMouseState;
-    MouseState previousMouseState;
-    public string selectedTile = "base.grass";
+    private readonly AnimatorComponent animator;
+    private readonly SpriteRendererComponent spriteRenderer;
+    private MouseState currentMouseState;
+    private MouseState previousMouseState;
+    public string SelectedTile { get; set; } = "base.grass";
 
-    /// <summary>
-    /// Represents a player in the game.
-    /// </summary>
-    /// <param name="position">The initial position of the player.</param>
     public Player(string uuid, Vector2 position)
     {
         Position = position;
         Speed = new Vector2(1, 1);
         UUID = uuid;
 
-        Animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
-        SpriteRenderer = new SpriteRendererComponent();
+        animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
+        spriteRenderer = new SpriteRendererComponent();
 
-        // AddComponent(new BoundingBoxComponent(new Vector2(16, 16)));
-        AddComponent(SpriteRenderer);
-        AddComponent(Animator);
+        AddComponent(spriteRenderer);
+        AddComponent(animator);
         AddComponent(new PixelBoundsComponent());
         AddComponent(new CollisionComponent("textures/player_sprite_2_collision_mask"));
     }
 
     public void SetSelectedTile(string selectedTileId)
     {
-        selectedTile = selectedTileId;
+        SelectedTile = selectedTileId;
     }
 
     public bool IsLocalPlayer()
     {
-        return this == Globals.world.GetLocalPlayer();
+        return this == Globals.World.GetLocalPlayer();
     }
 
-    /// <summary>
-    /// Handles the mouse click event at the specified coordinates, ensuring it occurs within the window bounds and when the window is active.
-    /// </summary>
-    /// <param name="x">The x-coordinate of the mouse click.</param>
-    /// <param name="y">The y-coordinate of the mouse click.</param>
-
-    Vector2 lastPosition = Vector2.Zero;
+    private Vector2 lastPosition = Vector2.Zero;
     private void HandleMouseClick(bool add, int x, int y)
     {
-        int windowWidth = Globals.graphicsDevice.PreferredBackBufferWidth;
-        int windowHeight = Globals.graphicsDevice.PreferredBackBufferHeight;
+        var windowWidth = Globals.GraphicsDevice.PreferredBackBufferWidth;
+        var windowHeight = Globals.GraphicsDevice.PreferredBackBufferHeight;
 
-        if (!Globals.game.IsActive)
+        if (!Globals.Game.IsActive)
         {
             return;
         }
@@ -73,41 +60,40 @@ public class Player : GameEntity
             return;
         }
 
-        Vector2 screenPosition = new Vector2(x, y);
-        (int, int) globalPosition = Globals.world.GetGlobalPositionFromScreenPosition(screenPosition);
+        var screenPosition = new Vector2(x, y);
+        var globalPosition = Globals.World.GetGlobalPositionFromScreenPosition(screenPosition);
 
         if (screenPosition != lastPosition)
         {
             lastPosition = screenPosition;
-            NetworkClient.Instance.SendMessage(new RequestToPlaceTileNetworkMessage(selectedTile, TileDrawLayer.Tiles, (int)globalPosition.Item1, (int)globalPosition.Item2));
+            NetworkClient.Instance.SendMessage(new RequestToPlaceTileNetworkMessage(SelectedTile, TileDrawLayer.Tiles, globalPosition.PosX, globalPosition.PosY));
         }
     }
 
-    /// <summary>
-    /// Updates the player's state based on user input and game time.
-    /// </summary>
-    /// <param name="gameTime">The game time.</param>
-    bool clicked = false;
+    private bool clicked = false;
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-        if (this == Globals.world.GetLocalPlayer())
+        if (this == Globals.World.GetLocalPlayer())
         {
-            KeyboardState state = Keyboard.GetState();
+            var state = Keyboard.GetState();
 
             currentMouseState = Mouse.GetState();
 
             if (currentMouseState.LeftButton == ButtonState.Pressed || currentMouseState.RightButton == ButtonState.Pressed)
             {
-                if (!clicked) clicked = true;
+                if (!clicked)
+                {
+                    clicked = true;
+                }
             }
 
             if (currentMouseState.LeftButton == ButtonState.Released)
             {
                 if (clicked)
                 {
-                    int mouseX = currentMouseState.X;
-                    int mouseY = currentMouseState.Y;
+                    var mouseX = currentMouseState.X;
+                    var mouseY = currentMouseState.Y;
                     HandleMouseClick(currentMouseState.LeftButton == ButtonState.Pressed, mouseX, mouseY);
                     clicked = false;
                 }
@@ -118,14 +104,17 @@ public class Player : GameEntity
             {
                 NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Up));
             }
+
             if (state.IsKeyDown(Keys.A))
             {
                 NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Left));
             }
+
             if (state.IsKeyDown(Keys.S))
             {
                 NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Down));
             }
+
             if (state.IsKeyDown(Keys.D))
             {
                 NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Right));
@@ -133,9 +122,10 @@ public class Player : GameEntity
 
             if (state.IsKeyUp(Keys.W) && state.IsKeyUp(Keys.A) && state.IsKeyUp(Keys.S) && state.IsKeyUp(Keys.D))
             {
-                Animator?.PlayAnimation("idle");
+                animator?.PlayAnimation("idle");
             }
         }
+
         base.Update(gameTime);
     }
 }

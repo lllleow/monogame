@@ -1,8 +1,7 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using MonoGame.Source.Rendering.UI.Interfaces;
 
-namespace MonoGame;
+namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class SizedBoxUserInterfaceComponent : SingleChildUserInterfaceComponent
 {
@@ -15,8 +14,8 @@ public class SizedBoxUserInterfaceComponent : SingleChildUserInterfaceComponent
 
     public override Vector2 GetPreferredSize()
     {
-        Vector2 childSize = base.GetPreferredSize();
-        
+        var childSize = base.GetPreferredSize();
+
         if (Size.X < 0 && Size.Y < 0)
         {
             return childSize;

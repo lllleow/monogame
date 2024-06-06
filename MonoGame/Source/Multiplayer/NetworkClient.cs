@@ -1,26 +1,23 @@
 ﻿using System;
-using System.Linq;
 using LiteNetLib;
-using LiteNetLib.Utils;
 using MonoGame.Source.Multiplayer.Interfaces;
 using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
 
-namespace MonoGame;
+namespace MonoGame.Source.Multiplayer;
 
 public class NetworkClient
 {
-    public static NetworkClient Instance = new NetworkClient();
-    EventBasedNetListener listener;
-    public NetManager client;
+    public static NetworkClient Instance { get; set; } = new();
+    private readonly EventBasedNetListener listener;
+    public NetManager Client { get; set; }
 
     public NetworkClient()
     {
-
         listener = new EventBasedNetListener();
-        client = new NetManager(listener);
+        Client = new NetManager(listener);
 
-        client.Start();
-        client.Connect("192.168.0.123", 9050, "monogame");
+        _ = Client.Start();
+        _ = Client.Connect("192.168.0.123", 9050, "monogame");
 
         listener.PeerConnectedEvent += peer =>
         {
@@ -31,13 +28,13 @@ public class NetworkClient
         {
             if (reader.AvailableBytes > 0)
             {
-                NetworkMessageTypes messageType = (NetworkMessageTypes)reader.GetByte();
-                Type messageObjectType = NetworkMessageTypeClientHelper.GetTypeFromMessageType(messageType);
+                var messageType = (NetworkMessageTypes)reader.GetByte();
+                var messageObjectType = NetworkMessageTypeClientHelper.GetTypeFromMessageType(messageType);
 
-                INetworkMessage message = (INetworkMessage)Activator.CreateInstance(messageObjectType);
+                var message = (INetworkMessage)Activator.CreateInstance(messageObjectType);
                 message.Deserialize(reader);
 
-                Type handlerType = NetworkMessageTypeClientHelper.GetHandlerForClientMessageType(messageType);
+                var handlerType = NetworkMessageTypeClientHelper.GetHandlerForClientMessageType(messageType);
                 dynamic handler = Activator.CreateInstance(handlerType);
                 handler.Execute(channel, message);
 
@@ -50,23 +47,23 @@ public class NetworkClient
 
     public void AuthenticateUser()
     {
-        AuthenticateUserNetworkMessage authenticateUser = new AuthenticateUserNetworkMessage(Globals.UUID);
+        var authenticateUser = new AuthenticateUserNetworkMessage(Globals.UUID);
         SendMessage(authenticateUser);
     }
 
     public void SendMessage(INetworkMessage message)
     {
         Console.WriteLine("Client Sent: " + message);
-        client.FirstPeer?.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
+        Client.FirstPeer?.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
     }
 
     public void Update()
     {
-        client.PollEvents();
+        Client.PollEvents();
     }
 
     public void Stop()
     {
-        client.Stop();
+        Client.Stop();
     }
 }

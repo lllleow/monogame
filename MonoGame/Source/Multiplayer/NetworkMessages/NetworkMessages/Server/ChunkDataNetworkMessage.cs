@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
+using MonoGame.Source.WorldNamespace.WorldStates;
 
-namespace MonoGame
+namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
 {
     public class ChunkDataNetworkMessage : NetworkMessage
     {
-        public ChunkState ChunkState;
+        public ChunkState ChunkState { get; set; }
 
         public ChunkDataNetworkMessage()
         {
-            
         }
 
         public ChunkDataNetworkMessage(ChunkState chunkState)
@@ -26,7 +24,7 @@ namespace MonoGame
 
         public override NetDataWriter Serialize()
         {
-            NetDataWriter data = new NetDataWriter();
+            var data = new NetDataWriter();
             data.Put((byte)NetworkMessageTypes.ChunkDataNetworkMessage);
             data.Put(ChunkState);
             return data;
