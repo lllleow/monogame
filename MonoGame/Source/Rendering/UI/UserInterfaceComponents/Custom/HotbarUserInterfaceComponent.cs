@@ -1,6 +1,5 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Source.Rendering.UI.Interfaces;
@@ -67,6 +66,6 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
         component.LocalPosition = new Vector2(0, 0);
 
         var selectedTileId = component.Tile.Id;
-        Globals.world.GetLocalPlayer()?.SetSelectedTile(selectedTileId);
+        Globals.World.GetLocalPlayer()?.SetSelectedTile(selectedTileId);
     }
 }

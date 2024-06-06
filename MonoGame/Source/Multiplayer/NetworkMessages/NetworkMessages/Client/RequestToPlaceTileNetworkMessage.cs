@@ -1,18 +1,16 @@
-﻿using System;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 
 namespace MonoGame
 {
     public class RequestToPlaceTileNetworkMessage : NetworkMessage
     {
-        public string TileId;
-        public TileDrawLayer Layer;
-        public int PosX;
-        public int PosY;
+        public string TileId { get; set; }
+        public TileDrawLayer Layer { get; set; }
+        public int PosX { get; set; }
+        public int PosY { get; set; }
 
         public RequestToPlaceTileNetworkMessage()
         {
-
         }
 
         public RequestToPlaceTileNetworkMessage(string tileId, TileDrawLayer layer, int posX, int posY)

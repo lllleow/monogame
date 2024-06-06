@@ -1,54 +1,29 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using DotnetNoise;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Components.Collision;
 using MonoGame.Source.Systems.Scripts;
 using MonoGame.Source.Util.Loaders;
-using MonoGame;
 
 namespace MonoGame.Source.Systems.Chunks;
 
-/// <summary>
-/// Represents a chunk in the game world.
-/// </summary>
 public class Chunk : IChunk
 {
-    /// <summary>
-    /// Gets or sets the dictionary of tiles in the chunk, organized by tile draw layer.
-    /// </summary>
+
     public Dictionary<TileDrawLayer, ITile[,]> Tiles { get; set; }
 
-    /// <summary>
-    /// Gets or sets the X coordinate of the chunk.
-    /// </summary>
     public int X { get; set; }
 
-    /// <summary>
-    /// Gets or sets the Y coordinate of the chunk.
-    /// </summary>
     public int Y { get; set; }
 
-    /// <summary>
-    /// Gets or sets the size of the chunk in the X direction.
-    /// </summary>
     public static int SizeX { get; set; } = 16;
 
-    /// <summary>
-    /// Gets or sets the size of the chunk in the Y direction.
-    /// </summary>
     public static int SizeY { get; set; } = 16;
 
-    private World World = Globals.world;
+    private World World = Globals.World;
 
-    /// Initializes a new instance of the <see cref="Chunk"/> class.
-    /// </summary>
-    /// <param name="world">The world that the chunk belongs to.</param>
-    /// <param name="x">The X coordinate of the chunk.</param>
-    /// <param name="y">The Y coordinate of the chunk.</param>
     public Chunk(World world, int x, int y)
     {
         X = x;
@@ -94,28 +69,15 @@ public class Chunk : IChunk
             }
         }
 
-        Globals.world.UpdateAllTextureCoordinates();
+        Globals.World.UpdateAllTextureCoordinates();
     }
 
-    /// <summary>
-    /// Gets the tile at the specified position in the chunk.
-    /// </summary>
-    /// <param name="layer">The tile draw layer.</param>
-    /// <param name="x">The X coordinate of the tile.</param>
-    /// <param name="y">The Y coordinate of the tile.</param>
-    /// <returns>The tile at the specified position, or null if no tile exists at that position.</returns>
     public ITile GetTile(TileDrawLayer layer, int x, int y)
     {
         if (x >= SizeX || y >= SizeY || x < 0 || y < 0) return null;
         return Tiles[layer][x, y];
     }
 
-    /// <summary>
-    /// Gets the world position of a tile in the chunk.
-    /// </summary>
-    /// <param name="x">The X coordinate of the tile.</param>
-    /// <param name="y">The Y coordinate of the tile.</param>
-    /// <returns>The world position of the tile.</returns>
     public Vector2 GetWorldPosition(int x, int y)
     {
         int worldX = X * SizeX + x;
@@ -123,12 +85,6 @@ public class Chunk : IChunk
         return new Vector2(worldX, worldY);
     }
 
-    /// <summary>
-    /// Deletes the tile at the specified position in the chunk.
-    /// </summary>
-    /// <param name="layer">The tile draw layer.</param>
-    /// <param name="x">The X coordinate of the tile.</param>
-    /// <param name="y">The Y coordinate of the tile.</param>
     public void DeleteTile(TileDrawLayer layer, int x, int y)
     {
         if (x > SizeX || y > SizeY || x < 0 || y < 0) return;
@@ -136,14 +92,6 @@ public class Chunk : IChunk
         UpdateNeighborChunks();
     }
 
-    /// <summary>
-    /// Sets the tile at the specified position in the chunk.
-    /// </summary>
-    /// <param name="id">The ID of the tile.</param>
-    /// <param name="layer">The tile draw layer.</param>
-    /// <param name="x">The X coordinate of the tile.</param>d
-    /// <param name="y">The Y coordinate of the tile.</param>
-    /// <returns>The tile that was set.</returns>
     public ITile SetTile(string id, TileDrawLayer layer, int x, int y)
     {
         if (x > SizeX || y > SizeY || x < 0 || y < 0) return null;
@@ -157,14 +105,6 @@ public class Chunk : IChunk
         return tile;
     }
 
-    /// <summary>
-    /// Sets the tile at the specified position in the chunk and updates the neighboring chunks.
-    /// </summary>
-    /// <param name="id">The ID of the tile.</param>
-    /// <param name="layer">The tile draw layer.</param>
-    /// <param name="x">The X coordinate of the tile.</param>
-    /// <param name="y">The Y coordinate of the tile.</param>
-    /// <returns>The tile that was set.</returns>
     public ITile SetTileAndUpdateNeighbors(string id, TileDrawLayer layer, int x, int y)
     {
         ITile tile = SetTile(id, layer, x, y);
@@ -172,9 +112,6 @@ public class Chunk : IChunk
         return tile;
     }
 
-    /// <summary>
-    /// Updates the texture coordinates of all tiles in the chunk.
-    /// </summary>
     public void UpdateTextureCoordinates()
     {
         for (int x = 0; x < SizeX; x++)
@@ -193,10 +130,6 @@ public class Chunk : IChunk
         }
     }
 
-    /// <summary>
-    /// Updates the neighboring tiles of the specified tile draw layer in the chunk.
-    /// </summary>
-    /// <param name="layer">The tile draw layer.</param>
     public void UpdateNeighborTiles(TileDrawLayer layer)
     {
         for (int x = 0; x < SizeX; x++)
@@ -216,7 +149,7 @@ public class Chunk : IChunk
                             if (neighborX > 0 && neighborY > 0)
                             {
                                 Vector2 worldPosition = GetWorldPosition(neighborX, neighborY);
-                                ITile neighbor = Globals.world.GetTileAt(layer, (int)worldPosition.X, (int)worldPosition.Y);
+                                ITile neighbor = Globals.World.GetTileAt(layer, (int)worldPosition.X, (int)worldPosition.Y);
 
                                 if (neighbor != null)
                                 {
@@ -230,11 +163,8 @@ public class Chunk : IChunk
         }
     }
 
-    PrimitiveBatch primitiveBatch = new PrimitiveBatch(Globals.graphicsDevice.GraphicsDevice);
-    /// <summary>
-    /// Draws the tiles in the chunk using the specified sprite batch.
-    /// </summary>
-    /// <param name="spriteBatch">The sprite batch to draw with.</param>
+    PrimitiveBatch primitiveBatch = new PrimitiveBatch(Globals.GraphicsDevice.GraphicsDevice);
+
     public void Draw(SpriteBatch spriteBatch)
     {
         foreach (var layer in Tiles)
@@ -267,25 +197,6 @@ public class Chunk : IChunk
                         {
                             layerDepth = 0f;
                         }
-                        // else if (layer.Key == TileDrawLayer.Tiles)
-                        // {
-                        //     if (Globals.world.GetLocalPlayer() != null)
-                        //     {
-                        //         Vector2 playerPosition = Globals.world.GetLocalPlayer().Position + new Vector2(Tile.PixelSizeX / 2, Tile.PixelSizeY);
-                        //         if (playerPosition.Y - 2 <= tileRectangle.Bottom)
-                        //         {
-                        //             if (Math.Abs(position.X - playerPosition.X) < (Tile.PixelSizeX * 1) && Math.Abs(position.Y - playerPosition.Y) < Tile.PixelSizeY && tile.CollisionMode == CollisionMode.CollisionMask)
-                        //             {
-                        //                 colorWithOpacity = Color.White * 0.9f;
-                        //             }
-                        //             layerDepth = 0.6f;
-                        //         }
-                        //         else
-                        //         {
-                        //             layerDepth = 0.2f;
-                        //         }
-                        //     }
-                        // }
 
                         spriteBatch.Draw(
                             SpritesheetLoader.GetSpritesheet(tile.SpritesheetName),
@@ -316,7 +227,7 @@ public class Chunk : IChunk
 
                         if (layer.Key != TileDrawLayer.Background && Tile.ShowTileBoundingBox)
                         {
-                            Globals.spriteBatch.End();
+                            Globals.SpriteBatch.End();
                             primitiveBatch.Begin(PrimitiveType.LineList);
 
                             Rectangle rectangle = tileRectangle;
@@ -347,16 +258,10 @@ public class Chunk : IChunk
         }
     }
 
-    /// <summary>
-    /// Initializes the chunk.
-    /// </summary>
     public void Initialize()
     {
     }
 
-    /// <summary>
-    /// Updates the neighboring chunks of the chunk.
-    /// </summary>
     public void UpdateNeighborChunks()
     {
         UpdateTextureCoordinates();
@@ -366,14 +271,14 @@ public class Chunk : IChunk
         int chunkYMinus = Y - 1;
         int chunkYPlus = Y + 1;
 
-        IChunk chunkMinusX = Globals.world.GetChunkAt(chunkXMinus, Y);
-        IChunk chunkPlusX = Globals.world.GetChunkAt(chunkXPlus, Y);
-        IChunk chunkMinusY = Globals.world.GetChunkAt(X, chunkYMinus);
-        IChunk chunkPlusY = Globals.world.GetChunkAt(X, chunkYPlus);
-        IChunk chunkMinusXMinusY = Globals.world.GetChunkAt(chunkXMinus, chunkYMinus);
-        IChunk chunkMinusXPlusY = Globals.world.GetChunkAt(chunkXMinus, chunkYPlus);
-        IChunk chunkPlusXMinusY = Globals.world.GetChunkAt(chunkXPlus, chunkYMinus);
-        IChunk chunkPlusXPlusY = Globals.world.GetChunkAt(chunkXPlus, chunkYPlus);
+        IChunk chunkMinusX = Globals.World.GetChunkAt(chunkXMinus, Y);
+        IChunk chunkPlusX = Globals.World.GetChunkAt(chunkXPlus, Y);
+        IChunk chunkMinusY = Globals.World.GetChunkAt(X, chunkYMinus);
+        IChunk chunkPlusY = Globals.World.GetChunkAt(X, chunkYPlus);
+        IChunk chunkMinusXMinusY = Globals.World.GetChunkAt(chunkXMinus, chunkYMinus);
+        IChunk chunkMinusXPlusY = Globals.World.GetChunkAt(chunkXMinus, chunkYPlus);
+        IChunk chunkPlusXMinusY = Globals.World.GetChunkAt(chunkXPlus, chunkYMinus);
+        IChunk chunkPlusXPlusY = Globals.World.GetChunkAt(chunkXPlus, chunkYPlus);
 
         if (chunkMinusX != null)
         {

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Numerics;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 
 namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client
 {
@@ -8,12 +6,10 @@ namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client
     {
         public RequestToLoadWorldNetworkMessage()
         {
-
         }
 
         public override void Deserialize(NetDataReader reader)
         {
-
         }
 
         public override NetDataWriter Serialize()

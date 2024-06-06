@@ -1,5 +1,4 @@
-﻿using System;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 
 namespace MonoGame;
 
@@ -10,7 +9,6 @@ public class AuthenticationResultNetworkMessage : NetworkMessage
 
     public AuthenticationResultNetworkMessage()
     {
-
     }
 
     public AuthenticationResultNetworkMessage(bool success, string reason)

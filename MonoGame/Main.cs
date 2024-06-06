@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -8,9 +7,6 @@ using MonoGame.Source.Systems.Scripts;
 
 namespace MonoGame;
 
-/// <summary>
-/// Represents the main game class.
-/// </summary>
 public class Main : Game
 {
     private const int ScreenSizeX = 1080;
@@ -18,18 +14,18 @@ public class Main : Game
 
     public Main()
     {
-        Globals.graphicsDevice = new GraphicsDeviceManager(this);
+        Globals.GraphicsDevice = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
 
-        Globals.game = this;
-        Globals.graphicsDevice.PreferredBackBufferWidth = ScreenSizeX;
-        Globals.graphicsDevice.PreferredBackBufferHeight = ScreenSizeY;
-        Globals.graphicsDevice.PreferMultiSampling = false;
-        Globals.graphicsDevice.IsFullScreen = Globals.FullScreen;
-        Globals.graphicsDevice.ApplyChanges();
+        Globals.Game = this;
+        Globals.GraphicsDevice.PreferredBackBufferWidth = ScreenSizeX;
+        Globals.GraphicsDevice.PreferredBackBufferHeight = ScreenSizeY;
+        Globals.GraphicsDevice.PreferMultiSampling = false;
+        Globals.GraphicsDevice.IsFullScreen = Globals.FullScreen;
+        Globals.GraphicsDevice.ApplyChanges();
 
-        Globals.camera = new Camera(ScreenSizeX, ScreenSizeY);
+        Globals.Camera = new Camera(ScreenSizeX, ScreenSizeY);
     }
 
     protected override void Initialize()
@@ -39,21 +35,21 @@ public class Main : Game
 
     protected override void LoadContent()
     {
-        Globals.contentManager = this.Content;
-        Globals.spriteBatch = new SpriteBatch(GraphicsDevice);
-        Globals.userInterfaceHandler = new UserInterfaceHandler();
-        Globals.defaultFont = Content.Load<SpriteFont>("PixelifySans");
+        Globals.ContentManager = this.Content;
+        Globals.SpriteBatch = new SpriteBatch(GraphicsDevice);
+        Globals.UserInterfaceHandler = new UserInterfaceHandler();
+        Globals.DefaultFont = Content.Load<SpriteFont>("PixelifySans");
 
         TileRegistry.LoadTileScripts();
         AnimationBundleRegistry.LoadAnimationBundleScripts();
 
-        Globals.world = new World();
+        Globals.World = new World();
 
-        Globals.userInterfaceHandler.Initialize();
-        Globals.world.UpdateAllTextureCoordinates();
+        Globals.UserInterfaceHandler.Initialize();
+        Globals.World.UpdateAllTextureCoordinates();
     }
 
-    protected override void OnExiting(Object sender, EventArgs args)
+    protected override void OnExiting(object sender, EventArgs args)
     {
         base.OnExiting(sender, args);
     }
@@ -65,10 +61,10 @@ public class Main : Game
 
         Globals.gameTime = gameTime;
         NetworkClient.Instance.Update();
-        Globals.world.Update(gameTime);
-        Globals.camera.Follow(Globals.world.GetLocalPlayer(), gameTime);
-        Globals.camera.Update(gameTime);
-        Globals.userInterfaceHandler.Update(gameTime);
+        Globals.World.Update(gameTime);
+        Globals.Camera.Follow(Globals.World.GetLocalPlayer(), gameTime);
+        Globals.Camera.Update(gameTime);
+        Globals.UserInterfaceHandler.Update(gameTime);
 
         base.Update(gameTime);
     }
@@ -78,12 +74,12 @@ public class Main : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         Globals.DefaultSpriteBatchBegin();
-        Globals.world.Draw(Globals.spriteBatch);
-        Globals.spriteBatch.End();
+        Globals.World.Draw(Globals.SpriteBatch);
+        Globals.SpriteBatch.End();
 
-        Globals.spriteBatch.Begin(transformMatrix: Globals.userInterfaceHandler.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
-        Globals.userInterfaceHandler.Draw(Globals.spriteBatch);
-        Globals.spriteBatch.End();
+        Globals.SpriteBatch.Begin(transformMatrix: Globals.UserInterfaceHandler.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+        Globals.UserInterfaceHandler.Draw(Globals.SpriteBatch);
+        Globals.SpriteBatch.End();
 
         base.Draw(gameTime);
     }

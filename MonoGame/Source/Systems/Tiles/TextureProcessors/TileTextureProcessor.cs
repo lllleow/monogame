@@ -6,33 +6,17 @@ namespace MonoGame;
 
 public class TileTextureProcessor : ITileTextureProcessor
 {
-    /// <summary>
-    /// Processes the tile neighbor configuration and returns a tuple of two integers.
-    /// </summary>
-    /// <param name="configuration">The tile neighbor configuration to process.</param>
-    /// <returns>Texture coordinates of the configuration.</returns>
+
     public virtual (int, int) Process(TileNeighborConfiguration configuration)
     {
         throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// Checks if the given tile neighbor configuration can connect in the specified direction.
-    /// </summary>
-    /// <param name="configuration">The tile neighbor configuration to check.</param>
-    /// <param name="direction">The direction to check.</param>
-    /// <returns>True if the configuration can connect in the specified direction, otherwise false.</returns>
     public bool CanConnect(TileNeighborConfiguration configuration, Direction direction)
     {
         return IsOfSameType(configuration, direction) || IsWhitelisted(configuration, direction);
     }
 
-    /// <summary>
-    /// Checks if the tile in the given direction is of the same type as the center tile.
-    /// </summary>
-    /// <param name="configuration">The tile neighbor configuration to check.</param>
-    /// <param name="direction">The direction to check.</param>
-    /// <returns>True if the tile in the given direction is of the same type as the center tile, otherwise false.</returns>
     public bool IsOfSameType(TileNeighborConfiguration configuration, Direction direction)
     {
         if (configuration.Center is null)
@@ -61,12 +45,6 @@ public class TileTextureProcessor : ITileTextureProcessor
         }
     }
 
-    /// <summary>
-    /// Checks if the tile in the given direction is whitelisted in the center tile's connectable tiles list.
-    /// </summary>
-    /// <param name="configuration">The tile neighbor configuration to check.</param>
-    /// <param name="direction">The direction to check.</param>
-    /// <returns>True if the tile in the given direction is whitelisted, otherwise false.</returns>
     public bool IsWhitelisted(TileNeighborConfiguration configuration, Direction direction)
     {
         if (configuration.Center is null)

@@ -1,7 +1,7 @@
-﻿using System;
+﻿
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using MonoGame.Source.Rendering.UI.Interfaces;
 using MonoGame.Source.Rendering.Utils;
 using MonoGame.Source.Util.Loaders;

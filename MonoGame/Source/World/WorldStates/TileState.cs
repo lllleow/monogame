@@ -1,5 +1,4 @@
-﻿using System;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 
 namespace MonoGame;
 
@@ -12,7 +11,6 @@ public class TileState : INetSerializable
 
     public TileState()
     {
-
     }
 
     public TileState(string id, TileDrawLayer layer, int x, int y)

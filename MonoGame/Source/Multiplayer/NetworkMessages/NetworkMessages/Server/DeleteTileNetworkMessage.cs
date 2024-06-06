@@ -1,17 +1,15 @@
-﻿using System;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 
 namespace MonoGame
 {
     public class DeleteTileNetworkMessage : NetworkMessage
     {
-        public TileDrawLayer Layer;
-        public int PosX;
-        public int PosY;
+        public TileDrawLayer Layer { get; set; }
+        public int PosX { get; set; }
+        public int PosY { get; set; }
 
         public DeleteTileNetworkMessage()
         {
-
         }
 
         public DeleteTileNetworkMessage(TileDrawLayer layer, int posX, int posY)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.UI.Interfaces;
@@ -18,7 +17,7 @@ public class UserInterfaceHandler
     {
         UserInterfaces.Add(new LevelEditorUserInterface());
 
-        Vector2 transformed = Vector2.Transform(new Vector2(Globals.graphicsDevice.GraphicsDevice.Viewport.Width, Globals.graphicsDevice.GraphicsDevice.Viewport.Height), Matrix.Invert(Transform));
+        Vector2 transformed = Vector2.Transform(new Vector2(Globals.GraphicsDevice.GraphicsDevice.Viewport.Width, Globals.GraphicsDevice.GraphicsDevice.Viewport.Height), Matrix.Invert(Transform));
         UIScreenSize = new Vector2(transformed.X, transformed.Y);
     }
 

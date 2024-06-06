@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using LiteNetLib;
-using LiteNetLib.Utils;
 using MonoGame.Source.Multiplayer.Interfaces;
 using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
 
@@ -13,9 +11,9 @@ public class NetworkClient
     EventBasedNetListener listener;
     public NetManager client;
 
+
     public NetworkClient()
     {
-
         listener = new EventBasedNetListener();
         client = new NetManager(listener);
 

@@ -5,11 +5,11 @@ using MonoGame;
 public static class Program
 {
     [STAThread]
-    static void Main(string[] args)
+    public static void Main(string[] args)
     {
         try
         {
-            Globals.args = args;
+            Globals.Args = args;
             using (var game = new MonoGame.Main())
             {
                 game.Run();

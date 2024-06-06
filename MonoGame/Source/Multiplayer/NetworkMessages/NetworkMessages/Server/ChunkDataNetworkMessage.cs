@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 
 namespace MonoGame
 {
@@ -10,7 +8,6 @@ namespace MonoGame
 
         public ChunkDataNetworkMessage()
         {
-            
         }
 
         public ChunkDataNetworkMessage(ChunkState chunkState)

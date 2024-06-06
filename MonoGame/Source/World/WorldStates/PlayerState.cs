@@ -1,5 +1,4 @@
-﻿using System;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame;
@@ -9,17 +8,16 @@ public class PlayerState : INetSerializable
     public string UUID { get; set; }
     public Vector2? Position { get; set; }
     public string SelectedTile { get; set; }
-    
+
     public PlayerState()
     {
-
     }
 
     public PlayerState(string uuid)
     {
         UUID = uuid;
         SelectedTile = null;
-        Position = Globals.spawnPosition;
+        Position = Globals.SpawnPosition;
     }
 
     public PlayerState(Player player)

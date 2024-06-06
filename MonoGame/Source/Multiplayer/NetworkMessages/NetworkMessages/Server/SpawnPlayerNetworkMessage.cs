@@ -1,5 +1,4 @@
-﻿using System;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame
@@ -11,7 +10,6 @@ namespace MonoGame
 
         public SpawnPlayerNetworkMessage()
         {
-
         }
 
         public SpawnPlayerNetworkMessage(string uuid, Vector2 position)

@@ -1,5 +1,4 @@
-﻿using System;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame;
@@ -10,7 +9,6 @@ public class EntityState : INetSerializable
 
     public EntityState()
     {
-
     }
 
     public EntityState(IGameEntity entity)

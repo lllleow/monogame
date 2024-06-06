@@ -8,13 +8,9 @@
 #endregion
 
 #region Using Statements
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Input;
+using System;
 #endregion
 
 namespace MonoGame;
@@ -84,7 +80,7 @@ public class PrimitiveBatch : IDisposable
             World = Matrix.Identity,
 
             // Initially set the View matrix to use the camera's transformation matrix
-            View = Globals.camera.Transform
+            View = Globals.Camera.Transform
         };
     }
 
@@ -138,7 +134,7 @@ public class PrimitiveBatch : IDisposable
                 ("End must be called before Begin can be called again.");
         }
 
-        basicEffect.View = Globals.camera.Transform;
+        basicEffect.View = Globals.Camera.Transform;
 
         // these three types reuse vertices, so we can't flush properly without more
         // complex logic. Since that's a bit too complicated for this sample, we'll
@@ -299,6 +295,5 @@ public class PrimitiveBatch : IDisposable
     }
 
     #endregion
-
 
 }

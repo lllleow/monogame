@@ -5,52 +5,30 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.Camera;
 namespace MonoGame;
 
-/// <summary>
-/// Represents a class that holds global variables and objects used throughout the application.
-/// </summary>
 public class Globals
 {
-    /// <summary>
-    /// Gets or sets the content manager used for loading and managing game content.
-    /// </summary>
-    public static ContentManager contentManager { get; set; }
 
-    /// <summary>
-    /// Gets or sets the sprite batch used for rendering 2D graphics.
-    /// </summary>
-    public static SpriteBatch spriteBatch { get; set; }
+    public static ContentManager ContentManager { get; set; }
 
-    /// <summary>
-    /// Gets or sets the world object representing the game world.
-    /// </summary>
-    public static World world { get; set; }
+    public static SpriteBatch SpriteBatch { get; set; }
 
-    /// <summary>
-    /// Gets or sets the graphics device manager used for managing the graphics device.
-    /// </summary>
-    public static GraphicsDeviceManager graphicsDevice { get; set; }
-    /// <summary>
-    /// Gets or sets a value indicating whether the game is running in full-screen mode.
-    /// </summary>
+    public static World World { get; set; }
+
+    public static GraphicsDeviceManager GraphicsDevice { get; set; }
+
     public static bool FullScreen { get; internal set; } = false;
 
-    /// <summary>
-    /// Gets or sets the camera object used for viewing the game world.
-    /// </summary>
-    public static Camera camera;
+    public static Camera Camera;
 
-    /// <summary>
-    /// Gets or sets the game object.
-    /// </summary>
-    public static Game game;
+    public static Game Game;
 
-    public static string[] args;
+    public static string[] Args;
 
-    public static UserInterfaceHandler userInterfaceHandler;
+    public static UserInterfaceHandler UserInterfaceHandler;
 
-    public static SpriteFont defaultFont;
+    public static SpriteFont DefaultFont;
 
-    public static Vector2 spawnPosition = new Vector2(128, 128);
+    public static Vector2 SpawnPosition = new Vector2(128, 128);
 
     public static string UUID = Guid.NewGuid().ToString();
 
@@ -58,6 +36,6 @@ public class Globals
 
     public static void DefaultSpriteBatchBegin()
     {
-        Globals.spriteBatch.Begin(transformMatrix: camera.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+        Globals.SpriteBatch.Begin(transformMatrix: Camera.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
     }
 }

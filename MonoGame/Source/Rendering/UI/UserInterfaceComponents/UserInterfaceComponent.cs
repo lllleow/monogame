@@ -25,12 +25,12 @@ public class UserInterfaceComponent : IUserInterfaceComponent
         LocalPosition = localPosition;
     }
 
-    PrimitiveBatch primitiveBatch = new PrimitiveBatch(Globals.graphicsDevice.GraphicsDevice, transform: Globals.userInterfaceHandler.Transform);
+    PrimitiveBatch primitiveBatch = new PrimitiveBatch(Globals.GraphicsDevice.GraphicsDevice, transform: Globals.UserInterfaceHandler.Transform);
     public virtual void Draw(SpriteBatch spriteBatch)
     {
         if (ShowBounds && !BoundRenderOffForTypes.Contains(this.GetType()))
         {
-            primitiveBatch.Begin(PrimitiveType.LineList, transform: Globals.userInterfaceHandler.Transform);
+            primitiveBatch.Begin(PrimitiveType.LineList, transform: Globals.UserInterfaceHandler.Transform);
 
             Vector2 position = GetPositionRelativeToParent();
             Vector2 size = GetPreferredSize();
@@ -72,10 +72,10 @@ public class UserInterfaceComponent : IUserInterfaceComponent
 
     private void HandleMouseClick(bool add, int x, int y)
     {
-        int windowWidth = Globals.graphicsDevice.PreferredBackBufferWidth;
-        int windowHeight = Globals.graphicsDevice.PreferredBackBufferHeight;
+        int windowWidth = Globals.GraphicsDevice.PreferredBackBufferWidth;
+        int windowHeight = Globals.GraphicsDevice.PreferredBackBufferHeight;
 
-        if (!Globals.game.IsActive)
+        if (!Globals.Game.IsActive)
         {
             return;
         }
@@ -86,7 +86,7 @@ public class UserInterfaceComponent : IUserInterfaceComponent
         }
 
         Vector2 worldPosition = new Vector2(x, y);
-        Vector2 screenPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.userInterfaceHandler.GetUITransform()));
+        Vector2 screenPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.UserInterfaceHandler.GetUITransform()));
 
         if (screenPosition.X >= GetPositionRelativeToParent().X && screenPosition.X <= GetPositionRelativeToParent().X + GetPreferredSize().X && screenPosition.Y >= GetPositionRelativeToParent().Y && screenPosition.Y <= GetPositionRelativeToParent().Y + GetPreferredSize().Y)
         {

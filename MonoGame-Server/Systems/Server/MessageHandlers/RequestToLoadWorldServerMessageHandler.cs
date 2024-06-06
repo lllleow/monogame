@@ -1,9 +1,6 @@
 ﻿using LiteNetLib;
-using Microsoft.Xna.Framework;
 using MonoGame;
 using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
-using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame_Server.Systems.Server;
 using MonoGame_Server.Systems.Server.MessageHandlers;
 
@@ -31,7 +28,7 @@ public class RequestToLoadWorldServerMessageHandler : IServerMessageHandler
             PlayerState playerState = NetworkServer.ServerWorld.Players.FirstOrDefault(p => p.UUID == uuid);
             if (playerState != null)
             {
-                SpawnPlayerNetworkMessage spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(playerState.UUID, playerState.Position ?? Globals.spawnPosition);
+                SpawnPlayerNetworkMessage spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(playerState.UUID, playerState.Position ?? Globals.SpawnPosition);
                 NetworkServer.SendMessageToPeer(peer, spawnPlayerNetworkMessage);
             }
         }
@@ -42,7 +39,7 @@ public class RequestToLoadWorldServerMessageHandler : IServerMessageHandler
         {
             PlayerState newPlayer = new PlayerState(existingPlayerUUID);
             NetworkServer.ServerWorld.Players.Add(newPlayer);
-            SpawnPlayerNetworkMessage spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(newPlayer.UUID, newPlayer.Position ?? Globals.spawnPosition);
+            SpawnPlayerNetworkMessage spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(newPlayer.UUID, newPlayer.Position ?? Globals.SpawnPosition);
             NetworkServer.BroadcastMessage(spawnPlayerNetworkMessage);
         }
     }

@@ -17,7 +17,7 @@ public class RequestMovementNetworkMessageHandler : IServerMessageHandler
         PlayerState playerState = NetworkServer.Instance.GetPlayerFromPeer(peer);
 
         Vector2 displacement = GetDisplacement(requestMovementNetworkMessage.Direction, requestMovementNetworkMessage.Speed);
-        Vector2 newPosition = (playerState.Position ?? Globals.spawnPosition) + displacement;
+        Vector2 newPosition = (playerState.Position ?? Globals.SpawnPosition) + displacement;
         playerState.Position = newPosition;
 
         NetworkServer.BroadcastMessage(new MovePlayerNetworkMessage(playerState.UUID, requestMovementNetworkMessage.Speed, requestMovementNetworkMessage.Direction, newPosition));

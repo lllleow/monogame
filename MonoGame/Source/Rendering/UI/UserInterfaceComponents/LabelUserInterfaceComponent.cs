@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame;
@@ -17,11 +16,11 @@ public class LabelUserInterfaceComponent : UserInterfaceComponent
     public override void Draw(SpriteBatch batch)
     {
         base.Draw(batch);
-        Globals.spriteBatch.DrawString(Globals.defaultFont, Text, GetPositionRelativeToParent(), Color.White, scale: Scale, rotation: 0f, origin: Vector2.Zero, effects: SpriteEffects.None, layerDepth: 0f);
+        Globals.SpriteBatch.DrawString(Globals.DefaultFont, Text, GetPositionRelativeToParent(), Color.White, scale: Scale, rotation: 0f, origin: Vector2.Zero, effects: SpriteEffects.None, layerDepth: 0f);
     }
 
     public override Vector2 GetPreferredSize()
     {
-        return Globals.defaultFont.MeasureString(Text) * Scale;
+        return Globals.DefaultFont.MeasureString(Text) * Scale;
     }
 }

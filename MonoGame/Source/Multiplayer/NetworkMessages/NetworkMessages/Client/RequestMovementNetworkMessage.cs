@@ -1,17 +1,15 @@
-﻿using System;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
 
 namespace MonoGame
 {
     public class RequestMovementNetworkMessage : NetworkMessage
     {
-        public Vector2 Speed;
-        public Direction Direction;
+        public Vector2 Speed { get; set; }
+        public Direction Direction { get; set; }
 
         public RequestMovementNetworkMessage()
         {
-
         }
 
         public RequestMovementNetworkMessage(Vector2 displacement, Direction direction)

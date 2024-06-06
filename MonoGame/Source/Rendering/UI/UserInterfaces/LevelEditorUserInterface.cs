@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Source.Systems.Scripts;
+﻿using Microsoft.Xna.Framework;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaces;
 

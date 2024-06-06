@@ -4,20 +4,20 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/File.spritefont</File>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/fence_spritesheet_collision_mask.png</File>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/fence_spritesheet.png</File>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/grass_spritesheet.png</File>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/pipe_spritesheet.png</File>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/player_sprite_2_collision_mask.png</File>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/player_sprite_2.png</File>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/player_spritesheet.png</File>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/slot.png</File>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/spritesheet.png</File>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/stone_spritesheet.png</File>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/ui_background.png</File>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/wall_spritesheet_collision_mask.png</File>
-    <File>C:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/wall_spritesheet.png</File>
+    <File>c:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/File.spritefont</File>
+    <File>c:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/fence_spritesheet_collision_mask.png</File>
+    <File>c:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/fence_spritesheet.png</File>
+    <File>c:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/grass_spritesheet.png</File>
+    <File>c:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/pipe_spritesheet.png</File>
+    <File>c:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/player_sprite_2_collision_mask.png</File>
+    <File>c:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/player_sprite_2.png</File>
+    <File>c:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/player_spritesheet.png</File>
+    <File>c:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/slot.png</File>
+    <File>c:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/spritesheet.png</File>
+    <File>c:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/stone_spritesheet.png</File>
+    <File>c:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/ui_background.png</File>
+    <File>c:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/wall_spritesheet_collision_mask.png</File>
+    <File>c:/Users/Leonardo/Documents/Repositories/monogame/MonoGame/Content/textures/wall_spritesheet.png</File>
   </SourceFiles>
   <DestFiles>
     <File>PixelifySans.spritefont</File>

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Components;
 
@@ -19,7 +18,7 @@ public class BoundingBoxComponent : EntityComponent
         return new Rectangle((int)Entity.Position.X, (int)Entity.Position.Y, (int)Size.X, (int)Size.Y);
     }
 
-    PrimitiveBatch primitiveBatch = new PrimitiveBatch(Globals.graphicsDevice.GraphicsDevice);
+    PrimitiveBatch primitiveBatch = new PrimitiveBatch(Globals.GraphicsDevice.GraphicsDevice);
     public override void Draw(SpriteBatch spriteBatch)
     {
         // Globals.spriteBatch.End();

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MonoGame;
+﻿namespace MonoGame;
 
 public enum UserInterfaceAlignment
 {

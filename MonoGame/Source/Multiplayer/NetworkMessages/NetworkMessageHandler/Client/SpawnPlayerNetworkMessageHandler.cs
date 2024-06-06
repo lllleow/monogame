@@ -1,5 +1,4 @@
-﻿using System;
-using MonoGame.Source.Multiplayer.Interfaces;
+﻿using MonoGame.Source.Multiplayer.Interfaces;
 using MonoGame.Source.Multiplayer.NetworkMessageHandler;
 
 namespace MonoGame;
@@ -11,6 +10,6 @@ public class SpawnPlayerNetworkMessageHandler : IClientMessageHandler
         SpawnPlayerNetworkMessage spawnPlayerNetworkMessage = (SpawnPlayerNetworkMessage)message;
 
         Player player = new Player(spawnPlayerNetworkMessage.UUID, spawnPlayerNetworkMessage.Position);
-        Globals.world.Players.Add(player);
+        Globals.World.Players.Add(player);
     }
 }

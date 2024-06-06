@@ -1,20 +1,12 @@
-﻿using System;
-using MonoGame.Source.Systems.Tiles.Utils;
+﻿using MonoGame.Source.Systems.Tiles.Utils;
 
 namespace MonoGame;
 
 public class ComplexConnectionTileTextureProcessor : TileTextureProcessor
 {
-    /// <summary>
-    /// Represents a texture processor for complex connection tiles.
-    /// </summary>
+
     public static ComplexConnectionTileTextureProcessor instance = new ComplexConnectionTileTextureProcessor();
 
-    /// <summary>
-    /// Processes the tile neighbor configuration and returns the corresponding texture coordinates.
-    /// </summary>
-    /// <param name="configuration">The tile neighbor configuration.</param>
-    /// <returns>The texture coordinates as a tuple of integers.</returns>
     public override (int, int) Process(TileNeighborConfiguration configuration)
     {
         bool leftCanConnect = CanConnect(configuration, Direction.Left);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using LiteNetLib.Utils;
 
 namespace MonoGame
@@ -11,7 +10,6 @@ namespace MonoGame
 
         public UpdatePlayerPositionNetworkMessage()
         {
-
         }
 
         public UpdatePlayerPositionNetworkMessage(string uuid, Vector2 position)

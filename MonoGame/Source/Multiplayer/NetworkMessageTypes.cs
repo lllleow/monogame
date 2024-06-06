@@ -47,7 +47,6 @@ public static class NetworkMessageTypeClientHelper
                 return typeof(PlaceTileNetworkMessage);
             case NetworkMessageTypes.DeleteTileNetworkMessage:
                 return typeof(DeleteTileNetworkMessage);
-
         }
 
         return null;

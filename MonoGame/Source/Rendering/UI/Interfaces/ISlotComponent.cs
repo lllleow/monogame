@@ -1,5 +1,4 @@
-﻿using System;
-using MonoGame.Source.Rendering.Utils;
+﻿using MonoGame.Source.Rendering.Utils;
 
 namespace MonoGame.Source.Rendering.UI.Interfaces;
 

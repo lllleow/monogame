@@ -1,18 +1,11 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Source.Systems.Chunks;
-using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Components.Animator;
 using MonoGame.Source.Systems.Components.Collision;
 using MonoGame.Source.Systems.Entity;
 using MonoGame.Source.Systems.Scripts;
 namespace MonoGame;
 
-/// <summary>
-/// Represents a player entity in the game.
-/// </summary>
 public class Player : GameEntity
 {
     AnimatorComponent Animator;
@@ -21,10 +14,6 @@ public class Player : GameEntity
     MouseState previousMouseState;
     public string selectedTile = "base.grass";
 
-    /// <summary>
-    /// Represents a player in the game.
-    /// </summary>
-    /// <param name="position">The initial position of the player.</param>
     public Player(string uuid, Vector2 position)
     {
         Position = position;
@@ -34,7 +23,6 @@ public class Player : GameEntity
         Animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
         SpriteRenderer = new SpriteRendererComponent();
 
-        // AddComponent(new BoundingBoxComponent(new Vector2(16, 16)));
         AddComponent(SpriteRenderer);
         AddComponent(Animator);
         AddComponent(new PixelBoundsComponent());
@@ -48,22 +36,16 @@ public class Player : GameEntity
 
     public bool IsLocalPlayer()
     {
-        return this == Globals.world.GetLocalPlayer();
+        return this == Globals.World.GetLocalPlayer();
     }
-
-    /// <summary>
-    /// Handles the mouse click event at the specified coordinates, ensuring it occurs within the window bounds and when the window is active.
-    /// </summary>
-    /// <param name="x">The x-coordinate of the mouse click.</param>
-    /// <param name="y">The y-coordinate of the mouse click.</param>
 
     Vector2 lastPosition = Vector2.Zero;
     private void HandleMouseClick(bool add, int x, int y)
     {
-        int windowWidth = Globals.graphicsDevice.PreferredBackBufferWidth;
-        int windowHeight = Globals.graphicsDevice.PreferredBackBufferHeight;
+        int windowWidth = Globals.GraphicsDevice.PreferredBackBufferWidth;
+        int windowHeight = Globals.GraphicsDevice.PreferredBackBufferHeight;
 
-        if (!Globals.game.IsActive)
+        if (!Globals.Game.IsActive)
         {
             return;
         }
@@ -74,7 +56,7 @@ public class Player : GameEntity
         }
 
         Vector2 screenPosition = new Vector2(x, y);
-        (int, int) globalPosition = Globals.world.GetGlobalPositionFromScreenPosition(screenPosition);
+        (int, int) globalPosition = Globals.World.GetGlobalPositionFromScreenPosition(screenPosition);
 
         if (screenPosition != lastPosition)
         {
@@ -83,15 +65,11 @@ public class Player : GameEntity
         }
     }
 
-    /// <summary>
-    /// Updates the player's state based on user input and game time.
-    /// </summary>
-    /// <param name="gameTime">The game time.</param>
     bool clicked = false;
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-        if (this == Globals.world.GetLocalPlayer())
+        if (this == Globals.World.GetLocalPlayer())
         {
             KeyboardState state = Keyboard.GetState();
 

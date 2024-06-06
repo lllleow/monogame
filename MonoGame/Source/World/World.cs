@@ -1,32 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LiteNetLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Components.Collision;
-using MonoGame.Source.Systems.Entity;
-using MonoGame.Source.Systems.Entity.Interfaces;
 
 namespace MonoGame;
 
-/// <summary>
-/// Represents the game world, which contains entities, chunks, and tiles.
-/// </summary>
 public class World
 {
-    /// <summary>
-    /// Represents a game world that contains entities and chunks.
-    /// </summary>
+
+
     private List<IGameEntity> Entities { get; set; } = new List<IGameEntity>();
     public List<Player> Players { get; set; } = new List<Player>();
     private List<IChunk> Chunks { get; set; } = new List<IChunk>();
 
     public World()
     {
-
     }
 
     public void LoadChunkFromChunkState(ChunkState chunkState)
@@ -36,10 +28,6 @@ public class World
         chunk.UpdateNeighborChunks();
     }
 
-    /// <summary>
-    /// Updates the game world by updating all entities.
-    /// </summary>
-    /// <param name="gameTime">The game time.</param>
     public void Update(GameTime gameTime)
     {
         foreach (var entity in GetEntities())
@@ -61,23 +49,11 @@ public class World
         return Players.Cast<IGameEntity>().Concat(Entities).ToList();
     }
 
-    /// <summary>
-    /// Gets the chunk at the specified coordinates.
-    /// </summary>
-    /// <param name="x">The x-coordinate of the chunk.</param>
-    /// <param name="y">The y-coordinate of the chunk.</param>
-    /// <returns>The chunk at the specified coordinates, or null if no chunk is found.</returns>
     public IChunk GetChunkAt(int x, int y)
     {
         return Chunks.Find(c => c.X == x && c.Y == y);
     }
 
-    /// <summary>
-    /// Creates a new chunk at the specified coordinates if it doesn't exist, or returns the existing chunk.
-    /// </summary>
-    /// <param name="x">The x-coordinate of the chunk.</param>
-    /// <param name="y">The y-coordinate of the chunk.</param>
-    /// <returns>The created or existing chunk.</returns>
     public IChunk CreateOrGetChunk(int x, int y)
     {
         IChunk existingChunk = GetChunkAt(x, y);
@@ -93,10 +69,6 @@ public class World
         }
     }
 
-    /// <summary>
-    /// Draws the game world by drawing all chunks and entities.
-    /// </summary>
-    /// <param name="spriteBatch">The sprite batch used for drawing.</param>
     public void Draw(SpriteBatch spriteBatch)
     {
         DrawWorld();
@@ -116,11 +88,6 @@ public class World
         return Players.Where(p => p.UUID == Globals.UUID).FirstOrDefault();
     }
 
-    /// <summary>
-    /// Gets the tile at the specified world position.
-    /// </summary>
-    /// <param name="worldPosition">The world position.</param>
-    /// <returns>The tile at the specified world position, or null if no tile is found.</returns>
     public ITile GetTileAtPosition(Vector2 worldPosition)
     {
         int globalX = (int)(worldPosition.X / Chunk.SizeX);
@@ -128,30 +95,15 @@ public class World
         return GetTileAt(0, globalX, globalY);
     }
 
-    /// <summary>
-    /// Sets the tile at the specified global position.
-    /// </summary>
-    /// <param name="tile">The tile to set.</param>
-    /// <param name="layer">The layer of the tile.</param>
-    /// <param name="globalX">The global x-coordinate of the tile.</param>
-    /// <param name="globalY">The global y-coordinate of the tile.</param>
-    /// <returns>The set tile.</returns>
     public ITile SetTileAtPosition(string tile, TileDrawLayer layer, int globalX, int globalY)
     {
         (int, int) localPosition = GetLocalPositionFromGlobal(globalX, globalY);
         (int, int) chunkPosition = GetChunkPositionFromGlobal(globalX, globalY);
 
-        IChunk chunk = Globals.world.CreateOrGetChunk(chunkPosition.Item1, chunkPosition.Item2);
+        IChunk chunk = Globals.World.CreateOrGetChunk(chunkPosition.Item1, chunkPosition.Item2);
         return chunk.SetTileAndUpdateNeighbors(tile, layer, localPosition.Item1, localPosition.Item2);
     }
 
-    /// <summary>
-    /// Gets the tile at the specified global position and layer.
-    /// </summary>
-    /// <param name="layer">The layer of the tile.</param>
-    /// <param name="globalX">The global x-coordinate of the tile.</param>
-    /// <param name="globalY">The global y-coordinate of the tile.</param>
-    /// <returns>The tile at the specified global position and layer, or null if no tile is found.</returns>
     public ITile GetTileAt(TileDrawLayer layer, int globalX, int globalY)
     {
         (int, int) localPosition = GetLocalPositionFromGlobal(globalX, globalY);
@@ -167,12 +119,6 @@ public class World
         }
     }
 
-    /// <summary>
-    /// Gets all tiles from all layers at the specified global position.
-    /// </summary>
-    /// <param name="globalX">The global x-coordinate.</param>
-    /// <param name="globalY">The global y-coordinate.</param>
-    /// <returns>A list of tiles from all layers at the specified global position, or null if no chunk is found.</returns>
     public List<ITile> GetAllTilesFromLayerAt(int globalX, int globalY)
     {
         int chunkX = globalX / Chunk.SizeX;
@@ -205,7 +151,6 @@ public class World
         return (localX, localY);
     }
 
-
     public (int, int) GetChunkPositionFromGlobal(int posX, int posY)
     {
         int chunkX = posX / Chunk.SizeX;
@@ -220,17 +165,10 @@ public class World
         return GetChunkAt(chunkPosition.Item1, chunkPosition.Item2);
     }
 
-    /// <summary>
-    /// Gets the tile at the specified screen position and layer.
-    /// </summary>
-    /// <param name="layer">The layer of the tile.</param>
-    /// <param name="screenX">The screen x-coordinate.</param>
-    /// <param name="screenY">The screen y-coordinate.</param>
-    /// <returns>The tile at the specified screen position and layer, or null if no tile is found.</returns>
     public ITile GetTileAtScreenPosition(TileDrawLayer layer, int screenX, int screenY)
     {
         Vector2 worldPosition = new Vector2(screenX, screenY);
-        worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.camera.Transform));
+        worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.Camera.Transform));
 
         int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
         int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
@@ -241,16 +179,10 @@ public class World
         int localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
         int localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
 
-        IChunk chunk = Globals.world.GetChunkAt(chunkX, chunkY);
+        IChunk chunk = Globals.World.GetChunkAt(chunkX, chunkY);
         return chunk?.GetTile(layer, localX, localY) ?? null;
     }
 
-    /// <summary>
-    /// Gets the tiles that intersect with the specified mask and rectangle.
-    /// </summary>
-    /// <param name="mask">The mask to check for intersection.</param>
-    /// <param name="rectangle">The rectangle to check for intersection.</param>
-    /// <returns>A list of tiles that intersect with the specified mask and rectangle.</returns>
     public List<ITile> GetTilesIntersectingWithMask(bool[,] mask, Rectangle rectangle)
     {
         List<ITile> intersectingTiles = new List<ITile>();
@@ -368,7 +300,6 @@ public class World
         return intersectingTiles;
     }
 
-
     public bool Intersects(Rectangle rectA, Rectangle rectB)
     {
         return rectA.X < rectB.X + rectB.Width &&
@@ -377,11 +308,6 @@ public class World
                rectA.Y + rectA.Height > rectB.Y;
     }
 
-    /// <summary>
-    /// Retrieves a list of tiles that intersect with the specified rectangle.
-    /// </summary>
-    /// <param name="rectangle">The rectangle to check for intersection.</param>
-    /// <returns>A list of tiles that intersect with the specified rectangle.</returns>
     public List<ITile> GetTilesIntersectingWithRectangle(Rectangle rectangle)
     {
         List<ITile> intersectingTiles = new List<ITile>();
@@ -470,23 +396,16 @@ public class World
         return intersectingTiles;
     }
 
-    /// <summary>
-    /// Gets the chunk at the specified screen position.
-    /// </summary>
-    /// <param name="layer">The layer of the chunk.</param>
-    /// <param name="screenX">The screen x-coordinate.</param>
-    /// <param name="screenY">The screen y-coordinate.</param>
-    /// <returns>The chunk at the specified screen position, or null if no chunk is found.</returns>
     public IChunk GetChunkAtScreenPosition(int layer, int screenX, int screenY)
     {
         (int, int) chunkPosition = GetChunkFromScreenPosition(new Vector2(screenX, screenY));
-        IChunk chunk = Globals.world.GetChunkAt(chunkPosition.Item1, chunkPosition.Item2);
+        IChunk chunk = Globals.World.GetChunkAt(chunkPosition.Item1, chunkPosition.Item2);
         return chunk;
     }
 
     public (int, int) GetGlobalPositionFromScreenPosition(Vector2 screenPositionBeforeTransform)
     {
-        Vector2 screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.camera.Transform));
+        Vector2 screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.Camera.Transform));
 
         int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
         int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
@@ -502,7 +421,7 @@ public class World
 
     public (int, int) GetChunkFromScreenPosition(Vector2 screenPositionBeforeTransform)
     {
-        Vector2 screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.camera.Transform));
+        Vector2 screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.Camera.Transform));
 
         int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
         int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
@@ -513,14 +432,11 @@ public class World
         return (chunkX, chunkY);
     }
 
-    /// <summary>
-    /// Draws the world by iterating through each chunk and calling its Draw method.
-    /// </summary>
     private void DrawWorld()
     {
         foreach (var chunk in Chunks)
         {
-            chunk.Draw(Globals.spriteBatch);
+            chunk.Draw(Globals.SpriteBatch);
         }
     }
 
