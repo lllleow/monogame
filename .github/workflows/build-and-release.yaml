@@ -1,0 +1,80 @@
+name: Build and Release Project
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup MSBuild path
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1
+
+      - name: Restore NuGet packages
+        run: nuget restore MonoGame.sln
+
+      - name: Build MonoGame project
+        run: msbuild MonoGame/MonoGame.csproj /p:Configuration=Release /p:Platform="Any CPU"
+
+      - name: Build MonoGame-Server project
+        run: msbuild MonoGame-Server/MonoGame-Server.csproj /p:Configuration=Release /p:Platform="Any CPU"
+
+      - name: Create Artifacts Directory
+        run: mkdir artifacts
+
+      - name: Copy MonoGame binaries
+        run: |
+          Copy-Item MonoGame/bin/Release/* artifacts/MonoGame/
+
+      - name: Copy MonoGame-Server binaries
+        run: |
+          Copy-Item MonoGame-Server/bin/Release/* artifacts/MonoGame-Server/
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: game-build
+          path: artifacts/
+
+  release:
+    needs: build
+    runs-on: windows-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: game-build
+          path: release
+
+      - name: Create MonoGame Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: monogame-${{ github.run_number }}
+          name: MonoGame Release ${{ github.run_number }}
+          body: 'Release of MonoGame'
+          files: release/MonoGame/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create MonoGame-Server Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: monogame-server-${{ github.run_number }}
+          name: MonoGame Server Release ${{ github.run_number }}
+          body: 'Release of MonoGame Server'
+          files: release/MonoGame-Server/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
