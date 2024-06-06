@@ -87,8 +87,7 @@ jobs:
           name: MonoGame Release ${{ github.run_number }}
           body: 'Release of MonoGame'
           files: release/MonoGame/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create MonoGame-Server Release
         uses: softprops/action-gh-release@v1
@@ -97,5 +96,4 @@ jobs:
           name: MonoGame Server Release ${{ github.run_number }}
           body: 'Release of MonoGame Server'
           files: release/MonoGame-Server/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
