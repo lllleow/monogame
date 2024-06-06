@@ -5,190 +5,134 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Components.Animator;
 using MonoGame.Source.Systems.Components.Collision;
+using MonoGame.Source.Systems.Components.Collision.Enum;
 using MonoGame.Source.Systems.Components.Interfaces;
+using MonoGame.Source.Systems.Components.PixelBounds;
 using MonoGame.Source.Systems.Entity.Interfaces;
+using MonoGame.Source.Systems.Entity.PlayerNamespace;
+using MonoGame.Source.Systems.Tiles;
+using MonoGame.Source.Systems.Tiles.Interfaces;
+using MonoGame.Source.Util.Enum;
 
 namespace MonoGame.Source.Systems.Entity;
 
-/// <summary>
-/// Represents a game entity in the game world.
-/// </summary>
 public abstract class GameEntity : IGameEntity
 {
-    /// <summary>
-    /// Gets or sets the list of components attached to the entity.
-    /// </summary>
-    public List<IEntityComponent> components { get; set; }
+    public List<IEntityComponent> Components { get; set; }
 
-    /// <summary>
-    /// Gets or sets the position of the entity.
-    /// </summary>
     public Vector2 Position { get; set; }
 
-    /// <summary>
-    /// Gets or sets the speed of the entity.
-    /// </summary>
     public Vector2 Speed { get; set; }
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="GameEntity"/> class.
-    /// </summary>
+    public string UUID { get; set; } = Guid.NewGuid().ToString();
+
     public GameEntity()
     {
-        components = new List<IEntityComponent>();
+        Components = [];
         Position = Vector2.Zero;
         Speed = Vector2.Zero;
     }
 
-    public GameEntity(EntityState state)
-    {
-        components = new List<IEntityComponent>();
-        Position = state.Position;
-        Speed = Vector2.Zero;
-    }
-
-    /// <summary>
-    /// Updates the entity's components.
-    /// </summary>
-    /// <param name="gameTime">The game time.</param>
     public virtual void Update(GameTime gameTime)
     {
-        foreach (var component in components)
+        foreach (var component in Components)
         {
             component.Update(gameTime);
         }
     }
 
-    /// <summary>
-    /// Draws the entity's components.
-    /// </summary>
-    /// <param name="spriteBatch">The sprite batch used for drawing.</param>
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-        foreach (var component in components)
+        foreach (var component in Components)
         {
             component.Draw(spriteBatch);
         }
     }
 
-    /// <summary>
-    /// Adds a component to the entity.
-    /// </summary>
-    /// <param name="component">The component to add.</param>
     public void AddComponent(IEntityComponent component)
     {
-        components.Add(component);
+        Components.Add(component);
         component.SetEntity(this);
         component.Initialize();
         component.Initialized = true;
     }
 
-    /// <summary>
-    /// Removes a component from the entity.
-    /// </summary>
-    /// <param name="component">The component to remove.</param>
     public void RemoveComponent(IEntityComponent component)
     {
-        components.Remove(component);
+        _ = Components.Remove(component);
     }
 
-    /// <summary>
-    /// Gets the first component of the specified type attached to the entity.
-    /// </summary>
-    /// <typeparam name="T">The type of the component.</typeparam>
-    /// <returns>The first component of the specified type, or null if not found.</returns>
     public T GetFirstComponent<T>()
     {
         return GetComponents<T>().FirstOrDefault();
     }
 
-    /// <summary>
-    /// Gets all components of the specified type attached to the entity.
-    /// </summary>
-    /// <typeparam name="T">The type of the components.</typeparam>
-    /// <returns>A list of components of the specified type.</returns>
     public List<T> GetComponents<T>()
     {
-        return components.OfType<T>().ToList();
+        return Components.OfType<T>().ToList();
     }
 
-    /// <summary>
-    /// Checks if the entity contains a component of the specified type.
-    /// </summary>
-    /// <typeparam name="T">The type of the component.</typeparam>
-    /// <returns>True if the entity contains a component of the specified type, otherwise false.</returns>
     public bool ContainsComponent<T>()
     {
-        return components.OfType<T>().Any();
+        return Components.OfType<T>().Any();
     }
 
-    /// <summary>
-    /// Gets the displacement vector for the specified direction and speed.
-    /// </summary>
-    /// <param name="direction">The direction of movement.</param>
-    /// <param name="speed">The speed of movement.</param>
-    /// <returns>The displacement vector.</returns>
     public Vector2 GetDisplacement(Direction direction, Vector2 speed)
     {
-        switch (direction)
+        return direction switch
         {
-            case Direction.Up:
-                return new Vector2(0, -speed.Y);
-            case Direction.Down:
-                return new Vector2(0, speed.Y);
-            case Direction.Left:
-                return new Vector2(-speed.X, 0);
-            case Direction.Right:
-                return new Vector2(speed.X, 0);
-            case Direction.LeftUp:
-                return new Vector2(-speed.X, -speed.Y);
-            case Direction.RightUp:
-                return new Vector2(speed.X, -speed.Y);
-            case Direction.LeftDown:
-                return new Vector2(-speed.X, speed.Y);
-            case Direction.RightDown:
-                return new Vector2(speed.X, speed.Y);
-            default:
-                return Vector2.Zero;
-        }
+            Direction.Up => new Vector2(0, -speed.Y),
+            Direction.Down => new Vector2(0, speed.Y),
+            Direction.Left => new Vector2(-speed.X, 0),
+            Direction.Right => new Vector2(speed.X, 0),
+            Direction.LeftUp => new Vector2(-speed.X, -speed.Y),
+            Direction.RightUp => new Vector2(speed.X, -speed.Y),
+            Direction.LeftDown => new Vector2(-speed.X, speed.Y),
+            Direction.RightDown => new Vector2(speed.X, speed.Y),
+            _ => Vector2.Zero,
+        };
     }
 
-    /// <summary>
-    /// Moves the entity in the specified direction with the specified speed.
-    /// </summary>
-    /// <param name="gameTime">The game time.</param>
-    /// <param name="direction">The direction of movement.</param>
-    /// <param name="speed">The speed of movement.</param>
-    /// <returns>True if the entity successfully moved, otherwise false.</returns>
-    public bool Move(GameTime gameTime, Direction direction, Vector2 speed)
+    public void Move(GameTime gameTime, Direction direction, Vector2 speed)
     {
-        Vector2 displacement = GetDisplacement(direction, speed);
-        Vector2 newPosition = Position + displacement;
-
-        if (CanMove(newPosition, direction))
+        if (this is Player)
         {
-            Position = newPosition;
-            return true;
-        }
+            Vector2 displacement = GetDisplacement(direction, speed);
+            Vector2 newPosition = Position + displacement;
 
-        return false;
+            if (ContainsComponent<AnimatorComponent>())
+            {
+                AnimatorComponent animator = GetFirstComponent<AnimatorComponent>();
+
+                switch (direction)
+                {
+                    case Direction.Up:
+                        animator.PlayAnimation("walking_back");
+                        break;
+                    case Direction.Down:
+                        animator.PlayAnimation("walking_front");
+                        break;
+                    case Direction.Left:
+                        animator.PlayAnimation("walking_left");
+                        break;
+                    case Direction.Right:
+                        animator.PlayAnimation("walking_right");
+                        break;
+                    default:
+                        animator.PlayAnimation("idle");
+                        break;
+                }
+            }
+
+            Position = newPosition;
+        }
     }
 
-    /// <summary>
-    /// Teleports the entity to the specified position.
-    /// </summary>
-    /// <param name="newPosition">The new position of the entity.</param>
     public void Teleport(Vector2 newPosition)
     {
         Position = newPosition;
     }
 
-    /// <summary>
-    /// Checks if the entity can move to the specified position in the specified direction.
-    /// </summary>
-    /// <param name="newPosition">The new position to check.</param>
-    /// <param name="direction">The direction of movement.</param>
-    /// <returns>True if the entity can move to the specified position, otherwise false.</returns>
     public bool CanMove(Vector2 newPosition, Direction direction)
     {
         if (ContainsComponent<CollisionComponent>())
@@ -201,7 +145,7 @@ public abstract class GameEntity : IGameEntity
             {
                 tiles = collisionComponent.GetTilesCollidingWithRectangle(entityRectangle);
             }
-            else if (collisionComponent.Mode == CollisionMode.PixelPerfect || collisionComponent.Mode == CollisionMode.CollisionMask)
+            else if (collisionComponent.Mode is CollisionMode.PixelPerfect or CollisionMode.CollisionMask)
             {
                 PixelBoundsComponent pixelBounds = GetFirstComponent<PixelBoundsComponent>();
                 tiles = collisionComponent.GetTilesCollidingWithMask(pixelBounds.Mask, entityRectangle);
@@ -221,7 +165,7 @@ public abstract class GameEntity : IGameEntity
     {
         if (ContainsComponent<AnimatorComponent>())
         {
-            AnimatorComponent animator = GetFirstComponent<AnimatorComponent>();
+            _ = GetFirstComponent<AnimatorComponent>();
             return new Rectangle((int)position.X, (int)position.Y, Tile.PixelSizeX, Tile.PixelSizeY);
         }
         else

@@ -2,14 +2,15 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Source;
+using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Rendering.Camera;
+using MonoGame.Source.Rendering.UI;
 using MonoGame.Source.Systems.Scripts;
+using MonoGame.Source.WorldNamespace;
 
 namespace MonoGame;
 
-/// <summary>
-/// Represents the main game class.
-/// </summary>
 public class Main : Game
 {
     private const int ScreenSizeX = 1080;
@@ -17,18 +18,18 @@ public class Main : Game
 
     public Main()
     {
-        Globals.graphicsDevice = new GraphicsDeviceManager(this);
+        Globals.GraphicsDevice = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
 
-        Globals.game = this;
-        Globals.graphicsDevice.PreferredBackBufferWidth = ScreenSizeX;
-        Globals.graphicsDevice.PreferredBackBufferHeight = ScreenSizeY;
-        Globals.graphicsDevice.PreferMultiSampling = false;
-        Globals.graphicsDevice.IsFullScreen = Globals.FullScreen;
-        Globals.graphicsDevice.ApplyChanges();
+        Globals.Game = this;
+        Globals.GraphicsDevice.PreferredBackBufferWidth = ScreenSizeX;
+        Globals.GraphicsDevice.PreferredBackBufferHeight = ScreenSizeY;
+        Globals.GraphicsDevice.PreferMultiSampling = false;
+        Globals.GraphicsDevice.IsFullScreen = Globals.FullScreen;
+        Globals.GraphicsDevice.ApplyChanges();
 
-        Globals.camera = new Camera(ScreenSizeX, ScreenSizeY);
+        Globals.Camera = new Camera(ScreenSizeX, ScreenSizeY);
     }
 
     protected override void Initialize()
@@ -38,40 +39,39 @@ public class Main : Game
 
     protected override void LoadContent()
     {
-        Globals.contentManager = this.Content;
-        Globals.spriteBatch = new SpriteBatch(GraphicsDevice);
-        Globals.userInterfaceHandler = new UserInterfaceHandler();
-        Globals.defaultFont = Content.Load<SpriteFont>("PixelifySans");
-
+        Globals.ContentManager = Content;
+        Globals.SpriteBatch = new SpriteBatch(GraphicsDevice);
+        Globals.UserInterfaceHandler = new UserInterfaceHandler();
+        Globals.DefaultFont = Content.Load<SpriteFont>("PixelifySans");
 
         TileRegistry.LoadTileScripts();
         AnimationBundleRegistry.LoadAnimationBundleScripts();
 
-        if (!SaveManager.LoadGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\"))
-        {
-            Globals.world = new World();
-            Globals.world.InitWorld();
-        }
+        Globals.World = new World();
 
-        Globals.userInterfaceHandler.Initialize();
-        Globals.world.UpdateAllTextureCoordinates();
+        Globals.UserInterfaceHandler.Initialize();
+        Globals.World.UpdateAllTextureCoordinates();
     }
 
-    protected override void OnExiting(Object sender, EventArgs args)
+    protected override void OnExiting(object sender, EventArgs args)
     {
-        SaveManager.SaveGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\");
         base.OnExiting(sender, args);
     }
 
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        {
             Exit();
+        }
 
-        Globals.world.Update(gameTime);
-        Globals.camera.Follow(Globals.world.Player, gameTime);
-        Globals.camera.Update(gameTime);
-        Globals.userInterfaceHandler.Update(gameTime);
+        Globals.GameTime = gameTime;
+        NetworkClient.Instance.Update();
+        Globals.World.Update(gameTime);
+        Globals.Camera.Follow(Globals.World.GetLocalPlayer(), gameTime);
+        Globals.Camera.Update(gameTime);
+        Globals.UserInterfaceHandler.Update(gameTime);
+
         base.Update(gameTime);
     }
 
@@ -80,12 +80,12 @@ public class Main : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         Globals.DefaultSpriteBatchBegin();
-        Globals.world.Draw(Globals.spriteBatch);
-        Globals.spriteBatch.End();
+        Globals.World.Draw(Globals.SpriteBatch);
+        Globals.SpriteBatch.End();
 
-        Globals.spriteBatch.Begin(transformMatrix: Globals.userInterfaceHandler.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
-        Globals.userInterfaceHandler.Draw(Globals.spriteBatch);
-        Globals.spriteBatch.End();
+        Globals.SpriteBatch.Begin(transformMatrix: Globals.UserInterfaceHandler.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+        Globals.UserInterfaceHandler.Draw(Globals.SpriteBatch);
+        Globals.SpriteBatch.End();
 
         base.Draw(gameTime);
     }

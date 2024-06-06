@@ -1,4 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Source.Systems.Tiles;
+using MonoGame.Source.Systems.Components.Collision.Enum;
+using MonoGame.Source.Systems.Tiles.TextureProcessors;
 
 public class StoneTile : Tile
 {
@@ -7,7 +10,7 @@ public class StoneTile : Tile
         Id = "base.stone";
         Name = "Stone";
         SpritesheetName = "textures/stone_spritesheet";
-        TextureProcessor = ComplexConnectionTileTextureProcessor.instance;
+        TextureProcessor = ComplexConnectionTileTextureProcessor.Instance;
         Walkable = false;
     }
 }

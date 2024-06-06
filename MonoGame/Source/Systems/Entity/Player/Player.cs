@@ -1,73 +1,56 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Source.Systems.Chunks;
-using MonoGame.Source.Systems.Chunks.Interfaces;
+using MonoGame.Source.Multiplayer;
+using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
+using MonoGame.Source.Rendering.Enum;
 using MonoGame.Source.Systems.Components.Animator;
 using MonoGame.Source.Systems.Components.Collision;
-using MonoGame.Source.Systems.Entity;
+using MonoGame.Source.Systems.Components.PixelBounds;
+using MonoGame.Source.Systems.Components.SpriteRenderer;
 using MonoGame.Source.Systems.Scripts;
-namespace MonoGame;
+using MonoGame.Source.Util.Enum;
+namespace MonoGame.Source.Systems.Entity.PlayerNamespace;
 
-/// <summary>
-/// Represents a player entity in the game.
-/// </summary>
 public class Player : GameEntity
 {
-    AnimatorComponent Animator;
-    SpriteRendererComponent SpriteRenderer;
-    MouseState currentMouseState;
-    MouseState previousMouseState;
-    public string selectedTile = "base.grass";
+    private readonly AnimatorComponent animator;
+    private readonly SpriteRendererComponent spriteRenderer;
+    private MouseState currentMouseState;
+    private MouseState previousMouseState;
+    public string SelectedTile { get; set; } = "base.grass";
 
-    public Player(PlayerState state)
-    {
-        selectedTile = state.SelectedTile;
-        Position = state.Position;
-        Speed = new Vector2(1, 1);
-
-        Animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
-        SpriteRenderer = new SpriteRendererComponent();
-        AddComponent(SpriteRenderer);
-        AddComponent(Animator);
-        AddComponent(new PixelBoundsComponent());
-        AddComponent(new CollisionComponent("textures/player_sprite_2_collision_mask"));
-    }
-
-    /// <summary>
-    /// Represents a player in the game.
-    /// </summary>
-    /// <param name="position">The initial position of the player.</param>
-    public Player(Vector2 position)
+    public Player(string uuid, Vector2 position)
     {
         Position = position;
         Speed = new Vector2(1, 1);
+        UUID = uuid;
 
-        Animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
-        SpriteRenderer = new SpriteRendererComponent();
+        animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
+        spriteRenderer = new SpriteRendererComponent();
 
-        // AddComponent(new BoundingBoxComponent(new Vector2(16, 16)));
-        AddComponent(SpriteRenderer);
-        AddComponent(Animator);
+        AddComponent(spriteRenderer);
+        AddComponent(animator);
         AddComponent(new PixelBoundsComponent());
         AddComponent(new CollisionComponent("textures/player_sprite_2_collision_mask"));
     }
 
-    /// <summary>
-    /// Handles the mouse click event at the specified coordinates, ensuring it occurs within the window bounds and when the window is active.
-    /// </summary>
-    /// <param name="x">The x-coordinate of the mouse click.</param>
-    /// <param name="y">The y-coordinate of the mouse click.</param>
+    public void SetSelectedTile(string selectedTileId)
+    {
+        SelectedTile = selectedTileId;
+    }
 
-    int lastLocalX;
-    int lastLocalY;
+    public bool IsLocalPlayer()
+    {
+        return this == Globals.World.GetLocalPlayer();
+    }
+
+    private Vector2 lastPosition = Vector2.Zero;
     private void HandleMouseClick(bool add, int x, int y)
     {
-        int windowWidth = Globals.graphicsDevice.PreferredBackBufferWidth;
-        int windowHeight = Globals.graphicsDevice.PreferredBackBufferHeight;
+        var windowWidth = Globals.GraphicsDevice.PreferredBackBufferWidth;
+        var windowHeight = Globals.GraphicsDevice.PreferredBackBufferHeight;
 
-        if (!Globals.game.IsActive)
+        if (!Globals.Game.IsActive)
         {
             return;
         }
@@ -77,93 +60,70 @@ public class Player : GameEntity
             return;
         }
 
-        Vector2 worldPosition = new Vector2(x, y);
-        worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.camera.Transform));
+        var screenPosition = new Vector2(x, y);
+        var globalPosition = Globals.World.GetGlobalPositionFromScreenPosition(screenPosition);
 
-        int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
-        int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
-
-        int chunkX = (int)(worldPosition.X / chunkSizeInPixelsX);
-        int chunkY = (int)(worldPosition.Y / chunkSizeInPixelsY);
-
-        int localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
-        int localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
-
-        if (lastLocalX != localX || lastLocalY != localY)
+        if (screenPosition != lastPosition)
         {
-            IChunk chunk = Globals.world.CreateOrGetChunk(chunkX, chunkY);
-
-            if (chunk.GetTile(TileDrawLayer.Tiles, localX, localY) != null && !add)
-            {
-                lastLocalX = localX;
-                lastLocalY = localY;
-                chunk.DeleteTile(TileDrawLayer.Tiles, localX, localY);
-            }
-            else
-            {
-                if (add)
-                {
-                    lastLocalX = localX;
-                    lastLocalY = localY;
-                    chunk.SetTileAndUpdateNeighbors(selectedTile, TileDrawLayer.Tiles, localX, localY);
-                }
-            }
+            lastPosition = screenPosition;
+            NetworkClient.Instance.SendMessage(new RequestToPlaceTileNetworkMessage(SelectedTile, TileDrawLayer.Tiles, globalPosition.PosX, globalPosition.PosY));
         }
     }
 
-    /// <summary>
-    /// Updates the player's state based on user input and game time.
-    /// </summary>
-    /// <param name="gameTime">The game time.</param>
+    private bool clicked = false;
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-        KeyboardState state = Keyboard.GetState();
-
-        currentMouseState = Mouse.GetState();
-
-        if (currentMouseState.LeftButton == ButtonState.Pressed || currentMouseState.RightButton == ButtonState.Pressed)
+        if (this == Globals.World.GetLocalPlayer())
         {
-            int mouseX = currentMouseState.X;
-            int mouseY = currentMouseState.Y;
+            var state = Keyboard.GetState();
 
-            HandleMouseClick(currentMouseState.LeftButton == ButtonState.Pressed, mouseX, mouseY);
-        }
+            currentMouseState = Mouse.GetState();
 
-        previousMouseState = currentMouseState;
-
-        if (state.IsKeyDown(Keys.W))
-        {
-            if (Move(gameTime, Direction.Up, Speed))
+            if (currentMouseState.LeftButton == ButtonState.Pressed || currentMouseState.RightButton == ButtonState.Pressed)
             {
-                Animator?.PlayAnimation("walking_back");
+                if (!clicked)
+                {
+                    clicked = true;
+                }
             }
-        }
-        if (state.IsKeyDown(Keys.A))
-        {
-            if (Move(gameTime, Direction.Left, Speed))
-            {
-                Animator?.PlayAnimation("walking_left");
-            }
-        }
-        if (state.IsKeyDown(Keys.S))
-        {
-            if (Move(gameTime, Direction.Down, Speed))
-            {
-                Animator?.PlayAnimation("walking_front");
-            }
-        }
-        if (state.IsKeyDown(Keys.D))
-        {
-            if (Move(gameTime, Direction.Right, Speed))
-            {
-                Animator?.PlayAnimation("walking_right");
-            }
-        }
 
-        if (state.IsKeyUp(Keys.W) && state.IsKeyUp(Keys.A) && state.IsKeyUp(Keys.S) && state.IsKeyUp(Keys.D))
-        {
-            Animator?.PlayAnimation("idle");
+            if (currentMouseState.LeftButton == ButtonState.Released)
+            {
+                if (clicked)
+                {
+                    var mouseX = currentMouseState.X;
+                    var mouseY = currentMouseState.Y;
+                    HandleMouseClick(currentMouseState.LeftButton == ButtonState.Pressed, mouseX, mouseY);
+                    clicked = false;
+                }
+            }
+
+            previousMouseState = currentMouseState;
+            if (state.IsKeyDown(Keys.W))
+            {
+                NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Up));
+            }
+
+            if (state.IsKeyDown(Keys.A))
+            {
+                NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Left));
+            }
+
+            if (state.IsKeyDown(Keys.S))
+            {
+                NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Down));
+            }
+
+            if (state.IsKeyDown(Keys.D))
+            {
+                NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Right));
+            }
+
+            if (state.IsKeyUp(Keys.W) && state.IsKeyUp(Keys.A) && state.IsKeyUp(Keys.S) && state.IsKeyUp(Keys.D))
+            {
+                animator?.PlayAnimation("idle");
+            }
         }
 
         base.Update(gameTime);

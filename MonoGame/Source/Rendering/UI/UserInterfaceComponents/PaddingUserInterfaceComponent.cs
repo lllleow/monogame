@@ -1,15 +1,14 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using MonoGame.Source.Rendering.UI.Interfaces;
 
-namespace MonoGame;
+namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class PaddingUserInterfaceComponent : SingleChildUserInterfaceComponent
 {
-    int PaddingLeft { get; set; }
-    int PaddingRight { get; set; }
-    int PaddingUp { get; set; }
-    int PaddingDown { get; set; }
+    private int PaddingLeft { get; set; }
+    private int PaddingRight { get; set; }
+    private int PaddingUp { get; set; }
+    private int PaddingDown { get; set; }
 
     public PaddingUserInterfaceComponent(int paddingLeft, int paddingRight, int paddingTop, int paddingBottom, IUserInterfaceComponent child) : base("padding", new Vector2(0, 0), child)
     {

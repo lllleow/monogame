@@ -1,0 +1,44 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Server",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build Server", 
+            "program": "${workspaceFolder}/MonoGame-Server/bin/Debug/net8.0/MonoGame-Server.exe",
+            "args": [],
+            "cwd": "${workspaceFolder}/MonoGame-Server",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
+            "name": "Debug Client",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build Client", 
+            "program": "${workspaceFolder}/MonoGame/bin/Debug/net8.0/MonoGame.exe",
+            "args": [],
+            "cwd": "${workspaceFolder}/MonoGame",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+    ],
+    "compounds": [
+        {
+            "name": "Debug Server and Client",
+            "configurations": [
+                "Debug Server",
+                "Debug Client"
+            ]
+        },
+        {
+            "name": "Debug Server and Client (x2)",
+            "configurations": [
+                "Debug Server",
+                "Debug Client",
+                "Debug Client"
+            ]
+        }
+    ]
+}

@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Source.Systems.Tiles;
+using MonoGame.Source.Systems.Tiles.TextureProcessors;
 
 public class GrassTile : Tile
 {
@@ -7,7 +9,7 @@ public class GrassTile : Tile
         Id = "base.grass";
         Name = "Grass";
         SpritesheetName = "textures/grass_spritesheet";
-        TextureProcessor = ComplexConnectionTileTextureProcessor.instance;
+        TextureProcessor = ComplexConnectionTileTextureProcessor.Instance;
         Walkable = false;
     }
 }

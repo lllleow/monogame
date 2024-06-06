@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "MonoGame SP": {
+      "commandName": "Project"
+    },
+    "MonoGame Client": {
+      "commandName": "Project",
+      "commandLineArgs": "-- client"
+    },
+    "MonoGame Server": {
+      "commandName": "Project",
+      "commandLineArgs": "-- server"
+    }
+  }
+}

@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Source.Rendering.UI.Interfaces;
+using MonoGame.Source.Rendering.UI.UserInterfaces;
 
-namespace MonoGame;
+namespace MonoGame.Source.Rendering.UI;
 
 public class UserInterfaceHandler
 {
-    public List<IUserInterface> UserInterfaces { get; set; } = new List<IUserInterface>();
+    public List<IUserInterface> UserInterfaces { get; set; } = [];
     public float ScaleFactor { get; set; } = 3f;
     public Matrix Transform { get; set; } = Matrix.CreateScale(3f, 3f, 1f);
     public Vector2 UIScreenSize { get; set; } = new Vector2(1280, 720);
@@ -16,13 +17,13 @@ public class UserInterfaceHandler
     {
         UserInterfaces.Add(new LevelEditorUserInterface());
 
-        Vector2 transformed = Vector2.Transform(new Vector2(Globals.graphicsDevice.GraphicsDevice.Viewport.Width, Globals.graphicsDevice.GraphicsDevice.Viewport.Height), Matrix.Invert(Transform));
+        var transformed = Vector2.Transform(new Vector2(Globals.GraphicsDevice.GraphicsDevice.Viewport.Width, Globals.GraphicsDevice.GraphicsDevice.Viewport.Height), Matrix.Invert(Transform));
         UIScreenSize = new Vector2(transformed.X, transformed.Y);
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        foreach (IUserInterface userInterface in UserInterfaces)
+        foreach (var userInterface in UserInterfaces)
         {
             if (userInterface.Visible)
             {
@@ -33,7 +34,7 @@ public class UserInterfaceHandler
 
     public void Update(GameTime gameTime)
     {
-        foreach (IUserInterface userInterface in UserInterfaces)
+        foreach (var userInterface in UserInterfaces)
         {
             userInterface.Update(gameTime);
         }
@@ -51,7 +52,7 @@ public class UserInterfaceHandler
 
     public void RemoveUserInterface(IUserInterface userInterface)
     {
-        UserInterfaces.Remove(userInterface);
+        _ = UserInterfaces.Remove(userInterface);
     }
 
     public Matrix GetUITransform()

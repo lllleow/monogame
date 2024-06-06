@@ -1,5 +1,5 @@
 ﻿using System;
-
+using MonoGame.Source.Systems.Animation;
 public class PlayerMovementAnimationBundle : AnimationBundle
 {
     public PlayerMovementAnimationBundle()

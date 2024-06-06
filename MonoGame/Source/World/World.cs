@@ -3,56 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Source.Rendering.Enum;
 using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Components.Collision;
-using MonoGame.Source.Systems.Entity;
+using MonoGame.Source.Systems.Components.Collision.Enum;
 using MonoGame.Source.Systems.Entity.Interfaces;
+using MonoGame.Source.Systems.Entity.PlayerNamespace;
+using MonoGame.Source.Systems.Tiles;
+using MonoGame.Source.Systems.Tiles.Interfaces;
+using MonoGame.Source.WorldNamespace.WorldStates;
 
-namespace MonoGame;
+namespace MonoGame.Source.WorldNamespace;
 
-/// <summary>
-/// Represents the game world, which contains entities, chunks, and tiles.
-/// </summary>
 public class World
 {
-    /// <summary>
-    /// Represents a game world that contains entities and chunks.
-    /// </summary>
-    private List<IGameEntity> Entities { get; set; } = new List<IGameEntity>();
-    private List<IChunk> Chunks { get; set; } = new List<IChunk>();
-    public Player Player;
-
-    public World(PlayerState playerState, List<EntityState> entityStates, List<ChunkState> chunkStates)
-    {
-        Player = new Player(playerState);
-        Entities.Add(Player);
-        Chunks = chunkStates.Select(c => new Chunk(c) as IChunk).ToList();
-    }
+    private List<IGameEntity> Entities { get; set; } = [];
+    public List<Player> Players { get; set; } = [];
+    private List<IChunk> Chunks { get; set; } = [];
 
     public World()
     {
-
     }
 
-    /// <summary>
-    /// Initializes the game world by creating a player entity, initializing chunks, and teleporting the player.
-    /// </summary>
-    public void InitWorld()
+    public void LoadChunkFromChunkState(ChunkState chunkState)
     {
-        Player = new Player(new Vector2(500, 500));
-        Entities.Add(Player);
-
-        InitializeChunks();
+        IChunk chunk = new Chunk(chunkState);
+        Chunks.Add(chunk);
+        chunk.UpdateNeighborChunks();
     }
 
-    /// <summary>
-    /// Updates the game world by updating all entities.
-    /// </summary>
-    /// <param name="gameTime">The game time.</param>
     public void Update(GameTime gameTime)
     {
-        foreach (var entity in Entities)
+        foreach (var entity in GetEntities())
         {
             entity.Update(gameTime);
         }
@@ -60,36 +43,28 @@ public class World
 
     public void UpdateAllTextureCoordinates()
     {
-        foreach (IChunk chunk in Chunks)
+        foreach (var chunk in Chunks)
         {
             chunk.UpdateTextureCoordinates();
         }
     }
 
-    /// <summary>
-    /// Gets the chunk at the specified coordinates.
-    /// </summary>
-    /// <param name="x">The x-coordinate of the chunk.</param>
-    /// <param name="y">The y-coordinate of the chunk.</param>
-    /// <returns>The chunk at the specified coordinates, or null if no chunk is found.</returns>
+    public List<IGameEntity> GetEntities()
+    {
+        return Players.Cast<IGameEntity>().Concat(Entities).ToList();
+    }
+
     public IChunk GetChunkAt(int x, int y)
     {
         return Chunks.Find(c => c.X == x && c.Y == y);
     }
 
-    /// <summary>
-    /// Creates a new chunk at the specified coordinates if it doesn't exist, or returns the existing chunk.
-    /// </summary>
-    /// <param name="x">The x-coordinate of the chunk.</param>
-    /// <param name="y">The y-coordinate of the chunk.</param>
-    /// <returns>The created or existing chunk.</returns>
     public IChunk CreateOrGetChunk(int x, int y)
     {
-        IChunk existingChunk = GetChunkAt(x, y);
+        var existingChunk = GetChunkAt(x, y);
         if (existingChunk == null)
         {
             var chunk = new Chunk(this, x, y);
-            chunk.Generate();
             Chunks.Add(chunk);
             return chunk;
         }
@@ -99,105 +74,66 @@ public class World
         }
     }
 
-    /// <summary>
-    /// Draws the game world by drawing all chunks and entities.
-    /// </summary>
-    /// <param name="spriteBatch">The sprite batch used for drawing.</param>
     public void Draw(SpriteBatch spriteBatch)
     {
         DrawWorld();
-        foreach (var entity in Entities)
+        foreach (var entity in GetEntities())
         {
             entity.Draw(spriteBatch);
         }
     }
 
-    /// <summary>
-    /// Gets the tile at the specified world position.
-    /// </summary>
-    /// <param name="worldPosition">The world position.</param>
-    /// <returns>The tile at the specified world position, or null if no tile is found.</returns>
+    public Player GetPlayerByUUID(string id)
+    {
+        return Players.Find(p => p.UUID == id);
+    }
+
+    public Player GetLocalPlayer()
+    {
+        return Players.Where(p => p.UUID == Globals.UUID).FirstOrDefault();
+    }
+
     public ITile GetTileAtPosition(Vector2 worldPosition)
     {
-        int globalX = (int)(worldPosition.X / Chunk.SizeX);
-        int globalY = (int)(worldPosition.Y / Chunk.SizeY);
+        var globalX = (int)(worldPosition.X / Chunk.SizeX);
+        var globalY = (int)(worldPosition.Y / Chunk.SizeY);
         return GetTileAt(0, globalX, globalY);
     }
 
-    /// <summary>
-    /// Sets the tile at the specified global position.
-    /// </summary>
-    /// <param name="tile">The tile to set.</param>
-    /// <param name="layer">The layer of the tile.</param>
-    /// <param name="globalX">The global x-coordinate of the tile.</param>
-    /// <param name="globalY">The global y-coordinate of the tile.</param>
-    /// <returns>The set tile.</returns>
     public ITile SetTileAtPosition(string tile, TileDrawLayer layer, int globalX, int globalY)
     {
-        int chunkX = globalX / Chunk.SizeX;
-        int chunkY = globalY / Chunk.SizeY;
-        int tileX = globalX % Chunk.SizeX;
-        int tileY = globalY % Chunk.SizeY;
-        var chunk = Chunks.Find(c => c.X == chunkX && c.Y == chunkY);
+        var localPosition = GetLocalPositionFromGlobal(globalX, globalY);
+        var chunkPosition = GetChunkPositionFromGlobal(globalX, globalY);
 
-        if (chunk == null)
-        {
-            var newChunk = new Chunk(this, tileX, tileY);
-            newChunk.Generate();
-            Chunks.Add(newChunk);
-            chunk = newChunk;
-        }
-
-        return chunk.SetTile(tile, layer, tileX, tileY);
+        var chunk = Globals.World.CreateOrGetChunk(chunkPosition.ChunkPositionX, chunkPosition.ChunkPositionY);
+        return chunk.SetTileAndUpdateNeighbors(tile, layer, localPosition.LocalX, localPosition.LocalY);
     }
 
-    /// <summary>
-    /// Gets the tile at the specified global position and layer.
-    /// </summary>
-    /// <param name="layer">The layer of the tile.</param>
-    /// <param name="globalX">The global x-coordinate of the tile.</param>
-    /// <param name="globalY">The global y-coordinate of the tile.</param>
-    /// <returns>The tile at the specified global position and layer, or null if no tile is found.</returns>
     public ITile GetTileAt(TileDrawLayer layer, int globalX, int globalY)
     {
-        int chunkX = globalX / Chunk.SizeX;
-        int chunkY = globalY / Chunk.SizeY;
-        int tileX = globalX % Chunk.SizeX;
-        int tileY = globalY % Chunk.SizeY;
-        var chunk = Chunks.Find(c => c.X == chunkX && c.Y == chunkY);
+        var localPosition = GetLocalPositionFromGlobal(globalX, globalY);
+        var chunk = GetChunkFromGlobalPosition(globalX, globalY);
 
-        if (chunk != null)
-        {
-            return chunk.GetTile(layer: layer, x: tileX, y: tileY);
-        }
-        else
-        {
-            return null;
-        }
+        return chunk?.GetTile(layer: layer, x: localPosition.LocalX, y: localPosition.LocalY);
     }
 
-    /// <summary>
-    /// Gets all tiles from all layers at the specified global position.
-    /// </summary>
-    /// <param name="globalX">The global x-coordinate.</param>
-    /// <param name="globalY">The global y-coordinate.</param>
-    /// <returns>A list of tiles from all layers at the specified global position, or null if no chunk is found.</returns>
     public List<ITile> GetAllTilesFromLayerAt(int globalX, int globalY)
     {
-        int chunkX = globalX / Chunk.SizeX;
-        int chunkY = globalY / Chunk.SizeY;
-        int tileX = globalX % Chunk.SizeX;
-        int tileY = globalY % Chunk.SizeY;
+        var chunkX = globalX / Chunk.SizeX;
+        var chunkY = globalY / Chunk.SizeY;
+        var tileX = globalX % Chunk.SizeX;
+        var tileY = globalY % Chunk.SizeY;
         var chunk = Chunks.Find(c => c.X == chunkX && c.Y == chunkY);
 
         if (chunk != null)
         {
-            List<ITile> tiles = new List<ITile>();
-            foreach (TileDrawLayer layer in chunk.Tiles.Keys)
+            List<ITile> tiles = [];
+            foreach (var layer in chunk.Tiles.Keys)
             {
-                ITile tile = chunk.GetTile(layer, tileX, tileY);
+                var tile = chunk.GetTile(layer, tileX, tileY);
                 tiles.Add(tile);
             }
+
             return tiles;
         }
         else
@@ -206,96 +142,100 @@ public class World
         }
     }
 
-    /// <summary>
-    /// Gets the tile at the specified screen position and layer.
-    /// </summary>
-    /// <param name="layer">The layer of the tile.</param>
-    /// <param name="screenX">The screen x-coordinate.</param>
-    /// <param name="screenY">The screen y-coordinate.</param>
-    /// <returns>The tile at the specified screen position and layer, or null if no tile is found.</returns>
+    public (int LocalX, int LocalY) GetLocalPositionFromGlobal(int globalPositionX, int globalPositionY)
+    {
+        var localX = globalPositionX % Chunk.SizeX;
+        var localY = globalPositionY % Chunk.SizeY;
+
+        return (localX, localY);
+    }
+
+    public (int ChunkPositionX, int ChunkPositionY) GetChunkPositionFromGlobal(int globalPositionX, int globalPositionY)
+    {
+        var chunkX = globalPositionX / Chunk.SizeX;
+        var chunkY = globalPositionY / Chunk.SizeY;
+
+        return (chunkX, chunkY);
+    }
+
+    public IChunk GetChunkFromGlobalPosition(int globalPositionX, int globalPositionY)
+    {
+        var chunkPosition = GetChunkPositionFromGlobal(globalPositionX, globalPositionY);
+        return GetChunkAt(chunkPosition.ChunkPositionX, chunkPosition.ChunkPositionY);
+    }
+
     public ITile GetTileAtScreenPosition(TileDrawLayer layer, int screenX, int screenY)
     {
-        Vector2 worldPosition = new Vector2(screenX, screenY);
-        worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.camera.Transform));
+        var worldPosition = new Vector2(screenX, screenY);
+        worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.Camera.Transform));
 
-        int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
-        int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+        var chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
+        var chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
 
-        int chunkX = (int)(worldPosition.X / chunkSizeInPixelsX);
-        int chunkY = (int)(worldPosition.Y / chunkSizeInPixelsY);
+        var chunkX = (int)(worldPosition.X / chunkSizeInPixelsX);
+        var chunkY = (int)(worldPosition.Y / chunkSizeInPixelsY);
 
-        int localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
-        int localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
+        var localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
+        var localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
 
-        IChunk chunk = Globals.world.GetChunkAt(chunkX, chunkY);
+        var chunk = Globals.World.GetChunkAt(chunkX, chunkY);
         return chunk?.GetTile(layer, localX, localY) ?? null;
     }
 
-    /// <summary>
-    /// Gets the tiles that intersect with the specified mask and rectangle.
-    /// </summary>
-    /// <param name="mask">The mask to check for intersection.</param>
-    /// <param name="rectangle">The rectangle to check for intersection.</param>
-    /// <returns>A list of tiles that intersect with the specified mask and rectangle.</returns>
     public List<ITile> GetTilesIntersectingWithMask(bool[,] mask, Rectangle rectangle)
     {
-        List<ITile> intersectingTiles = new List<ITile>();
+        List<ITile> intersectingTiles = [];
 
-        int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
-        int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+        var chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
+        var chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
 
-        int startChunkX = rectangle.Left / chunkSizeInPixelsX;
-        int startChunkY = rectangle.Top / chunkSizeInPixelsY;
-        int endChunkX = (rectangle.Right - 1) / chunkSizeInPixelsX;
-        int endChunkY = (rectangle.Bottom - 1) / chunkSizeInPixelsY;
+        var startChunkX = rectangle.Left / chunkSizeInPixelsX;
+        var startChunkY = rectangle.Top / chunkSizeInPixelsY;
+        var endChunkX = (rectangle.Right - 1) / chunkSizeInPixelsX;
+        var endChunkY = (rectangle.Bottom - 1) / chunkSizeInPixelsY;
 
-        for (int chunkX = startChunkX; chunkX <= endChunkX; chunkX++)
+        for (var chunkX = startChunkX; chunkX <= endChunkX; chunkX++)
         {
-            for (int chunkY = startChunkY; chunkY <= endChunkY; chunkY++)
+            for (var chunkY = startChunkY; chunkY <= endChunkY; chunkY++)
             {
-                IChunk chunk = GetChunkAt(chunkX, chunkY);
+                var chunk = GetChunkAt(chunkX, chunkY);
                 if (chunk != null)
                 {
-                    int startTileX = Math.Max(0, (rectangle.Left - chunkX * chunkSizeInPixelsX) / Tile.PixelSizeX);
-                    int startTileY = Math.Max(0, (rectangle.Top - chunkY * chunkSizeInPixelsY) / Tile.PixelSizeY);
-                    int endTileX = Math.Min(Chunk.SizeX - 1, (rectangle.Right - 1 - chunkX * chunkSizeInPixelsX) / Tile.PixelSizeX);
-                    int endTileY = Math.Min(Chunk.SizeY - 1, (rectangle.Bottom - 1 - chunkY * chunkSizeInPixelsY) / Tile.PixelSizeY);
+                    var startTileX = Math.Max(0, (rectangle.Left - (chunkX * chunkSizeInPixelsX)) / Tile.PixelSizeX);
+                    var startTileY = Math.Max(0, (rectangle.Top - (chunkY * chunkSizeInPixelsY)) / Tile.PixelSizeY);
+                    var endTileX = Math.Min(Chunk.SizeX - 1, (rectangle.Right - 1 - (chunkX * chunkSizeInPixelsX)) / Tile.PixelSizeX);
+                    var endTileY = Math.Min(Chunk.SizeY - 1, (rectangle.Bottom - 1 - (chunkY * chunkSizeInPixelsY)) / Tile.PixelSizeY);
 
-                    for (int tileX = startTileX; tileX <= endTileX; tileX++)
+                    for (var tileX = startTileX; tileX <= endTileX; tileX++)
                     {
-                        for (int tileY = startTileY; tileY <= endTileY; tileY++)
+                        for (var tileY = startTileY; tileY <= endTileY; tileY++)
                         {
-                            ITile tile = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
+                            var tile = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
                             if (tile != null)
                             {
-                                if (tile.CollisionMode == CollisionMode.CollisionMask || tile.CollisionMode == CollisionMode.PixelPerfect)
+                                if (tile.CollisionMode is CollisionMode.CollisionMask or CollisionMode.PixelPerfect)
                                 {
-                                    Rectangle tileRect = new Rectangle(chunkX * chunkSizeInPixelsX + tileX * Tile.PixelSizeX,
-                                                                       chunkY * chunkSizeInPixelsY + tileY * Tile.PixelSizeY,
-                                                                       Tile.PixelSizeX, Tile.PixelSizeY);
+                                    var tileRect = new Rectangle(
+                                        (chunkX * chunkSizeInPixelsX) + (tileX * Tile.PixelSizeX),
+                                        (chunkY * chunkSizeInPixelsY) + (tileY * Tile.PixelSizeY),
+                                        Tile.PixelSizeX,
+                                        Tile.PixelSizeY);
 
-                                    bool[,] tileMask;
-                                    if (tile.CollisionMode == CollisionMode.CollisionMask && tile.CollisionMaskSpritesheetName != null)
+                                    var tileMask = tile.CollisionMode == CollisionMode.CollisionMask && tile.CollisionMaskSpritesheetName != null
+                                        ? CollisionMaskHandler.GetMaskForTexture(tile.CollisionMaskSpritesheetName, tile.GetSpriteRectangle())
+                                        : CollisionMaskHandler.GetMaskForTexture(tile.SpritesheetName, tile.GetSpriteRectangle());
+                                    var intersects = false;
+                                    for (var mx = 0; mx < mask.GetLength(0); mx++)
                                     {
-                                        tileMask = CollisionMaskHandler.GetMaskForTexture(tile.CollisionMaskSpritesheetName, tile.GetSpriteRectangle());
-                                    }
-                                    else
-                                    {
-                                        tileMask = CollisionMaskHandler.GetMaskForTexture(tile.SpritesheetName, tile.GetSpriteRectangle());
-                                    }
-
-                                    bool intersects = false;
-                                    for (int mx = 0; mx < mask.GetLength(0); mx++)
-                                    {
-                                        for (int my = 0; my < mask.GetLength(1); my++)
+                                        for (var my = 0; my < mask.GetLength(1); my++)
                                         {
                                             if (mask[mx, my])
                                             {
-                                                int globalMaskX = rectangle.Left + mx;
-                                                int globalMaskY = rectangle.Top + my;
+                                                var globalMaskX = rectangle.Left + mx;
+                                                var globalMaskY = rectangle.Top + my;
 
-                                                int localTileX = globalMaskX - tileRect.Left;
-                                                int localTileY = globalMaskY - tileRect.Top;
+                                                var localTileX = globalMaskX - tileRect.Left;
+                                                var localTileY = globalMaskY - tileRect.Top;
 
                                                 if (localTileX >= 0 && localTileX < Tile.PixelSizeX && localTileY >= 0 && localTileY < Tile.PixelSizeY)
                                                 {
@@ -307,7 +247,11 @@ public class World
                                                 }
                                             }
                                         }
-                                        if (intersects) break;
+
+                                        if (intersects)
+                                        {
+                                            break;
+                                        }
                                     }
 
                                     if (intersects && !intersectingTiles.Contains(tile))
@@ -317,18 +261,20 @@ public class World
                                 }
                                 else
                                 {
-                                    Rectangle tileRect = new Rectangle(chunkX * chunkSizeInPixelsX + tileX * Tile.PixelSizeX,
-                                                                   chunkY * chunkSizeInPixelsY + tileY * Tile.PixelSizeY,
-                                                                   Tile.PixelSizeX, Tile.PixelSizeY);
+                                    var tileRect = new Rectangle(
+                                        (chunkX * chunkSizeInPixelsX) + (tileX * Tile.PixelSizeX),
+                                        (chunkY * chunkSizeInPixelsY) + (tileY * Tile.PixelSizeY),
+                                        Tile.PixelSizeX,
+                                        Tile.PixelSizeY);
 
-                                    bool intersects = false;
-                                    for (int mx = 0; mx < mask.GetLength(0); mx++)
+                                    var intersects = false;
+                                    for (var mx = 0; mx < mask.GetLength(0); mx++)
                                     {
-                                        for (int my = 0; my < mask.GetLength(1); my++)
+                                        for (var my = 0; my < mask.GetLength(1); my++)
                                         {
                                             if (mask[mx, my])
                                             {
-                                                Rectangle maskRect = new Rectangle(rectangle.Left + mx, rectangle.Top + my, 1, 1);
+                                                var maskRect = new Rectangle(rectangle.Left + mx, rectangle.Top + my, 1, 1);
                                                 if (tileRect.Intersects(maskRect))
                                                 {
                                                     intersects = true;
@@ -336,7 +282,11 @@ public class World
                                                 }
                                             }
                                         }
-                                        if (intersects) break;
+
+                                        if (intersects)
+                                        {
+                                            break;
+                                        }
                                     }
 
                                     if (intersects && !intersectingTiles.Contains(tile))
@@ -354,7 +304,6 @@ public class World
         return intersectingTiles;
     }
 
-
     public bool Intersects(Rectangle rectA, Rectangle rectB)
     {
         return rectA.X < rectB.X + rectB.Width &&
@@ -363,40 +312,35 @@ public class World
                rectA.Y + rectA.Height > rectB.Y;
     }
 
-    /// <summary>
-    /// Retrieves a list of tiles that intersect with the specified rectangle.
-    /// </summary>
-    /// <param name="rectangle">The rectangle to check for intersection.</param>
-    /// <returns>A list of tiles that intersect with the specified rectangle.</returns>
     public List<ITile> GetTilesIntersectingWithRectangle(Rectangle rectangle)
     {
-        List<ITile> intersectingTiles = new List<ITile>();
+        List<ITile> intersectingTiles = [];
 
-        int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
-        int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+        var chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
+        var chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
 
-        int startChunkX = rectangle.Left / chunkSizeInPixelsX;
-        int startChunkY = rectangle.Top / chunkSizeInPixelsY;
-        int endChunkX = rectangle.Right / chunkSizeInPixelsX;
-        int endChunkY = rectangle.Bottom / chunkSizeInPixelsY;
+        var startChunkX = rectangle.Left / chunkSizeInPixelsX;
+        var startChunkY = rectangle.Top / chunkSizeInPixelsY;
+        var endChunkX = rectangle.Right / chunkSizeInPixelsX;
+        var endChunkY = rectangle.Bottom / chunkSizeInPixelsY;
 
-        for (int chunkX = startChunkX; chunkX <= endChunkX; chunkX++)
+        for (var chunkX = startChunkX; chunkX <= endChunkX; chunkX++)
         {
-            for (int chunkY = startChunkY; chunkY <= endChunkY; chunkY++)
+            for (var chunkY = startChunkY; chunkY <= endChunkY; chunkY++)
             {
-                IChunk chunk = GetChunkAt(chunkX, chunkY);
+                var chunk = GetChunkAt(chunkX, chunkY);
                 if (chunk != null)
                 {
-                    int startTileX = Math.Max(0, (rectangle.Left - chunkX * chunkSizeInPixelsX) / Tile.PixelSizeX);
-                    int startTileY = Math.Max(0, (rectangle.Top - chunkY * chunkSizeInPixelsY) / Tile.PixelSizeY);
-                    int endTileX = Math.Min(Chunk.SizeX - 1, (rectangle.Right - chunkX * chunkSizeInPixelsX) / Tile.PixelSizeX);
-                    int endTileY = Math.Min(Chunk.SizeY - 1, (rectangle.Bottom - chunkY * chunkSizeInPixelsY) / Tile.PixelSizeY);
+                    var startTileX = Math.Max(0, (rectangle.Left - (chunkX * chunkSizeInPixelsX)) / Tile.PixelSizeX);
+                    var startTileY = Math.Max(0, (rectangle.Top - (chunkY * chunkSizeInPixelsY)) / Tile.PixelSizeY);
+                    var endTileX = Math.Min(Chunk.SizeX - 1, (rectangle.Right - (chunkX * chunkSizeInPixelsX)) / Tile.PixelSizeX);
+                    var endTileY = Math.Min(Chunk.SizeY - 1, (rectangle.Bottom - (chunkY * chunkSizeInPixelsY)) / Tile.PixelSizeY);
 
-                    for (int tileX = startTileX; tileX <= endTileX; tileX++)
+                    for (var tileX = startTileX; tileX <= endTileX; tileX++)
                     {
-                        for (int tileY = startTileY; tileY <= endTileY; tileY++)
+                        for (var tileY = startTileY; tileY <= endTileY; tileY++)
                         {
-                            ITile tile = chunk.GetTile(TileDrawLayer.Terrain, tileX, tileY);
+                            var tile = chunk.GetTile(TileDrawLayer.Terrain, tileX, tileY);
                             if (tile != null)
                             {
                                 intersectingTiles.Add(tile);
@@ -412,38 +356,38 @@ public class World
 
     public List<ITile> GetTilesIntersectingWithCircle(Vector2 position, float radius)
     {
-        List<ITile> intersectingTiles = new List<ITile>();
+        List<ITile> intersectingTiles = [];
 
-        int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
-        int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+        var chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
+        var chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
 
-        int startChunkX = (int)((position.X - radius) / chunkSizeInPixelsX);
-        int startChunkY = (int)((position.Y - radius) / chunkSizeInPixelsY);
-        int endChunkX = (int)((position.X + radius) / chunkSizeInPixelsX);
-        int endChunkY = (int)((position.Y + radius) / chunkSizeInPixelsY);
+        var startChunkX = (int)((position.X - radius) / chunkSizeInPixelsX);
+        var startChunkY = (int)((position.Y - radius) / chunkSizeInPixelsY);
+        var endChunkX = (int)((position.X + radius) / chunkSizeInPixelsX);
+        var endChunkY = (int)((position.Y + radius) / chunkSizeInPixelsY);
 
-        for (int chunkX = startChunkX; chunkX <= endChunkX; chunkX++)
+        for (var chunkX = startChunkX; chunkX <= endChunkX; chunkX++)
         {
-            for (int chunkY = startChunkY; chunkY <= endChunkY; chunkY++)
+            for (var chunkY = startChunkY; chunkY <= endChunkY; chunkY++)
             {
-                IChunk chunk = GetChunkAt(chunkX, chunkY);
+                var chunk = GetChunkAt(chunkX, chunkY);
                 if (chunk != null)
                 {
-                    int chunkStartX = chunkX * Chunk.SizeX;
-                    int chunkStartY = chunkY * Chunk.SizeY;
-                    int chunkEndX = chunkStartX + Chunk.SizeX;
-                    int chunkEndY = chunkStartY + Chunk.SizeY;
+                    var chunkStartX = chunkX * Chunk.SizeX;
+                    var chunkStartY = chunkY * Chunk.SizeY;
+                    var chunkEndX = chunkStartX + Chunk.SizeX;
+                    var chunkEndY = chunkStartY + Chunk.SizeY;
 
-                    for (int tileX = chunkStartX; tileX < chunkEndX; tileX++)
+                    for (var tileX = chunkStartX; tileX < chunkEndX; tileX++)
                     {
-                        for (int tileY = chunkStartY; tileY < chunkEndY; tileY++)
+                        for (var tileY = chunkStartY; tileY < chunkEndY; tileY++)
                         {
-                            Vector2 tilePosition = new Vector2(tileX * Tile.PixelSizeX, tileY * Tile.PixelSizeY);
+                            var tilePosition = new Vector2(tileX * Tile.PixelSizeX, tileY * Tile.PixelSizeY);
                             if (Vector2.Distance(tilePosition, position) <= radius)
                             {
-                                foreach (TileDrawLayer layer in chunk.Tiles.Keys)
+                                foreach (var layer in chunk.Tiles.Keys)
                                 {
-                                    ITile tile = chunk.GetTile(layer, tileX - chunkStartX, tileY - chunkStartY);
+                                    var tile = chunk.GetTile(layer, tileX - chunkStartX, tileY - chunkStartY);
                                     intersectingTiles.Add(tile);
                                 }
                             }
@@ -456,68 +400,54 @@ public class World
         return intersectingTiles;
     }
 
-    /// <summary>
-    /// Gets the chunk at the specified screen position.
-    /// </summary>
-    /// <param name="layer">The layer of the chunk.</param>
-    /// <param name="screenX">The screen x-coordinate.</param>
-    /// <param name="screenY">The screen y-coordinate.</param>
-    /// <returns>The chunk at the specified screen position, or null if no chunk is found.</returns>
     public IChunk GetChunkAtScreenPosition(int layer, int screenX, int screenY)
     {
-        Vector2 worldPosition = new Vector2(screenX, screenY);
-        worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.camera.Transform));
-
-        int chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
-        int chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
-
-        int chunkX = (int)(worldPosition.X / chunkSizeInPixelsX);
-        int chunkY = (int)(worldPosition.Y / chunkSizeInPixelsY);
-
-        int localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
-        int localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
-
-        IChunk chunk = Globals.world.GetChunkAt(chunkX, chunkY);
+        var chunkPosition = GetChunkFromScreenPosition(new Vector2(screenX, screenY));
+        var chunk = Globals.World.GetChunkAt(chunkPosition.ChunkPositionX, chunkPosition.ChunkPositionY);
         return chunk;
     }
 
-    /// <summary>
-    /// Initializes the chunks in the world.
-    /// </summary>
-    private void InitializeChunks()
+    public (int PosX, int PosY) GetGlobalPositionFromScreenPosition(Vector2 screenPositionBeforeTransform)
     {
-        for (int x = 0; x < 4; x++)
-        {
-            for (int y = 0; y < 4; y++)
-            {
-                var chunk = new Chunk(this, x, y);
-                chunk.Generate();
-                Chunks.Add(chunk);
-            }
-        }
+        var screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.Camera.Transform));
 
-        foreach (IChunk chunk in Chunks)
-        {
-            chunk.UpdateTextureCoordinates();
-        }
+        var chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
+        var chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+
+        var chunkX = (int)(screenPosition.X / chunkSizeInPixelsX);
+        var chunkY = (int)(screenPosition.Y / chunkSizeInPixelsY);
+
+        var localX = (int)(screenPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
+        var localY = (int)(screenPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
+
+        return ((chunkX * Chunk.SizeX) + localX, (chunkY * Chunk.SizeY) + localY);
     }
 
-    /// <summary>
-    /// Draws the world by iterating through each chunk and calling its Draw method.
-    /// </summary>
+    public (int ChunkPositionX, int ChunkPositionY) GetChunkFromScreenPosition(Vector2 screenPositionBeforeTransform)
+    {
+        var screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.Camera.Transform));
+
+        var chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
+        var chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+
+        var chunkX = (int)(screenPosition.X / chunkSizeInPixelsX);
+        var chunkY = (int)(screenPosition.Y / chunkSizeInPixelsY);
+
+        return (chunkX, chunkY);
+    }
+
     private void DrawWorld()
     {
         foreach (var chunk in Chunks)
         {
-            chunk.Draw(Globals.spriteBatch);
+            chunk.Draw(Globals.SpriteBatch);
         }
     }
 
-    public (PlayerState, List<EntityState>, List<ChunkState>) GetWorldState()
+    internal void DeleteTile(TileDrawLayer layer, int posX, int posY)
     {
-        var playerState = new PlayerState(Player);
-        var entityStates = Entities.Select(e => new EntityState(e)).ToList();
-        var chunkStates = Chunks.Select(c => new ChunkState(c)).ToList();
-        return (playerState, entityStates, chunkStates);
+        var chunk = GetChunkFromGlobalPosition(posX, posY);
+        var localPosition = GetLocalPositionFromGlobal(posX, posY);
+        chunk.DeleteTile(layer, localPosition.LocalX, localPosition.LocalY);
     }
 }
