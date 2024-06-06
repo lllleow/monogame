@@ -12,7 +12,7 @@ public class FenceTile : Tile
         SpritesheetName = "textures/wall_spritesheet";
         CollisionMaskSpritesheetName = "textures/wall_spritesheet_collision_mask";
         CollisionMode = CollisionMode.CollisionMask;
-        TextureProcessor = SimpleConnectionTileTextureProcessor.instance;
+        TextureProcessor = SimpleConnectionTileTextureProcessor.Instance;
         Walkable = false;
     }
 }

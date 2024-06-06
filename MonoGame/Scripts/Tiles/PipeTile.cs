@@ -10,7 +10,7 @@ public class PipeTile : Tile
         Id = "base.pipe";
         Name = "Pipe";
         SpritesheetName = "textures/pipe_spritesheet";
-        TextureProcessor = SimpleConnectionTileTextureProcessor.instance;
+        TextureProcessor = SimpleConnectionTileTextureProcessor.Instance;
     }
 }
 
