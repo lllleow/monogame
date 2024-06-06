@@ -28,6 +28,13 @@ jobs:
       - name: Build MonoGame-Server project
         run: msbuild MonoGame-Server/MonoGame-Server.csproj /p:Configuration=Release /p:Platform="Any CPU"
 
+      - name: Check Tree Command
+        run: |
+          tree || choco install tree
+
+      - name: Display Directory Structure with Tree
+        run: tree /f /a
+
       - name: Create Artifacts Directory
         run: mkdir artifacts
 
