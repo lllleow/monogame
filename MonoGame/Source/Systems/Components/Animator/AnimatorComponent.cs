@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using MonoGame.Source.Systems.Animation;
+using MonoGame.Source.Systems.Components.SpriteRenderer;
+using MonoGame.Source.Systems.Entity.Interfaces;
 
 namespace MonoGame.Source.Systems.Components.Animator;
 
 public class AnimatorComponent : EntityComponent
 {
-
-    int CurrentTime;
-
-    int CurrentTextureX = 0;
-
-    int CurrentTextureY = 0;
+    private int currentTime;
+    private int currentTextureX = 0;
+    private int currentTextureY = 0;
 
     public IAnimationBundle AnimationBundle;
 
@@ -25,7 +25,7 @@ public class AnimatorComponent : EntityComponent
 
     public Rectangle GetSpriteRectangle()
     {
-        return AnimationBundle.GetSpriteRectangle(CurrentAnimation, CurrentTime / (double)AnimationBundle.Animations[CurrentAnimation].Duration);
+        return AnimationBundle.GetSpriteRectangle(CurrentAnimation, currentTime / (double)AnimationBundle.Animations[CurrentAnimation].Duration);
     }
 
     public override void Initialize()
@@ -42,27 +42,27 @@ public class AnimatorComponent : EntityComponent
     {
         if (animationId != CurrentAnimation)
         {
-            CurrentTime = 0;
+            currentTime = 0;
             CurrentAnimation = animationId;
         }
     }
 
     public override void Update(GameTime gameTime)
     {
-        CurrentTime++;
-        if (CurrentTime > AnimationBundle.Animations[CurrentAnimation].Duration)
+        currentTime++;
+        if (currentTime > AnimationBundle.Animations[CurrentAnimation].Duration)
         {
-            CurrentTime = 0;
+            currentTime = 0;
         }
 
-        int NewTextureX = AnimationBundle.GetSpritesheetColumnForAnimationPercentage(CurrentAnimation, CurrentTime / (double)AnimationBundle.Animations[CurrentAnimation].Duration);
+        int NewTextureX = AnimationBundle.GetSpritesheetColumnForAnimationPercentage(CurrentAnimation, currentTime / (double)AnimationBundle.Animations[CurrentAnimation].Duration);
         int NewTextureY = AnimationBundle.GetSpritesheetRowForAnimation(CurrentAnimation);
 
-        if (NewTextureX != CurrentTextureX || NewTextureY != CurrentTextureY)
+        if (NewTextureX != currentTextureX || NewTextureY != currentTextureY)
         {
-            CurrentTextureX = NewTextureX;
-            CurrentTextureY = NewTextureY;
-            Entity.GetFirstComponent<SpriteRendererComponent>()?.UpdateTexture(AnimationBundle.SpriteSheet, new Rectangle(CurrentTextureX * AnimationBundle.SizeX, CurrentTextureY * AnimationBundle.SizeY, AnimationBundle.SizeX, AnimationBundle.SizeY));
+            currentTextureX = NewTextureX;
+            currentTextureY = NewTextureY;
+            Entity.GetFirstComponent<SpriteRendererComponent>()?.UpdateTexture(AnimationBundle.SpriteSheet, new Rectangle(currentTextureX * AnimationBundle.SizeX, currentTextureY * AnimationBundle.SizeY, AnimationBundle.SizeX, AnimationBundle.SizeY));
         }
     }
 }

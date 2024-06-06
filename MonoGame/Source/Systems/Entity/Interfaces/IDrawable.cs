@@ -4,7 +4,6 @@ namespace MonoGame.Source.Systems.Entity.Interfaces;
 
 public interface IDrawable
 {
-
     string SpritesheetName { get; set; }
 
     int PixelSizeX { get; set; }

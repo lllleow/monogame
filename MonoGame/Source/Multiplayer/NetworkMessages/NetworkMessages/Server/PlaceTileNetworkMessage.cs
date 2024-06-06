@@ -1,6 +1,7 @@
 ﻿using LiteNetLib.Utils;
+using MonoGame.Source.Rendering.Enum;
 
-namespace MonoGame
+namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
 {
     public class PlaceTileNetworkMessage : NetworkMessage
     {
@@ -31,7 +32,7 @@ namespace MonoGame
 
         public override NetDataWriter Serialize()
         {
-            NetDataWriter data = new NetDataWriter();
+            var data = new NetDataWriter();
             data.Put((byte)NetworkMessageTypes.PlaceTileNetworkMessage);
             data.Put(TileId);
             data.Put((byte)Layer);

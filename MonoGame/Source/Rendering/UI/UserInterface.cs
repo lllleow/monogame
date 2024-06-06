@@ -1,20 +1,19 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.UI.Interfaces;
 
-namespace MonoGame;
+namespace MonoGame.Source.Rendering.UI;
 
 public class UserInterface : IUserInterface
 {
     public string Name { get; set; }
-    public List<IUserInterfaceComponent> Components { get; set; } = new List<IUserInterfaceComponent>();
+    public List<IUserInterfaceComponent> Components { get; set; } = [];
     public bool Visible { get; set; } = true;
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-        foreach (IUserInterfaceComponent component in Components)
+        foreach (var component in Components)
         {
             component.Draw(spriteBatch);
         }
@@ -22,7 +21,7 @@ public class UserInterface : IUserInterface
 
     public virtual void Update(GameTime gameTime)
     {
-        foreach (IUserInterfaceComponent component in Components)
+        foreach (var component in Components)
         {
             component.Update(gameTime);
         }
@@ -36,6 +35,6 @@ public class UserInterface : IUserInterface
 
     public void RemoveComponent(IUserInterfaceComponent component)
     {
-        Components.Remove(component);
+        _ = Components.Remove(component);
     }
 }

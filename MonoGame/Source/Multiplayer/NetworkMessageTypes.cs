@@ -1,8 +1,10 @@
 ﻿using System;
 using MonoGame.Source.Multiplayer.NetworkMessageHandler.Client;
+using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessageHandler.Client;
 using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
+using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server;
 
-namespace MonoGame;
+namespace MonoGame.Source.Multiplayer;
 
 public enum NetworkMessageTypes
 {
@@ -23,55 +25,35 @@ public static class NetworkMessageTypeClientHelper
 {
     public static Type GetTypeFromMessageType(NetworkMessageTypes messageType)
     {
-        switch (messageType)
+        return messageType switch
         {
-            case NetworkMessageTypes.AuthenticateUserNetworkMessage:
-                return typeof(AuthenticateUserNetworkMessage);
-            case NetworkMessageTypes.AuthenticationResultNetworkMessage:
-                return typeof(AuthenticationResultNetworkMessage);
-            case NetworkMessageTypes.RequestToLoadWorldNetworkMessage:
-                return typeof(RequestToLoadWorldNetworkMessage);
-            case NetworkMessageTypes.ChunkDataNetworkMessage:
-                return typeof(ChunkDataNetworkMessage);
-            case NetworkMessageTypes.SpawnPlayerNetworkMessage:
-                return typeof(SpawnPlayerNetworkMessage);
-            case NetworkMessageTypes.RequestMovementNetworkMessage:
-                return typeof(RequestMovementNetworkMessage);
-            case NetworkMessageTypes.UpdatePlayerPositionNetworkMessage:
-                return typeof(UpdatePlayerPositionNetworkMessage);
-            case NetworkMessageTypes.MovePlayerNetworkMessage:
-                return typeof(MovePlayerNetworkMessage);
-            case NetworkMessageTypes.RequestToPlaceTileNetworkMessage:
-                return typeof(RequestToPlaceTileNetworkMessage);
-            case NetworkMessageTypes.PlaceTileNetworkMessage:
-                return typeof(PlaceTileNetworkMessage);
-            case NetworkMessageTypes.DeleteTileNetworkMessage:
-                return typeof(DeleteTileNetworkMessage);
-        }
-
-        return null;
+            NetworkMessageTypes.AuthenticateUserNetworkMessage => typeof(AuthenticateUserNetworkMessage),
+            NetworkMessageTypes.AuthenticationResultNetworkMessage => typeof(AuthenticationResultNetworkMessage),
+            NetworkMessageTypes.RequestToLoadWorldNetworkMessage => typeof(RequestToLoadWorldNetworkMessage),
+            NetworkMessageTypes.ChunkDataNetworkMessage => typeof(ChunkDataNetworkMessage),
+            NetworkMessageTypes.SpawnPlayerNetworkMessage => typeof(SpawnPlayerNetworkMessage),
+            NetworkMessageTypes.RequestMovementNetworkMessage => typeof(RequestMovementNetworkMessage),
+            NetworkMessageTypes.UpdatePlayerPositionNetworkMessage => typeof(UpdatePlayerPositionNetworkMessage),
+            NetworkMessageTypes.MovePlayerNetworkMessage => typeof(MovePlayerNetworkMessage),
+            NetworkMessageTypes.RequestToPlaceTileNetworkMessage => typeof(RequestToPlaceTileNetworkMessage),
+            NetworkMessageTypes.PlaceTileNetworkMessage => typeof(PlaceTileNetworkMessage),
+            NetworkMessageTypes.DeleteTileNetworkMessage => typeof(DeleteTileNetworkMessage),
+            _ => null,
+        };
     }
 
     public static Type GetHandlerForClientMessageType(NetworkMessageTypes messageTypes)
     {
-        switch (messageTypes)
+        return messageTypes switch
         {
-            case NetworkMessageTypes.AuthenticationResultNetworkMessage:
-                return typeof(AuthenticationResultNetworkMessageHandler);
-            case NetworkMessageTypes.ChunkDataNetworkMessage:
-                return typeof(ChunkDataNetworkMessageHandler);
-            case NetworkMessageTypes.SpawnPlayerNetworkMessage:
-                return typeof(SpawnPlayerNetworkMessageHandler);
-            case NetworkMessageTypes.UpdatePlayerPositionNetworkMessage:
-                return typeof(UpdatePlayerPositionNetworkMessageHandler);
-            case NetworkMessageTypes.MovePlayerNetworkMessage:
-                return typeof(MovePlayerNetworkMessageHandler);
-            case NetworkMessageTypes.PlaceTileNetworkMessage:
-                return typeof(PlaceTileNetworkMessageHandler);
-            case NetworkMessageTypes.DeleteTileNetworkMessage:
-                return typeof(DeleteTileNetworkMessageHandler);
-        }
-
-        return null;
+            NetworkMessageTypes.AuthenticationResultNetworkMessage => typeof(AuthenticationResultNetworkMessageHandler),
+            NetworkMessageTypes.ChunkDataNetworkMessage => typeof(ChunkDataNetworkMessageHandler),
+            NetworkMessageTypes.SpawnPlayerNetworkMessage => typeof(SpawnPlayerNetworkMessageHandler),
+            NetworkMessageTypes.UpdatePlayerPositionNetworkMessage => typeof(UpdatePlayerPositionNetworkMessageHandler),
+            NetworkMessageTypes.MovePlayerNetworkMessage => typeof(MovePlayerNetworkMessageHandler),
+            NetworkMessageTypes.PlaceTileNetworkMessage => typeof(PlaceTileNetworkMessageHandler),
+            NetworkMessageTypes.DeleteTileNetworkMessage => typeof(DeleteTileNetworkMessageHandler),
+            _ => null,
+        };
     }
 }

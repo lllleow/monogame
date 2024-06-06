@@ -1,21 +1,20 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.Utils;
-using MonoGame.Source.Systems.Components;
+using MonoGame.Source.Systems.Tiles;
 using MonoGame.Source.Util.Loaders;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Components.SpriteRenderer;
 
 public class SpriteRendererComponent : EntityComponent
 {
-
     public string SpriteSheet;
 
     public Rectangle TextureRectangle = Rectangle.Empty;
 
-    public Vector2 Scale = new Vector2(1, 1);
+    public Vector2 Scale = new(1, 1);
 
-    public Vector2 Size = new Vector2(Tile.PixelSizeX, Tile.PixelSizeY);
+    public Vector2 Size = new(Tile.PixelSizeX, Tile.PixelSizeY);
 
     public SpriteRendererComponent()
     {

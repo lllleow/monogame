@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7jcHhdpFLoY=",
+  "dgSpecHash": "jgHLkOiv2LY=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame-Server\\MonoGame-Server.csproj",
+  "projectFilePath": "c:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame-Server\\MonoGame-Server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Leonardo\\.nuget\\packages\\dotnetnoise\\1.0.0\\dotnetnoise.1.0.0.nupkg.sha512",
     "C:\\Users\\Leonardo\\.nuget\\packages\\litenetlib\\1.2.0\\litenetlib.1.2.0.nupkg.sha512",

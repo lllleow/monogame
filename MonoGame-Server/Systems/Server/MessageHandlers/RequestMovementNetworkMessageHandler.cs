@@ -1,61 +1,48 @@
 ﻿using LiteNetLib;
 using Microsoft.Xna.Framework;
-using MonoGame;
+using MonoGame.Source;
 using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame_Server.Systems.Server;
-using MonoGame_Server.Systems.Server.MessageHandlers;
+using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessageHandler.Client;
+using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
+using MonoGame.Source.Util.Enum;
 
-namespace MonoGame_Server;
+namespace MonoGame_Server.Systems.Server.MessageHandlers;
 
 public class RequestMovementNetworkMessageHandler : IServerMessageHandler
 {
-    NetworkServer NetworkServer = NetworkServer.Instance;
+    private readonly NetworkServer networkServer = NetworkServer.Instance;
 
     public void Execute(NetPeer peer, byte channel, INetworkMessage message)
     {
-        RequestMovementNetworkMessage requestMovementNetworkMessage = (RequestMovementNetworkMessage)message;
-        PlayerState playerState = NetworkServer.Instance.GetPlayerFromPeer(peer);
+        var requestMovementNetworkMessage = (RequestMovementNetworkMessage)message;
+        var playerState = NetworkServer.Instance.GetPlayerFromPeer(peer);
 
-        Vector2 displacement = GetDisplacement(requestMovementNetworkMessage.Direction, requestMovementNetworkMessage.Speed);
-        Vector2 newPosition = (playerState.Position ?? Globals.SpawnPosition) + displacement;
+        var displacement = GetDisplacement(requestMovementNetworkMessage.Direction, requestMovementNetworkMessage.Speed);
+        var newPosition = (playerState.Position ?? Globals.SpawnPosition) + displacement;
         playerState.Position = newPosition;
 
-        NetworkServer.BroadcastMessage(new MovePlayerNetworkMessage(playerState.UUID, requestMovementNetworkMessage.Speed, requestMovementNetworkMessage.Direction, newPosition));
+        networkServer.BroadcastMessage(new MovePlayerNetworkMessage(playerState.UUID, requestMovementNetworkMessage.Speed, requestMovementNetworkMessage.Direction, newPosition));
     }
 
     public bool Validate(NetPeer peer, byte channel, INetworkMessage message)
     {
-        RequestMovementNetworkMessage requestMovementNetworkMessage = (RequestMovementNetworkMessage)message;
-        if (requestMovementNetworkMessage.Speed.LengthSquared() <= Vector2.One.LengthSquared())
-        {
-            return true;
-        }
-
-        return false;
+        var requestMovementNetworkMessage = (RequestMovementNetworkMessage)message;
+        return requestMovementNetworkMessage.Speed.LengthSquared() <= Vector2.One.LengthSquared();
     }
 
     public Vector2 GetDisplacement(Direction direction, Vector2 speed)
     {
-        switch (direction)
+        return direction switch
         {
-            case Direction.Up:
-                return new Vector2(0, -speed.Y);
-            case Direction.Down:
-                return new Vector2(0, speed.Y);
-            case Direction.Left:
-                return new Vector2(-speed.X, 0);
-            case Direction.Right:
-                return new Vector2(speed.X, 0);
-            case Direction.LeftUp:
-                return new Vector2(-speed.X, -speed.Y);
-            case Direction.RightUp:
-                return new Vector2(speed.X, -speed.Y);
-            case Direction.LeftDown:
-                return new Vector2(-speed.X, speed.Y);
-            case Direction.RightDown:
-                return new Vector2(speed.X, speed.Y);
-            default:
-                return Vector2.Zero;
-        }
+            Direction.Up => new Vector2(0, -speed.Y),
+            Direction.Down => new Vector2(0, speed.Y),
+            Direction.Left => new Vector2(-speed.X, 0),
+            Direction.Right => new Vector2(speed.X, 0),
+            Direction.LeftUp => new Vector2(-speed.X, -speed.Y),
+            Direction.RightUp => new Vector2(speed.X, -speed.Y),
+            Direction.LeftDown => new Vector2(-speed.X, speed.Y),
+            Direction.RightDown => new Vector2(speed.X, speed.Y),
+            _ => Vector2.Zero,
+        };
     }
 }

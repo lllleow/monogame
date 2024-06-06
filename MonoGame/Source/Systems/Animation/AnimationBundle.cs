@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using MonoGame.Source.Systems.Tiles;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Animation;
 
 public class AnimationBundle : IAnimationBundle
 {
@@ -10,25 +11,20 @@ public class AnimationBundle : IAnimationBundle
     public string SpriteSheet { get; set; }
     public int SizeX { get; set; } = 16;
     public int SizeY { get; set; } = 16;
-    public Dictionary<string, Animation> Animations { get; set; } = new Dictionary<string, Animation>();
+    public Dictionary<string, Animation> Animations { get; set; } = [];
 
     public Rectangle GetSpriteRectangle(string animationId, double percentage)
     {
-        Rectangle rect = new Rectangle(GetSpritesheetColumnForAnimationPercentage(animationId, percentage) * Tile.PixelSizeX, GetSpritesheetRowForAnimation(animationId) * Tile.PixelSizeY, SizeX * Tile.PixelSizeX, SizeY * Tile.PixelSizeY);
+        var rect = new Rectangle(GetSpritesheetColumnForAnimationPercentage(animationId, percentage) * Tile.PixelSizeX, GetSpritesheetRowForAnimation(animationId) * Tile.PixelSizeY, SizeX * Tile.PixelSizeX, SizeY * Tile.PixelSizeY);
         return rect;
     }
 
     public int GetSpritesheetColumnForAnimationPercentage(string animationId, double percentage)
     {
-        int column = (int)(Animations[animationId].SpriteCount * percentage);
-        if (column > Animations[animationId].SpriteCount)
-        {
-            return column - 1;
-        }
-        return column;
+        var column = (int)(Animations[animationId].SpriteCount * percentage);
+        return column > Animations[animationId].SpriteCount ? column - 1 : column;
     }
 
-    
     public int GetSpritesheetRowForAnimation(string animationName)
     {
         return Animations[animationName].SpritesheetRow;
@@ -36,13 +32,6 @@ public class AnimationBundle : IAnimationBundle
 
     public void CreateAnimation(Animation animation)
     {
-        if (Animations.ContainsKey(animation.Id))
-        {
-            throw new Exception("Animation already registered " + animation.Id);
-        }
-        else
-        {
-            Animations[animation.Id] = animation;
-        }
+        Animations[animation.Id] = Animations.ContainsKey(animation.Id) ? throw new Exception("Animation already registered " + animation.Id) : animation;
     }
 }

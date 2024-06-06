@@ -1,7 +1,7 @@
 ﻿using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame
+namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
 {
     public class SpawnPlayerNetworkMessage : NetworkMessage
     {
@@ -26,7 +26,7 @@ namespace MonoGame
 
         public override NetDataWriter Serialize()
         {
-            NetDataWriter data = new NetDataWriter();
+            var data = new NetDataWriter();
             data.Put((byte)NetworkMessageTypes.SpawnPlayerNetworkMessage);
             data.Put(UUID);
             data.Put(Position.X);

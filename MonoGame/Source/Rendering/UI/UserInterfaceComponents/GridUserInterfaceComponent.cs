@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using MonoGame.Source.Rendering.UI.Interfaces;
-using MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
-namespace MonoGame;
+namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class GridUserInterfaceComponent : MultipleChildUserInterfaceComponent
 {
@@ -25,12 +24,12 @@ public class GridUserInterfaceComponent : MultipleChildUserInterfaceComponent
 
     public override Vector2 GetChildOffset(IUserInterfaceComponent child)
     {
-        int index = Children.IndexOf(child);
+        var index = Children.IndexOf(child);
 
-        int row = index / MaxColumns;
-        int column = index % MaxColumns;
+        var row = index / MaxColumns;
+        var column = index % MaxColumns;
 
-        Vector2 preferredSize = child.GetPreferredSize();
+        var preferredSize = child.GetPreferredSize();
 
         return new Vector2(column * (preferredSize.X + Spacing.X), row * (preferredSize.Y + Spacing.Y));
     }

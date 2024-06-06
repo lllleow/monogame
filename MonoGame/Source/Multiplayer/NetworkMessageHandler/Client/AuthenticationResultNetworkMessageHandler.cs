@@ -1,6 +1,7 @@
 ﻿using System;
 using MonoGame.Source.Multiplayer.Interfaces;
 using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
+using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server;
 
 namespace MonoGame.Source.Multiplayer.NetworkMessageHandler.Client;
 
@@ -9,7 +10,6 @@ public class AuthenticationResultNetworkMessageHandler : IClientMessageHandler
     public void Execute(byte channel, INetworkMessage message)
     {
         AuthenticationResultNetworkMessage authMessage = (AuthenticationResultNetworkMessage)message;
-
 
         if (authMessage.Success)
         {

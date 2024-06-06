@@ -1,95 +1,91 @@
 ﻿using MonoGame_Server.Systems.Server;
+using MonoGame.Source.WorldNamespace.WorldStates;
 using Newtonsoft.Json;
 
-namespace MonoGame
+namespace MonoGame_Server.Systems.Saving
 {
     public class SaveManager
     {
         public static void SaveGame(string dirPath)
         {
-            (List<PlayerState>?, List<ChunkState>?, List<EntityState>?) worldState = NetworkServer.Instance.ServerWorld.GetWorldState();
+            var worldState = NetworkServer.Instance.ServerWorld.GetWorldState();
+            var playersFolderPath = Path.Combine(dirPath, "players");
+            _ = Directory.CreateDirectory(playersFolderPath);
 
-            string json = JsonConvert.SerializeObject(worldState.Item1);
-
-            string playersFolderPath = Path.Combine(dirPath, "players");
-            Directory.CreateDirectory(playersFolderPath);
-
-            for (int i = 0; i < worldState.Item1?.Count; i++)
+            for (var i = 0; i < worldState.Players?.Count; i++)
             {
-                string playerJson = JsonConvert.SerializeObject(worldState.Item1[i]);
-                string chunkFilePath = Path.Combine(playersFolderPath, $"player_{worldState.Item1[i].UUID}.json");
+                var playerJson = JsonConvert.SerializeObject(worldState.Players[i]);
+                var chunkFilePath = Path.Combine(playersFolderPath, $"player_{worldState.Players[i].UUID}.json");
                 File.WriteAllText(chunkFilePath, playerJson);
             }
 
-            string chunksFolderPath = Path.Combine(dirPath, "chunks");
-            Directory.CreateDirectory(chunksFolderPath);
+            var chunksFolderPath = Path.Combine(dirPath, "chunks");
+            _ = Directory.CreateDirectory(chunksFolderPath);
 
-            for (int i = 0; i < worldState.Item2?.Count; i++)
+            for (var i = 0; i < worldState.Chunks?.Count; i++)
             {
-                string chunkJson = JsonConvert.SerializeObject(worldState.Item2?[i]);
-                string chunkFilePath = Path.Combine(chunksFolderPath, $"chunk_{worldState.Item2?[i].X}_{worldState.Item2?[i].Y}.json");
+                var chunkJson = JsonConvert.SerializeObject(worldState.Chunks?[i]);
+                var chunkFilePath = Path.Combine(chunksFolderPath, $"chunk_{worldState.Chunks?[i].X}_{worldState.Chunks?[i].Y}.json");
                 File.WriteAllText(chunkFilePath, chunkJson);
             }
 
-            json = JsonConvert.SerializeObject(worldState.Item3);
+            var json = JsonConvert.SerializeObject(worldState.Entities);
             File.WriteAllText(dirPath + "entities.json", json);
         }
 
-        public (List<PlayerState>?, List<ChunkState>?, List<EntityState>?) LoadGame(string dirPath)
+        public (List<PlayerState>? Players, List<ChunkState>? Chunks, List<EntityState>? Entities) LoadGame(string dirPath)
         {
             if (Directory.Exists(dirPath) && Directory.Exists(dirPath + "players") && Directory.Exists(dirPath + "chunks") && File.Exists(dirPath + "entities.json"))
             {
-                //Chunks
-                List<string> chunksJson = new List<string>();
-                string chunksFolderPath = Path.Combine(dirPath, "chunks");
+                // Chunks
+                List<string> chunksJson = [];
+                var chunksFolderPath = Path.Combine(dirPath, "chunks");
                 if (Directory.Exists(chunksFolderPath))
                 {
-                    string[] chunkFiles = Directory.GetFiles(chunksFolderPath, "*.json");
-                    foreach (string chunkFilePath in chunkFiles)
+                    var chunkFiles = Directory.GetFiles(chunksFolderPath, "*.json");
+                    foreach (var chunkFilePath in chunkFiles)
                     {
-                        string chunkJson = File.ReadAllText(chunkFilePath);
+                        var chunkJson = File.ReadAllText(chunkFilePath);
                         chunksJson.Add(chunkJson);
                     }
                 }
 
-                List<ChunkState> chunkStates = new List<ChunkState>();
-                foreach (string chunkJson in chunksJson)
+                List<ChunkState> chunkStates = [];
+                foreach (var chunkJson in chunksJson)
                 {
-                    ChunkState? chunkState = JsonConvert.DeserializeObject<ChunkState>(chunkJson);
+                    var chunkState = JsonConvert.DeserializeObject<ChunkState>(chunkJson);
                     if (chunkState != null)
                     {
                         chunkStates.Add(chunkState);
                     }
                 }
 
-                //Players
-
-                List<string> playersJson = new List<string>();
-                string playersFolderPath = Path.Combine(dirPath, "players");
+                // Players
+                List<string> playersJson = [];
+                var playersFolderPath = Path.Combine(dirPath, "players");
                 if (Directory.Exists(playersFolderPath))
                 {
-                    string[] playerFiles = Directory.GetFiles(playersFolderPath, "*.json");
-                    foreach (string playerFilesPath in playerFiles)
+                    var playerFiles = Directory.GetFiles(playersFolderPath, "*.json");
+                    foreach (var playerFilesPath in playerFiles)
                     {
-                        string playerJson = File.ReadAllText(playerFilesPath);
+                        var playerJson = File.ReadAllText(playerFilesPath);
                         playersJson.Add(playerJson);
                     }
                 }
 
-                List<PlayerState> playerStates = new List<PlayerState>();
-                foreach (string playerJson in playersJson)
+                List<PlayerState> playerStates = [];
+                foreach (var playerJson in playersJson)
                 {
-                    PlayerState? playerState = JsonConvert.DeserializeObject<PlayerState>(playerJson);
+                    var playerState = JsonConvert.DeserializeObject<PlayerState>(playerJson);
                     if (playerState != null)
                     {
                         playerStates.Add(playerState);
                     }
                 }
 
-                //Entities
-
-                string entitiesJson = File.ReadAllText(dirPath + "entities.json");
-                List<EntityState>? entityStates = JsonConvert.DeserializeObject<List<EntityState>>(entitiesJson ?? string.Empty);
+                // Entities
+                var entitiesJson = File.ReadAllText(dirPath + "entities.json");
+                var entityStates = JsonConvert.DeserializeObject<List<EntityState>>(entitiesJson ?? string.Empty);
 
                 return (playerStates, chunkStates, entityStates);
             }

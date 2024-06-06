@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using MonoGame.Source.Systems.Components.BoundingBox;
+using MonoGame.Source.Systems.Components.Collision.Enum;
+using MonoGame.Source.Systems.Components.PixelBounds;
+using MonoGame.Source.Systems.Tiles.Interfaces;
 
 namespace MonoGame.Source.Systems.Components.Collision;
 
@@ -51,4 +55,3 @@ public class CollisionComponent : EntityComponent
         return tiles;
     }
 }
-

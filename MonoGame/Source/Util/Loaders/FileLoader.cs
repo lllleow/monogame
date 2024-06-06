@@ -1,10 +1,8 @@
-﻿
-using System.IO;
+﻿using System.IO;
 namespace MonoGame.Source.Util.Loaders;
 
 public static class FileLoader
 {
-
     public static string[] LoadAllFilesFromFolder(string folderPath)
     {
         if (!Directory.Exists(folderPath))

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame;
+namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class LabelUserInterfaceComponent : UserInterfaceComponent
 {

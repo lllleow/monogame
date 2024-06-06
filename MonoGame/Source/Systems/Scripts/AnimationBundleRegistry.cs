@@ -4,14 +4,14 @@ using System.IO;
 using System.Reflection;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
+using MonoGame.Source.Systems.Animation;
 using MonoGame.Source.Util.Loaders;
 
 namespace MonoGame.Source.Systems.Scripts;
 
 public static class AnimationBundleRegistry
 {
-
-    public static Dictionary<string, Type> AnimationBundles { get; private set; } = new Dictionary<string, Type>();
+    public static Dictionary<string, Type> AnimationBundles { get; private set; } = [];
 
     public static void RegisterAnimationBundle(string id, Type bundleType)
     {
@@ -19,6 +19,7 @@ public static class AnimationBundleRegistry
         {
             throw new ArgumentException("Bundle type must implement IAnimationBundle interface", nameof(bundleType));
         }
+
         AnimationBundles.Add(id, bundleType);
     }
 

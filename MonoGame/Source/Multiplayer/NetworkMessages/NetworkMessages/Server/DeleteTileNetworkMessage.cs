@@ -1,6 +1,7 @@
 ﻿using LiteNetLib.Utils;
+using MonoGame.Source.Rendering.Enum;
 
-namespace MonoGame
+namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
 {
     public class DeleteTileNetworkMessage : NetworkMessage
     {
@@ -28,7 +29,7 @@ namespace MonoGame
 
         public override NetDataWriter Serialize()
         {
-            NetDataWriter data = new NetDataWriter();
+            var data = new NetDataWriter();
             data.Put((byte)NetworkMessageTypes.DeleteTileNetworkMessage);
             data.Put((byte)Layer);
             data.Put(PosX);

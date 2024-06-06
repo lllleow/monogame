@@ -1,14 +1,14 @@
 ﻿using LiteNetLib;
-using MonoGame;
+using MonoGame.Source;
 using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame_Server.Systems.Server;
-using MonoGame_Server.Systems.Server.MessageHandlers;
+using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server;
+using MonoGame.Source.WorldNamespace.WorldStates;
 
-namespace MonoGame_Server;
+namespace MonoGame_Server.Systems.Server.MessageHandlers;
 
 public class RequestToLoadWorldServerMessageHandler : IServerMessageHandler
 {
-    NetworkServer NetworkServer = NetworkServer.Instance;
+    private readonly NetworkServer networkServer = NetworkServer.Instance;
 
     public bool Validate(NetPeer peer, byte channel, INetworkMessage message)
     {
@@ -17,30 +17,30 @@ public class RequestToLoadWorldServerMessageHandler : IServerMessageHandler
 
     public void Execute(NetPeer peer, byte channel, INetworkMessage message)
     {
-        foreach (ChunkState chunk in NetworkServer.ServerWorld.Chunks!)
+        foreach (var chunk in networkServer.ServerWorld.Chunks!)
         {
-            ChunkDataNetworkMessage chunkDataNetworkMessage = new ChunkDataNetworkMessage(chunk);
-            NetworkServer.SendMessageToPeer(peer, chunkDataNetworkMessage);
+            var chunkDataNetworkMessage = new ChunkDataNetworkMessage(chunk);
+            networkServer.SendMessageToPeer(peer, chunkDataNetworkMessage);
         }
 
-        foreach (string uuid in NetworkServer.Connections.Values)
+        foreach (var uuid in networkServer.Connections.Values)
         {
-            PlayerState playerState = NetworkServer.ServerWorld.Players.FirstOrDefault(p => p.UUID == uuid);
+            var playerState = networkServer.ServerWorld.Players?.FirstOrDefault(p => p.UUID == uuid);
             if (playerState != null)
             {
-                SpawnPlayerNetworkMessage spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(playerState.UUID, playerState.Position ?? Globals.SpawnPosition);
-                NetworkServer.SendMessageToPeer(peer, spawnPlayerNetworkMessage);
+                var spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(playerState.UUID, playerState.Position ?? Globals.SpawnPosition);
+                networkServer.SendMessageToPeer(peer, spawnPlayerNetworkMessage);
             }
         }
 
-        string existingPlayerUUID = NetworkServer.GetUUIDByPeer(peer);
-        PlayerState existingPlayer = NetworkServer.ServerWorld.Players.FirstOrDefault(p => p.UUID == existingPlayerUUID);
+        var existingPlayerUUID = networkServer.GetUUIDByPeer(peer);
+        var existingPlayer = networkServer.ServerWorld.Players?.FirstOrDefault(p => p.UUID == existingPlayerUUID);
         if (existingPlayer == null)
         {
-            PlayerState newPlayer = new PlayerState(existingPlayerUUID);
-            NetworkServer.ServerWorld.Players.Add(newPlayer);
-            SpawnPlayerNetworkMessage spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(newPlayer.UUID, newPlayer.Position ?? Globals.SpawnPosition);
-            NetworkServer.BroadcastMessage(spawnPlayerNetworkMessage);
+            var newPlayer = new PlayerState(existingPlayerUUID);
+            networkServer.ServerWorld.Players?.Add(newPlayer);
+            var spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(newPlayer.UUID, newPlayer.Position ?? Globals.SpawnPosition);
+            networkServer.BroadcastMessage(spawnPlayerNetworkMessage);
         }
     }
 }

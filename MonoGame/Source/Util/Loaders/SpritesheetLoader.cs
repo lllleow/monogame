@@ -5,7 +5,7 @@ namespace MonoGame.Source.Util.Loaders;
 
 public class SpritesheetLoader
 {
-    private static Dictionary<string, Texture2D> SpriteSheets = new Dictionary<string, Texture2D>();
+    private static readonly Dictionary<string, Texture2D> SpriteSheets = [];
 
     public static Texture2D GetSpritesheet(string spritesheet)
     {
@@ -21,4 +21,3 @@ public class SpritesheetLoader
         }
     }
 }
-

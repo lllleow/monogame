@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame.Source.Rendering.UI.UserInterfaceComponents;
+using MonoGame.Source.Rendering.UI.UserInterfaceComponents.Custom;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaces;
 

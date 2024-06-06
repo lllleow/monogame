@@ -1,56 +1,59 @@
 ﻿using Microsoft.Xna.Framework;
-using MonoGame;
-using MonoGame.Source.Systems.Chunks;
+using MonoGame_Server.Systems.Saving;
 using MonoGame_Server.Systems.Server;
+using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server;
+using MonoGame.Source.Rendering.Enum;
+using MonoGame.Source.Systems.Chunks;
+using MonoGame.Source.WorldNamespace.WorldStates;
 
-namespace MonoGame_Server;
+namespace MonoGame_Server.Systems.World;
 
 public class ServerWorld
 {
     public List<ChunkState>? Chunks;
     public List<PlayerState>? Players;
     public List<EntityState>? Entities;
-    private SaveManager SaveManager = new SaveManager();
+    private readonly SaveManager saveManager = new();
 
     public void Initialize()
     {
-        (List<PlayerState>?, List<ChunkState>?, List<EntityState>?) worldState = SaveManager.LoadGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\");
+        var worldState = saveManager.LoadGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\");
 
-        Chunks = worldState.Item2 ?? new List<ChunkState>();
-        Players = worldState.Item1 ?? new List<PlayerState>();
-        Entities = worldState.Item3 ?? new List<EntityState>();
+        Chunks = worldState.Chunks ?? [];
+        Players = worldState.Players ?? [];
+        Entities = worldState.Entities ?? [];
     }
 
-    public (List<PlayerState>?, List<ChunkState>?, List<EntityState>?) GetWorldState()
+    public (List<PlayerState>? Players, List<ChunkState>? Chunks, List<EntityState>? Entities) GetWorldState()
     {
         return (Players, Chunks, Entities);
     }
 
-    public PlayerState GetPlayerByUUID(string UUID)
+    public PlayerState? GetPlayerByUUID(string UUID)
     {
-        return Players.FirstOrDefault(x => x.UUID == UUID);
+        return Players?.FirstOrDefault(x => x.UUID == UUID);
     }
 
     public TileState? GetTileAtPosition(TileDrawLayer layer, int posX, int posY)
     {
-        int chunkX = posX / Chunk.SizeX;
-        int chunkY = posY / Chunk.SizeY;
-        int localX = posX % Chunk.SizeX;
-        int localY = posY % Chunk.SizeY;
+        var chunkX = posX / Chunk.SizeX;
+        var chunkY = posY / Chunk.SizeY;
+        var localX = posX % Chunk.SizeX;
+        var localY = posY % Chunk.SizeY;
 
-        ChunkState chunk = Chunks.FirstOrDefault(x => x.X == chunkX && x.Y == chunkY);
+        var chunk = Chunks?.FirstOrDefault(x => x.X == chunkX && x.Y == chunkY);
         return chunk?.GetTile(layer, localX, localY);
     }
 
     public void DestroyTileAtPosition(TileDrawLayer layer, int posX, int posY)
     {
-        int chunkX = posX / Chunk.SizeX;
-        int chunkY = posY / Chunk.SizeY;
-        int localX = posX % Chunk.SizeX;
-        int localY = posY % Chunk.SizeY;
+        var chunkX = posX / Chunk.SizeX;
+        var chunkY = posY / Chunk.SizeY;
+        var localX = posX % Chunk.SizeX;
+        var localY = posY % Chunk.SizeY;
 
-        ChunkState chunk = Chunks.FirstOrDefault(x => x.X == chunkX && x.Y == chunkY);
-        bool? removedAny = chunk?.DestroyTile(layer, localX, localY);
+        var chunk = Chunks?.FirstOrDefault(x => x.X == chunkX && x.Y == chunkY);
+        var removedAny = chunk?.DestroyTile(layer, localX, localY);
         if (removedAny ?? true)
         {
             NetworkServer.Instance.BroadcastMessage(new DeleteTileNetworkMessage(layer, posX, posY));
@@ -60,23 +63,23 @@ public class ServerWorld
 
     public void SetTileAtPosition(string tileId, TileDrawLayer layer, int posX, int posY)
     {
-        Vector2 worldPosition = new Vector2(posX, posY);
+        var worldPosition = new Vector2(posX, posY);
 
-        int chunkX = posX / Chunk.SizeX;
-        int chunkY = posY / Chunk.SizeY;
-        int localX = posX % Chunk.SizeX;
-        int localY = posY % Chunk.SizeY;
+        var chunkX = posX / Chunk.SizeX;
+        var chunkY = posY / Chunk.SizeY;
+        var localX = posX % Chunk.SizeX;
+        var localY = posY % Chunk.SizeY;
 
-        ChunkState chunk = Chunks.FirstOrDefault(x => x.X == chunkX && x.Y == chunkY);
+        var chunk = Chunks?.FirstOrDefault(x => x.X == chunkX && x.Y == chunkY);
 
         if (chunk == null)
         {
-            ChunkState newChunk = new ChunkState(chunkX, chunkY);
+            var newChunk = new ChunkState(chunkX, chunkY);
             chunk = newChunk;
-            Chunks.Add(newChunk);
+            Chunks?.Add(newChunk);
         }
 
-        bool success = chunk.SetTile(tileId, layer, localX, localY);
+        var success = chunk.SetTile(tileId, layer, localX, localY);
         if (success)
         {
             NetworkServer.Instance.BroadcastMessage(new PlaceTileNetworkMessage(tileId, layer, posX, posY));

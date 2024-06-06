@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using MonoGame.Source.Rendering.UI.Interfaces;
@@ -59,9 +58,13 @@ public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceC
         }
 
         if (Direction == ListDirection.Horizontal)
+        {
             maxWidth += Spacing * (Children.Count - 1);
+        }
         else
+        {
             totalHeight += Spacing * (Children.Count - 1);
+        }
 
         return new Vector2((int)maxWidth, (int)totalHeight);
     }

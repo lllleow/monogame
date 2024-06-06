@@ -1,18 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Source.Systems.Entity.Interfaces;
+using MonoGame.Source.Systems.Tiles;
 
 namespace MonoGame.Source.Rendering.Camera;
 
 public class Camera
 {
-
     public Matrix Transform { get; set; } = Matrix.Identity;
 
     private float ScreenSizeX { get; set; }
     private float ScreenSizeY { get; set; }
-    private float scaleFactor = 3f;
-    private float followSpeed = 7f;
-    private int previousScrollValue;
+    private readonly float scaleFactor = 3f;
+    private readonly float followSpeed = 7f;
+    private readonly int previousScrollValue;
 
     public Camera(int screenSizeX, int screenSizeY)
     {
@@ -23,14 +24,18 @@ public class Camera
 
     public void Follow(IGameEntity entity, GameTime gameTime)
     {
-        if (entity == null) return;
+        if (entity == null)
+        {
+            return;
+        }
+
         float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        Vector2 entityCenter = new Vector2(entity.Position.X + Tile.PixelSizeX / 2, entity.Position.Y + Tile.PixelSizeY / 2);
+        Vector2 entityCenter = new Vector2(entity.Position.X + (Tile.PixelSizeX / 2), entity.Position.Y + (Tile.PixelSizeY / 2));
         Vector2 screenCenter = new Vector2(ScreenSizeX / 2f, ScreenSizeY / 2f);
 
         Matrix targetTranslation = Matrix.CreateTranslation(
-            screenCenter.X - entityCenter.X * scaleFactor,
-            screenCenter.Y - entityCenter.Y * scaleFactor,
+            screenCenter.X - (entityCenter.X * scaleFactor),
+            screenCenter.Y - (entityCenter.Y * scaleFactor),
             0);
 
         Matrix targetTransform = Matrix.Multiply(Matrix.CreateScale(scaleFactor, scaleFactor, 1f), targetTranslation);
@@ -42,4 +47,3 @@ public class Camera
     {
     }
 }
-

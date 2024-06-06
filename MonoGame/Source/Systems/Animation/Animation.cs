@@ -1,8 +1,7 @@
-﻿namespace MonoGame;
+﻿namespace MonoGame.Source.Systems.Animation;
 
 public class Animation
 {
-
     public string Id { get; set; }
 
     public int SpritesheetRow { get; set; }

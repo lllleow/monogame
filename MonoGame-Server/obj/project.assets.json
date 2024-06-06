@@ -1607,8 +1607,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj": {
-              "projectPath": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj"
+            "c:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj": {
+              "projectPath": "c:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj"
             }
           }
         }

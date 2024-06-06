@@ -8,8 +8,7 @@ namespace MonoGame.Source.Systems.Components.Collision;
 
 public class CollisionMaskHandler
 {
-
-    public static Dictionary<int, bool[,]> CollisionMasks = new Dictionary<int, bool[,]>();
+    public static Dictionary<int, bool[,]> CollisionMasks = [];
 
     public static bool[,] GetMaskForTexture(string spritesheet, Rectangle region)
     {
@@ -57,10 +56,11 @@ public class CollisionMaskHandler
         {
             for (int x = 0; x < width; x++)
             {
-                int index = x + y * width;
+                int index = x + (y * width);
                 mask[x, y] = textureData[index].A != 0;
             }
         }
+
         return mask;
     }
 
@@ -72,7 +72,9 @@ public class CollisionMaskHandler
         int overlapHeight = Math.Min(rect1.Y + rect1.Height, rect2.Y + rect2.Height) - overlapY;
 
         if (overlapWidth <= 0 || overlapHeight <= 0)
+        {
             return false;
+        }
 
         for (int y = 0; y < overlapHeight; y++)
         {
@@ -84,13 +86,19 @@ public class CollisionMaskHandler
                 int mask2Y = overlapY - rect2.Y + y;
 
                 if (mask1X < 0 || mask1Y < 0 || mask1X >= mask1.GetLength(0) || mask1Y >= mask1.GetLength(1))
+                {
                     continue;
+                }
 
                 if (mask2X < 0 || mask2Y < 0 || mask2X >= mask2.GetLength(0) || mask2Y >= mask2.GetLength(1))
+                {
                     continue;
+                }
 
                 if (mask1[mask1X, mask1Y] && mask2[mask2X, mask2Y])
+                {
                     return true;
+                }
             }
         }
 

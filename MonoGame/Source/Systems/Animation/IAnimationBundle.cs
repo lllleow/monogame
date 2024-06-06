@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Animation;
 
 public interface IAnimationBundle
 {
-
     string SpriteSheet { get; set; }
 
     int SizeX { get; set; }
@@ -20,7 +19,6 @@ public interface IAnimationBundle
 
     int GetSpritesheetRowForAnimation(string animationName);
 
-    
     void CreateAnimation(Animation animation);
 
     Rectangle GetSpriteRectangle(string animationName, double percentage);

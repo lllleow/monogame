@@ -2,14 +2,14 @@
 using MonoGame.Source.Multiplayer.Interfaces;
 using MonoGame.Source.Multiplayer.NetworkMessageHandler;
 
-namespace MonoGame;
+namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessageHandler.Client;
 
 public class MovePlayerNetworkMessageHandler : IClientMessageHandler
 {
     public void Execute(byte channel, INetworkMessage message)
     {
-        MovePlayerNetworkMessage allowMovementNetworkMessage = (MovePlayerNetworkMessage)message;
-        Player player = Globals.World.GetPlayerByUUID(allowMovementNetworkMessage.UUID);
+        var allowMovementNetworkMessage = (MovePlayerNetworkMessage)message;
+        var player = Globals.World.GetPlayerByUUID(allowMovementNetworkMessage.UUID);
 
         if (Vector2.Distance(player.Position, allowMovementNetworkMessage.ExpectedPosition) < 1f)
         {
@@ -17,7 +17,7 @@ public class MovePlayerNetworkMessageHandler : IClientMessageHandler
         }
         else
         {
-            player.Move(Globals.gameTime, allowMovementNetworkMessage.Direction, allowMovementNetworkMessage.Speed);
+            player.Move(Globals.GameTime, allowMovementNetworkMessage.Direction, allowMovementNetworkMessage.Speed);
         }
     }
 }

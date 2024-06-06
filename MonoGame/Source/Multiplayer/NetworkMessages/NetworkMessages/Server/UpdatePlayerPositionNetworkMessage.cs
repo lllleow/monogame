@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using LiteNetLib.Utils;
 
-namespace MonoGame
+namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
 {
     public class UpdatePlayerPositionNetworkMessage : NetworkMessage
     {
@@ -26,7 +26,7 @@ namespace MonoGame
 
         public override NetDataWriter Serialize()
         {
-            NetDataWriter data = new NetDataWriter();
+            var data = new NetDataWriter();
             data.Put((byte)NetworkMessageTypes.UpdatePlayerPositionNetworkMessage);
             data.Put(UUID);
             data.Put(Position.X);

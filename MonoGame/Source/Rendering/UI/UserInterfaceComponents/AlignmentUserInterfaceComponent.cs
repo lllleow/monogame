@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Source.Rendering.UI.Interfaces;
 
-namespace MonoGame;
+namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class AlignmentUserInterfaceComponent : SingleChildUserInterfaceComponent
 {
@@ -14,10 +14,10 @@ public class AlignmentUserInterfaceComponent : SingleChildUserInterfaceComponent
 
     public override Vector2 GetPositionRelativeToParent()
     {
-        Vector2 parentPosition = Parent?.GetPositionRelativeToParent() ?? Vector2.Zero;
-        Vector2 parentSize = Parent?.GetPreferredSize() ?? Globals.UserInterfaceHandler.UIScreenSize;
-        Vector2 componentSize = GetPreferredSize();
-        Vector2 position = Vector2.Zero;
+        var parentPosition = Parent?.GetPositionRelativeToParent() ?? Vector2.Zero;
+        var parentSize = Parent?.GetPreferredSize() ?? Globals.UserInterfaceHandler.UIScreenSize;
+        var componentSize = GetPreferredSize();
+        var position = Vector2.Zero;
 
         switch (Alignment)
         {

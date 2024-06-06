@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Source.Rendering.Enum;
+using MonoGame.Source.Systems.Tiles.Interfaces;
 
 namespace MonoGame.Source.Systems.Chunks.Interfaces;
 
 public interface IChunk
 {
-
     public Dictionary<TileDrawLayer, ITile[,]> Tiles { get; set; }
 
     public int X { get; set; }

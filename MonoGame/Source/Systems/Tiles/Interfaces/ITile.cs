@@ -1,11 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame.Source.Rendering.Enum;
 using MonoGame.Source.Rendering.Utils;
+using MonoGame.Source.Systems.Components.Collision.Enum;
+using MonoGame.Source.Systems.Tiles.Enums;
+using MonoGame.Source.Util.Enum;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Tiles.Interfaces;
 
 public interface ITile
 {
-
     public string Id { get; set; }
 
     public string Name { get; set; }
@@ -44,7 +47,7 @@ public interface ITile
 
     public bool Walkable { get; set; }
 
-    public (int, int) DefaultTextureCoordinates { get; set; }
+    public (int TextureCoordinateX, int TextureCoordinateY) DefaultTextureCoordinates { get; set; }
 
     public string[] ConnectableTiles { get; set; }
 

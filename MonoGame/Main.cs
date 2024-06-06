@@ -2,8 +2,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Source;
+using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Rendering.Camera;
+using MonoGame.Source.Rendering.UI;
 using MonoGame.Source.Systems.Scripts;
+using MonoGame.Source.WorldNamespace;
 
 namespace MonoGame;
 
@@ -35,7 +39,7 @@ public class Main : Game
 
     protected override void LoadContent()
     {
-        Globals.ContentManager = this.Content;
+        Globals.ContentManager = Content;
         Globals.SpriteBatch = new SpriteBatch(GraphicsDevice);
         Globals.UserInterfaceHandler = new UserInterfaceHandler();
         Globals.DefaultFont = Content.Load<SpriteFont>("PixelifySans");
@@ -57,9 +61,11 @@ public class Main : Game
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        {
             Exit();
+        }
 
-        Globals.gameTime = gameTime;
+        Globals.GameTime = gameTime;
         NetworkClient.Instance.Update();
         Globals.World.Update(gameTime);
         Globals.Camera.Follow(Globals.World.GetLocalPlayer(), gameTime);

@@ -1,24 +1,19 @@
-﻿using MonoGame;
-using MonoGame_Server.Systems.Server.MessageHandlers;
+﻿using MonoGame_Server.Systems.Server.MessageHandlers;
+using MonoGame.Source.Multiplayer;
 
-namespace MonoGame_Server;
+namespace MonoGame_Server.Systems.Server;
 
 public class NetworkMessageTypeServerHelper
 {
     public static Type GetHandlerForServerMessageType(NetworkMessageTypes messageType)
     {
-        switch (messageType)
+        return messageType switch
         {
-            case NetworkMessageTypes.AuthenticateUserNetworkMessage:
-                return typeof(AuthenticateUserServerMessageHandler);
-            case NetworkMessageTypes.RequestToLoadWorldNetworkMessage:
-                return typeof(RequestToLoadWorldServerMessageHandler);
-            case NetworkMessageTypes.RequestMovementNetworkMessage:
-                return typeof(RequestMovementNetworkMessageHandler);
-            case NetworkMessageTypes.RequestToPlaceTileNetworkMessage:
-                return typeof(RequestToPlaceTileNetworkMessageHandler);
-            default:
-                throw new ArgumentException("Invalid network message type");
-        }
+            NetworkMessageTypes.AuthenticateUserNetworkMessage => typeof(AuthenticateUserServerMessageHandler),
+            NetworkMessageTypes.RequestToLoadWorldNetworkMessage => typeof(RequestToLoadWorldServerMessageHandler),
+            NetworkMessageTypes.RequestMovementNetworkMessage => typeof(RequestMovementNetworkMessageHandler),
+            NetworkMessageTypes.RequestToPlaceTileNetworkMessage => typeof(RequestToPlaceTileNetworkMessageHandler),
+            _ => throw new ArgumentException("Invalid network message type"),
+        };
     }
 }

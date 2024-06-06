@@ -1,9 +1,7 @@
-﻿namespace MonoGame
+﻿namespace MonoGame.Source.Rendering.Enum
 {
-
     public enum TileDrawLayer
     {
-
         Background,
 
         Terrain,
@@ -13,7 +11,6 @@
 
     public static class TileDrawLayerPriority
     {
-
         public static TileDrawLayer[] GetPriority()
         {
             return new TileDrawLayer[]

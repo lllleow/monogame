@@ -5,14 +5,20 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Components.Animator;
 using MonoGame.Source.Systems.Components.Collision;
+using MonoGame.Source.Systems.Components.Collision.Enum;
 using MonoGame.Source.Systems.Components.Interfaces;
+using MonoGame.Source.Systems.Components.PixelBounds;
+using MonoGame.Source.Systems.Entity.Interfaces;
+using MonoGame.Source.Systems.Entity.PlayerNamespace;
+using MonoGame.Source.Systems.Tiles;
+using MonoGame.Source.Systems.Tiles.Interfaces;
+using MonoGame.Source.Util.Enum;
 
 namespace MonoGame.Source.Systems.Entity;
 
 public abstract class GameEntity : IGameEntity
 {
-
-    public List<IEntityComponent> components { get; set; }
+    public List<IEntityComponent> Components { get; set; }
 
     public Vector2 Position { get; set; }
 
@@ -22,15 +28,14 @@ public abstract class GameEntity : IGameEntity
 
     public GameEntity()
     {
-        components = new List<IEntityComponent>();
+        Components = [];
         Position = Vector2.Zero;
         Speed = Vector2.Zero;
     }
 
-    
     public virtual void Update(GameTime gameTime)
     {
-        foreach (var component in components)
+        foreach (var component in Components)
         {
             component.Update(gameTime);
         }
@@ -38,7 +43,7 @@ public abstract class GameEntity : IGameEntity
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-        foreach (var component in components)
+        foreach (var component in Components)
         {
             component.Draw(spriteBatch);
         }
@@ -46,7 +51,7 @@ public abstract class GameEntity : IGameEntity
 
     public void AddComponent(IEntityComponent component)
     {
-        components.Add(component);
+        Components.Add(component);
         component.SetEntity(this);
         component.Initialize();
         component.Initialized = true;
@@ -54,7 +59,7 @@ public abstract class GameEntity : IGameEntity
 
     public void RemoveComponent(IEntityComponent component)
     {
-        components.Remove(component);
+        _ = Components.Remove(component);
     }
 
     public T GetFirstComponent<T>()
@@ -64,37 +69,28 @@ public abstract class GameEntity : IGameEntity
 
     public List<T> GetComponents<T>()
     {
-        return components.OfType<T>().ToList();
+        return Components.OfType<T>().ToList();
     }
 
     public bool ContainsComponent<T>()
     {
-        return components.OfType<T>().Any();
+        return Components.OfType<T>().Any();
     }
 
     public Vector2 GetDisplacement(Direction direction, Vector2 speed)
     {
-        switch (direction)
+        return direction switch
         {
-            case Direction.Up:
-                return new Vector2(0, -speed.Y);
-            case Direction.Down:
-                return new Vector2(0, speed.Y);
-            case Direction.Left:
-                return new Vector2(-speed.X, 0);
-            case Direction.Right:
-                return new Vector2(speed.X, 0);
-            case Direction.LeftUp:
-                return new Vector2(-speed.X, -speed.Y);
-            case Direction.RightUp:
-                return new Vector2(speed.X, -speed.Y);
-            case Direction.LeftDown:
-                return new Vector2(-speed.X, speed.Y);
-            case Direction.RightDown:
-                return new Vector2(speed.X, speed.Y);
-            default:
-                return Vector2.Zero;
-        }
+            Direction.Up => new Vector2(0, -speed.Y),
+            Direction.Down => new Vector2(0, speed.Y),
+            Direction.Left => new Vector2(-speed.X, 0),
+            Direction.Right => new Vector2(speed.X, 0),
+            Direction.LeftUp => new Vector2(-speed.X, -speed.Y),
+            Direction.RightUp => new Vector2(speed.X, -speed.Y),
+            Direction.LeftDown => new Vector2(-speed.X, speed.Y),
+            Direction.RightDown => new Vector2(speed.X, speed.Y),
+            _ => Vector2.Zero,
+        };
     }
 
     public void Move(GameTime gameTime, Direction direction, Vector2 speed)
@@ -149,7 +145,7 @@ public abstract class GameEntity : IGameEntity
             {
                 tiles = collisionComponent.GetTilesCollidingWithRectangle(entityRectangle);
             }
-            else if (collisionComponent.Mode == CollisionMode.PixelPerfect || collisionComponent.Mode == CollisionMode.CollisionMask)
+            else if (collisionComponent.Mode is CollisionMode.PixelPerfect or CollisionMode.CollisionMask)
             {
                 PixelBoundsComponent pixelBounds = GetFirstComponent<PixelBoundsComponent>();
                 tiles = collisionComponent.GetTilesCollidingWithMask(pixelBounds.Mask, entityRectangle);
@@ -169,7 +165,7 @@ public abstract class GameEntity : IGameEntity
     {
         if (ContainsComponent<AnimatorComponent>())
         {
-            AnimatorComponent animator = GetFirstComponent<AnimatorComponent>();
+            _ = GetFirstComponent<AnimatorComponent>();
             return new Rectangle((int)position.X, (int)position.Y, Tile.PixelSizeX, Tile.PixelSizeY);
         }
         else

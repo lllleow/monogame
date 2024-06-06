@@ -1,10 +1,14 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Source.Rendering.Enum;
+using MonoGame.Source.Systems.Components.Collision.Enum;
+using MonoGame.Source.Systems.Tiles.Enums;
+using MonoGame.Source.Systems.Tiles.Interfaces;
 using MonoGame.Source.Systems.Tiles.Utils;
-namespace MonoGame;
+using MonoGame.Source.Util.Enum;
+namespace MonoGame.Source.Systems.Tiles;
 
 public class Tile : ITile
 {
-
     public string Id { get; set; }
 
     public string Name { get; set; }
@@ -15,7 +19,7 @@ public class Tile : ITile
 
     public int TextureY { get; set; }
 
-    public (int, int) CurrentTextureIndex { get; set; }
+    public (int TextureCoordinateX, int TextureCoordinateY) CurrentTextureIndex { get; set; }
 
     public Texture2D Texture { get; set; }
 
@@ -51,7 +55,7 @@ public class Tile : ITile
 
     public string[] ConnectableTiles { get; set; } = System.Array.Empty<string>();
 
-    public (int, int) DefaultTextureCoordinates { get; set; }
+    public (int TextureCoordinateX, int TextureCoordinateY) DefaultTextureCoordinates { get; set; }
     public int LocalX { get; set; }
     public int LocalY { get; set; }
 
@@ -69,26 +73,26 @@ public class Tile : ITile
 
     public void UpdateTextureCoordinates(TileDrawLayer layer)
     {
-        TileNeighborConfiguration configuration = GetNeighborConfiguration(layer);
-        (int, int) coordinates = TextureProcessor?.Process(configuration) ?? (0, 0);
+        var configuration = GetNeighborConfiguration(layer);
+        var coordinates = TextureProcessor?.Process(configuration) ?? (0, 0);
 
         CurrentTextureIndex = coordinates;
 
-        TextureX = coordinates.Item1;
-        TextureY = coordinates.Item2;
+        TextureX = coordinates.TextureCoordinateX;
+        TextureY = coordinates.TextureCoordinateY;
     }
 
     public TileNeighborConfiguration GetNeighborConfiguration(TileDrawLayer layer)
     {
-        ITile left = Globals.World.GetTileAt(layer, WorldX - 1, WorldY);
-        ITile right = Globals.World.GetTileAt(layer, WorldX + 1, WorldY);
-        ITile up = Globals.World.GetTileAt(layer, WorldX, WorldY - 1);
-        ITile down = Globals.World.GetTileAt(layer, WorldX, WorldY + 1);
+        var left = Globals.World.GetTileAt(layer, WorldX - 1, WorldY);
+        var right = Globals.World.GetTileAt(layer, WorldX + 1, WorldY);
+        var up = Globals.World.GetTileAt(layer, WorldX, WorldY - 1);
+        var down = Globals.World.GetTileAt(layer, WorldX, WorldY + 1);
 
-        ITile left_top = Globals.World.GetTileAt(layer, WorldX - 1, WorldY - 1);
-        ITile right_top = Globals.World.GetTileAt(layer, WorldX + 1, WorldY - 1);
-        ITile left_bottom = Globals.World.GetTileAt(layer, WorldX - 1, WorldY + 1);
-        ITile right_bottom = Globals.World.GetTileAt(layer, WorldX + 1, WorldY + 1);
+        var left_top = Globals.World.GetTileAt(layer, WorldX - 1, WorldY - 1);
+        var right_top = Globals.World.GetTileAt(layer, WorldX + 1, WorldY - 1);
+        var left_bottom = Globals.World.GetTileAt(layer, WorldX - 1, WorldY + 1);
+        var right_bottom = Globals.World.GetTileAt(layer, WorldX + 1, WorldY + 1);
 
         return new TileNeighborConfiguration(this, left, right, up, down, left_top, right_top, left_bottom, right_bottom);
     }

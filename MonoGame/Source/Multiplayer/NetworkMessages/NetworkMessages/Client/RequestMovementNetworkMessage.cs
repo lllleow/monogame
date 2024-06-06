@@ -1,7 +1,8 @@
 ﻿using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
+using MonoGame.Source.Util.Enum;
 
-namespace MonoGame
+namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client
 {
     public class RequestMovementNetworkMessage : NetworkMessage
     {
@@ -26,7 +27,7 @@ namespace MonoGame
 
         public override NetDataWriter Serialize()
         {
-            NetDataWriter data = new NetDataWriter();
+            var data = new NetDataWriter();
             data.Put((byte)NetworkMessageTypes.RequestMovementNetworkMessage);
             data.Put(Speed.X);
             data.Put(Speed.Y);

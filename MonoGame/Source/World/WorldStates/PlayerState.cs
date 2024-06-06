@@ -1,7 +1,8 @@
 ﻿using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
+using MonoGame.Source.Systems.Entity.PlayerNamespace;
 
-namespace MonoGame;
+namespace MonoGame.Source.WorldNamespace.WorldStates;
 
 public class PlayerState : INetSerializable
 {
@@ -22,7 +23,7 @@ public class PlayerState : INetSerializable
 
     public PlayerState(Player player)
     {
-        SelectedTile = player.selectedTile;
+        SelectedTile = player.SelectedTile;
         Position = player.Position;
         UUID = player.UUID;
     }

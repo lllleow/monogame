@@ -87,3 +87,6 @@ dotnet_diagnostic.SA1111.severity = None
 
 # Braces should not be ommitted
 dotnet_diagnostic.SA1503.severity = None
+
+# An opening square bracket within a C# statement is not spaced correctly.
+dotnet_diagnostic.SA1010.severity = None

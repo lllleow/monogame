@@ -4,14 +4,14 @@ using System.IO;
 using System.Reflection;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
+using MonoGame.Source.Systems.Tiles.Interfaces;
 using MonoGame.Source.Util.Loaders;
 
 namespace MonoGame.Source.Systems.Scripts;
 
 public static class TileRegistry
 {
-
-    public static Dictionary<string, Type> Tiles { get; private set; } = new Dictionary<string, Type>();
+    public static Dictionary<string, Type> Tiles { get; private set; } = [];
 
     public static void RegisterTile(string id, Type tileType)
     {
@@ -19,6 +19,7 @@ public static class TileRegistry
         {
             throw new ArgumentException("Tile type must implement ITile interface", nameof(tileType));
         }
+
         Tiles.Add(id, tileType);
     }
 
@@ -42,7 +43,7 @@ public static class TileRegistry
         {
             string code = File.ReadAllText(file);
             ITile tile = LoadTileScript(code);
-    
+
             RegisterTile(tile.Id, tile.GetType());
         }
     }

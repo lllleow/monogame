@@ -3,12 +3,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Components.Interfaces;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Entity.Interfaces;
 
 public interface IGameEntity
 {
-
-    List<IEntityComponent> components { get; set; }
+    List<IEntityComponent> Components { get; set; }
 
     string UUID { get; set; }
 

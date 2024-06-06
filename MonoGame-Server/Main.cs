@@ -2,7 +2,7 @@
 
 namespace MonoGame_Server;
 
-class Server
+internal class Server
 {
     public static void Main(string[] args)
     {

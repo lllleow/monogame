@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Source.Rendering.Utils;
+using MonoGame.Source.Systems.Tiles.Interfaces;
 
-namespace MonoGame;
+namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class TileSlotComponent : SlotComponent
 {
@@ -19,8 +20,8 @@ public class TileSlotComponent : SlotComponent
 
     public override TextureLocation GetDrawable()
     {
-        TextureLocation textureLocation = Tile?.GetTextureLocation();
-        textureLocation.TextureRectangle = rectangleHelper.GetTextureRectangleFromCoordinates(Tile?.DefaultTextureCoordinates.Item1 ?? 0, Tile?.DefaultTextureCoordinates.Item2 ?? 0);
+        var textureLocation = Tile?.GetTextureLocation();
+        textureLocation.TextureRectangle = RectangleHelper.GetTextureRectangleFromCoordinates(Tile?.DefaultTextureCoordinates.Item1 ?? 0, Tile?.DefaultTextureCoordinates.Item2 ?? 0);
         return textureLocation;
     }
 }

@@ -1,17 +1,23 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Source.Rendering.Enum;
+using MonoGame.Source.Rendering.Utils;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Components.Collision;
+using MonoGame.Source.Systems.Components.Collision.Enum;
 using MonoGame.Source.Systems.Scripts;
+using MonoGame.Source.Systems.Tiles;
+using MonoGame.Source.Systems.Tiles.Interfaces;
+using MonoGame.Source.Util.Enum;
 using MonoGame.Source.Util.Loaders;
+using MonoGame.Source.WorldNamespace;
+using MonoGame.Source.WorldNamespace.WorldStates;
 
 namespace MonoGame.Source.Systems.Chunks;
 
 public class Chunk : IChunk
 {
-
     public Dictionary<TileDrawLayer, ITile[,]> Tiles { get; set; }
 
     public int X { get; set; }
@@ -22,14 +28,14 @@ public class Chunk : IChunk
 
     public static int SizeY { get; set; } = 16;
 
-    private World World = Globals.World;
+    private World world = Globals.World;
 
     public Chunk(World world, int x, int y)
     {
         X = x;
         Y = y;
-        World = world;
-        Tiles = new Dictionary<TileDrawLayer, ITile[,]>();
+        this.world = world;
+        Tiles = [];
 
         foreach (TileDrawLayer layer in TileDrawLayerPriority.GetPriority())
         {
@@ -40,7 +46,7 @@ public class Chunk : IChunk
         {
             for (int chunkY = 0; chunkY < SizeY; chunkY++)
             {
-                SetTile("base.grass", TileDrawLayer.Background, chunkX, chunkY);
+                _ = SetTile("base.grass", TileDrawLayer.Background, chunkX, chunkY);
             }
         }
     }
@@ -49,7 +55,7 @@ public class Chunk : IChunk
     {
         X = chunkState.X;
         Y = chunkState.Y;
-        Tiles = new Dictionary<TileDrawLayer, ITile[,]>();
+        Tiles = [];
 
         foreach (TileDrawLayer layer in TileDrawLayerPriority.GetPriority())
         {
@@ -58,14 +64,14 @@ public class Chunk : IChunk
 
         foreach (TileState tileState in chunkState.Tiles)
         {
-            SetTile(tileState.Id, tileState.Layer.Value, tileState.LocalX.Value, tileState.LocalY.Value);
+            _ = SetTile(tileState.Id, tileState.Layer.Value, tileState.LocalX.Value, tileState.LocalY.Value);
         }
 
         for (int chunkX = 0; chunkX < SizeX; chunkX++)
         {
             for (int chunkY = 0; chunkY < SizeY; chunkY++)
             {
-                SetTile("base.grass", TileDrawLayer.Background, chunkX, chunkY);
+                _ = SetTile("base.grass", TileDrawLayer.Background, chunkX, chunkY);
             }
         }
 
@@ -74,27 +80,33 @@ public class Chunk : IChunk
 
     public ITile GetTile(TileDrawLayer layer, int x, int y)
     {
-        if (x >= SizeX || y >= SizeY || x < 0 || y < 0) return null;
-        return Tiles[layer][x, y];
+        return x >= SizeX || y >= SizeY || x < 0 || y < 0 ? null : Tiles[layer][x, y];
     }
 
     public Vector2 GetWorldPosition(int x, int y)
     {
-        int worldX = X * SizeX + x;
-        int worldY = Y * SizeY + y;
+        int worldX = (X * SizeX) + x;
+        int worldY = (Y * SizeY) + y;
         return new Vector2(worldX, worldY);
     }
 
     public void DeleteTile(TileDrawLayer layer, int x, int y)
     {
-        if (x > SizeX || y > SizeY || x < 0 || y < 0) return;
+        if (x > SizeX || y > SizeY || x < 0 || y < 0)
+        {
+            return;
+        }
+
         Tiles[layer][x, y] = null;
         UpdateNeighborChunks();
     }
 
     public ITile SetTile(string id, TileDrawLayer layer, int x, int y)
     {
-        if (x > SizeX || y > SizeY || x < 0 || y < 0) return null;
+        if (x > SizeX || y > SizeY || x < 0 || y < 0)
+        {
+            return null;
+        }
 
         ITile tile = TileRegistry.GetTile(id);
         Vector2 worldPosition = GetWorldPosition(x, y);
@@ -121,10 +133,7 @@ public class Chunk : IChunk
                 foreach (var layer in Tiles)
                 {
                     ITile tile = GetTile(layer.Key, x, y);
-                    if (tile != null)
-                    {
-                        tile.UpdateTextureCoordinates(layer.Key);
-                    }
+                    tile?.UpdateTextureCoordinates(layer.Key);
                 }
             }
         }
@@ -151,10 +160,7 @@ public class Chunk : IChunk
                                 Vector2 worldPosition = GetWorldPosition(neighborX, neighborY);
                                 ITile neighbor = Globals.World.GetTileAt(layer, (int)worldPosition.X, (int)worldPosition.Y);
 
-                                if (neighbor != null)
-                                {
-                                    neighbor.OnNeighborChanged(tile, layer, DirectionHelper.GetDirection(X, Y));
-                                }
+                                neighbor?.OnNeighborChanged(tile, layer, DirectionHelper.GetDirection(X, Y));
                             }
                         }
                     }
@@ -163,7 +169,7 @@ public class Chunk : IChunk
         }
     }
 
-    PrimitiveBatch primitiveBatch = new PrimitiveBatch(Globals.GraphicsDevice.GraphicsDevice);
+    private readonly PrimitiveBatch primitiveBatch = new(Globals.GraphicsDevice.GraphicsDevice);
 
     public void Draw(SpriteBatch spriteBatch)
     {
@@ -176,8 +182,8 @@ public class Chunk : IChunk
                     var tile = GetTile(layer.Key, chunkX, chunkY);
                     if (tile != null)
                     {
-                        int x = X * SizeX * Tile.PixelSizeX + chunkX * tile.SizeX * Tile.PixelSizeX;
-                        int y = Y * SizeY * Tile.PixelSizeY + chunkY * tile.SizeY * Tile.PixelSizeY;
+                        int x = (X * SizeX * Tile.PixelSizeX) + (chunkX * tile.SizeX * Tile.PixelSizeX);
+                        int y = (Y * SizeY * Tile.PixelSizeY) + (chunkY * tile.SizeY * Tile.PixelSizeY);
 
                         Vector2 scale = new Vector2(tile.Scale, tile.Scale);
                         Vector2 origin = new Vector2(tile.SizeX * Tile.PixelSizeX / 2, tile.SizeY * Tile.PixelSizeY / 2) + new Vector2(tile.PixelOffsetX, tile.PixelOffsetY);
@@ -280,44 +286,20 @@ public class Chunk : IChunk
         IChunk chunkPlusXMinusY = Globals.World.GetChunkAt(chunkXPlus, chunkYMinus);
         IChunk chunkPlusXPlusY = Globals.World.GetChunkAt(chunkXPlus, chunkYPlus);
 
-        if (chunkMinusX != null)
-        {
-            chunkMinusX.UpdateTextureCoordinates();
-        }
+        chunkMinusX?.UpdateTextureCoordinates();
 
-        if (chunkPlusX != null)
-        {
-            chunkPlusX.UpdateTextureCoordinates();
-        }
+        chunkPlusX?.UpdateTextureCoordinates();
 
-        if (chunkMinusY != null)
-        {
-            chunkMinusY.UpdateTextureCoordinates();
-        }
+        chunkMinusY?.UpdateTextureCoordinates();
 
-        if (chunkPlusY != null)
-        {
-            chunkPlusY.UpdateTextureCoordinates();
-        }
+        chunkPlusY?.UpdateTextureCoordinates();
 
-        if (chunkMinusXMinusY != null)
-        {
-            chunkMinusXMinusY.UpdateTextureCoordinates();
-        }
+        chunkMinusXMinusY?.UpdateTextureCoordinates();
 
-        if (chunkMinusXPlusY != null)
-        {
-            chunkMinusXPlusY.UpdateTextureCoordinates();
-        }
+        chunkMinusXPlusY?.UpdateTextureCoordinates();
 
-        if (chunkPlusXMinusY != null)
-        {
-            chunkPlusXMinusY.UpdateTextureCoordinates();
-        }
+        chunkPlusXMinusY?.UpdateTextureCoordinates();
 
-        if (chunkPlusXPlusY != null)
-        {
-            chunkPlusXPlusY.UpdateTextureCoordinates();
-        }
+        chunkPlusXPlusY?.UpdateTextureCoordinates();
     }
 }

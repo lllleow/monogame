@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using MonoGame;
+using MonoGame.Source;
 
 public static class Program
 {
@@ -10,10 +10,8 @@ public static class Program
         try
         {
             Globals.Args = args;
-            using (var game = new MonoGame.Main())
-            {
-                game.Run();
-            }
+            using var game = new MonoGame.Main();
+            game.Run();
         }
         catch (Exception ex)
         {

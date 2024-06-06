@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Source.Systems.Tiles.Utils;
+﻿using MonoGame.Source.Systems.Tiles.Interfaces;
+
+namespace MonoGame.Source.Systems.Tiles.Utils;
 
 public class TileNeighborConfiguration
 {
