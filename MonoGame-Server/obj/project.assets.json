@@ -1586,11 +1586,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame-Server\\MonoGame-Server.csproj",
+      "projectUniqueName": "c:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame-Server\\MonoGame-Server.csproj",
       "projectName": "MonoGame-Server",
-      "projectPath": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame-Server\\MonoGame-Server.csproj",
+      "projectPath": "c:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame-Server\\MonoGame-Server.csproj",
       "packagesPath": "C:\\Users\\Leonardo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame-Server\\obj\\",
+      "outputPath": "c:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame-Server\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Leonardo\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1607,8 +1607,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "c:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj": {
-              "projectPath": "c:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj"
+            "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj": {
+              "projectPath": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj"
             }
           }
         }

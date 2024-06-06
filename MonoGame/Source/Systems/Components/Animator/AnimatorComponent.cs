@@ -13,9 +13,9 @@ public class AnimatorComponent : EntityComponent
     private int currentTextureX = 0;
     private int currentTextureY = 0;
 
-    public IAnimationBundle AnimationBundle;
+    public IAnimationBundle AnimationBundle { get; set; }
 
-    public string CurrentAnimation = "idle";
+    public string CurrentAnimation { get; set; } = "idle";
 
     public AnimatorComponent(IGameEntity entity, IAnimationBundle animation)
     {

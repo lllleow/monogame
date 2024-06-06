@@ -5,8 +5,8 @@ namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
 {
     public class UpdatePlayerPositionNetworkMessage : NetworkMessage
     {
-        public string UUID;
-        public Vector2 Position;
+        public string UUID { get; set; }
+        public Vector2 Position { get; set; }
 
         public UpdatePlayerPositionNetworkMessage()
         {

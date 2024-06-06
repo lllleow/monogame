@@ -51,7 +51,7 @@ public class Tile : ITile
 
     public bool Walkable { get; set; } = true;
 
-    public static bool ShowTileBoundingBox = false;
+    public static bool ShowTileBoundingBox { get; set; } = false;
 
     public string[] ConnectableTiles { get; set; } = System.Array.Empty<string>();
 

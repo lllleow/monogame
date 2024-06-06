@@ -10,11 +10,11 @@ namespace MonoGame.Source.Systems.Components.PixelBounds;
 
 public class PixelBoundsComponent : EntityComponent
 {
-    public bool[,] Mask;
-    public Rectangle TextureRectangle;
-    public string SpriteSheet;
-    public SpriteRendererComponent SpriteRendererComponent;
-    public static bool ShowEntityPixelPerfectCollision = false;
+    public bool[,] Mask { get; set; }
+    public Rectangle TextureRectangle { get; set; }
+    public string SpriteSheet { get; set; }
+    public SpriteRendererComponent SpriteRendererComponent { get; set; }
+    public static bool ShowEntityPixelPerfectCollision { get; set; } = false;
 
     public override void Initialize()
     {

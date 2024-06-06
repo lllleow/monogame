@@ -8,7 +8,7 @@ namespace MonoGame.Source.Systems.Components.Collision;
 
 public class CollisionMaskHandler
 {
-    public static Dictionary<int, bool[,]> CollisionMasks = [];
+    public static Dictionary<int, bool[,]> CollisionMasks { get; set; } = [];
 
     public static bool[,] GetMaskForTexture(string spritesheet, Rectangle region)
     {

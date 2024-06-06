@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj": {}
+    "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj": {
+    "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj",
+        "projectUniqueName": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj",
         "projectName": "MonoGame",
-        "projectPath": "c:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj",
+        "projectPath": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\MonoGame.csproj",
         "packagesPath": "C:\\Users\\Leonardo\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\obj\\",
+        "outputPath": "C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\MonoGame\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Leonardo\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -17,7 +17,7 @@ public class Player : GameEntity
     private readonly SpriteRendererComponent spriteRenderer;
     private MouseState currentMouseState;
     private MouseState previousMouseState;
-    public string SelectedTile = "base.grass";
+    public string SelectedTile { get; set; } = "base.grass";
 
     public Player(string uuid, Vector2 position)
     {

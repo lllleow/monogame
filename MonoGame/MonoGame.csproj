@@ -1,18 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
-	 <ItemGroup>
-    <!-- Ensure all files in the Scripts directory are included and set to copy to the output directory -->
-    <Content Include="Scripts\**\*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <Target Name="CopyScriptsFolder" AfterTargets="Build">
-    <!-- Explicitly copy all files from the Scripts folder to the output directory, preserving the directory structure -->
-    <Copy
-      SourceFiles="@(Content)"
-      DestinationFolder="$(OutputPath)\Scripts\%(RecursiveDir)"
-      SkipUnchangedFiles="true" />
-  </Target>
+	<ItemGroup>
+		<ContentWithTargetPath Include="Scripts\**">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<TargetPath>Scripts\%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
+		</ContentWithTargetPath>
+	</ItemGroup>
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net8.0</TargetFramework>

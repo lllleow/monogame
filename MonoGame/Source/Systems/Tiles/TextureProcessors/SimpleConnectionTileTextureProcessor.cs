@@ -5,7 +5,7 @@ namespace MonoGame.Source.Systems.Tiles.TextureProcessors;
 
 public class SimpleConnectionTileTextureProcessor : TileTextureProcessor
 {
-    public static SimpleConnectionTileTextureProcessor Instance = new();
+    public static SimpleConnectionTileTextureProcessor Instance { get; set; } = new();
 
     public override (int TextureCoordinateX, int TextureCoordinateY) Process(TileNeighborConfiguration configuration)
     {

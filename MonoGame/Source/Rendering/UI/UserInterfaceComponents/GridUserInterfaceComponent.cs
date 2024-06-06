@@ -8,7 +8,7 @@ public class GridUserInterfaceComponent : MultipleChildUserInterfaceComponent
 {
     public int MaxColumns { get; set; }
     public int MaxRows { get; set; }
-    public Vector2 Spacing = Vector2.Zero;
+    public Vector2 Spacing { get; set; } = Vector2.Zero;
 
     public GridUserInterfaceComponent(string name, int maxColumns, int maxRows, Vector2 spacing, Vector2 localPosition, List<IUserInterfaceComponent> children) : base(name, localPosition, children)
     {

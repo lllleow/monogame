@@ -10,9 +10,9 @@ namespace MonoGame_Server.Systems.World;
 
 public class ServerWorld
 {
-    public List<ChunkState>? Chunks;
-    public List<PlayerState>? Players;
-    public List<EntityState>? Entities;
+    public List<ChunkState>? Chunks { get; set; }
+    public List<PlayerState>? Players { get; set; }
+    public List<EntityState>? Entities { get; set; }
     private readonly SaveManager saveManager = new();
 
     public void Initialize()

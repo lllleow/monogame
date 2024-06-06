@@ -6,12 +6,12 @@ namespace MonoGame_Server.Systems.Server;
 
 public class NetworkServer
 {
-    public static NetworkServer Instance = new();
+    public static NetworkServer Instance { get; set; } = new();
     private readonly EventBasedNetListener listener;
     private readonly NetManager server;
-    public Dictionary<NetPeer, string> Connections = [];
-    public MessageHandler MessageHandler = new();
-    public ServerWorld ServerWorld;
+    public Dictionary<NetPeer, string> Connections { get; set; } = [];
+    public MessageHandler MessageHandler { get; set; } = new();
+    public ServerWorld ServerWorld { get; set; }
 
     public NetworkServer()
     {

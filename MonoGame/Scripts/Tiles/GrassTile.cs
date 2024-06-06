@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Source.Systems.Tiles;
+using MonoGame.Source.Systems.Tiles.TextureProcessors;
 
 public class GrassTile : Tile
 {

@@ -15,10 +15,10 @@ public class UserInterfaceComponent : IUserInterfaceComponent
     public Vector2 LocalPosition { get; set; }
     public IUserInterfaceComponent Parent { get; set; }
     public static bool ShowBounds { get; set; } = false;
-    public static List<Type> BoundRenderOffForTypes = [typeof(PaddingUserInterfaceComponent)];
-    public MouseState CurrentMouseState;
-    public MouseState PreviousMouseState;
-    public Action<IUserInterfaceComponent> OnClick;
+    public static List<Type> BoundRenderOffForTypes { get; set; } = [typeof(PaddingUserInterfaceComponent)];
+    public MouseState CurrentMouseState { get; set; }
+    public MouseState PreviousMouseState { get; set; }
+    public Action<IUserInterfaceComponent> OnClick { get; set; }
 
     public UserInterfaceComponent(string name, Vector2 localPosition)
     {

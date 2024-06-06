@@ -5,7 +5,7 @@ namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
 {
     public class ChunkDataNetworkMessage : NetworkMessage
     {
-        public ChunkState ChunkState;
+        public ChunkState ChunkState { get; set; }
 
         public ChunkDataNetworkMessage()
         {

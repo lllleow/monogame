@@ -10,9 +10,9 @@ namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class SlotComponent : UserInterfaceComponent, ISlotComponent
 {
-    public TextureLocation SlotTexture = TextureLocation.FirstTextureCoordinate("textures/slot");
-    public bool IsSelected = false;
-    public RectangleHelper RectangleHelper = new();
+    public TextureLocation SlotTexture { get; set; } = TextureLocation.FirstTextureCoordinate("textures/slot");
+    public bool IsSelected { get; set; } = false;
+    public RectangleHelper RectangleHelper { get; set; } = new();
 
     public SlotComponent(string name, Vector2 localPosition) : base(name, localPosition)
     {

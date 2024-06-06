@@ -7,9 +7,9 @@ namespace MonoGame.Source.Multiplayer;
 
 public class NetworkClient
 {
-    public static NetworkClient Instance = new();
+    public static NetworkClient Instance { get; set; } = new();
     private readonly EventBasedNetListener listener;
-    public NetManager Client;
+    public NetManager Client { get; set; }
 
     public NetworkClient()
     {

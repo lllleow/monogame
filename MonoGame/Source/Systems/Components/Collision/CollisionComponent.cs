@@ -10,9 +10,9 @@ namespace MonoGame.Source.Systems.Components.Collision;
 
 public class CollisionComponent : EntityComponent
 {
-    public CollisionMode Mode;
-    public string CollisionMaskSpritesheet;
-    public static bool ShowCollisionMasks = false;
+    public CollisionMode Mode { get; set; }
+    public string CollisionMaskSpritesheet { get; set; }
+    public static bool ShowCollisionMasks { get; set; } = false;
 
     public CollisionComponent(CollisionMode mode)
     {

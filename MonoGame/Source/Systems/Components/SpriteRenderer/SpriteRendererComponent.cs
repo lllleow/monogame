@@ -8,13 +8,13 @@ namespace MonoGame.Source.Systems.Components.SpriteRenderer;
 
 public class SpriteRendererComponent : EntityComponent
 {
-    public string SpriteSheet;
+    public string SpriteSheet { get; set; }
 
-    public Rectangle TextureRectangle = Rectangle.Empty;
+    public Rectangle TextureRectangle { get; set; } = Rectangle.Empty;
 
-    public Vector2 Scale = new(1, 1);
+    public Vector2 Scale { get; set; } = new(1, 1);
 
-    public Vector2 Size = new(Tile.PixelSizeX, Tile.PixelSizeY);
+    public Vector2 Size { get; set; } = new(Tile.PixelSizeX, Tile.PixelSizeY);
 
     public SpriteRendererComponent()
     {

@@ -6,7 +6,7 @@ namespace MonoGame.Source.Systems.Components.BoundingBox;
 
 public class BoundingBoxComponent : EntityComponent
 {
-    public Vector2 Size;
+    public Vector2 Size { get; set; }
 
     public BoundingBoxComponent(Vector2 size)
     {

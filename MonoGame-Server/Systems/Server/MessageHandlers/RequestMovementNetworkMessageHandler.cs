@@ -18,10 +18,13 @@ public class RequestMovementNetworkMessageHandler : IServerMessageHandler
         var playerState = NetworkServer.Instance.GetPlayerFromPeer(peer);
 
         var displacement = GetDisplacement(requestMovementNetworkMessage.Direction, requestMovementNetworkMessage.Speed);
-        var newPosition = (playerState.Position ?? Globals.SpawnPosition) + displacement;
-        playerState.Position = newPosition;
+        var newPosition = (playerState?.Position ?? Globals.SpawnPosition) + displacement;
+        if (playerState != null)
+        {
+            playerState.Position = newPosition;
+        }
 
-        networkServer.BroadcastMessage(new MovePlayerNetworkMessage(playerState.UUID, requestMovementNetworkMessage.Speed, requestMovementNetworkMessage.Direction, newPosition));
+        networkServer.BroadcastMessage(new MovePlayerNetworkMessage(playerState?.UUID, requestMovementNetworkMessage.Speed, requestMovementNetworkMessage.Direction, newPosition));
     }
 
     public bool Validate(NetPeer peer, byte channel, INetworkMessage message)

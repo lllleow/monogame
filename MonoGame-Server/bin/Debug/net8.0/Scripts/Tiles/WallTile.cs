@@ -1,4 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Source.Systems.Tiles;
+using MonoGame.Source.Systems.Tiles.TextureProcessors;
+using MonoGame.Source.Systems.Components.Collision.Enum;
 
 public class FenceTile : Tile
 {
