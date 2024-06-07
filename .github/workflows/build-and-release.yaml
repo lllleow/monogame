@@ -19,6 +19,9 @@ jobs:
       - name: Setup NuGet
         uses: NuGet/setup-nuget@v1
 
+      - name: Install SDL2
+        run: choco install sdl2
+
       - name: Restore NuGet packages
         run: nuget restore MonoGame.sln
 
