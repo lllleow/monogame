@@ -13,20 +13,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup MSBuild path
-        uses: microsoft/setup-msbuild@v1.1
-
-      - name: Setup NuGet
-        uses: NuGet/setup-nuget@v1
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '8.0'  # Updated to .NET 8.0
 
       - name: Restore NuGet packages
-        run: nuget restore MonoGame.sln
+        run: dotnet restore MonoGame.sln
 
       - name: Build MonoGame project
-        run: msbuild MonoGame/MonoGame.csproj /p:Configuration=Release /p:Platform="Any CPU"
+        run: dotnet build MonoGame/MonoGame.csproj --configuration Release --no-restore
 
       - name: Build MonoGame-Server project
-        run: msbuild MonoGame-Server/MonoGame-Server.csproj /p:Configuration=Release /p:Platform="Any CPU"
+        run: dotnet build MonoGame-Server/MonoGame-Server.csproj --configuration Release --no-restore
 
       - name: Create Artifacts Directory
         run: mkdir artifacts
@@ -47,11 +46,11 @@ jobs:
           
       - name: Copy MonoGame binaries
         run: |
-          Copy-Item "MonoGame/bin/Any CPU/Release/net8.0/*" "artifacts\MonoGame\"
+          Copy-Item "MonoGame/bin/Release/net8.0/*" "artifacts\MonoGame\"  # Ensure path matches target framework and configuration
 
       - name: Copy MonoGame-Server binaries
         run: |
-          Copy-Item "MonoGame-Server/bin/Any CPU/Release/net8.0/*" "artifacts\MonoGame-Server\"
+          Copy-Item "MonoGame-Server/bin/Release/net8.0/*" "artifacts\MonoGame-Server\"  # Ensure path matches target framework and configuration
 
       - name: Zip MonoGame binaries
         run: Compress-Archive -Path "artifacts\MonoGame\*" -DestinationPath "artifacts\MonoGame.zip" -Force
@@ -79,22 +78,14 @@ jobs:
           name: game-build
           path: release
 
-      - name: Create MonoGame Release
+      - name: Release Game Build
         uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.PAL }}
         with:
           tag_name: monogame-${{ github.run_number }}
-          name: MonoGame Release ${{ github.run_number }}
-          body: 'Release of MonoGame'
-          files: release/MonoGame.zip
-
-      - name: Create MonoGame-Server Release
-        uses: softprops/action-gh-release@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAL }}
-        with:
-          tag_name: monogame-server-${{ github.run_number }}
-          name: MonoGame Server Release ${{ github.run_number }}
-          body: 'Release of MonoGame Server'
-          files: release/MonoGame-Server.zip
+          name: Game Release ${{ github.run_number }}
+          body: 'Game Build Release'
+          files: |
+            release/MonoGame-Server.zip
+            release/MonoGame.zip
