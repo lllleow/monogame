@@ -25,7 +25,7 @@ public static class NetworkClient
         }
         else
         {
-            Client.Connect("agruta.duckdns.com", 25565, "monogame");
+            Client.Connect("189.30.162.90", 25565, "monogame");
         }
 
         InitializeNetworkClient();
