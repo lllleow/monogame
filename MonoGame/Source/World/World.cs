@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Source.Multiplayer.Messages.Player;
+using MonoGame.Source.Multiplayer.Messages.World;
 using MonoGame.Source.Rendering.Enum;
 using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.Systems.Chunks.Interfaces;
@@ -24,6 +26,26 @@ public class World
 
     public World()
     {
+        ClientNetworkEventManager.Subscribe<ChunkDataNetworkMessage>(message =>
+        {
+            LoadChunkFromChunkState(message.ChunkState);
+        });
+
+        ClientNetworkEventManager.Subscribe<DeleteTileNetworkMessage>(message =>
+        {
+            DeleteTile(TileDrawLayer.Tiles, message.PosX, message.PosY);
+        });
+
+        ClientNetworkEventManager.Subscribe<PlaceTileNetworkMessage>(message =>
+        {
+            SetTileAtPosition(message.TileId, TileDrawLayer.Tiles, message.PosX, message.PosY);
+        });
+
+        ClientNetworkEventManager.Subscribe<SpawnPlayerNetworkMessage>(message =>
+        {
+            var player = new Player(message.UUID, message.Position);
+            Players.Add(player);
+        });
     }
 
     public void LoadChunkFromChunkState(ChunkState chunkState)

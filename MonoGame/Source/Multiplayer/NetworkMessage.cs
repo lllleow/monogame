@@ -6,8 +6,11 @@ namespace MonoGame.Source.Multiplayer;
 
 public class NetworkMessage : INetworkMessage
 {
+    protected int MessageTypeId { get; set; }
+
     public NetworkMessage()
     {
+        MessageTypeId = MessageRegistry.Instance.GetIdByType(GetType());
     }
 
     public NetworkMessage(NetDataReader reader)
@@ -20,18 +23,10 @@ public class NetworkMessage : INetworkMessage
         throw new NotImplementedException();
     }
 
-    public void Execute()
-    {
-        throw new NotImplementedException();
-    }
-
     public virtual NetDataWriter Serialize()
     {
         throw new NotImplementedException();
     }
 
-    public bool Validate()
-    {
-        throw new NotImplementedException();
-    }
+    protected byte GetNetworkTypeId() => (byte)MessageTypeId;
 }

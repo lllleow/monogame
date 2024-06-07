@@ -18,7 +18,7 @@
             "request": "launch",
             "preLaunchTask": "Build Client", 
             "program": "${workspaceFolder}/MonoGame/bin/Debug/net8.0/MonoGame.exe",
-            "args": [],
+            "args": ["localhost"],
             "cwd": "${workspaceFolder}/MonoGame",
             "stopAtEntry": false,
             "console": "internalConsole"

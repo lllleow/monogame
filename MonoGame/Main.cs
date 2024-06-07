@@ -42,7 +42,7 @@ public class Main : Game
         Globals.ContentManager = Content;
         Globals.SpriteBatch = new SpriteBatch(GraphicsDevice);
         Globals.UserInterfaceHandler = new UserInterfaceHandler();
-        Globals.DefaultFont = Content.Load<SpriteFont>("PixelifySans");
+        Globals.DefaultFont = Content.Load<SpriteFont>("fonts/pixelify_sans/PixelifySans-Regular");
 
         TileRegistry.LoadTileScripts();
         AnimationBundleRegistry.LoadAnimationBundleScripts();
@@ -66,7 +66,7 @@ public class Main : Game
         }
 
         Globals.GameTime = gameTime;
-        NetworkClient.Instance.Update();
+        NetworkClient.Update();
         Globals.World.Update(gameTime);
         Globals.Camera.Follow(Globals.World.GetLocalPlayer(), gameTime);
         Globals.Camera.Update(gameTime);

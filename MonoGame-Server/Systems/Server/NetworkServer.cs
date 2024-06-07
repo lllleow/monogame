@@ -1,4 +1,5 @@
 ﻿using LiteNetLib;
+using MonoGame;
 using MonoGame_Server.Systems.World;
 using MonoGame.Source.Multiplayer.Interfaces;
 using MonoGame.Source.WorldNamespace.WorldStates;
@@ -10,13 +11,14 @@ public class NetworkServer
     private readonly EventBasedNetListener listener;
     private readonly NetManager server;
     public Dictionary<NetPeer, string> Connections { get; set; } = [];
-    public MessageHandler MessageHandler { get; set; } = new();
     public ServerWorld ServerWorld { get; set; }
+    public List<INetworkController> NetworkControllers { get; set; } = new();
 
     public NetworkServer()
     {
         listener = new EventBasedNetListener();
         server = new NetManager(listener);
+        InitializeControllers();
         ServerWorld = new ServerWorld();
         ServerWorld.Initialize();
     }
@@ -24,30 +26,11 @@ public class NetworkServer
     public void InitializeServer()
     {
         Console.WriteLine("Initializing server");
-        int port = 9050;
+        int port = 25565;
         _ = server.Start(port);
 
         Console.WriteLine("Server started at port " + port);
-        SetupListeners();
-    }
 
-    public NetPeer GetPeerByUUID(string UUID)
-    {
-        return Connections.FirstOrDefault(x => x.Value == UUID).Key;
-    }
-
-    public string GetUUIDByPeer(NetPeer peer)
-    {
-        return Connections.FirstOrDefault(x => x.Key == peer).Value;
-    }
-
-    public PlayerState? GetPlayerFromPeer(NetPeer peer)
-    {
-        return ServerWorld.GetPlayerByUUID(GetUUIDByPeer(peer));
-    }
-
-    public void SetupListeners()
-    {
         Console.WriteLine("Server is listening for connections");
         listener.ConnectionRequestEvent += request =>
         {
@@ -71,11 +54,42 @@ public class NetworkServer
             Console.WriteLine("Network message received from {0}", peer.Address);
             if (reader.AvailableBytes > 0)
             {
-                MessageHandler.HandleMessage(peer, reader, deliveryMethod, channel);
+                byte messageTypeId = reader.GetByte();
+                Type messageType = MessageRegistry.Instance.GetTypeById((int)messageTypeId);
+                INetworkMessage? message = (INetworkMessage?)Activator.CreateInstance(messageType);
+                message?.Deserialize(reader);
+                if (message != null)
+                {
+                    ServerNetworkEventManager.RaiseEvent(this, peer, messageType, message);
+                }
+
+                Console.WriteLine("Server received: " + message);
             }
 
             reader.Recycle();
         };
+    }
+
+    public void InitializeControllers()
+    {
+        ServerNetworkEventManager.AddController(new AuthenticationNetworkServerController());
+        ServerNetworkEventManager.AddController(new PlayerNetworkServerController());
+        ServerNetworkEventManager.AddController(new WorldNetworkServerController());
+    }
+
+    public NetPeer GetPeerByUUID(string UUID)
+    {
+        return Connections.FirstOrDefault(x => x.Value == UUID).Key;
+    }
+
+    public string GetUUIDByPeer(NetPeer peer)
+    {
+        return Connections.FirstOrDefault(x => x.Key == peer).Value;
+    }
+
+    public PlayerState? GetPlayerFromPeer(NetPeer peer)
+    {
+        return ServerWorld.GetPlayerByUUID(GetUUIDByPeer(peer));
     }
 
     public NetPeer GetConnection(string UUID)

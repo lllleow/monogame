@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Source.Multiplayer;
-using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
+using MonoGame.Source.Multiplayer.Messages.Player;
 using MonoGame.Source.Rendering.Enum;
 using MonoGame.Source.Systems.Components.Animator;
 using MonoGame.Source.Systems.Components.Collision;
@@ -27,6 +27,29 @@ public class Player : GameEntity
 
         animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
         spriteRenderer = new SpriteRendererComponent();
+
+        ClientNetworkEventManager.Subscribe<MovePlayerNetworkMessage>(message =>
+        {
+            if (UUID == message.UUID)
+            {
+                if (Vector2.Distance(Position, message.ExpectedPosition) < 1f)
+                {
+                    Position = message.ExpectedPosition;
+                }
+                else
+                {
+                    Move(Globals.GameTime, message.Direction, message.Speed);
+                }
+            }
+        });
+
+        ClientNetworkEventManager.Subscribe<UpdatePlayerPositionNetworkMessage>(message =>
+        {
+            if (UUID == message.UUID)
+            {
+                Position = message.Position;
+            }
+        });
 
         AddComponent(spriteRenderer);
         AddComponent(animator);
@@ -66,7 +89,7 @@ public class Player : GameEntity
         if (screenPosition != lastPosition)
         {
             lastPosition = screenPosition;
-            NetworkClient.Instance.SendMessage(new RequestToPlaceTileNetworkMessage(SelectedTile, TileDrawLayer.Tiles, globalPosition.PosX, globalPosition.PosY));
+            NetworkClient.SendMessage(new RequestToPlaceTileNetworkMessage(SelectedTile, TileDrawLayer.Tiles, globalPosition.PosX, globalPosition.PosY));
         }
     }
 
@@ -102,22 +125,22 @@ public class Player : GameEntity
             previousMouseState = currentMouseState;
             if (state.IsKeyDown(Keys.W))
             {
-                NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Up));
+                NetworkClient.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Up));
             }
 
             if (state.IsKeyDown(Keys.A))
             {
-                NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Left));
+                NetworkClient.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Left));
             }
 
             if (state.IsKeyDown(Keys.S))
             {
-                NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Down));
+                NetworkClient.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Down));
             }
 
             if (state.IsKeyDown(Keys.D))
             {
-                NetworkClient.Instance.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Right));
+                NetworkClient.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Right));
             }
 
             if (state.IsKeyUp(Keys.W) && state.IsKeyUp(Keys.A) && state.IsKeyUp(Keys.S) && state.IsKeyUp(Keys.D))
