@@ -18,14 +18,11 @@ jobs:
         with:
           dotnet-version: '8.0'  # Updated to .NET 8.0
 
-      - name: Restore NuGet packages
-        run: dotnet restore MonoGame.sln
-
       - name: Build MonoGame project
-        run: dotnet build MonoGame/MonoGame.csproj --configuration Release --no-restore
+        run: dotnet build MonoGame/MonoGame.csproj --configuration Release
 
       - name: Build MonoGame-Server project
-        run: dotnet build MonoGame-Server/MonoGame-Server.csproj --configuration Release --no-restore
+        run: dotnet build MonoGame-Server/MonoGame-Server.csproj --configuration Release
 
       - name: Create Artifacts Directory
         run: mkdir artifacts
@@ -46,11 +43,11 @@ jobs:
           
       - name: Copy MonoGame binaries
         run: |
-          Copy-Item "MonoGame/bin/Release/net8.0/*" "artifacts\MonoGame\"  # Ensure path matches target framework and configuration
+          Copy-Item "MonoGame/bin/Release/net8.0/*" "artifacts\MonoGame\"  -Recurse # Ensure path matches target framework and configuration
 
       - name: Copy MonoGame-Server binaries
         run: |
-          Copy-Item "MonoGame-Server/bin/Release/net8.0/*" "artifacts\MonoGame-Server\"  # Ensure path matches target framework and configuration
+          Copy-Item "MonoGame-Server/bin/Release/net8.0/*" "artifacts\MonoGame-Server\"  -Recurse # Ensure path matches target framework and configuration
 
       - name: Zip MonoGame binaries
         run: Compress-Archive -Path "artifacts\MonoGame\*" -DestinationPath "artifacts\MonoGame.zip" -Force
