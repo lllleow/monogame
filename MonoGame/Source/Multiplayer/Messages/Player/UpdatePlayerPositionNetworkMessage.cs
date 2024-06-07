@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using LiteNetLib.Utils;
 
-namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
+namespace MonoGame.Source.Multiplayer.Messages.Player
 {
     [NetworkMessage(7)]
     public class UpdatePlayerPositionNetworkMessage : NetworkMessage

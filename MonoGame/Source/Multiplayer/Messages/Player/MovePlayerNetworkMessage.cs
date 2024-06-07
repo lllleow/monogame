@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Source.Util.Enum;
 
-namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessageHandler.Client
+namespace MonoGame.Source.Multiplayer.Messages.Player
 {
     [NetworkMessage(8)]
     public class MovePlayerNetworkMessage : NetworkMessage

@@ -1,21 +1,21 @@
 ﻿using LiteNetLib.Utils;
 using MonoGame.Source.Rendering.Enum;
 
-namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
+namespace MonoGame.Source.Multiplayer.Messages.Player
 {
-    [NetworkMessage(10)]
-    public class PlaceTileNetworkMessage : NetworkMessage
+    [NetworkMessage(9)]
+    public class RequestToPlaceTileNetworkMessage : NetworkMessage
     {
         public string TileId { get; set; }
         public TileDrawLayer Layer { get; set; }
         public int PosX { get; set; }
         public int PosY { get; set; }
 
-        public PlaceTileNetworkMessage() : base()
+        public RequestToPlaceTileNetworkMessage() : base()
         {
         }
 
-        public PlaceTileNetworkMessage(string tileId, TileDrawLayer layer, int posX, int posY) : base()
+        public RequestToPlaceTileNetworkMessage(string tileId, TileDrawLayer layer, int posX, int posY) : base()
         {
             TileId = tileId;
             Layer = layer;
@@ -34,7 +34,7 @@ namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
         public override NetDataWriter Serialize()
         {
             var data = new NetDataWriter();
-            data.Put((byte)GetNetworkTypeId());
+            data.Put(GetNetworkTypeId());
             data.Put(TileId);
             data.Put((byte)Layer);
             data.Put(PosX);

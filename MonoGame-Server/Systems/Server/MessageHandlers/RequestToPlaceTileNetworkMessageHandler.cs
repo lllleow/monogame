@@ -1,6 +1,6 @@
 ﻿using LiteNetLib;
 using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
+using MonoGame.Source.Multiplayer.Messages.Player;
 
 namespace MonoGame_Server.Systems.Server.MessageHandlers;
 

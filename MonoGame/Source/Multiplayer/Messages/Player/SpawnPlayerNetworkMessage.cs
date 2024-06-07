@@ -1,7 +1,7 @@
 ﻿using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
+namespace MonoGame.Source.Multiplayer.Messages.Player
 {
     [NetworkMessage(5)]
     public class SpawnPlayerNetworkMessage : NetworkMessage

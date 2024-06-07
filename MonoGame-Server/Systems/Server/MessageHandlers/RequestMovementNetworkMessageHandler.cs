@@ -2,8 +2,8 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Source;
 using MonoGame.Source.Multiplayer.Interfaces;
+using MonoGame.Source.Multiplayer.Messages.Player;
 using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessageHandler.Client;
-using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
 using MonoGame.Source.Util.Enum;
 
 namespace MonoGame_Server.Systems.Server.MessageHandlers;

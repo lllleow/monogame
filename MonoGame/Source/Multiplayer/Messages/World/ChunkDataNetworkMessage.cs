@@ -1,7 +1,7 @@
 ﻿using LiteNetLib.Utils;
 using MonoGame.Source.WorldNamespace.WorldStates;
 
-namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
+namespace MonoGame.Source.Multiplayer.Messages.World
 {
     [NetworkMessage(4)]
     public class ChunkDataNetworkMessage : NetworkMessage

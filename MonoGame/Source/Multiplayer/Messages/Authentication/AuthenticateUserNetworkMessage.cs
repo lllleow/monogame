@@ -1,6 +1,6 @@
 ﻿using LiteNetLib.Utils;
 
-namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
+namespace MonoGame.Source.Multiplayer.Messages.Authentication;
 
 [NetworkMessage(1)]
 public class AuthenticateUserNetworkMessage : NetworkMessage
@@ -18,7 +18,7 @@ public class AuthenticateUserNetworkMessage : NetworkMessage
 
     public override NetDataWriter Serialize()
     {
-        NetDataWriter data = new NetDataWriter();
+        var data = new NetDataWriter();
         data.Put(GetNetworkTypeId());
         data.Put(UUID);
 

@@ -1,8 +1,7 @@
 ﻿using System;
 using LiteNetLib.Utils;
-using MonoGame.Source.Multiplayer;
 
-namespace MonoGame
+namespace MonoGame.Source.Multiplayer.Messages.Player
 {
     public class UpdateEntityAnimatorStateNetworkMessage : NetworkMessage
     {
@@ -16,8 +15,8 @@ namespace MonoGame
 
         public override NetDataWriter Serialize()
         {
-            NetDataWriter data = new NetDataWriter();
-            data.Put((byte)GetNetworkTypeId());
+            var data = new NetDataWriter();
+            data.Put(GetNetworkTypeId());
             return data;
         }
     }

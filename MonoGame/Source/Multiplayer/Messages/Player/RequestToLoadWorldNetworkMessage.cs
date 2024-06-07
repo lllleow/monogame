@@ -1,6 +1,6 @@
 ﻿using LiteNetLib.Utils;
 
-namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client
+namespace MonoGame.Source.Multiplayer.Messages.Player
 
 {
     [NetworkMessage(3)]
@@ -16,7 +16,7 @@ namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client
 
         public override NetDataWriter Serialize()
         {
-            NetDataWriter data = new NetDataWriter();
+            var data = new NetDataWriter();
             data.Put(GetNetworkTypeId());
             return data;
         }

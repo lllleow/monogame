@@ -1,4 +1,4 @@
-﻿using MonoGame;
+﻿using MonoGame.Source.Multiplayer.Interfaces;
 
 namespace MonoGame_Server;
 

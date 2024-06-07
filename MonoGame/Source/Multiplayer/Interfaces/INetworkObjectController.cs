@@ -1,5 +1,5 @@
 ﻿using System;
-namespace MonoGame;
+namespace MonoGame.Source.Multiplayer.Interfaces;
 
 public interface INetworkObjectController<T> : INetworkController
 {
