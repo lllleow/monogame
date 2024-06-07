@@ -3,16 +3,17 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
 {
+    [NetworkMessage(5)]
     public class SpawnPlayerNetworkMessage : NetworkMessage
     {
         public string UUID { get; set; }
         public Vector2 Position { get; set; }
 
-        public SpawnPlayerNetworkMessage()
+        public SpawnPlayerNetworkMessage() : base()
         {
         }
 
-        public SpawnPlayerNetworkMessage(string uuid, Vector2 position)
+        public SpawnPlayerNetworkMessage(string uuid, Vector2 position) : base()
         {
             UUID = uuid;
             Position = position;
@@ -27,7 +28,7 @@ namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
         public override NetDataWriter Serialize()
         {
             var data = new NetDataWriter();
-            data.Put((byte)NetworkMessageTypes.SpawnPlayerNetworkMessage);
+            data.Put(GetNetworkTypeId());
             data.Put(UUID);
             data.Put(Position.X);
             data.Put(Position.Y);

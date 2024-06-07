@@ -2,15 +2,16 @@
 
 namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
 
+[NetworkMessage(1)]
 public class AuthenticateUserNetworkMessage : NetworkMessage
 {
     public string UUID { get; set; }
 
-    public AuthenticateUserNetworkMessage()
+    public AuthenticateUserNetworkMessage() : base()
     {
     }
 
-    public AuthenticateUserNetworkMessage(string uuid)
+    public AuthenticateUserNetworkMessage(string uuid) : base()
     {
         UUID = uuid;
     }
@@ -18,7 +19,7 @@ public class AuthenticateUserNetworkMessage : NetworkMessage
     public override NetDataWriter Serialize()
     {
         NetDataWriter data = new NetDataWriter();
-        data.Put((byte)NetworkMessageTypes.AuthenticateUserNetworkMessage);
+        data.Put(GetNetworkTypeId());
         data.Put(UUID);
 
         return data;

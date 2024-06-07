@@ -2,16 +2,17 @@
 
 namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server;
 
+[NetworkMessage(2)]
 public class AuthenticationResultNetworkMessage : NetworkMessage
 {
     public bool Success { get; set; }
     public string Reason { get; set; }
 
-    public AuthenticationResultNetworkMessage()
+    public AuthenticationResultNetworkMessage() : base()
     {
     }
 
-    public AuthenticationResultNetworkMessage(bool success, string reason)
+    public AuthenticationResultNetworkMessage(bool success, string reason) : base()
     {
         Success = success;
         Reason = reason;
@@ -26,7 +27,7 @@ public class AuthenticationResultNetworkMessage : NetworkMessage
     public override NetDataWriter Serialize()
     {
         var data = new NetDataWriter();
-        data.Put((byte)NetworkMessageTypes.AuthenticationResultNetworkMessage);
+        data.Put(GetNetworkTypeId());
         data.Put(Success);
         data.Put(Reason);
 

@@ -4,6 +4,7 @@ using MonoGame.Source.Util.Enum;
 
 namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessageHandler.Client
 {
+    [NetworkMessage(8)]
     public class MovePlayerNetworkMessage : NetworkMessage
     {
         public string UUID { get; set; }
@@ -11,11 +12,11 @@ namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessageHandler.Clie
         public Direction Direction { get; set; }
         public Vector2 ExpectedPosition { get; set; }
 
-        public MovePlayerNetworkMessage()
+        public MovePlayerNetworkMessage() : base()
         {
         }
 
-        public MovePlayerNetworkMessage(string uuid, Vector2 speed, Direction direction, Vector2 expectedPosition)
+        public MovePlayerNetworkMessage(string uuid, Vector2 speed, Direction direction, Vector2 expectedPosition) : base()
         {
             UUID = uuid;
             Speed = speed;
@@ -34,7 +35,7 @@ namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessageHandler.Clie
         public override NetDataWriter Serialize()
         {
             var data = new NetDataWriter();
-            data.Put((byte)NetworkMessageTypes.MovePlayerNetworkMessage);
+            data.Put((byte)MessageTypeId);
             data.Put(UUID);
             data.Put(Speed.X);
             data.Put(Speed.Y);

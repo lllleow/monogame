@@ -3,6 +3,7 @@ using MonoGame.Source.WorldNamespace.WorldStates;
 
 namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
 {
+    [NetworkMessage(4)]
     public class ChunkDataNetworkMessage : NetworkMessage
     {
         public ChunkState ChunkState { get; set; }
@@ -25,7 +26,7 @@ namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
         public override NetDataWriter Serialize()
         {
             var data = new NetDataWriter();
-            data.Put((byte)NetworkMessageTypes.ChunkDataNetworkMessage);
+            data.Put(GetNetworkTypeId());
             data.Put(ChunkState);
             return data;
         }

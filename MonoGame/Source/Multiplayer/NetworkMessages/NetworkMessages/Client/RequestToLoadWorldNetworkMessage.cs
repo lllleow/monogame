@@ -1,10 +1,12 @@
 ﻿using LiteNetLib.Utils;
 
 namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client
+
 {
+    [NetworkMessage(3)]
     public class RequestToLoadWorldNetworkMessage : NetworkMessage
     {
-        public RequestToLoadWorldNetworkMessage()
+        public RequestToLoadWorldNetworkMessage() : base()
         {
         }
 
@@ -15,7 +17,7 @@ namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client
         public override NetDataWriter Serialize()
         {
             NetDataWriter data = new NetDataWriter();
-            data.Put((byte)NetworkMessageTypes.RequestToLoadWorldNetworkMessage);
+            data.Put(GetNetworkTypeId());
             return data;
         }
     }

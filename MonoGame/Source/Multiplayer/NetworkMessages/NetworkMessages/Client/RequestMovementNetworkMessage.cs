@@ -4,16 +4,17 @@ using MonoGame.Source.Util.Enum;
 
 namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client
 {
+    [NetworkMessage(6)]
     public class RequestMovementNetworkMessage : NetworkMessage
     {
         public Vector2 Speed { get; set; }
         public Direction Direction { get; set; }
 
-        public RequestMovementNetworkMessage()
+        public RequestMovementNetworkMessage() : base()
         {
         }
 
-        public RequestMovementNetworkMessage(Vector2 displacement, Direction direction)
+        public RequestMovementNetworkMessage(Vector2 displacement, Direction direction) : base()
         {
             Speed = displacement;
             Direction = direction;
@@ -28,7 +29,7 @@ namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client
         public override NetDataWriter Serialize()
         {
             var data = new NetDataWriter();
-            data.Put((byte)NetworkMessageTypes.RequestMovementNetworkMessage);
+            data.Put(GetNetworkTypeId());
             data.Put(Speed.X);
             data.Put(Speed.Y);
             data.Put((byte)Direction);

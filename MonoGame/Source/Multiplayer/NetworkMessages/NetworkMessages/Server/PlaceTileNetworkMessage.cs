@@ -3,6 +3,7 @@ using MonoGame.Source.Rendering.Enum;
 
 namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
 {
+    [NetworkMessage(10)]
     public class PlaceTileNetworkMessage : NetworkMessage
     {
         public string TileId { get; set; }
@@ -10,11 +11,11 @@ namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
         public int PosX { get; set; }
         public int PosY { get; set; }
 
-        public PlaceTileNetworkMessage()
+        public PlaceTileNetworkMessage() : base()
         {
         }
 
-        public PlaceTileNetworkMessage(string tileId, TileDrawLayer layer, int posX, int posY)
+        public PlaceTileNetworkMessage(string tileId, TileDrawLayer layer, int posX, int posY) : base()
         {
             TileId = tileId;
             Layer = layer;
@@ -33,7 +34,7 @@ namespace MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server
         public override NetDataWriter Serialize()
         {
             var data = new NetDataWriter();
-            data.Put((byte)NetworkMessageTypes.PlaceTileNetworkMessage);
+            data.Put((byte)GetNetworkTypeId());
             data.Put(TileId);
             data.Put((byte)Layer);
             data.Put(PosX);

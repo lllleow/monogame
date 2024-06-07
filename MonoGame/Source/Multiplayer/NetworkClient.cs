@@ -1,43 +1,54 @@
 ﻿using System;
+using System.Collections.Generic;
 using LiteNetLib;
 using MonoGame.Source.Multiplayer.Interfaces;
 using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
 
 namespace MonoGame.Source.Multiplayer;
 
-public class NetworkClient
+public static class NetworkClient
 {
-    public static NetworkClient Instance { get; set; } = new();
-    private readonly EventBasedNetListener listener;
-    public NetManager Client { get; set; }
+    private static readonly EventBasedNetListener Listener;
+    public static NetManager Client { get; set; }
+    public static List<INetworkController> NetworkControllers { get; set; } = new();
 
-    public NetworkClient()
+    static NetworkClient()
     {
-        listener = new EventBasedNetListener();
-        Client = new NetManager(listener);
+        Listener = new EventBasedNetListener();
+        Client = new NetManager(Listener);
 
-        _ = Client.Start();
-        _ = Client.Connect("192.168.0.123", 9050, "monogame");
+        Client.Start();
 
-        listener.PeerConnectedEvent += peer =>
+        if (Globals.Args.Length > 0 && Globals.Args[0] == "localhost")
+        {
+            Client.Connect("localhost", 25565, "key");
+        }
+        else
+        {
+            Client.Connect("agruta.duckdns.com", 25565, "monogame");
+        }
+
+        InitializeNetworkClient();
+        InitializeControllers();
+        AuthenticateUser();
+    }
+
+    public static void InitializeNetworkClient()
+    {
+        Listener.PeerConnectedEvent += peer =>
         {
             AuthenticateUser();
         };
 
-        listener.NetworkReceiveEvent += (peer, reader, channel, deliveryMethod) =>
+        Listener.NetworkReceiveEvent += (peer, reader, channel, deliveryMethod) =>
         {
             if (reader.AvailableBytes > 0)
             {
-                var messageType = (NetworkMessageTypes)reader.GetByte();
-                var messageObjectType = NetworkMessageTypeClientHelper.GetTypeFromMessageType(messageType);
-
-                var message = (INetworkMessage)Activator.CreateInstance(messageObjectType);
+                byte messageTypeId = reader.GetByte();
+                Type messageType = MessageRegistry.Instance.GetTypeById((int)messageTypeId);
+                INetworkMessage message = (INetworkMessage)Activator.CreateInstance(messageType);
                 message.Deserialize(reader);
-
-                var handlerType = NetworkMessageTypeClientHelper.GetHandlerForClientMessageType(messageType);
-                dynamic handler = Activator.CreateInstance(handlerType);
-                handler.Execute(channel, message);
-
+                ClientNetworkEventManager.RaiseEvent(messageType, message);
                 Console.WriteLine("Client Received: " + message);
             }
 
@@ -45,24 +56,29 @@ public class NetworkClient
         };
     }
 
-    public void AuthenticateUser()
+    public static void InitializeControllers()
+    {
+        NetworkControllers.Add(new AuthenticationNetworkController());
+    }
+
+    public static void AuthenticateUser()
     {
         var authenticateUser = new AuthenticateUserNetworkMessage(Globals.UUID);
         SendMessage(authenticateUser);
     }
 
-    public void SendMessage(INetworkMessage message)
+    public static void SendMessage(INetworkMessage message)
     {
         Console.WriteLine("Client Sent: " + message);
         Client.FirstPeer?.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
     }
 
-    public void Update()
+    public static void Update()
     {
         Client.PollEvents();
     }
 
-    public void Stop()
+    public static void Stop()
     {
         Client.Stop();
     }

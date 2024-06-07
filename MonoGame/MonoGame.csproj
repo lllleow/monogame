@@ -37,12 +37,11 @@
 		<PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
 		<PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="SDL2" Version="2.0.5" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Source\Multiplayer\NetworkMessages\NetworkMessageHandler\Server\" />
-		<Folder Include="Source\Multiplayer\NetworkMessages\ServerMessages\" />
 		<Folder Include="Source\Systems\Components\Collision\Handlers\" />
+		<Folder Include="Source\World\ComponentStates\" />
 	</ItemGroup>
 	<Target Name="RestoreDotnetTools" BeforeTargets="Restore">
 		<Message Text="Restoring dotnet tools" Importance="High" />
