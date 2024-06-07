@@ -13,23 +13,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup MSBuild path
-        uses: microsoft/setup-msbuild@v1.1
-
-      - name: Setup NuGet
-        uses: NuGet/setup-nuget@v1
-
-      - name: Install SDL2
-        run: choco install sdl2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.0'  # Specify your .NET version here
 
       - name: Restore NuGet packages
-        run: nuget restore MonoGame.sln
+        run: dotnet restore MonoGame.sln
 
       - name: Build MonoGame project
-        run: msbuild MonoGame/MonoGame.csproj /p:Configuration=Release /p:Platform="Any CPU"
+        run: dotnet build MonoGame/MonoGame.csproj --configuration Release --no-restore
 
       - name: Build MonoGame-Server project
-        run: msbuild MonoGame-Server/MonoGame-Server.csproj /p:Configuration=Release /p:Platform="Any CPU"
+        run: dotnet build MonoGame-Server/MonoGame-Server.csproj --configuration Release --no-restore
 
       - name: Create Artifacts Directory
         run: mkdir artifacts
@@ -50,11 +46,11 @@ jobs:
           
       - name: Copy MonoGame binaries
         run: |
-          Copy-Item "MonoGame/bin/Any CPU/Release/net8.0/*" "artifacts\MonoGame\"
+          Copy-Item "MonoGame/bin/Release/net6.0/*" "artifacts\MonoGame\"  # Adjust path according to your target framework
 
       - name: Copy MonoGame-Server binaries
         run: |
-          Copy-Item "MonoGame-Server/bin/Any CPU/Release/net8.0/*" "artifacts\MonoGame-Server\"
+          Copy-Item "MonoGame-Server/bin/Release/net6.0/*" "artifacts\MonoGame-Server\"  # Adjust path according to your target framework
 
       - name: Zip MonoGame binaries
         run: Compress-Archive -Path "artifacts\MonoGame\*" -DestinationPath "artifacts\MonoGame.zip" -Force
@@ -85,7 +81,7 @@ jobs:
       - name: Release Game Build
         uses: softprops/action-gh-release@v2
         env:
-          GITHUB_TOKEN: ${{ secrets.PAL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: monogame-${{ github.run_number }}
           name: Game Release ${{ github.run_number }}
