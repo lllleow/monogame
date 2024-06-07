@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame_Server.Systems.Saving;
 using MonoGame_Server.Systems.Server;
-using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Server;
+using MonoGame.Source.Multiplayer.Messages.World;
 using MonoGame.Source.Rendering.Enum;
 using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.WorldNamespace.WorldStates;

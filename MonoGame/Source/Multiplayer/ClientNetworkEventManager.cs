@@ -9,10 +9,20 @@ using MonoGame.Source.Multiplayer.Interfaces;
 public static class ClientNetworkEventManager
 {
     private static Dictionary<Type, Action<INetworkMessage>> _subscriptions;
+    private static List<INetworkController> _controllers = new();
 
     static ClientNetworkEventManager()
     {
         _subscriptions = new Dictionary<Type, Action<INetworkMessage>>();
+    }
+
+    public static void AddController(INetworkController controller)
+    {
+        if (controller is IStandaloneNetworkController)
+        {
+            _controllers.Add(controller);
+            (controller as IStandaloneNetworkController)?.InitializeListeners();
+        }
     }
 
     public static void Subscribe<T>(Action<T> handler)

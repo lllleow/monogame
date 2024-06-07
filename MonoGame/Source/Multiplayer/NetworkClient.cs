@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using LiteNetLib;
 using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame.Source.Multiplayer.NetworkMessages.NetworkMessages.Client;
+using MonoGame.Source.Multiplayer.Messages.Authentication;
 
 namespace MonoGame.Source.Multiplayer;
 
@@ -58,7 +58,7 @@ public static class NetworkClient
 
     public static void InitializeControllers()
     {
-        NetworkControllers.Add(new AuthenticationNetworkController());
+        ClientNetworkEventManager.AddController(new AuthenticationNetworkController());
     }
 
     public static void AuthenticateUser()

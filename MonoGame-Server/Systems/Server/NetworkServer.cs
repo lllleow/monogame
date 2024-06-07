@@ -12,11 +12,13 @@ public class NetworkServer
     private readonly NetManager server;
     public Dictionary<NetPeer, string> Connections { get; set; } = [];
     public ServerWorld ServerWorld { get; set; }
+    public List<INetworkController> NetworkControllers { get; set; } = new();
 
     public NetworkServer()
     {
         listener = new EventBasedNetListener();
         server = new NetManager(listener);
+        InitializeControllers();
         ServerWorld = new ServerWorld();
         ServerWorld.Initialize();
     }
@@ -56,12 +58,23 @@ public class NetworkServer
                 Type messageType = MessageRegistry.Instance.GetTypeById((int)messageTypeId);
                 INetworkMessage? message = (INetworkMessage?)Activator.CreateInstance(messageType);
                 message?.Deserialize(reader);
-                ClientNetworkEventManager.RaiseEvent(messageType, message);
+                if (message != null)
+                {
+                    ServerNetworkEventManager.RaiseEvent(this, peer, messageType, message);
+                }
+
                 Console.WriteLine("Server received: " + message);
             }
 
             reader.Recycle();
         };
+    }
+
+    public void InitializeControllers()
+    {
+        ServerNetworkEventManager.AddController(new AuthenticationNetworkServerController());
+        ServerNetworkEventManager.AddController(new PlayerNetworkServerController());
+        ServerNetworkEventManager.AddController(new WorldNetworkServerController());
     }
 
     public NetPeer GetPeerByUUID(string UUID)

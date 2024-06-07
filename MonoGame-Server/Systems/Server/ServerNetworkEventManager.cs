@@ -4,47 +4,60 @@ namespace MonoGame;
 
 using System;
 using System.Collections.Generic;
+using LiteNetLib;
 using MonoGame.Source.Multiplayer.Interfaces;
+using MonoGame_Server;
+using MonoGame_Server.Systems.Server;
 
 public static class ServerNetworkEventManager
 {
-    private static Dictionary<Type, Action<INetworkMessage>> _subscriptions;
+    private static Dictionary<Type, Action<NetworkServer, NetPeer, INetworkMessage>> _subscriptions;
+    private static List<INetworkController> _controllers = new();
 
     static ServerNetworkEventManager()
     {
-        _subscriptions = new Dictionary<Type, Action<INetworkMessage>>();
+        _subscriptions = new Dictionary<Type, Action<NetworkServer, NetPeer, INetworkMessage>>();
     }
 
-    public static void Subscribe<T>(Action<T> handler)
+    public static void AddController(INetworkController controller)
+    {
+        if (controller is IStandaloneNetworkController)
+        {
+            _controllers.Add(controller);
+            (controller as IStandaloneNetworkController)?.InitializeListeners();
+        }
+    }
+
+    public static void Subscribe<T>(Action<NetworkServer, NetPeer, T> handler)
         where T : INetworkMessage
     {
         var messageType = typeof(T);
         if (!_subscriptions.ContainsKey(messageType))
         {
-            _subscriptions[messageType] = (msg) => handler((T)msg);
+            _subscriptions[messageType] = (server, peer, msg) => handler(server, peer, (T)msg);
         }
         else
         {
-            _subscriptions[messageType] += (msg) => handler((T)msg);
+            _subscriptions[messageType] += (server, peer, msg) => handler(server, peer, (T)msg);
         }
     }
 
-    public static void RaiseEvent<T>(Type messageType, T message)
+    public static void RaiseEvent<T>(NetworkServer server, NetPeer peer, Type messageType, T message)
         where T : INetworkMessage
     {
         if (_subscriptions.TryGetValue(messageType, out var handlers))
         {
-            handlers(message);
+            handlers(server, peer, message);
         }
     }
 
-    public static void Unsubscribe<T>(Action<T> handler)
+    public static void Unsubscribe<T>(Action<NetworkServer, NetPeer, T> handler)
         where T : INetworkMessage
     {
         var messageType = typeof(T);
         if (_subscriptions.TryGetValue(messageType, out var currentHandlers))
         {
-            currentHandlers -= (msg) => handler((T)msg);
+            currentHandlers -= (server, peer, msg) => handler(server, peer, (T)msg);
             if (currentHandlers == null)
             {
                 _subscriptions.Remove(messageType);
