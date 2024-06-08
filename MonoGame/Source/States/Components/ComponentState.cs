@@ -1,20 +1,25 @@
-﻿using LiteNetLib.Utils;
+﻿using System;
+using LiteNetLib.Utils;
 
 namespace MonoGame.Source.States.Components;
 
-public abstract class ComponentState : INetSerializable
+public class ComponentState : INetSerializable
 {
+    // public Type ComponentStateType { get; set; }
+
     public ComponentState()
     {
+        // ComponentStateType = GetType();
     }
 
     public virtual void Deserialize(NetDataReader reader)
     {
-        throw new System.NotImplementedException();
+        // string componentStateType = reader.GetString();
+        // ComponentStateType = Type.GetType(componentStateType);
     }
 
     public virtual void Serialize(NetDataWriter writer)
     {
-        throw new System.NotImplementedException();
+        // writer.Put(ComponentStateType.FullName);
     }
 }

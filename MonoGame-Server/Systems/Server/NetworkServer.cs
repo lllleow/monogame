@@ -10,9 +10,13 @@ public class NetworkServer
 {
     public static NetworkServer Instance { get; set; } = new();
     private readonly EventBasedNetListener listener;
+
     private readonly NetManager server;
+
     public Dictionary<NetPeer, string> Connections { get; set; } = [];
+
     public ServerWorld ServerWorld { get; set; }
+
     public List<INetworkController> NetworkControllers { get; set; } = new();
 
     public NetworkServer()

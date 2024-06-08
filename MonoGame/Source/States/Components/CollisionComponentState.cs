@@ -7,6 +7,7 @@ namespace MonoGame;
 
 public class CollisionComponentState : ComponentState
 {
+
     public CollisionMode Mode { get; set; } = CollisionMode.BoundingBox;
 
     public CollisionComponentState()
@@ -15,11 +16,13 @@ public class CollisionComponentState : ComponentState
 
     public override void Serialize(NetDataWriter writer)
     {
+        base.Serialize(writer);
         writer.Put((int)Mode);
     }
 
     public override void Deserialize(NetDataReader reader)
     {
+        base.Deserialize(reader);
         Mode = (CollisionMode)reader.GetInt();
     }
 }

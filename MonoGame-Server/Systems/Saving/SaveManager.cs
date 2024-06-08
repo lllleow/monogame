@@ -4,6 +4,7 @@
     using MonoGame.Source;
     using MonoGame.Source.States;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     public class SaveManager
     {
@@ -16,7 +17,7 @@
 
             for (var i = 0; i < worldState.Players?.Count; i++)
             {
-                var playerJson = JsonConvert.SerializeObject(worldState.Players[i]);
+                var playerJson = Serialize(worldState.Players[i]);
                 var chunkFilePath = Path.Combine(playersFolderPath, $"player_{worldState.Players[i].UUID}.json");
                 File.WriteAllText(chunkFilePath, playerJson);
             }
@@ -26,12 +27,12 @@
 
             for (var i = 0; i < worldState.Chunks?.Count; i++)
             {
-                var chunkJson = JsonConvert.SerializeObject(worldState.Chunks?[i]);
+                var chunkJson = Serialize(worldState.Chunks?[i]);
                 var chunkFilePath = Path.Combine(chunksFolderPath, $"chunk_{worldState.Chunks?[i].X}_{worldState.Chunks?[i].Y}.json");
                 File.WriteAllText(chunkFilePath, chunkJson);
             }
 
-            var json = JsonConvert.SerializeObject(worldState.Entities);
+            var json = Serialize(worldState.Entities);
             File.WriteAllText(dirPath + "entities.json", json);
         }
 
@@ -56,7 +57,7 @@
                 List<ChunkState> chunkStates = [];
                 foreach (var chunkJson in chunksJson)
                 {
-                    var chunkState = JsonConvert.DeserializeObject<ChunkState>(chunkJson);
+                    var chunkState = Deserialize<ChunkState>(chunkJson);
                     if (chunkState != null)
                     {
                         chunkStates.Add(chunkState);
@@ -79,7 +80,7 @@
                 List<PlayerState> playerStates = [];
                 foreach (var playerJson in playersJson)
                 {
-                    var playerState = JsonConvert.DeserializeObject<PlayerState>(playerJson);
+                    var playerState = Deserialize<PlayerState>(playerJson);
                     if (playerState != null)
                     {
                         playerStates.Add(playerState);
@@ -88,7 +89,7 @@
 
                 // Entities
                 var entitiesJson = File.ReadAllText(dirPath + "entities.json");
-                var entityStates = JsonConvert.DeserializeObject<List<EntityState>>(entitiesJson ?? string.Empty);
+                var entityStates = Deserialize<List<EntityState>>(entitiesJson ?? string.Empty);
 
                 return (playerStates, chunkStates, entityStates);
             }
@@ -97,6 +98,22 @@
                 Console.WriteLine("Save file not found.");
                 return (null, null, null);
             }
+        }
+
+        private static T? Deserialize<T>(string json)
+        {
+            return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
+        }
+
+        private static string Serialize(object? obj)
+        {
+            return JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
         }
     }
 }
