@@ -1,5 +1,5 @@
-﻿using System.Numerics;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Source.Multiplayer.Messages.Player
 {

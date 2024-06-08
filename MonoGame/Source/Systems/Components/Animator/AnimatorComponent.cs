@@ -24,7 +24,6 @@ public class AnimatorComponent : EntityComponent
             OnSpriteChanged = (CurrentTextureX, CurrentTextureY) =>
         {
             Entity.GetFirstComponent<SpriteRendererComponent>()?.UpdateTexture(AnimationBundle.SpriteSheet, new Rectangle(CurrentTextureX * AnimationBundle.SizeX, CurrentTextureY * AnimationBundle.SizeY, AnimationBundle.SizeX, AnimationBundle.SizeY));
-            networkController.SendStateUpdate(this);
         }
         };
     }
@@ -36,6 +35,7 @@ public class AnimatorComponent : EntityComponent
 
     public void SetState(string animationId)
     {
+        networkController.SendStateUpdate(this);
         stateMachine.SetState(animationId);
     }
 

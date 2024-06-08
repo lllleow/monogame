@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Source.Multiplayer;
-using MonoGame.Source.Multiplayer.Messages.Player;
 using MonoGame.Source.Systems.Components;
-using MonoGame.Source.Systems.Components.Animator;
 using MonoGame.Source.Systems.Components.Collision;
 using MonoGame.Source.Systems.Components.Collision.Enum;
 using MonoGame.Source.Systems.Components.PixelBounds;
-using MonoGame.Source.Systems.Entity.PlayerNamespace;
 using MonoGame.Source.Systems.Tiles.Interfaces;
 using MonoGame.Source.Util.Enum;
 
@@ -18,69 +15,42 @@ namespace MonoGame;
 public class MovementComponent : EntityComponent
 {
     public Vector2 Speed { get; set; } = new(1, 1);
+    private bool sentEmptyKeysMessage = false;
 
     public override void Update(GameTime gameTime)
     {
         var state = Keyboard.GetState();
+        List<Keys> keys = new();
 
         if (state.IsKeyDown(Keys.W))
         {
-            NetworkClient.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Up));
+            keys.Add(Keys.W);
         }
 
         if (state.IsKeyDown(Keys.A))
         {
-            NetworkClient.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Left));
+            keys.Add(Keys.A);
         }
 
         if (state.IsKeyDown(Keys.S))
         {
-            NetworkClient.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Down));
+            keys.Add(Keys.S);
         }
 
         if (state.IsKeyDown(Keys.D))
         {
-            NetworkClient.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Right));
+            keys.Add(Keys.D);
         }
 
-        // if (state.IsKeyUp(Keys.W) && state.IsKeyUp(Keys.A) && state.IsKeyUp(Keys.S) && state.IsKeyUp(Keys.D))
-        // {
-        //     NetworkClient.SendMessage(new PlayerIdleNetworkMessage(Entity.UUID));
-        // }
-    }
-
-    public void Move(GameTime gameTime, Direction direction, Vector2 speed)
-    {
-        if (Entity is Player)
+        if (keys.Count > 0)
         {
-            Vector2 displacement = MovementHelper.GetDisplacement(direction, speed);
-            Vector2 newPosition = Entity.Position + displacement;
-
-            if (Entity.ContainsComponent<AnimatorComponent>())
-            {
-                AnimatorComponent animator = Entity.GetFirstComponent<AnimatorComponent>();
-
-                switch (direction)
-                {
-                    case Direction.Up:
-                        animator.SetState("walking_back");
-                        break;
-                    case Direction.Down:
-                        animator.SetState("walking_front");
-                        break;
-                    case Direction.Left:
-                        animator.SetState("walking_left");
-                        break;
-                    case Direction.Right:
-                        animator.SetState("walking_right");
-                        break;
-                    default:
-                        animator.SetState("idle");
-                        break;
-                }
-            }
-
-            Entity.Position = newPosition;
+            sentEmptyKeysMessage = false;
+            NetworkClient.SendMessage(new KeyClickedNetworkMessage(Entity.UUID, keys));
+        }
+        else if (!sentEmptyKeysMessage)
+        {
+            NetworkClient.SendMessage(new KeyClickedNetworkMessage(Entity.UUID, keys));
+            sentEmptyKeysMessage = true;
         }
     }
 

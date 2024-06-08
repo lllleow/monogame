@@ -9,13 +9,13 @@ public class AnimatorComponentNetworkController : INetworkObjectController<Anima
 {
     public void InitializeListeners(AnimatorComponent networkObject)
     {
-        // ClientNetworkEventManager.Subscribe<UpdateAnimatorStateNetworkMessage>(message =>
-        // {
-        //     if (message.UUID == networkObject.Entity.UUID)
-        //     {
-        //         networkObject.SetState(message.TargetState);
-        //     }
-        // });
+        ClientNetworkEventManager.Subscribe<UpdateAnimatorStateNetworkMessage>(message =>
+        {
+            if (message.UUID == networkObject.Entity.UUID)
+            {
+                networkObject.SetState(message.TargetState);
+            }
+        });
     }
 
     public void SendStateUpdate(AnimatorComponent networkObject)

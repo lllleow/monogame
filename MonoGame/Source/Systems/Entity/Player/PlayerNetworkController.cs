@@ -11,21 +11,6 @@ public class PlayerNetworkController : INetworkObjectController<Player>
 {
     public void InitializeListeners(Player player)
     {
-        ClientNetworkEventManager.Subscribe<MovePlayerNetworkMessage>(message =>
-        {
-            if (player.UUID == message.UUID)
-            {
-                if (Vector2.Distance(player.Position, message.ExpectedPosition) < 1f)
-                {
-                    player.Position = message.ExpectedPosition;
-                }
-                else
-                {
-                    player.GetFirstComponent<MovementComponent>()?.Move(Globals.GameTime, message.Direction, message.Speed);
-                }
-            }
-        });
-
         ClientNetworkEventManager.Subscribe<UpdatePlayerPositionNetworkMessage>(message =>
         {
             if (player.UUID == message.UUID)
