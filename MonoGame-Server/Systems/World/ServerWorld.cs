@@ -4,7 +4,7 @@ using MonoGame_Server.Systems.Server;
 using MonoGame.Source.Multiplayer.Messages.World;
 using MonoGame.Source.Rendering.Enum;
 using MonoGame.Source.Systems.Chunks;
-using MonoGame.Source.WorldNamespace.WorldStates;
+using MonoGame.Source.States;
 
 namespace MonoGame_Server.Systems.World;
 
@@ -85,5 +85,10 @@ public class ServerWorld
             NetworkServer.Instance.BroadcastMessage(new PlaceTileNetworkMessage(tileId, layer, posX, posY));
             SaveManager.SaveGame("C:\\Users\\Leonardo\\Documents\\Repositories\\monogame\\save\\");
         }
+    }
+
+    public EntityState? GetEntityByUUID(string UUID)
+    {
+        return Entities?.FirstOrDefault(x => x.UUID == UUID);
     }
 }

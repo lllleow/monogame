@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.Enum;
 using MonoGame.Source.Rendering.Utils;
+using MonoGame.Source.States;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Components.Collision;
 using MonoGame.Source.Systems.Components.Collision.Enum;
@@ -12,7 +13,6 @@ using MonoGame.Source.Systems.Tiles.Interfaces;
 using MonoGame.Source.Util.Enum;
 using MonoGame.Source.Util.Loaders;
 using MonoGame.Source.WorldNamespace;
-using MonoGame.Source.WorldNamespace.WorldStates;
 
 namespace MonoGame.Source.Systems.Chunks;
 

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Source.Systems.Entity.PlayerNamespace;
 
-namespace MonoGame.Source.WorldNamespace.WorldStates;
+namespace MonoGame.Source.States;
 
 public class PlayerState : INetSerializable
 {

@@ -4,7 +4,7 @@ using LiteNetLib.Utils;
 using MonoGame.Source.Rendering.Enum;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 
-namespace MonoGame.Source.WorldNamespace.WorldStates;
+namespace MonoGame.Source.States;
 
 public class ChunkState : INetSerializable
 {

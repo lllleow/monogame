@@ -2,7 +2,7 @@
 using MonoGame;
 using MonoGame_Server.Systems.World;
 using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame.Source.WorldNamespace.WorldStates;
+using MonoGame.Source.States;
 namespace MonoGame_Server.Systems.Server;
 
 public class NetworkServer
@@ -75,6 +75,7 @@ public class NetworkServer
         ServerNetworkEventManager.AddController(new AuthenticationNetworkServerController());
         ServerNetworkEventManager.AddController(new PlayerNetworkServerController());
         ServerNetworkEventManager.AddController(new WorldNetworkServerController());
+        ServerNetworkEventManager.AddController(new AnimatorComponentNetworkController());
     }
 
     public NetPeer GetPeerByUUID(string UUID)

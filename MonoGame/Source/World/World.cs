@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Multiplayer.Messages.Player;
 using MonoGame.Source.Multiplayer.Messages.World;
 using MonoGame.Source.Rendering.Enum;
+using MonoGame.Source.States;
 using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Components.Collision;
@@ -14,7 +15,6 @@ using MonoGame.Source.Systems.Entity.Interfaces;
 using MonoGame.Source.Systems.Entity.PlayerNamespace;
 using MonoGame.Source.Systems.Tiles;
 using MonoGame.Source.Systems.Tiles.Interfaces;
-using MonoGame.Source.WorldNamespace.WorldStates;
 
 namespace MonoGame.Source.WorldNamespace;
 

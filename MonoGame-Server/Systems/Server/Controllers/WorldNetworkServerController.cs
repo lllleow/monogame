@@ -3,7 +3,7 @@ using MonoGame.Source;
 using MonoGame.Source.Multiplayer.Interfaces;
 using MonoGame.Source.Multiplayer.Messages.Player;
 using MonoGame.Source.Multiplayer.Messages.World;
-using MonoGame.Source.WorldNamespace.WorldStates;
+using MonoGame.Source.States;
 
 namespace MonoGame_Server;
 

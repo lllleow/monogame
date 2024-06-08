@@ -18,6 +18,7 @@ public class Player : GameEntity
     private MouseState currentMouseState;
     private MouseState previousMouseState;
     public string SelectedTile { get; set; } = "base.grass";
+    public PlayerNetworkController NetworkController { get; set; } = new();
 
     public Player(string uuid, Vector2 position)
     {
@@ -28,28 +29,7 @@ public class Player : GameEntity
         animator = new AnimatorComponent(this, AnimationBundleRegistry.GetAnimationBundle("base.player"));
         spriteRenderer = new SpriteRendererComponent();
 
-        ClientNetworkEventManager.Subscribe<MovePlayerNetworkMessage>(message =>
-        {
-            if (UUID == message.UUID)
-            {
-                if (Vector2.Distance(Position, message.ExpectedPosition) < 1f)
-                {
-                    Position = message.ExpectedPosition;
-                }
-                else
-                {
-                    Move(Globals.GameTime, message.Direction, message.Speed);
-                }
-            }
-        });
-
-        ClientNetworkEventManager.Subscribe<UpdatePlayerPositionNetworkMessage>(message =>
-        {
-            if (UUID == message.UUID)
-            {
-                Position = message.Position;
-            }
-        });
+        NetworkController.InitializeListeners(this);
 
         AddComponent(spriteRenderer);
         AddComponent(animator);

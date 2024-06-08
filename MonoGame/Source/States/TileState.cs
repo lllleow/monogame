@@ -2,7 +2,7 @@
 using MonoGame.Source.Rendering.Enum;
 using MonoGame.Source.Systems.Tiles.Interfaces;
 
-namespace MonoGame.Source.WorldNamespace.WorldStates;
+namespace MonoGame.Source.States;
 
 public class TileState : INetSerializable
 {
