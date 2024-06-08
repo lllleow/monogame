@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Source.Systems.Animation;
@@ -9,24 +10,33 @@ namespace MonoGame.Source.Systems.Components.Animator;
 
 public class AnimatorComponent : EntityComponent
 {
-    public int CurrentTime { get; set; }
-    public int CurrentTextureX { get; set; } = 0;
-    public int CurrentTextureY { get; set; } = 0;
-    private AnimatorComponentNetworkController networkController = new();
     public IAnimationBundle AnimationBundle { get; set; }
-
-    public string CurrentAnimation { get; set; } = "idle";
+    private AnimatorComponentNetworkController networkController = new();
+    private AnimationStateMachine stateMachine;
 
     public AnimatorComponent(IGameEntity entity, IAnimationBundle animation)
     {
         Entity = entity;
         AnimationBundle = animation;
         networkController.InitializeListeners(this);
+        stateMachine = new AnimationStateMachine(AnimationBundle)
+        {
+            OnSpriteChanged = (CurrentTextureX, CurrentTextureY) =>
+        {
+            Entity.GetFirstComponent<SpriteRendererComponent>()?.UpdateTexture(AnimationBundle.SpriteSheet, new Rectangle(CurrentTextureX * AnimationBundle.SizeX, CurrentTextureY * AnimationBundle.SizeY, AnimationBundle.SizeX, AnimationBundle.SizeY));
+        }
+        };
     }
 
-    public Rectangle GetSpriteRectangle()
+    public string GetCurrentStateId()
     {
-        return AnimationBundle.GetSpriteRectangle(CurrentAnimation, CurrentTime / (double)AnimationBundle.Animations[CurrentAnimation].Duration);
+        return stateMachine.CurrentState.Animation.Id;
+    }
+
+    public void SetState(string animationId)
+    {
+        networkController.SendStateUpdate(this);
+        stateMachine.SetState(animationId);
     }
 
     public override void Initialize()
@@ -35,36 +45,10 @@ public class AnimatorComponent : EntityComponent
         {
             throw new Exception("AnimatorComponent requires a SpriteRendererComponent to be present on the entity.");
         }
-
-        CurrentAnimation ??= AnimationBundle.Animations.Keys.ToList().FirstOrDefault();
-    }
-
-    public void PlayAnimation(string animationId)
-    {
-        if (animationId != CurrentAnimation)
-        {
-            CurrentTime = 0;
-            CurrentAnimation = animationId;
-        }
     }
 
     public override void Update(GameTime gameTime)
     {
-        CurrentTime++;
-        if (CurrentTime > AnimationBundle.Animations[CurrentAnimation].Duration)
-        {
-            CurrentTime = 0;
-        }
-
-        int NewTextureX = AnimationBundle.GetSpritesheetColumnForAnimationPercentage(CurrentAnimation, CurrentTime / (double)AnimationBundle.Animations[CurrentAnimation].Duration);
-        int NewTextureY = AnimationBundle.GetSpritesheetRowForAnimation(CurrentAnimation);
-
-        if (NewTextureX != CurrentTextureX || NewTextureY != CurrentTextureY)
-        {
-            CurrentTextureX = NewTextureX;
-            CurrentTextureY = NewTextureY;
-            Entity.GetFirstComponent<SpriteRendererComponent>()?.UpdateTexture(AnimationBundle.SpriteSheet, new Rectangle(CurrentTextureX * AnimationBundle.SizeX, CurrentTextureY * AnimationBundle.SizeY, AnimationBundle.SizeX, AnimationBundle.SizeY));
-            networkController.SendStateUpdate(this);
-        }
+        stateMachine.Update(gameTime);
     }
 }

@@ -9,7 +9,8 @@ public enum Direction
     RightUp,
     RightDown,
     LeftUp,
-    LeftDown
+    LeftDown,
+    None
 }
 
 public class DirectionHelper

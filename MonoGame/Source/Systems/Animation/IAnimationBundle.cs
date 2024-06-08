@@ -14,6 +14,7 @@ public interface IAnimationBundle
     string Id { get; set; }
 
     Dictionary<string, Animation> Animations { get; set; }
+    List<AnimationTransition> AnimationTransitions { get; set; }
 
     int GetSpritesheetColumnForAnimationPercentage(string animationName, double percentage);
 

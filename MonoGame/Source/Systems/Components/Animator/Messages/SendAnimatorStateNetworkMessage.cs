@@ -7,28 +7,22 @@ namespace MonoGame
     public class SendAnimatorStateNetworkMessage : NetworkMessage
     {
         public string UUID { get; set; }
-        public int CurrentTime { get; set; }
-        public int CurrentTextureX { get; set; }
-        public int CurrentTextureY { get; set; }
+        public string CurrentState { get; set; }
 
         public SendAnimatorStateNetworkMessage()
         {
         }
 
-        public SendAnimatorStateNetworkMessage(string uuid, int currentTime, int currentTextureX, int currentTextureY)
+        public SendAnimatorStateNetworkMessage(string uuid, string currentState)
         {
             UUID = uuid;
-            CurrentTime = currentTime;
-            CurrentTextureX = currentTextureX;
-            CurrentTextureY = currentTextureY;
+            CurrentState = currentState;
         }
 
         public override void Deserialize(NetDataReader reader)
         {
             UUID = reader.GetString();
-            CurrentTime = reader.GetInt();
-            CurrentTextureX = reader.GetInt();
-            CurrentTextureY = reader.GetInt();
+            CurrentState = reader.GetString();
         }
 
         public override NetDataWriter Serialize()
@@ -36,9 +30,7 @@ namespace MonoGame
             NetDataWriter data = new NetDataWriter();
             data.Put((byte)GetNetworkTypeId());
             data.Put(UUID);
-            data.Put(CurrentTime);
-            data.Put(CurrentTextureX);
-            data.Put(CurrentTextureY);
+            data.Put(CurrentState);
             return data;
         }
     }

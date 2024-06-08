@@ -7,11 +7,16 @@ public class PlayerMovementAnimationBundle : AnimationBundle
         Id = "base.player";
         SpriteSheet = "textures/player_sprite_2";
 
-        CreateAnimation(new Animation("walking_front", 0, 50, 3));
-        CreateAnimation(new Animation("walking_back", 1, 50, 3));
-        CreateAnimation(new Animation("walking_right", 2, 50, 3));
-        CreateAnimation(new Animation("walking_left", 3, 50, 3));
-        CreateAnimation(new Animation("idle", 4, 200, 3));
+        // AddTransition(new ChangeStateOnEndAnimationTransition("walking_front", "idle"));
+        // AddTransition(new ChangeStateOnEndAnimationTransition("walking_back", "idle"));
+        // AddTransition(new ChangeStateOnEndAnimationTransition("walking_right", "idle"));
+        // AddTransition(new ChangeStateOnEndAnimationTransition("walking_left", "idle"));
+
+        CreateAnimation(new Animation("walking_front", false, 0, 25, 3));
+        CreateAnimation(new Animation("walking_back", false, 1, 25, 3));
+        CreateAnimation(new Animation("walking_right", false, 2, 25, 3));
+        CreateAnimation(new Animation("walking_left", false, 3, 25, 3));
+        CreateAnimation(new Animation("idle", true, 4, 200, 3, true));
     }
 }
 

@@ -12,6 +12,7 @@ public class AnimationBundle : IAnimationBundle
     public int SizeX { get; set; } = 16;
     public int SizeY { get; set; } = 16;
     public Dictionary<string, Animation> Animations { get; set; } = [];
+    public List<AnimationTransition> AnimationTransitions { get; set; } = new();
 
     public Rectangle GetSpriteRectangle(string animationId, double percentage)
     {
@@ -33,5 +34,10 @@ public class AnimationBundle : IAnimationBundle
     public void CreateAnimation(Animation animation)
     {
         Animations[animation.Id] = Animations.ContainsKey(animation.Id) ? throw new Exception("Animation already registered " + animation.Id) : animation;
+    }
+
+    public void AddTransition(AnimationTransition animationTransition)
+    {
+        AnimationTransitions.Add(animationTransition);
     }
 }
