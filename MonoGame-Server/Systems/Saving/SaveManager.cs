@@ -1,13 +1,15 @@
-﻿using MonoGame_Server.Systems.Server;
-using MonoGame.Source.States;
-using Newtonsoft.Json;
-
-namespace MonoGame_Server.Systems.Saving
+﻿namespace MonoGame_Server.Systems.Saving
 {
+    using MonoGame_Server.Systems.Server;
+    using MonoGame.Source;
+    using MonoGame.Source.States;
+    using Newtonsoft.Json;
+
     public class SaveManager
     {
-        public static void SaveGame(string dirPath)
+        public static void SaveGame()
         {
+            string dirPath = Globals.SaveLocation;
             var worldState = NetworkServer.Instance.ServerWorld.GetWorldState();
             var playersFolderPath = Path.Combine(dirPath, "players");
             _ = Directory.CreateDirectory(playersFolderPath);
@@ -33,8 +35,9 @@ namespace MonoGame_Server.Systems.Saving
             File.WriteAllText(dirPath + "entities.json", json);
         }
 
-        public (List<PlayerState>? Players, List<ChunkState>? Chunks, List<EntityState>? Entities) LoadGame(string dirPath)
+        public (List<PlayerState>? Players, List<ChunkState>? Chunks, List<EntityState>? Entities) LoadGame()
         {
+            string dirPath = Globals.SaveLocation;
             if (Directory.Exists(dirPath) && Directory.Exists(dirPath + "players") && Directory.Exists(dirPath + "chunks") && File.Exists(dirPath + "entities.json"))
             {
                 // Chunks

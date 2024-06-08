@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Source.Multiplayer;
@@ -52,33 +51,5 @@ public class MovementComponent : EntityComponent
             NetworkClient.SendMessage(new KeyClickedNetworkMessage(Entity.UUID, keys));
             sentEmptyKeysMessage = true;
         }
-    }
-
-    public bool CanMove(Vector2 newPosition, Direction direction)
-    {
-        if (Entity.ContainsComponent<CollisionComponent>())
-        {
-            Rectangle entityRectangle = Entity.GetEntityBoundsAtPosition(newPosition);
-            CollisionComponent collisionComponent = Entity.GetFirstComponent<CollisionComponent>();
-            List<ITile> tiles;
-
-            if (collisionComponent.Mode == CollisionMode.BoundingBox)
-            {
-                tiles = collisionComponent.GetTilesCollidingWithRectangle(entityRectangle);
-            }
-            else if (collisionComponent.Mode is CollisionMode.PixelPerfect or CollisionMode.CollisionMask)
-            {
-                PixelBoundsComponent pixelBounds = Entity.GetFirstComponent<PixelBoundsComponent>();
-                tiles = collisionComponent.GetTilesCollidingWithMask(pixelBounds.Mask, entityRectangle);
-            }
-            else
-            {
-                return true;
-            }
-
-            return tiles.Count == 0;
-        }
-
-        return true;
     }
 }

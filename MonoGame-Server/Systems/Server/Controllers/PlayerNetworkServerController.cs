@@ -10,11 +10,19 @@ namespace MonoGame_Server;
 
 public class PlayerNetworkServerController : IStandaloneNetworkController
 {
+    private ServerMovementHelper ServerMovementHelper { get; set; } = new();
+
     public void InitializeListeners()
     {
         ServerNetworkEventManager.Subscribe<KeyClickedNetworkMessage>((server, peer, message) =>
         {
             var playerState = server.GetPlayerFromPeer(peer);
+
+            if (playerState == null)
+            {
+                return;
+            }
+
             if (message.Keys.Contains(Keys.W) || message.Keys.Contains(Keys.A) || message.Keys.Contains(Keys.S) || message.Keys.Contains(Keys.D))
             {
                 Vector2 resultingDisplacement = Vector2.Zero;
@@ -38,12 +46,18 @@ public class PlayerNetworkServerController : IStandaloneNetworkController
                 }
 
                 var newPosition = (playerState?.Position ?? Globals.SpawnPosition) + resultingDisplacement;
+                Direction direction = DirectionHelper.GetDirection((int)resultingDisplacement.X, (int)resultingDisplacement.Y);
+
+                if (!this.ServerMovementHelper.CanMove(playerState!, newPosition, direction))
+                {
+                    return;
+                }
+
                 if (playerState?.Position != null)
                 {
                     playerState.Position = newPosition;
                 }
 
-                Direction direction = DirectionHelper.GetDirection((int)resultingDisplacement.X, (int)resultingDisplacement.Y);
                 switch (direction)
                 {
                     case Direction.Up:

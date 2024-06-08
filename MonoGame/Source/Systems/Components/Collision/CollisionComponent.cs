@@ -27,6 +27,7 @@ public class CollisionComponent : EntityComponent
 
     public override void Initialize()
     {
+        base.Initialize();
         if (Mode == CollisionMode.BoundingBox && !Entity.ContainsComponent<BoundingBoxComponent>())
         {
             throw new Exception("CollisionComponent in BoundingBox mode requires a BoundingBoxComponent to be present on the entity.");
@@ -43,15 +44,8 @@ public class CollisionComponent : EntityComponent
         return tiles;
     }
 
-    public List<ITile> GetTilesCollidingWithRectangle(Rectangle rectangle)
+    public override Type GetComponentStateType()
     {
-        List<ITile> tiles = Globals.World.GetTilesIntersectingWithRectangle(rectangle);
-        return tiles;
-    }
-
-    public List<ITile> GetTilesCollidingWithCircle(Vector2 position, float radius)
-    {
-        List<ITile> tiles = Globals.World.GetTilesIntersectingWithCircle(position, radius);
-        return tiles;
+        return typeof(CollisionComponentState);
     }
 }

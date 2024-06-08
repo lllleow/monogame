@@ -78,7 +78,6 @@ public abstract class GameEntity : IGameEntity
     {
         if (ContainsComponent<AnimatorComponent>())
         {
-            _ = GetFirstComponent<AnimatorComponent>();
             return new Rectangle((int)position.X, (int)position.Y, Tile.PixelSizeX, Tile.PixelSizeY);
         }
         else

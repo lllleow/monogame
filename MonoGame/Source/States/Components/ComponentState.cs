@@ -4,6 +4,10 @@ namespace MonoGame.Source.States.Components;
 
 public abstract class ComponentState : INetSerializable
 {
+    public ComponentState()
+    {
+    }
+
     public virtual void Deserialize(NetDataReader reader)
     {
         throw new System.NotImplementedException();

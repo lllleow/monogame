@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.Xna.Framework;
+using MonoGame.Source.States.Components;
 using MonoGame.Source.Systems.Animation;
 using MonoGame.Source.Systems.Components.SpriteRenderer;
 using MonoGame.Source.Systems.Entity.Interfaces;
@@ -50,5 +50,10 @@ public class AnimatorComponent : EntityComponent
     public override void Update(GameTime gameTime)
     {
         stateMachine.Update(gameTime);
+    }
+
+    public override Type GetComponentStateType()
+    {
+        return typeof(AnimatorComponentState);
     }
 }

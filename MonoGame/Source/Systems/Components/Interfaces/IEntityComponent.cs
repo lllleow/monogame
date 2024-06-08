@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Entity.Interfaces;
 
@@ -17,4 +18,5 @@ public interface IEntityComponent
     public abstract void Update(GameTime gameTime);
 
     public abstract void Draw(SpriteBatch spriteBatch);
+    public Type GetComponentStateType();
 }

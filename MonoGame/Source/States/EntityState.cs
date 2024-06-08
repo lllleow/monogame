@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using LiteNetLib.Utils;
 using Microsoft.Xna.Framework;
 using MonoGame.Source.States.Components;
@@ -28,11 +29,24 @@ public class EntityState : INetSerializable
         return (T)Components.Find(x => x.GetType() == typeof(T));
     }
 
-    public T SetComponent<T>(T component)
+    public T ReplaceComponent<T>(T component)
+    where T : ComponentState
+    {
+        Components.RemoveAll(x => x.GetType() == component.GetType());
+        Components.Add(component);
+        return component;
+    }
+
+    public T AddComponent<T>(T component)
     where T : ComponentState
     {
         Components.Add(component);
         return component;
+    }
+
+    public bool HasComponent(Type t)
+    {
+        return Components.Exists(x => x.GetType() == t);
     }
 
     public virtual void Serialize(NetDataWriter writer)

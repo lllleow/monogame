@@ -34,6 +34,7 @@ public class Globals
     public static string UUID { get; set; } = Guid.NewGuid().ToString();
 
     public static GameTime GameTime { get; set; }
+    public static string SaveLocation { get; set; } = @"C:\Users\Leonardo\Documents\Repositories\monogame\save\";
 
     public static void DefaultSpriteBatchBegin()
     {

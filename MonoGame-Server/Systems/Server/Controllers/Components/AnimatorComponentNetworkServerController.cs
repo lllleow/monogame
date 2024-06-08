@@ -18,20 +18,8 @@ public class AnimatorComponentNetworkServerController : IStandaloneNetworkContro
             {
                 CurrentState = message.CurrentState,
             };
-            state?.SetComponent(animatorState);
+            state?.ReplaceComponent(animatorState);
             NetworkServer.Instance.BroadcastMessage(updateMessage, blacklist: [peer]);
-        });
-
-        ServerNetworkEventManager.Subscribe<PlayerIdleNetworkMessage>((server, peer, message) =>
-        {
-            UpdateAnimatorStateNetworkMessage updateMessage = new(message.UUID, "idle");
-            EntityState? state = NetworkServer.Instance.ServerWorld.GetEntityByUUID(message.UUID);
-            AnimatorComponentState animatorState = new AnimatorComponentState
-            {
-                CurrentState = "idle",
-            };
-            state?.SetComponent(animatorState);
-            NetworkServer.Instance.BroadcastMessage(updateMessage);
         });
     }
 }
