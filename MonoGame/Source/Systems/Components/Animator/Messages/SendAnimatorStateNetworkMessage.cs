@@ -11,6 +11,10 @@ namespace MonoGame
         public int CurrentTextureX { get; set; }
         public int CurrentTextureY { get; set; }
 
+        public SendAnimatorStateNetworkMessage()
+        {
+        }
+
         public SendAnimatorStateNetworkMessage(string uuid, int currentTime, int currentTextureX, int currentTextureY)
         {
             UUID = uuid;

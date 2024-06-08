@@ -24,7 +24,7 @@ public class WorldNetworkServerController : IStandaloneNetworkController
                 var playerState = server.ServerWorld.Players?.FirstOrDefault(p => p.UUID == uuid);
                 if (playerState != null)
                 {
-                    var spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(playerState.UUID, playerState.Position ?? Globals.SpawnPosition);
+                    var spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(playerState.UUID, playerState.Position);
                     server.SendMessageToPeer(peer, spawnPlayerNetworkMessage);
                 }
             }
@@ -35,7 +35,7 @@ public class WorldNetworkServerController : IStandaloneNetworkController
             {
                 var newPlayer = new PlayerState(existingPlayerUUID);
                 server.ServerWorld.Players?.Add(newPlayer);
-                var spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(newPlayer.UUID, newPlayer.Position ?? Globals.SpawnPosition);
+                var spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(newPlayer.UUID, newPlayer.Position);
                 server.BroadcastMessage(spawnPlayerNetworkMessage);
             }
         });

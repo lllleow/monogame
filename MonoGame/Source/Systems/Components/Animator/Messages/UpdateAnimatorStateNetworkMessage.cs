@@ -4,12 +4,17 @@ using MonoGame.Source.Multiplayer;
 
 namespace MonoGame
 {
+    [NetworkMessage(13)]
     public class UpdateAnimatorStateNetworkMessage : NetworkMessage
     {
         public string UUID { get; set; }
         public int CurrentTime { get; set; }
         public int TextureX { get; set; }
         public int TextureY { get; set; }
+
+        public UpdateAnimatorStateNetworkMessage()
+        {
+        }
 
         public UpdateAnimatorStateNetworkMessage(string uuid, int currentTime, int textureX, int textureY)
         {

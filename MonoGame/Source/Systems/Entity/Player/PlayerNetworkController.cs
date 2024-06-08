@@ -21,7 +21,7 @@ public class PlayerNetworkController : INetworkObjectController<Player>
                 }
                 else
                 {
-                    player.Move(Globals.GameTime, message.Direction, message.Speed);
+                    player.GetFirstComponent<MovementComponent>()?.Move(Globals.GameTime, message.Direction, message.Speed);
                 }
             }
         });

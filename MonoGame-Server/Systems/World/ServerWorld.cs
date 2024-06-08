@@ -3,8 +3,8 @@ using MonoGame_Server.Systems.Saving;
 using MonoGame_Server.Systems.Server;
 using MonoGame.Source.Multiplayer.Messages.World;
 using MonoGame.Source.Rendering.Enum;
-using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.States;
+using MonoGame.Source.Systems.Chunks;
 
 namespace MonoGame_Server.Systems.World;
 
@@ -89,6 +89,6 @@ public class ServerWorld
 
     public EntityState? GetEntityByUUID(string UUID)
     {
-        return Entities?.FirstOrDefault(x => x.UUID == UUID);
+        return (Entities ?? new List<EntityState>())?.Concat(Players ?? new List<PlayerState>())?.FirstOrDefault(x => x.UUID == UUID);
     }
 }

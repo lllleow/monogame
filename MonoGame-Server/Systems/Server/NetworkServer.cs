@@ -75,7 +75,7 @@ public class NetworkServer
         ServerNetworkEventManager.AddController(new AuthenticationNetworkServerController());
         ServerNetworkEventManager.AddController(new PlayerNetworkServerController());
         ServerNetworkEventManager.AddController(new WorldNetworkServerController());
-        ServerNetworkEventManager.AddController(new AnimatorComponentNetworkController());
+        ServerNetworkEventManager.AddController(new AnimatorComponentNetworkServerController());
     }
 
     public NetPeer GetPeerByUUID(string UUID)
@@ -115,9 +115,12 @@ public class NetworkServer
         peer.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
     }
 
-    public void BroadcastMessage(INetworkMessage message)
+    public void BroadcastMessage(INetworkMessage message, List<NetPeer> blacklist = null)
     {
-        foreach (var peer in Connections.Keys)
+        blacklist ??= new List<NetPeer>();
+        List<NetPeer> whitelistedPeers = Connections.Keys.Except(blacklist).ToList();
+
+        foreach (var peer in whitelistedPeers)
         {
             peer.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
         }

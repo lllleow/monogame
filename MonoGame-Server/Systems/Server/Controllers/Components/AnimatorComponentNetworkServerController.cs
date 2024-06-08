@@ -21,7 +21,7 @@ public class AnimatorComponentNetworkServerController : IStandaloneNetworkContro
                 TextureY = message.CurrentTextureY
             };
             state?.SetComponent(animatorState);
-            NetworkServer.Instance.BroadcastMessage(updateMessage);
+            NetworkServer.Instance.BroadcastMessage(updateMessage, blacklist: [peer]);
         });
     }
 }

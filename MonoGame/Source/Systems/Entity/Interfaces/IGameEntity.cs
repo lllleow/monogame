@@ -13,8 +13,6 @@ public interface IGameEntity
 
     Vector2 Position { get; set; }
 
-    Vector2 Speed { get; set; }
-
     void Update(GameTime gameTime);
 
     void Draw(SpriteBatch spriteBatch);
@@ -28,4 +26,6 @@ public interface IGameEntity
     List<T> GetComponents<T>();
 
     bool ContainsComponent<T>();
+
+    public Rectangle GetEntityBoundsAtPosition(Vector2 position);
 }

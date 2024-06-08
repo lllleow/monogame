@@ -8,6 +8,7 @@ namespace MonoGame.Source.States;
 
 public class EntityState : INetSerializable
 {
+    public string UUID { get; set; }
     public Vector2 Position { get; set; }
     public List<ComponentState> Components { get; set; } = new();
 
@@ -17,6 +18,7 @@ public class EntityState : INetSerializable
 
     public EntityState(IGameEntity entity)
     {
+        UUID = entity.UUID;
         Position = entity.Position;
     }
 
@@ -33,14 +35,16 @@ public class EntityState : INetSerializable
         return component;
     }
 
-    public void Serialize(NetDataWriter writer)
+    public virtual void Serialize(NetDataWriter writer)
     {
+        writer.Put(UUID);
         writer.Put(Position.X);
         writer.Put(Position.Y);
     }
 
-    public void Deserialize(NetDataReader reader)
+    public virtual void Deserialize(NetDataReader reader)
     {
+        UUID = reader.GetString();
         Position = new Vector2(reader.GetFloat(), reader.GetFloat());
     }
 }

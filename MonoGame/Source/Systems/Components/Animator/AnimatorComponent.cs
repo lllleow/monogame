@@ -64,6 +64,7 @@ public class AnimatorComponent : EntityComponent
             CurrentTextureX = NewTextureX;
             CurrentTextureY = NewTextureY;
             Entity.GetFirstComponent<SpriteRendererComponent>()?.UpdateTexture(AnimationBundle.SpriteSheet, new Rectangle(CurrentTextureX * AnimationBundle.SizeX, CurrentTextureY * AnimationBundle.SizeY, AnimationBundle.SizeX, AnimationBundle.SizeY));
+            networkController.SendStateUpdate(this);
         }
     }
 }
