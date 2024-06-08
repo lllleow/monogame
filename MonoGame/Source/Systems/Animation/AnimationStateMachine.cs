@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Source.Systems.Animation;
 
@@ -9,16 +10,19 @@ public class AnimationStateMachine
 {
     public IAnimationBundle AnimationBundle { get; set; }
     private Dictionary<string, IAnimationState> AnimationStates { get; set; } = new();
-    private IAnimationState CurrentState { get; set; }
+    public IAnimationState CurrentState { get; set; }
     public Action<int, int> OnSpriteChanged { get; set; }
     public Action<IAnimationState> OnStateEnded { get; set; }
 
     public AnimationStateMachine(IAnimationBundle animationBundle)
     {
+        AnimationBundle = animationBundle;
         foreach (Animation animation in animationBundle.Animations.Values)
         {
             AddState(new AnimationState(this, animation, animationBundle));
         }
+
+        CurrentState = AnimationStates.Values.FirstOrDefault(state => state.Animation.IsDefault);
     }
 
     public void AddState(IAnimationState state)
@@ -33,9 +37,12 @@ public class AnimationStateMachine
 
     public void SetState(string animationId)
     {
-        IAnimationState newState = AnimationStates[animationId];
-        CurrentState = newState;
-        CurrentState.Start();
+        if (CurrentState.Animation.Id != animationId)
+        {
+            IAnimationState newState = AnimationStates[animationId];
+            CurrentState = newState;
+            CurrentState.Start();
+        }
     }
 
     public void Update(GameTime gameTime)

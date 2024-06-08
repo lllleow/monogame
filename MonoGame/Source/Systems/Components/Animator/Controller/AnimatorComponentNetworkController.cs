@@ -9,21 +9,18 @@ public class AnimatorComponentNetworkController : INetworkObjectController<Anima
 {
     public void InitializeListeners(AnimatorComponent networkObject)
     {
-        ClientNetworkEventManager.Subscribe<UpdateAnimatorStateNetworkMessage>(message =>
-        {
-            if (message.UUID == networkObject.Entity.UUID)
-            {
-                // networkObject.CurrentTime = message.CurrentTime;
-                // networkObject.CurrentTextureX = message.TextureX;
-                // networkObject.CurrentTextureY = message.TextureY;
-                // TODO: Implement this
-            }
-        });
+        // ClientNetworkEventManager.Subscribe<UpdateAnimatorStateNetworkMessage>(message =>
+        // {
+        //     if (message.UUID == networkObject.Entity.UUID)
+        //     {
+        //         networkObject.SetState(message.TargetState);
+        //     }
+        // });
     }
 
     public void SendStateUpdate(AnimatorComponent networkObject)
     {
-        // var message = new SendAnimatorStateNetworkMessage(networkObject.Entity.UUID, networkObject.CurrentTime, networkObject.CurrentTextureX, networkObject.CurrentTextureY);
-        // NetworkClient.SendMessage(message);
+        var message = new SendAnimatorStateNetworkMessage(networkObject.Entity.UUID, networkObject.GetCurrentStateId());
+        NetworkClient.SendMessage(message);
     }
 }

@@ -42,6 +42,11 @@ public class MovementComponent : EntityComponent
         {
             NetworkClient.SendMessage(new RequestMovementNetworkMessage(Speed, Direction.Right));
         }
+
+        // if (state.IsKeyUp(Keys.W) && state.IsKeyUp(Keys.A) && state.IsKeyUp(Keys.S) && state.IsKeyUp(Keys.D))
+        // {
+        //     NetworkClient.SendMessage(new PlayerIdleNetworkMessage(Entity.UUID));
+        // }
     }
 
     public void Move(GameTime gameTime, Direction direction, Vector2 speed)
@@ -51,29 +56,29 @@ public class MovementComponent : EntityComponent
             Vector2 displacement = MovementHelper.GetDisplacement(direction, speed);
             Vector2 newPosition = Entity.Position + displacement;
 
-            // if (Entity.ContainsComponent<AnimatorComponent>())
-            // {
-            //     AnimatorComponent animator = Entity.GetFirstComponent<AnimatorComponent>();
+            if (Entity.ContainsComponent<AnimatorComponent>())
+            {
+                AnimatorComponent animator = Entity.GetFirstComponent<AnimatorComponent>();
 
-            //     switch (direction)
-            //     {
-            //         case Direction.Up:
-            //             animator.PlayAnimation("walking_back");
-            //             break;
-            //         case Direction.Down:
-            //             animator.PlayAnimation("walking_front");
-            //             break;
-            //         case Direction.Left:
-            //             animator.PlayAnimation("walking_left");
-            //             break;
-            //         case Direction.Right:
-            //             animator.PlayAnimation("walking_right");
-            //             break;
-            //         default:
-            //             animator.PlayAnimation("idle");
-            //             break;
-            //     }
-            // }
+                switch (direction)
+                {
+                    case Direction.Up:
+                        animator.SetState("walking_back");
+                        break;
+                    case Direction.Down:
+                        animator.SetState("walking_front");
+                        break;
+                    case Direction.Left:
+                        animator.SetState("walking_left");
+                        break;
+                    case Direction.Right:
+                        animator.SetState("walking_right");
+                        break;
+                    default:
+                        animator.SetState("idle");
+                        break;
+                }
+            }
 
             Entity.Position = newPosition;
         }

@@ -122,7 +122,7 @@ public class NetworkServer
 
         foreach (var peer in whitelistedPeers)
         {
-            peer.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
+            peer.Send(message.Serialize(), DeliveryMethod.Unreliable);
         }
     }
 

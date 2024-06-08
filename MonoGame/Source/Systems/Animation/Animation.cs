@@ -7,13 +7,15 @@ public class Animation
     public int Duration { get; set; }
     public int SpriteCount { get; set; }
     public bool Repeats { get; set; } = false;
+    public bool IsDefault { get; set; } = false;
 
-    public Animation(string id, bool repeats, int row, int duration, int spriteCount)
+    public Animation(string id, bool repeats, int row, int duration, int spriteCount, bool isDefault = false)
     {
         Repeats = repeats;
         Id = id;
         Duration = duration;
         SpriteCount = spriteCount;
         SpritesheetRow = row;
+        IsDefault = isDefault;
     }
 }

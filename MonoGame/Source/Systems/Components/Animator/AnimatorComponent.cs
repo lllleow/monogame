@@ -29,6 +29,16 @@ public class AnimatorComponent : EntityComponent
         };
     }
 
+    public string GetCurrentStateId()
+    {
+        return stateMachine.CurrentState.Animation.Id;
+    }
+
+    public void SetState(string animationId)
+    {
+        stateMachine.SetState(animationId);
+    }
+
     public override void Initialize()
     {
         if (!Entity.ContainsComponent<SpriteRendererComponent>())
