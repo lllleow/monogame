@@ -38,12 +38,6 @@ public class CollisionComponent : EntityComponent
         }
     }
 
-    public List<ITile> GetTilesCollidingWithMask(bool[,] mask, Rectangle rectangle)
-    {
-        List<ITile> tiles = Globals.World.GetTilesIntersectingWithMask(mask, rectangle);
-        return tiles;
-    }
-
     public override Type GetComponentStateType()
     {
         return typeof(CollisionComponentState);

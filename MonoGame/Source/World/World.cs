@@ -124,8 +124,8 @@ public class World
 
     public ITile SetTileAtPosition(string tile, TileDrawLayer layer, int globalX, int globalY)
     {
-        var localPosition = GetLocalPositionFromGlobal(globalX, globalY);
-        var chunkPosition = GetChunkPositionFromGlobal(globalX, globalY);
+        var localPosition = GetLocalPositionFromGlobalPosition(globalX, globalY);
+        var chunkPosition = GetChunkPositionFromGlobalPosition(globalX, globalY);
 
         var chunk = Globals.World.CreateOrGetChunk(chunkPosition.ChunkPositionX, chunkPosition.ChunkPositionY);
         return chunk.SetTileAndUpdateNeighbors(tile, layer, localPosition.LocalX, localPosition.LocalY);
@@ -133,7 +133,7 @@ public class World
 
     public ITile GetTileAt(TileDrawLayer layer, int globalX, int globalY)
     {
-        var localPosition = GetLocalPositionFromGlobal(globalX, globalY);
+        var localPosition = GetLocalPositionFromGlobalPosition(globalX, globalY);
         var chunk = GetChunkFromGlobalPosition(globalX, globalY);
 
         return chunk?.GetTile(layer: layer, x: localPosition.LocalX, y: localPosition.LocalY);
@@ -164,7 +164,7 @@ public class World
         }
     }
 
-    public (int LocalX, int LocalY) GetLocalPositionFromGlobal(int globalPositionX, int globalPositionY)
+    public (int LocalX, int LocalY) GetLocalPositionFromGlobalPosition(int globalPositionX, int globalPositionY)
     {
         var localX = globalPositionX % Chunk.SizeX;
         var localY = globalPositionY % Chunk.SizeY;
@@ -172,7 +172,7 @@ public class World
         return (localX, localY);
     }
 
-    public (int ChunkPositionX, int ChunkPositionY) GetChunkPositionFromGlobal(int globalPositionX, int globalPositionY)
+    public (int ChunkPositionX, int ChunkPositionY) GetChunkPositionFromGlobalPosition(int globalPositionX, int globalPositionY)
     {
         var chunkX = globalPositionX / Chunk.SizeX;
         var chunkY = globalPositionY / Chunk.SizeY;
@@ -182,11 +182,11 @@ public class World
 
     public IChunk GetChunkFromGlobalPosition(int globalPositionX, int globalPositionY)
     {
-        var chunkPosition = GetChunkPositionFromGlobal(globalPositionX, globalPositionY);
+        var chunkPosition = GetChunkPositionFromGlobalPosition(globalPositionX, globalPositionY);
         return GetChunkAt(chunkPosition.ChunkPositionX, chunkPosition.ChunkPositionY);
     }
 
-    public ITile GetTileAtScreenPosition(TileDrawLayer layer, int screenX, int screenY)
+    public ITile GetTileFromScreenPosition(TileDrawLayer layer, int screenX, int screenY)
     {
         var worldPosition = new Vector2(screenX, screenY);
         worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.Camera.Transform));
@@ -204,128 +204,6 @@ public class World
         return chunk?.GetTile(layer, localX, localY) ?? null;
     }
 
-    public List<ITile> GetTilesIntersectingWithMask(bool[,] mask, Rectangle rectangle)
-    {
-        List<ITile> intersectingTiles = [];
-
-        var chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
-        var chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
-
-        var startChunkX = rectangle.Left / chunkSizeInPixelsX;
-        var startChunkY = rectangle.Top / chunkSizeInPixelsY;
-        var endChunkX = (rectangle.Right - 1) / chunkSizeInPixelsX;
-        var endChunkY = (rectangle.Bottom - 1) / chunkSizeInPixelsY;
-
-        for (var chunkX = startChunkX; chunkX <= endChunkX; chunkX++)
-        {
-            for (var chunkY = startChunkY; chunkY <= endChunkY; chunkY++)
-            {
-                var chunk = GetChunkAt(chunkX, chunkY);
-                if (chunk != null)
-                {
-                    var startTileX = Math.Max(0, (rectangle.Left - (chunkX * chunkSizeInPixelsX)) / Tile.PixelSizeX);
-                    var startTileY = Math.Max(0, (rectangle.Top - (chunkY * chunkSizeInPixelsY)) / Tile.PixelSizeY);
-                    var endTileX = Math.Min(Chunk.SizeX - 1, (rectangle.Right - 1 - (chunkX * chunkSizeInPixelsX)) / Tile.PixelSizeX);
-                    var endTileY = Math.Min(Chunk.SizeY - 1, (rectangle.Bottom - 1 - (chunkY * chunkSizeInPixelsY)) / Tile.PixelSizeY);
-
-                    for (var tileX = startTileX; tileX <= endTileX; tileX++)
-                    {
-                        for (var tileY = startTileY; tileY <= endTileY; tileY++)
-                        {
-                            var tile = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
-                            if (tile != null)
-                            {
-                                if (tile.CollisionMode is CollisionMode.CollisionMask or CollisionMode.PixelPerfect)
-                                {
-                                    var tileRect = new Rectangle(
-                                        (chunkX * chunkSizeInPixelsX) + (tileX * Tile.PixelSizeX),
-                                        (chunkY * chunkSizeInPixelsY) + (tileY * Tile.PixelSizeY),
-                                        Tile.PixelSizeX,
-                                        Tile.PixelSizeY);
-
-                                    var tileMask = tile.CollisionMode == CollisionMode.CollisionMask && tile.CollisionMaskSpritesheetName != null
-                                        ? CollisionMaskHandler.GetMaskForTexture(tile.CollisionMaskSpritesheetName, tile.GetSpriteRectangle())
-                                        : CollisionMaskHandler.GetMaskForTexture(tile.SpritesheetName, tile.GetSpriteRectangle());
-                                    var intersects = false;
-                                    for (var mx = 0; mx < mask.GetLength(0); mx++)
-                                    {
-                                        for (var my = 0; my < mask.GetLength(1); my++)
-                                        {
-                                            if (mask[mx, my])
-                                            {
-                                                var globalMaskX = rectangle.Left + mx;
-                                                var globalMaskY = rectangle.Top + my;
-
-                                                var localTileX = globalMaskX - tileRect.Left;
-                                                var localTileY = globalMaskY - tileRect.Top;
-
-                                                if (localTileX >= 0 && localTileX < Tile.PixelSizeX && localTileY >= 0 && localTileY < Tile.PixelSizeY)
-                                                {
-                                                    if (tileMask[localTileX, localTileY])
-                                                    {
-                                                        intersects = true;
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                        }
-
-                                        if (intersects)
-                                        {
-                                            break;
-                                        }
-                                    }
-
-                                    if (intersects && !intersectingTiles.Contains(tile))
-                                    {
-                                        intersectingTiles.Add(tile);
-                                    }
-                                }
-                                else
-                                {
-                                    var tileRect = new Rectangle(
-                                        (chunkX * chunkSizeInPixelsX) + (tileX * Tile.PixelSizeX),
-                                        (chunkY * chunkSizeInPixelsY) + (tileY * Tile.PixelSizeY),
-                                        Tile.PixelSizeX,
-                                        Tile.PixelSizeY);
-
-                                    var intersects = false;
-                                    for (var mx = 0; mx < mask.GetLength(0); mx++)
-                                    {
-                                        for (var my = 0; my < mask.GetLength(1); my++)
-                                        {
-                                            if (mask[mx, my])
-                                            {
-                                                var maskRect = new Rectangle(rectangle.Left + mx, rectangle.Top + my, 1, 1);
-                                                if (tileRect.Intersects(maskRect))
-                                                {
-                                                    intersects = true;
-                                                    break;
-                                                }
-                                            }
-                                        }
-
-                                        if (intersects)
-                                        {
-                                            break;
-                                        }
-                                    }
-
-                                    if (intersects && !intersectingTiles.Contains(tile))
-                                    {
-                                        intersectingTiles.Add(tile);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return intersectingTiles;
-    }
-
     public bool Intersects(Rectangle rectA, Rectangle rectB)
     {
         return rectA.X < rectB.X + rectB.Width &&
@@ -334,9 +212,9 @@ public class World
                rectA.Y + rectA.Height > rectB.Y;
     }
 
-    public IChunk GetChunkAtScreenPosition(int layer, int screenX, int screenY)
+    public IChunk GetChunkFromScreenPosition(int layer, int screenX, int screenY)
     {
-        var chunkPosition = GetChunkFromScreenPosition(new Vector2(screenX, screenY));
+        var chunkPosition = GetChunkPositionFromScreenPosition(new Vector2(screenX, screenY));
         var chunk = Globals.World.GetChunkAt(chunkPosition.ChunkPositionX, chunkPosition.ChunkPositionY);
         return chunk;
     }
@@ -357,7 +235,7 @@ public class World
         return ((chunkX * Chunk.SizeX) + localX, (chunkY * Chunk.SizeY) + localY);
     }
 
-    public (int ChunkPositionX, int ChunkPositionY) GetChunkFromScreenPosition(Vector2 screenPositionBeforeTransform)
+    public (int ChunkPositionX, int ChunkPositionY) GetChunkPositionFromScreenPosition(Vector2 screenPositionBeforeTransform)
     {
         var screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.Camera.Transform));
 
@@ -381,7 +259,7 @@ public class World
     internal void DeleteTile(TileDrawLayer layer, int posX, int posY)
     {
         var chunk = GetChunkFromGlobalPosition(posX, posY);
-        var localPosition = GetLocalPositionFromGlobal(posX, posY);
+        var localPosition = GetLocalPositionFromGlobalPosition(posX, posY);
         chunk.DeleteTile(layer, localPosition.LocalX, localPosition.LocalY);
     }
 }
