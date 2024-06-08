@@ -127,7 +127,7 @@ public class ServerWorld
                     {
                         for (var tileY = startTileY; tileY <= endTileY; tileY++)
                         {
-                            var tile = chunk.GetTile(TileDrawLayer.Terrain, tileX, tileY);
+                            var tile = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
                             if (tile != null)
                             {
                                 intersectingTiles.Add(tile);
