@@ -13,16 +13,17 @@ public class AnimatorComponentNetworkController : INetworkObjectController<Anima
         {
             if (message.UUID == networkObject.Entity.UUID)
             {
-                networkObject.CurrentTime = message.CurrentTime;
-                networkObject.CurrentTextureX = message.TextureX;
-                networkObject.CurrentTextureY = message.TextureY;
+                // networkObject.CurrentTime = message.CurrentTime;
+                // networkObject.CurrentTextureX = message.TextureX;
+                // networkObject.CurrentTextureY = message.TextureY;
+                // TODO: Implement this
             }
         });
     }
 
     public void SendStateUpdate(AnimatorComponent networkObject)
     {
-        var message = new SendAnimatorStateNetworkMessage(networkObject.Entity.UUID, networkObject.CurrentTime, networkObject.CurrentTextureX, networkObject.CurrentTextureY);
-        NetworkClient.SendMessage(message);
+        // var message = new SendAnimatorStateNetworkMessage(networkObject.Entity.UUID, networkObject.CurrentTime, networkObject.CurrentTextureX, networkObject.CurrentTextureY);
+        // NetworkClient.SendMessage(message);
     }
 }

@@ -51,29 +51,29 @@ public class MovementComponent : EntityComponent
             Vector2 displacement = MovementHelper.GetDisplacement(direction, speed);
             Vector2 newPosition = Entity.Position + displacement;
 
-            if (Entity.ContainsComponent<AnimatorComponent>())
-            {
-                AnimatorComponent animator = Entity.GetFirstComponent<AnimatorComponent>();
+            // if (Entity.ContainsComponent<AnimatorComponent>())
+            // {
+            //     AnimatorComponent animator = Entity.GetFirstComponent<AnimatorComponent>();
 
-                switch (direction)
-                {
-                    case Direction.Up:
-                        animator.PlayAnimation("walking_back");
-                        break;
-                    case Direction.Down:
-                        animator.PlayAnimation("walking_front");
-                        break;
-                    case Direction.Left:
-                        animator.PlayAnimation("walking_left");
-                        break;
-                    case Direction.Right:
-                        animator.PlayAnimation("walking_right");
-                        break;
-                    default:
-                        animator.PlayAnimation("idle");
-                        break;
-                }
-            }
+            //     switch (direction)
+            //     {
+            //         case Direction.Up:
+            //             animator.PlayAnimation("walking_back");
+            //             break;
+            //         case Direction.Down:
+            //             animator.PlayAnimation("walking_front");
+            //             break;
+            //         case Direction.Left:
+            //             animator.PlayAnimation("walking_left");
+            //             break;
+            //         case Direction.Right:
+            //             animator.PlayAnimation("walking_right");
+            //             break;
+            //         default:
+            //             animator.PlayAnimation("idle");
+            //             break;
+            //     }
+            // }
 
             Entity.Position = newPosition;
         }

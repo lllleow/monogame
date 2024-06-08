@@ -115,7 +115,7 @@ public class NetworkServer
         peer.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
     }
 
-    public void BroadcastMessage(INetworkMessage message, List<NetPeer> blacklist = null)
+    public void BroadcastMessage(INetworkMessage message, List<NetPeer>? blacklist = null)
     {
         blacklist ??= new List<NetPeer>();
         List<NetPeer> whitelistedPeers = Connections.Keys.Except(blacklist).ToList();
