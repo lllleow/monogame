@@ -3,7 +3,10 @@ using MonoGame;
 using MonoGame_Server.Systems.Server;
 using MonoGame.Source.States;
 using MonoGame.Source.States.Components;
+using MonoGame.Source.Systems.Animation;
+using MonoGame.Source.Systems.Components.Collision;
 using MonoGame.Source.Systems.Components.Collision.Enum;
+using MonoGame.Source.Systems.Scripts;
 using MonoGame.Source.Systems.Tiles;
 using MonoGame.Source.Util.Enum;
 
@@ -19,15 +22,29 @@ public class ServerMovementHelper
             CollisionComponentState collisionComponent = entity.GetComponent<CollisionComponentState>();
             List<TileState> tiles;
 
-            // TODO: Different collision methods
             if (collisionComponent.Mode == CollisionMode.BoundingBox)
             {
                 tiles = NetworkServer.Instance.ServerWorld.GetTilesIntersectingWithRectangle(entityRectangle);
             }
-            else if (collisionComponent.Mode is CollisionMode.PixelPerfect or CollisionMode.CollisionMask)
+            else if (collisionComponent.Mode is CollisionMode.CollisionMask)
             {
-                // PixelBoundsComponent pixelBounds = Entity.GetFirstComponent<PixelBoundsComponent>();
-                tiles = []; // collisionComponent.GetTilesCollidingWithMask(pixelBounds.Mask, entityRectangle);
+                if (entity.HasComponent(typeof(AnimatorComponentState)))
+                {
+                    AnimatorComponentState animator = entity.GetComponent<AnimatorComponentState>();
+                    IAnimationBundle animationBundle = AnimationBundleRegistry.GetAnimationBundle(animator.AnimationBundleId);
+                    Animation currentAnimation = animationBundle.Animations[animator.CurrentState];
+                    AnimationState animationState = new AnimationState(currentAnimation, animationBundle)
+                    {
+                        CurrentTime = animator.CurrentTime
+                    };
+                    Rectangle textureRectangle = animationState.GetTextureRectangle();
+                    bool[,] mask = CollisionMaskHandler.GetMaskForTexture(animationBundle.CollisionMaskSpritesheet, textureRectangle);
+                    tiles = NetworkServer.Instance.ServerWorld.GetTilesIntersectingWithMask(mask, entityRectangle);
+                }
+                else
+                {
+                    tiles = NetworkServer.Instance.ServerWorld.GetTilesIntersectingWithRectangle(entityRectangle);
+                }
             }
             else
             {

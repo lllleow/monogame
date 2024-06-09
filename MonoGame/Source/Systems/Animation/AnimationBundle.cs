@@ -12,6 +12,7 @@ public class AnimationBundle : IAnimationBundle
     public int SizeX { get; set; } = 16;
     public int SizeY { get; set; } = 16;
     public Dictionary<string, Animation> Animations { get; set; } = [];
+    public string CollisionMaskSpritesheet { get; set; }
     public List<AnimationTransition> AnimationTransitions { get; set; } = new();
 
     public Rectangle GetSpriteRectangle(string animationId, double percentage)

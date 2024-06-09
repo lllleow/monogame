@@ -216,7 +216,7 @@ public class Chunk : IChunk
                             layerDepth
                         );
 
-                        if (tile.CollisionMaskSpritesheetName != null && tile.CollisionMode == CollisionMode.CollisionMask && CollisionComponent.ShowCollisionMasks)
+                        if (tile.CollisionMaskSpritesheetName != null && tile.CollisionMode == CollisionMode.CollisionMask)
                         {
                             spriteBatch.Draw(
                                 SpritesheetLoader.GetSpritesheet(tile.CollisionMaskSpritesheetName),

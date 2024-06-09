@@ -6,7 +6,6 @@ namespace MonoGame;
 
 public interface IAnimationState
 {
-    public AnimationStateMachine StateMachine { get; set; }
     public Animation Animation { get; set; }
     public IAnimationBundle AnimationBundle { get; set; }
     public Action<IAnimationState> OnStateEnded { get; set; }
@@ -16,5 +15,6 @@ public interface IAnimationState
     public abstract void Update(GameTime gameTime);
     public abstract void Start();
     public abstract (int TextureX, int TextureY) GetTextureCoordinates();
+    public abstract Rectangle GetTextureRectangle();
     public abstract double GetAnimationPercentage();
 }

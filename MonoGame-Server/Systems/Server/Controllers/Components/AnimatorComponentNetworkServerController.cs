@@ -17,6 +17,8 @@ public class AnimatorComponentNetworkServerController : IStandaloneNetworkContro
             AnimatorComponentState animatorState = new AnimatorComponentState
             {
                 CurrentState = message.CurrentState,
+                CurrentTime = message.CurrentTime,
+                AnimationBundleId = message.AnimationBundleId
             };
             state?.ReplaceComponent(animatorState);
             NetworkServer.Instance.BroadcastMessage(updateMessage, blacklist: [peer]);

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Source.Systems.Components.Animator;
 using MonoGame.Source.Systems.Components.Collision;
-using MonoGame.Source.Systems.Components.PixelBounds;
+using MonoGame.Source.Systems.Components.Collision.Enum;
 using MonoGame.Source.Systems.Components.SpriteRenderer;
 using MonoGame.Source.Systems.Scripts;
 namespace MonoGame.Source.Systems.Entity.PlayerNamespace;
@@ -25,8 +25,7 @@ public class Player : GameEntity
 
         AddComponent(spriteRenderer);
         AddComponent(animator);
-        AddComponent(new PixelBoundsComponent());
-        AddComponent(new CollisionComponent("textures/player_sprite_2_collision_mask"));
+        AddComponent(new CollisionComponent(CollisionMode.CollisionMask));
         AddComponent(new MovementComponent());
     }
 

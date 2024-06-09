@@ -20,7 +20,6 @@ public class ComponentNetworkServerController : IStandaloneNetworkController
             {
                 ComponentState? newComponentState = Activator.CreateInstance(message.ComponentType) as ComponentState;
                 entityState.AddComponent(newComponentState);
-                SaveManager.SaveGame();
             }
         });
     }

@@ -1,8 +1,10 @@
 ﻿using LiteNetLib;
 using MonoGame;
+using MonoGame_Server.Systems.Saving;
 using MonoGame_Server.Systems.World;
 using MonoGame.Source.Multiplayer.Interfaces;
 using MonoGame.Source.States;
+using MonoGame.Source.Systems.Scripts;
 
 namespace MonoGame_Server.Systems.Server;
 
@@ -18,6 +20,8 @@ public class NetworkServer
     public ServerWorld ServerWorld { get; set; }
 
     public List<INetworkController> NetworkControllers { get; set; } = new();
+
+    private int autoSaveCounter = 0;
 
     public NetworkServer()
     {
@@ -35,6 +39,9 @@ public class NetworkServer
         _ = this.server.Start(port);
 
         Console.WriteLine("Server started at port " + port);
+        Console.WriteLine("Loading scripts");
+        AnimationBundleRegistry.LoadAnimationBundleScripts();
+        Console.WriteLine("Finished loading scripts");
 
         Console.WriteLine("Server is listening for connections");
         this.listener.ConnectionRequestEvent += request =>
@@ -82,6 +89,7 @@ public class NetworkServer
         ServerNetworkEventManager.AddController(new WorldNetworkServerController());
         ServerNetworkEventManager.AddController(new AnimatorComponentNetworkServerController());
         ServerNetworkEventManager.AddController(new ComponentNetworkServerController());
+        ServerNetworkEventManager.AddController(new CollisionComponentNetworkServerController());
     }
 
     public NetPeer GetPeerByUUID(string UUID)
@@ -140,6 +148,16 @@ public class NetworkServer
     public void Update()
     {
         this.server.PollEvents();
+
+        if (this.autoSaveCounter >= 600)
+        {
+            SaveManager.SaveGame();
+            this.autoSaveCounter = 0;
+        }
+        else
+        {
+            this.autoSaveCounter++;
+        }
     }
 
     public void Stop()

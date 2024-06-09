@@ -3,11 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Systems.Components;
-using MonoGame.Source.Systems.Components.Collision;
-using MonoGame.Source.Systems.Components.Collision.Enum;
-using MonoGame.Source.Systems.Components.PixelBounds;
-using MonoGame.Source.Systems.Tiles.Interfaces;
-using MonoGame.Source.Util.Enum;
 
 namespace MonoGame;
 

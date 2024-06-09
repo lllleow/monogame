@@ -6,7 +6,6 @@ namespace MonoGame;
 
 public class AnimationState : IAnimationState
 {
-    public AnimationStateMachine StateMachine { get; set; }
     public Animation Animation { get; set; }
     public IAnimationBundle AnimationBundle { get; set; }
     public Action<IAnimationState> OnStateEnded { get; set; } = (state) => { };
@@ -14,9 +13,8 @@ public class AnimationState : IAnimationState
     public bool FinishedPlayingAnimation { get; set; } = false;
     public bool StateEnded { get; set; } = false;
 
-    public AnimationState(AnimationStateMachine stateMachine, Animation animation, IAnimationBundle animationBundle)
+    public AnimationState(Animation animation, IAnimationBundle animationBundle)
     {
-        StateMachine = stateMachine;
         Animation = animation;
         AnimationBundle = animationBundle;
     }
@@ -32,6 +30,12 @@ public class AnimationState : IAnimationState
         int TextureY = AnimationBundle.GetSpritesheetRowForAnimation(Animation.Id);
 
         return (TextureX, TextureY);
+    }
+
+    public Rectangle GetTextureRectangle()
+    {
+        (int TextureX, int TextureY) = GetTextureCoordinates();
+        return new Rectangle(TextureX * AnimationBundle.SizeX, TextureY * AnimationBundle.SizeY, AnimationBundle.SizeX, AnimationBundle.SizeY);
     }
 
     public void Start()

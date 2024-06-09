@@ -19,7 +19,7 @@ public class AnimationStateMachine
         AnimationBundle = animationBundle;
         foreach (Animation animation in animationBundle.Animations.Values)
         {
-            AddState(new AnimationState(this, animation, animationBundle));
+            AddState(new AnimationState(animation, animationBundle));
         }
 
         CurrentState = AnimationStates.Values.FirstOrDefault(state => state.Animation.IsDefault);
