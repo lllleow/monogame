@@ -17,12 +17,10 @@ public class SizedBoxUserInterfaceComponent : SingleChildUserInterfaceComponent
     {
         var childSize = base.GetPreferredSize();
 
-        if (Size.X < 0 && Size.Y < 0)
-            return childSize;
-        if (Size.Y > 0 && Size.X < 0)
-            return new Vector2(childSize.X, Size.Y);
-        if (Size.X > 0 && Size.Y < 0) return new Vector2(Size.X, childSize.Y);
-
-        return Size;
+        return Size.X < 0 && Size.Y < 0
+            ? childSize
+            : Size.Y > 0 && Size.X < 0
+            ? new Vector2(childSize.X, Size.Y)
+            : Size.X > 0 && Size.Y < 0 ? new Vector2(Size.X, childSize.Y) : Size;
     }
 }

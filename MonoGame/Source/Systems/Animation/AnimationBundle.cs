@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using MonoGame.Source.Systems.Tiles;
 
 namespace MonoGame.Source.Systems.Animation;
 

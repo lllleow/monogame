@@ -4,8 +4,8 @@ using System.IO;
 using System.Reflection;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
-using MonoGame_Common.Util.Loaders;
 using MonoGame.Source.Systems.Tiles.Interfaces;
+using MonoGame_Common.Util.Loaders;
 
 namespace MonoGame.Source.Systems.Scripts;
 
@@ -16,7 +16,9 @@ public static class TileRegistry
     public static void RegisterTile(string id, Type tileType)
     {
         if (!typeof(ITile).IsAssignableFrom(tileType))
+        {
             throw new ArgumentException("Tile type must implement ITile interface", nameof(tileType));
+        }
 
         Tiles.Add(id, tileType);
     }

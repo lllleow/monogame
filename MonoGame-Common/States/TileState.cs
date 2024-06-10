@@ -31,7 +31,6 @@ public class TileState : INetSerializable
     //     LocalY = tile.LocalY;
     //     Layer = layer;
     // }
-
     public void Serialize(NetDataWriter writer)
     {
         writer.Put(Id);

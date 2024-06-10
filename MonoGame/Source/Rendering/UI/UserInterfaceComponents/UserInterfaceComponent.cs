@@ -99,9 +99,15 @@ public class UserInterfaceComponent : IUserInterfaceComponent
         var windowWidth = Globals.GraphicsDevice.PreferredBackBufferWidth;
         var windowHeight = Globals.GraphicsDevice.PreferredBackBufferHeight;
 
-        if (!Globals.Game.IsActive) return;
+        if (!Globals.Game.IsActive)
+        {
+            return;
+        }
 
-        if (x < 0 || y < 0 || x >= windowWidth || y >= windowHeight) return;
+        if (x < 0 || y < 0 || x >= windowWidth || y >= windowHeight)
+        {
+            return;
+        }
 
         var worldPosition = new Vector2(x, y);
         var screenPosition =
@@ -110,6 +116,9 @@ public class UserInterfaceComponent : IUserInterfaceComponent
         if (screenPosition.X >= GetPositionRelativeToParent().X &&
             screenPosition.X <= GetPositionRelativeToParent().X + GetPreferredSize().X &&
             screenPosition.Y >= GetPositionRelativeToParent().Y &&
-            screenPosition.Y <= GetPositionRelativeToParent().Y + GetPreferredSize().Y) OnClick?.Invoke(this);
+            screenPosition.Y <= GetPositionRelativeToParent().Y + GetPreferredSize().Y)
+        {
+            OnClick?.Invoke(this);
+        }
     }
 }

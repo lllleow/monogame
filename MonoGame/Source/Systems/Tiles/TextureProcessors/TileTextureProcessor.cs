@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using MonoGame_Common.Util.Enum;
 using MonoGame.Source.Systems.Tiles.Interfaces;
 using MonoGame.Source.Systems.Tiles.Utils;
+using MonoGame_Common.Util.Enum;
 
 namespace MonoGame.Source.Systems.Tiles.TextureProcessors;
 
@@ -37,7 +37,10 @@ public class TileTextureProcessor : ITileTextureProcessor
 
     public bool IsWhitelisted(TileNeighborConfiguration configuration, Direction direction)
     {
-        if (configuration.Center is null) return false;
+        if (configuration.Center is null)
+        {
+            return false;
+        }
 
         var connectableTiles = new List<string>(configuration.Center.Tile.ConnectableTiles);
         return direction switch

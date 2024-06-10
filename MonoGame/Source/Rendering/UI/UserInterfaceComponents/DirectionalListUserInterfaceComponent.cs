@@ -25,9 +25,13 @@ public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceC
         for (var i = 0; i < index; i++)
         {
             if (Direction == ListDirection.Horizontal)
+            {
                 offset.X += Children[i].GetPreferredSize().X + Spacing;
+            }
             else
+            {
                 offset.Y += Children[i].GetPreferredSize().Y + Spacing;
+            }
         }
 
         return offset + base.GetChildOffset(child);
@@ -55,9 +59,13 @@ public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceC
         }
 
         if (Direction == ListDirection.Horizontal)
+        {
             maxWidth += Spacing * (Children.Count - 1);
+        }
         else
+        {
             totalHeight += Spacing * (Children.Count - 1);
+        }
 
         return new Vector2((int)maxWidth, (int)totalHeight);
     }

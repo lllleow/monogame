@@ -13,12 +13,18 @@ public class UserInterface : IUserInterface
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-        foreach (var component in Components) component.Draw(spriteBatch);
+        foreach (var component in Components)
+        {
+            component.Draw(spriteBatch);
+        }
     }
 
     public virtual void Update(GameTime gameTime)
     {
-        foreach (var component in Components) component.Update(gameTime);
+        foreach (var component in Components)
+        {
+            component.Update(gameTime);
+        }
     }
 
     public void AddComponent(IUserInterfaceComponent component)

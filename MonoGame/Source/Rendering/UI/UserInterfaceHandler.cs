@@ -30,13 +30,18 @@ public class UserInterfaceHandler
         foreach (var userInterface in UserInterfaces)
         {
             if (userInterface.Visible)
+            {
                 userInterface.Draw(spriteBatch);
+            }
         }
     }
 
     public void Update(GameTime gameTime)
     {
-        foreach (var userInterface in UserInterfaces) userInterface.Update(gameTime);
+        foreach (var userInterface in UserInterfaces)
+        {
+            userInterface.Update(gameTime);
+        }
     }
 
     public IUserInterface GetUserInterface(string name)

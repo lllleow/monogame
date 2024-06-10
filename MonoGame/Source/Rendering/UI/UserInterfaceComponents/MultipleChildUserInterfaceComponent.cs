@@ -15,7 +15,10 @@ public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
     {
         Children = children;
 
-        foreach (var child in Children) child.Initialize(this);
+        foreach (var child in Children)
+        {
+            child.Initialize(this);
+        }
     }
 
     public List<IUserInterfaceComponent> Children { get; set; }
@@ -34,13 +37,19 @@ public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
     public override void Draw(SpriteBatch spriteBatch)
     {
         base.Draw(spriteBatch);
-        foreach (var child in Children) child.Draw(spriteBatch);
+        foreach (var child in Children)
+        {
+            child.Draw(spriteBatch);
+        }
     }
 
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-        foreach (var child in Children) child.Update(gameTime);
+        foreach (var child in Children)
+        {
+            child.Update(gameTime);
+        }
     }
 
     public override Vector2 GetPreferredSize()

@@ -2,8 +2,8 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using MonoGame_Common.Messages.Player;
 using MonoGame.Source.Multiplayer;
+using MonoGame_Common.Messages.Player;
 
 namespace MonoGame.Source.Systems.Components.Movement;
 
@@ -17,13 +17,25 @@ public class MovementComponent : EntityComponent
         var state = Keyboard.GetState();
         List<Keys> keys = [];
 
-        if (state.IsKeyDown(Keys.W)) keys.Add(Keys.W);
+        if (state.IsKeyDown(Keys.W))
+        {
+            keys.Add(Keys.W);
+        }
 
-        if (state.IsKeyDown(Keys.A)) keys.Add(Keys.A);
+        if (state.IsKeyDown(Keys.A))
+        {
+            keys.Add(Keys.A);
+        }
 
-        if (state.IsKeyDown(Keys.S)) keys.Add(Keys.S);
+        if (state.IsKeyDown(Keys.S))
+        {
+            keys.Add(Keys.S);
+        }
 
-        if (state.IsKeyDown(Keys.D)) keys.Add(Keys.D);
+        if (state.IsKeyDown(Keys.D))
+        {
+            keys.Add(Keys.D);
+        }
 
         var commonsKeys = keys.Select(x => (MonoGame_Common.Enums.Keys)x).ToList();
 

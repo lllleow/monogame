@@ -21,7 +21,6 @@ public class PlayerState : EntityState
     //     SelectedTile = player.SelectedTile;
     //     Position = player.Position;
     // }
-
     public override void Serialize(NetDataWriter writer)
     {
         base.Serialize(writer);

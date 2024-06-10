@@ -7,7 +7,6 @@ using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Rendering.Camera;
 using MonoGame.Source.Rendering.UI;
 using MonoGame.Source.Systems.Scripts;
-using MonoGame.Source.WorldNamespace;
 
 namespace MonoGame;
 
@@ -61,7 +60,10 @@ public class Main : Game
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-            Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
+            Keyboard.GetState().IsKeyDown(Keys.Escape))
+        {
+            Exit();
+        }
 
         Globals.GameTime = gameTime;
         NetworkClient.Update();
@@ -81,10 +83,7 @@ public class Main : Game
         Globals.World.Draw(Globals.SpriteBatch);
         Globals.SpriteBatch.End();
 
-        Globals.SpriteBatch.Begin(
-            transformMatrix: Globals.UserInterfaceHandler.Transform,
-            sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend,
-            samplerState: SamplerState.PointClamp);
+        Globals.SpriteBatch.Begin(transformMatrix: Globals.UserInterfaceHandler.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
         Globals.UserInterfaceHandler.Draw(Globals.SpriteBatch);
         Globals.SpriteBatch.End();
 

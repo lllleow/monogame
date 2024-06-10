@@ -1,12 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
-using MonoGame_Common.Enums;
-using MonoGame_Common.Util.Enum;
-using MonoGame.Source;
 using MonoGame.Source.Rendering.Utils;
 using MonoGame.Source.Systems.Tiles.Interfaces;
 using MonoGame.Source.Systems.Tiles.Utils;
+using MonoGame_Common.Enums;
+using MonoGame_Common.Util.Enum;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Tiles;
 
 public class PlacedTile
 {
@@ -38,14 +37,17 @@ public class PlacedTile
     public void UpdateTextureCoordinates(TileDrawLayer layer)
     {
         var configuration = GetNeighborConfiguration(layer);
-        var coordinates = Tile.TextureProcessor?.Process(configuration) ?? (0, 0);
-        TextureX = coordinates.TextureCoordinateX;
-        TextureY = coordinates.TextureCoordinateY;
+        var (TextureCoordinateX, TextureCoordinateY) = Tile.TextureProcessor?.Process(configuration) ?? (0, 0);
+        TextureX = TextureCoordinateX;
+        TextureY = TextureCoordinateY;
     }
 
     public void OnNeighborChanged(PlacedTile neighbor, TileDrawLayer layer, Direction direction)
     {
-        if (Tile.TextureProcessor != null) UpdateTextureCoordinates(layer);
+        if (Tile.TextureProcessor != null)
+        {
+            UpdateTextureCoordinates(layer);
+        }
     }
 
     public TileNeighborConfiguration GetNeighborConfiguration(TileDrawLayer layer)

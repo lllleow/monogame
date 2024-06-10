@@ -1,16 +1,14 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame_Common.Enums;
-using MonoGame_Common.States;
-using MonoGame_Common.Util.Enum;
 using MonoGame.Source.Rendering.Utils;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Scripts;
 using MonoGame.Source.Systems.Tiles;
-using MonoGame.Source.Systems.Tiles.Interfaces;
 using MonoGame.Source.Utils.Loaders;
-using MonoGame.Source.WorldNamespace;
+using MonoGame_Common.Enums;
+using MonoGame_Common.States;
+using MonoGame_Common.Util.Enum;
 
 namespace MonoGame.Source.Systems.Chunks;
 
@@ -27,12 +25,17 @@ public class Chunk : IChunk
         this.world = world;
         Tiles = [];
 
-        foreach (var layer in TileDrawLayerPriority.GetPriority()) Tiles[layer] = new PlacedTile[SizeX, SizeY];
+        foreach (var layer in TileDrawLayerPriority.GetPriority())
+        {
+            Tiles[layer] = new PlacedTile[SizeX, SizeY];
+        }
 
         for (var chunkX = 0; chunkX < SizeX; chunkX++)
         {
             for (var chunkY = 0; chunkY < SizeY; chunkY++)
+            {
                 _ = SetTile("base.grass", TileDrawLayer.Background, chunkX, chunkY);
+            }
         }
     }
 
@@ -42,15 +45,22 @@ public class Chunk : IChunk
         Y = chunkState.Y;
         Tiles = [];
 
-        foreach (var layer in TileDrawLayerPriority.GetPriority()) Tiles[layer] = new PlacedTile[SizeX, SizeY];
+        foreach (var layer in TileDrawLayerPriority.GetPriority())
+        {
+            Tiles[layer] = new PlacedTile[SizeX, SizeY];
+        }
 
         foreach (var tileState in chunkState.Tiles)
+        {
             _ = SetTile(tileState.Id, tileState.Layer, tileState.LocalX.Value, tileState.LocalY.Value);
+        }
 
         for (var chunkX = 0; chunkX < SizeX; chunkX++)
         {
             for (var chunkY = 0; chunkY < SizeY; chunkY++)
+            {
                 _ = SetTile("base.grass", TileDrawLayer.Background, chunkX, chunkY);
+            }
         }
 
         Globals.World.UpdateAllTextureCoordinates();
@@ -72,7 +82,10 @@ public class Chunk : IChunk
 
     public void DeleteTile(TileDrawLayer layer, int x, int y)
     {
-        if (x > SizeX || y > SizeY || x < 0 || y < 0) return;
+        if (x > SizeX || y > SizeY || x < 0 || y < 0)
+        {
+            return;
+        }
 
         Tiles[layer][x, y] = null;
         UpdateNeighborChunks();
@@ -80,7 +93,10 @@ public class Chunk : IChunk
 
     public PlacedTile SetTile(string id, TileDrawLayer layer, int x, int y)
     {
-        if (x > SizeX || y > SizeY || x < 0 || y < 0) return null;
+        if (x > SizeX || y > SizeY || x < 0 || y < 0)
+        {
+            return null;
+        }
 
         var tile = TileRegistry.GetTile(id);
         var worldPosition = GetWorldPosition(x, y);
@@ -166,9 +182,15 @@ public class Chunk : IChunk
 
                         var layerDepth = 1f;
 
-                        if (layer.Key == TileDrawLayer.Terrain) layerDepth = 0.1f;
+                        if (layer.Key == TileDrawLayer.Terrain)
+                        {
+                            layerDepth = 0.1f;
+                        }
 
-                        if (layer.Key == TileDrawLayer.Background) layerDepth = 0f;
+                        if (layer.Key == TileDrawLayer.Background)
+                        {
+                            layerDepth = 0f;
+                        }
 
                         spriteBatch.Draw(
                             SpritesheetLoader.GetSpritesheet(tile.Tile.SpritesheetName),

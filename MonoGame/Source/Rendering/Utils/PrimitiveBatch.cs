@@ -3,12 +3,12 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 // PrimitiveBatch.cs
 //
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
-
 namespace MonoGame.Source.Rendering.Utils;
 
 // PrimitiveBatch is a class that handles efficient rendering automatically for its
@@ -199,7 +199,9 @@ public class PrimitiveBatch : IDisposable
 
         if (newPrimitive &&
             positionInBuffer + numVertsPerPrimitive >= vertices.Length)
+        {
             Flush();
+        }
 
         // once we know there's enough room, set the vertex in the buffer,
         // and increase position.
@@ -240,7 +242,10 @@ public class PrimitiveBatch : IDisposable
         }
 
         // no work to do
-        if (positionInBuffer == 0) return;
+        if (positionInBuffer == 0)
+        {
+            return;
+        }
 
         // how many primitives will we draw?
         var primitiveCount = positionInBuffer / numVertsPerPrimitive;

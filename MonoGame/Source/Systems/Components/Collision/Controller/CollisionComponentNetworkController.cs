@@ -1,6 +1,6 @@
-﻿using MonoGame_Common.Messages.Components.Collision;
-using MonoGame.Source.Multiplayer;
+﻿using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Multiplayer.Interfaces;
+using MonoGame_Common.Messages.Components.Collision;
 
 namespace MonoGame.Source.Systems.Components.Collision.Controller;
 
@@ -10,7 +10,10 @@ public class CollisionComponentNetworkController : INetworkObjectController<Coll
     {
         ClientNetworkEventManager.Subscribe<SetCollisionModeNetworkMessage>(message =>
         {
-            if (networkObject.Entity.UUID == message.UUID) networkObject.Mode = message.Mode;
+            if (networkObject.Entity.UUID == message.UUID)
+            {
+                networkObject.Mode = message.Mode;
+            }
         });
     }
 

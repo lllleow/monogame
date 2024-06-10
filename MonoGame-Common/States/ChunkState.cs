@@ -28,7 +28,10 @@ public class ChunkState : INetSerializable
         writer.Put(X);
         writer.Put(Y);
         writer.Put(Tiles.Count);
-        foreach (var tile in Tiles) tile.Serialize(writer);
+        foreach (var tile in Tiles)
+        {
+            tile.Serialize(writer);
+        }
     }
 
     public void Deserialize(NetDataReader reader)
@@ -51,7 +54,7 @@ public class ChunkState : INetSerializable
     //     X = chunk.X;
     //     Y = chunk.Y;
 
-    //     foreach (var layer in chunk.Tiles)
+    // foreach (var layer in chunk.Tiles)
     //     {
     //         if (layer.Key != TileDrawLayer.Background)
     //         {
@@ -69,7 +72,6 @@ public class ChunkState : INetSerializable
     //         }
     //     }
     // }
-
     public bool SetTile(string tileId, TileDrawLayer layer, int posX, int posY)
     {
         var tile = Tiles.FirstOrDefault(x => x.LocalX == posX && x.LocalY == posY && x.Layer == layer);

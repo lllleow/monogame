@@ -2,19 +2,18 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame_Common.Enums;
-using MonoGame_Common.Messages.Player;
-using MonoGame_Common.Messages.World;
-using MonoGame_Common.States;
 using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Entity.Interfaces;
 using MonoGame.Source.Systems.Entity.Player;
 using MonoGame.Source.Systems.Tiles;
-using MonoGame.Source.Systems.Tiles.Interfaces;
+using MonoGame_Common.Enums;
+using MonoGame_Common.Messages.Player;
+using MonoGame_Common.Messages.World;
+using MonoGame_Common.States;
 
-namespace MonoGame.Source.WorldNamespace;
+namespace MonoGame.Source.World;
 
 public class World
 {
@@ -55,12 +54,18 @@ public class World
 
     public void Update(GameTime gameTime)
     {
-        foreach (var entity in GetEntities()) entity.Update(gameTime);
+        foreach (var entity in GetEntities())
+        {
+            entity.Update(gameTime);
+        }
     }
 
     public void UpdateAllTextureCoordinates()
     {
-        foreach (var chunk in Chunks) chunk.UpdateTextureCoordinates();
+        foreach (var chunk in Chunks)
+        {
+            chunk.UpdateTextureCoordinates();
+        }
     }
 
     public List<IGameEntity> GetEntities()
@@ -89,7 +94,10 @@ public class World
     public void Draw(SpriteBatch spriteBatch)
     {
         DrawWorld();
-        foreach (var entity in GetEntities()) entity.Draw(spriteBatch);
+        foreach (var entity in GetEntities())
+        {
+            entity.Draw(spriteBatch);
+        }
     }
 
     public Player GetPlayerByUUID(string id)
@@ -238,7 +246,10 @@ public class World
 
     private void DrawWorld()
     {
-        foreach (var chunk in Chunks) chunk.Draw(Globals.SpriteBatch);
+        foreach (var chunk in Chunks)
+        {
+            chunk.Draw(Globals.SpriteBatch);
+        }
     }
 
     internal void DeleteTile(TileDrawLayer layer, int posX, int posY)

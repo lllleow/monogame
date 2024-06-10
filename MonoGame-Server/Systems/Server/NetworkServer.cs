@@ -37,17 +37,21 @@ public class NetworkServer
         _ = server.Start(port);
 
         Console.WriteLine("Server started at port " + port);
+
         // Console.WriteLine("Loading scripts");
         // AnimationBundleRegistry.LoadAnimationBundleScripts();
         // Console.WriteLine("Finished loading scripts");
-
         Console.WriteLine("Server is listening for connections");
         listener.ConnectionRequestEvent += request =>
         {
             if (ShouldAcceptConnection())
+            {
                 _ = request.Accept();
+            }
             else
+            {
                 request.Reject();
+            }
         };
 
         listener.PeerConnectedEvent += peer => { Console.WriteLine("New connection: {0}", peer); };
@@ -61,7 +65,10 @@ public class NetworkServer
                 var messageType = MessageRegistry.Instance.GetTypeById(messageTypeId);
                 var message = (INetworkMessage?)Activator.CreateInstance(messageType);
                 message?.Deserialize(reader);
-                if (message != null) ServerNetworkEventManager.RaiseEvent(this, peer, messageType, message);
+                if (message != null)
+                {
+                    ServerNetworkEventManager.RaiseEvent(this, peer, messageType, message);
+                }
 
                 Console.WriteLine("Server received: " + message);
             }
@@ -122,7 +129,10 @@ public class NetworkServer
         blacklist ??= [];
         var whitelistedPeers = Connections.Keys.Except(blacklist).ToList();
 
-        foreach (var peer in whitelistedPeers) peer.Send(message.Serialize(), DeliveryMethod.Unreliable);
+        foreach (var peer in whitelistedPeers)
+        {
+            peer.Send(message.Serialize(), DeliveryMethod.Unreliable);
+        }
     }
 
     public bool ShouldAcceptConnection()

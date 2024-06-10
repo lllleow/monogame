@@ -1,4 +1,4 @@
-﻿namespace MonoGame_Server;
+﻿namespace MonoGame_Server.Systems.Server;
 
 public interface IServerNetworkController
 {

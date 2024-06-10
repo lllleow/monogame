@@ -19,7 +19,10 @@ public class PlayerNetworkServerController : IServerNetworkController
         {
             var playerState = server.GetPlayerFromPeer(peer);
 
-            if (playerState == null) return;
+            if (playerState == null)
+            {
+                return;
+            }
 
             if (message.Keys.Contains(Keys.W) || message.Keys.Contains(Keys.A) || message.Keys.Contains(Keys.S) ||
                 message.Keys.Contains(Keys.D))
@@ -48,9 +51,15 @@ public class PlayerNetworkServerController : IServerNetworkController
                 var direction =
                     DirectionHelper.GetDirection((int)resultingDisplacement.X, (int)resultingDisplacement.Y);
 
-                if (!ServerMovementHelper.CanMove(playerState!, newPosition, direction)) return;
+                if (!ServerMovementHelper.CanMove(playerState!, newPosition, direction))
+                {
+                    return;
+                }
 
-                if (playerState?.Position != null) playerState.Position = newPosition;
+                if (playerState?.Position != null)
+                {
+                    playerState.Position = newPosition;
+                }
 
                 switch (direction)
                 {
@@ -76,7 +85,9 @@ public class PlayerNetworkServerController : IServerNetworkController
             }
 
             if (message.Keys.Count == 0)
+            {
                 server.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(playerState?.UUID, "idle"));
+            }
         });
     }
 }

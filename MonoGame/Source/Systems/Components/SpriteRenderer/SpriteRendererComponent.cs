@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.Utils;
-using MonoGame.Source.Systems.Tiles;
 using MonoGame.Source.Utils.Loaders;
 
 namespace MonoGame.Source.Systems.Components.SpriteRenderer;

@@ -9,6 +9,9 @@ internal class Server
         var server = NetworkServer.Instance;
         server.InitializeServer();
 
-        while (true) server.Update();
+        while (true)
+        {
+            server.Update();
+        }
     }
 }
