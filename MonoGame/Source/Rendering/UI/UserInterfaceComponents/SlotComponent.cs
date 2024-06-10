@@ -1,10 +1,11 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame_Common.Util.Helpers;
 using MonoGame.Source.Rendering.UI.Interfaces;
 using MonoGame.Source.Rendering.Utils;
-using MonoGame.Source.Util.Helpers;
-using MonoGame.Source.Util.Loaders;
+using MonoGame.Source.Utils.Helpers;
+using MonoGame.Source.Utils.Loaders;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 

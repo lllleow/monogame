@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Source.Util.Loaders;
+namespace MonoGame.Source.Utils.Loaders;
 
 public class SpritesheetLoader
 {

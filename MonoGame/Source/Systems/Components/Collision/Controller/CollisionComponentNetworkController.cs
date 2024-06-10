@@ -1,9 +1,8 @@
-﻿using System;
+﻿using MonoGame_Common.Messages.Components.Collision;
 using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame.Source.Systems.Components.Collision;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Components.Collision.Controller;
 
 public class CollisionComponentNetworkController : INetworkObjectController<CollisionComponent>
 {
@@ -20,9 +19,11 @@ public class CollisionComponentNetworkController : INetworkObjectController<Coll
 
     public void SetCollisionMode(CollisionComponent networkObject)
     {
-        SendCollisionModeUpdateNetworkMessage message = new SendCollisionModeUpdateNetworkMessage();
-        message.UUID = networkObject.Entity.UUID;
-        message.Mode = networkObject.Mode;
+        var message = new SendCollisionModeUpdateNetworkMessage
+        {
+            UUID = networkObject.Entity.UUID,
+            Mode = networkObject.Mode
+        };
         NetworkClient.SendMessage(message);
     }
 }

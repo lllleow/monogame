@@ -1,8 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using MonoGame.Source.Systems.Animation;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Animation;
 
 public interface IAnimationState
 {

@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using MonoGame_Common.Attributes;
 using System.Reflection;
 
-namespace MonoGame;
+namespace MonoGame_Common.Util;
 
 public class MessageRegistry
 {
     public static MessageRegistry Instance { get; } = new();
-    private Dictionary<int, Type> idToTypeMap = new Dictionary<int, Type>();
-    private Dictionary<Type, int> typeToIdMap = new Dictionary<Type, int>();
+    private readonly Dictionary<int, Type> idToTypeMap = [];
+    private readonly Dictionary<Type, int> typeToIdMap = [];
 
     public MessageRegistry()
     {
@@ -29,6 +27,13 @@ public class MessageRegistry
         }
     }
 
-    public int GetIdByType(Type type) => typeToIdMap[type];
-    public Type GetTypeById(int id) => idToTypeMap[id];
+    public int GetIdByType(Type type)
+    {
+        return typeToIdMap[type];
+    }
+
+    public Type GetTypeById(int id)
+    {
+        return idToTypeMap[id];
+    }
 }

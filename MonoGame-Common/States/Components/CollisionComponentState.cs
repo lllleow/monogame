@@ -1,18 +1,14 @@
-﻿using System;
-using LiteNetLib.Utils;
-using MonoGame.Source.States.Components;
-using MonoGame.Source.Systems.Components.Collision;
-using MonoGame.Source.Systems.Components.Collision.Enum;
+﻿using MonoGame_Common.Enums;
 
-namespace MonoGame;
+namespace MonoGame_Common.States.Components;
 
 public class CollisionComponentState : ComponentState
 {
     public CollisionMode Mode { get; set; } = CollisionMode.BoundingBox;
 
-    public CollisionComponentState(CollisionComponent collisionComponent)
+    public CollisionComponentState(CollisionMode collisionMode)
     {
-        Mode = collisionComponent.Mode;
+        Mode = collisionMode;
     }
 
     public CollisionComponentState()

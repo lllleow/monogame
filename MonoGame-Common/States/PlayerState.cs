@@ -1,12 +1,10 @@
 ﻿using LiteNetLib.Utils;
-using Microsoft.Xna.Framework;
-using MonoGame.Source.Systems.Entity.PlayerNamespace;
 
-namespace MonoGame.Source.States;
+namespace MonoGame_Common.States;
 
 public class PlayerState : EntityState
 {
-    public string SelectedTile { get; set; }
+    public string? SelectedTile { get; set; }
 
     public PlayerState()
     {
@@ -18,11 +16,11 @@ public class PlayerState : EntityState
         SelectedTile = null;
     }
 
-    public PlayerState(Player player) : base(player)
-    {
-        SelectedTile = player.SelectedTile;
-        Position = player.Position;
-    }
+    // public PlayerState(Player player) : base(player)
+    // {
+    //     SelectedTile = player.SelectedTile;
+    //     Position = player.Position;
+    // }
 
     public override void Serialize(NetDataWriter writer)
     {

@@ -1,7 +1,7 @@
 ﻿using LiteNetLib.Utils;
-using MonoGame_Common.Messages;
+using MonoGame_Common.Attributes;
 
-namespace MonoGame.Source.Multiplayer.Messages.Authentication;
+namespace MonoGame_Common.Messages.Authentication;
 
 [NetworkMessage(1)]
 public class AuthenticateUserNetworkMessage : NetworkMessage

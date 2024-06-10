@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using LiteNetLib.Utils;
-using MonoGame.Source.Rendering.Enum;
-using MonoGame.Source.Systems.Chunks.Interfaces;
+﻿using LiteNetLib.Utils;
+using MonoGame_Common.Enums;
 
-namespace MonoGame.Source.States;
+namespace MonoGame_Common.States;
 
 public class ChunkState : INetSerializable
 {
+    public static int SizeX { get; set; } = 16;
+    public static int SizeY { get; set; } = 16;
     public List<TileState> Tiles { get; set; }
     public int X { get; set; }
     public int Y { get; set; }
@@ -24,30 +23,30 @@ public class ChunkState : INetSerializable
         Y = y;
     }
 
-    public ChunkState(IChunk chunk)
-    {
-        Tiles = [];
-        X = chunk.X;
-        Y = chunk.Y;
+    // public ChunkState(IChunk chunk)
+    // {
+    //     Tiles = [];
+    //     X = chunk.X;
+    //     Y = chunk.Y;
 
-        foreach (var layer in chunk.Tiles)
-        {
-            if (layer.Key != TileDrawLayer.Background)
-            {
-                for (var x = 0; x < layer.Value.GetLength(0); x++)
-                {
-                    for (var y = 0; y < layer.Value.GetLength(1); y++)
-                    {
-                        var tile = layer.Value[x, y];
-                        if (tile != null)
-                        {
-                            Tiles.Add(new TileState(layer.Key, tile));
-                        }
-                    }
-                }
-            }
-        }
-    }
+    //     foreach (var layer in chunk.Tiles)
+    //     {
+    //         if (layer.Key != TileDrawLayer.Background)
+    //         {
+    //             for (var x = 0; x < layer.Value.GetLength(0); x++)
+    //             {
+    //                 for (var y = 0; y < layer.Value.GetLength(1); y++)
+    //                 {
+    //                     var tile = layer.Value[x, y];
+    //                     if (tile != null)
+    //                     {
+    //                         Tiles.Add(new TileState(layer.Key, tile));
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     public bool SetTile(string tileId, TileDrawLayer layer, int posX, int posY)
     {

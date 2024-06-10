@@ -1,8 +1,6 @@
-﻿using System;
-using LiteNetLib.Utils;
-using MonoGame_Common.Messages;
+﻿using LiteNetLib.Utils;
 
-namespace MonoGame.Source.Multiplayer.Messages.Player
+namespace MonoGame_Common.Messages.Player
 {
     public class UpdateEntityAnimatorStateNetworkMessage : NetworkMessage
     {

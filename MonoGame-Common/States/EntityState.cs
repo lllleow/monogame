@@ -1,27 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Numerics;
 using LiteNetLib.Utils;
-using Microsoft.Xna.Framework;
-using MonoGame.Source.States.Components;
-using MonoGame.Source.Systems.Entity.Interfaces;
+using MonoGame_Common.States.Components;
 
-namespace MonoGame.Source.States;
+namespace MonoGame_Common.States;
 
 public class EntityState : INetSerializable
 {
     public string UUID { get; set; }
     public Vector2 Position { get; set; }
-    public List<ComponentState> Components { get; set; } = new();
+    public List<ComponentState> Components { get; set; } = [];
 
     public EntityState()
     {
     }
 
-    public EntityState(IGameEntity entity)
-    {
-        UUID = entity.UUID;
-        Position = entity.Position;
-    }
+    // public EntityState(IGameEntity entity)
+    // {
+    //     UUID = entity.UUID;
+    //     Position = entity.Position;
+    // }
 
     public T GetComponent<T>()
     where T : ComponentState
@@ -32,7 +29,7 @@ public class EntityState : INetSerializable
     public T ReplaceComponent<T>(T component)
     where T : ComponentState
     {
-        Components.RemoveAll(x => x.GetType() == component.GetType());
+        _ = Components.RemoveAll(x => x.GetType() == component.GetType());
         Components.Add(component);
         return component;
     }

@@ -1,10 +1,9 @@
 ﻿using System;
-using MonoGame.Source.Multiplayer;
+using MonoGame_Common.Messages.Authentication;
+using MonoGame_Common.Messages.Player;
 using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame.Source.Multiplayer.Messages.Authentication;
-using MonoGame.Source.Multiplayer.Messages.Player;
 
-namespace MonoGame;
+namespace MonoGame.Source.Multiplayer.Controllers;
 
 public class AuthenticationNetworkController : IStandaloneNetworkController
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Source.Rendering.Enum;
+using MonoGame_Common.Enums;
 using MonoGame.Source.Systems.Tiles.Interfaces;
 
 namespace MonoGame.Source.Systems.Chunks.Interfaces;

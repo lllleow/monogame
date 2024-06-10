@@ -1,11 +1,9 @@
-﻿using System;
-using LiteNetLib.Utils;
-using MonoGame;
-using MonoGame_Common.Messages;
+﻿using LiteNetLib.Utils;
+using MonoGame_Common.Attributes;
+using MonoGame_Common.Enums;
 
-namespace MonoGame
+namespace MonoGame_Common.Messages.Components.Collision
 {
-
     [NetworkMessage(14)]
     public class SendCollisionModeUpdateNetworkMessage : NetworkMessage
     {
@@ -18,22 +16,22 @@ namespace MonoGame
 
         public SendCollisionModeUpdateNetworkMessage(string uuid, CollisionMode mode)
         {
-            this.UUID = uuid;
-            this.Mode = mode;
+            UUID = uuid;
+            Mode = mode;
         }
 
         public override void Deserialize(NetDataReader reader)
         {
-            this.UUID = reader.GetString();
-            this.Mode = (CollisionMode)reader.GetByte();
+            UUID = reader.GetString();
+            Mode = (CollisionMode)reader.GetByte();
         }
 
         public override NetDataWriter Serialize()
         {
-            NetDataWriter data = new NetDataWriter();
+            var data = new NetDataWriter();
             data.Put(GetNetworkTypeId());
-            data.Put(this.UUID);
-            data.Put((byte)this.Mode);
+            data.Put(UUID);
+            data.Put((byte)Mode);
             return data;
         }
     }

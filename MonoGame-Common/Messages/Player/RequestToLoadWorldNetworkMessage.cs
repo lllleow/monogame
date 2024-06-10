@@ -1,7 +1,7 @@
 ﻿using LiteNetLib.Utils;
-using MonoGame_Common.Messages;
+using MonoGame_Common.Attributes;
 
-namespace MonoGame.Source.Multiplayer.Messages.Player
+namespace MonoGame_Common.Messages.Player
 
 {
     [NetworkMessage(3)]

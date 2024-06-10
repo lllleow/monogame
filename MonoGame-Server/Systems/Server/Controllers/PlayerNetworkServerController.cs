@@ -1,16 +1,17 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using MonoGame;
-using MonoGame.Source;
-using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame.Source.Multiplayer.Messages.Player;
-using MonoGame.Source.Util.Enum;
+﻿using System.Numerics;
+using MonoGame_Common.Enums;
+using MonoGame_Common.Messages.Components.Animator;
+using MonoGame_Common.Messages.Player;
+using MonoGame_Common.Util.Enum;
+using MonoGame_Common.Util.Helpers;
+using MonoGame_Server.Systems.Server.Helper;
 
-namespace MonoGame_Server;
+namespace MonoGame_Server.Systems.Server.Controllers;
 
-public class PlayerNetworkServerController : IStandaloneNetworkController
+public class PlayerNetworkServerController : IServerNetworkController
 {
     private ServerMovementHelper ServerMovementHelper { get; set; } = new();
+    private Vector2 SpawnPosition { get; set; } = new(128, 128);
 
     public void InitializeListeners()
     {
@@ -45,10 +46,10 @@ public class PlayerNetworkServerController : IStandaloneNetworkController
                     }
                 }
 
-                var newPosition = (playerState?.Position ?? Globals.SpawnPosition) + resultingDisplacement;
+                var newPosition = (playerState?.Position ?? SpawnPosition) + resultingDisplacement;
                 Direction direction = DirectionHelper.GetDirection((int)resultingDisplacement.X, (int)resultingDisplacement.Y);
 
-                if (!this.ServerMovementHelper.CanMove(playerState!, newPosition, direction))
+                if (!ServerMovementHelper.CanMove(playerState!, newPosition, direction))
                 {
                     return;
                 }

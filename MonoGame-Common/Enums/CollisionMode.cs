@@ -1,4 +1,4 @@
-﻿namespace MonoGame.Source.Systems.Components.Collision.Enum;
+﻿namespace MonoGame_Common.Enums;
 
 public enum CollisionMode
 {

@@ -1,17 +1,15 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Source.Rendering.Enum;
+using MonoGame_Common.Enums;
+using MonoGame_Common.States;
+using MonoGame_Common.Util.Enum;
 using MonoGame.Source.Rendering.Utils;
-using MonoGame.Source.States;
 using MonoGame.Source.Systems.Chunks.Interfaces;
-using MonoGame.Source.Systems.Components.Collision;
-using MonoGame.Source.Systems.Components.Collision.Enum;
 using MonoGame.Source.Systems.Scripts;
 using MonoGame.Source.Systems.Tiles;
 using MonoGame.Source.Systems.Tiles.Interfaces;
-using MonoGame.Source.Util.Enum;
-using MonoGame.Source.Util.Loaders;
+using MonoGame.Source.Utils.Loaders;
 using MonoGame.Source.WorldNamespace;
 
 namespace MonoGame.Source.Systems.Chunks;
@@ -28,7 +26,7 @@ public class Chunk : IChunk
 
     public static int SizeY { get; set; } = 16;
 
-    private World world = Globals.World;
+    private readonly World world = Globals.World;
 
     public Chunk(World world, int x, int y)
     {
@@ -64,7 +62,7 @@ public class Chunk : IChunk
 
         foreach (TileState tileState in chunkState.Tiles)
         {
-            _ = SetTile(tileState.Id, tileState.Layer.Value, tileState.LocalX.Value, tileState.LocalY.Value);
+            _ = SetTile(tileState.Id, tileState.Layer, tileState.LocalX.Value, tileState.LocalY.Value);
         }
 
         for (int chunkX = 0; chunkX < SizeX; chunkX++)

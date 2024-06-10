@@ -1,7 +1,4 @@
-﻿using LiteNetLib.Utils;
-using Microsoft.Xna.Framework;
-
-namespace MonoGame.Source.States.Components;
+﻿namespace MonoGame_Common.States.Components;
 
 public class AnimatorComponentState : ComponentState
 {

@@ -1,6 +1,6 @@
 ﻿using LiteNetLib.Utils;
 
-namespace MonoGame.Source.Multiplayer.Interfaces;
+namespace MonoGame_Common.Messages;
 
 public interface INetworkMessage
 {

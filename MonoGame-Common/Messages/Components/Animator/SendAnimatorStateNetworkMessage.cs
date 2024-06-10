@@ -1,15 +1,15 @@
 ﻿using LiteNetLib.Utils;
-using MonoGame_Common.Messages;
+using MonoGame_Common.Attributes;
 
-namespace MonoGame
+namespace MonoGame_Common.Messages.Components.Animator
 {
     [NetworkMessage(12)]
     public class SendAnimatorStateNetworkMessage : NetworkMessage
     {
-        public string UUID { get; set; }
-        public string CurrentState { get; set; }
-        public int CurrentTime { get; set; }
-        public string AnimationBundleId { get; set; }
+        public string UUID { get; set; } = "";
+        public string CurrentState { get; set; } = "";
+        public int CurrentTime { get; set; } = 0;
+        public string AnimationBundleId { get; set; } = "";
 
         public SendAnimatorStateNetworkMessage()
         {
@@ -33,7 +33,7 @@ namespace MonoGame
 
         public override NetDataWriter Serialize()
         {
-            NetDataWriter data = new NetDataWriter();
+            var data = new NetDataWriter();
             data.Put(GetNetworkTypeId());
             data.Put(UUID);
             data.Put(CurrentState);

@@ -1,8 +1,7 @@
-﻿using System;
-using LiteNetLib.Utils;
-using MonoGame_Common.Messages;
+﻿using LiteNetLib.Utils;
+using MonoGame_Common.Attributes;
 
-namespace MonoGame
+namespace MonoGame_Common.Messages.Components.Animator
 {
     [NetworkMessage(13)]
     public class UpdateAnimatorStateNetworkMessage : NetworkMessage
@@ -28,7 +27,7 @@ namespace MonoGame
 
         public override NetDataWriter Serialize()
         {
-            NetDataWriter data = new NetDataWriter();
+            var data = new NetDataWriter();
             data.Put(GetNetworkTypeId());
             data.Put(UUID);
             data.Put(TargetState);

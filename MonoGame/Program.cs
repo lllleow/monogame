@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using MonoGame.Source;
 
 public static class Program

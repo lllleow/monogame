@@ -1,15 +1,16 @@
 ﻿using LiteNetLib.Utils;
-using MonoGame.Source.Rendering.Enum;
-using MonoGame.Source.Systems.Tiles.Interfaces;
+using MonoGame_Common.Enums;
 
-namespace MonoGame.Source.States;
+namespace MonoGame_Common.States;
 
 public class TileState : INetSerializable
 {
+    public static int PixelSizeX { get; set; } = 16;
+    public static int PixelSizeY { get; set; } = 16;
     public string Id { get; set; }
     public int? LocalX { get; set; }
     public int? LocalY { get; set; }
-    public TileDrawLayer? Layer { get; set; }
+    public TileDrawLayer Layer { get; set; }
 
     public TileState()
     {
@@ -23,13 +24,13 @@ public class TileState : INetSerializable
         Layer = layer;
     }
 
-    public TileState(TileDrawLayer layer, ITile tile)
-    {
-        Id = tile.Id;
-        LocalX = tile.LocalX;
-        LocalY = tile.LocalY;
-        Layer = layer;
-    }
+    // public TileState(TileDrawLayer layer, ITile tile)
+    // {
+    //     Id = tile.Id;
+    //     LocalX = tile.LocalX;
+    //     LocalY = tile.LocalY;
+    //     Layer = layer;
+    // }
 
     public void Serialize(NetDataWriter writer)
     {

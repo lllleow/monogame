@@ -1,6 +1,5 @@
-﻿using System;
-using LiteNetLib.Utils;
-using MonoGame.Source.Multiplayer.Interfaces;
+﻿using LiteNetLib.Utils;
+using MonoGame_Common.Util;
 
 namespace MonoGame_Common.Messages;
 
@@ -28,5 +27,8 @@ public class NetworkMessage : INetworkMessage
         throw new NotImplementedException();
     }
 
-    protected byte GetNetworkTypeId() => (byte)MessageTypeId;
+    protected byte GetNetworkTypeId()
+    {
+        return (byte)MessageTypeId;
+    }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
 using Microsoft.Xna.Framework;
-using MonoGame.Source.States.Components;
+using MonoGame_Common.States.Components;
 using MonoGame.Source.Systems.Animation;
+using MonoGame.Source.Systems.Components.Animator.Controller;
 using MonoGame.Source.Systems.Components.SpriteRenderer;
 using MonoGame.Source.Systems.Entity.Interfaces;
 
@@ -11,7 +11,7 @@ namespace MonoGame.Source.Systems.Components.Animator;
 public class AnimatorComponent : EntityComponent
 {
     public IAnimationBundle AnimationBundle { get; set; }
-    private AnimatorComponentNetworkController networkController = new();
+    private readonly AnimatorComponentNetworkController networkController = new();
     public AnimationStateMachine StateMachine { get; set; }
 
     public AnimatorComponent(IGameEntity entity, IAnimationBundle animation)

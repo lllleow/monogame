@@ -1,6 +1,8 @@
 ﻿using System;
+using MonoGame_Common.Enums;
+using MonoGame_Common.States.Components;
 using MonoGame.Source.Systems.Components.BoundingBox;
-using MonoGame.Source.Systems.Components.Collision.Enum;
+using MonoGame.Source.Systems.Components.Collision.Controller;
 
 namespace MonoGame.Source.Systems.Components.Collision;
 

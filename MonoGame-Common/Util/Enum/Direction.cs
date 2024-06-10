@@ -1,4 +1,4 @@
-﻿namespace MonoGame.Source.Util.Enum;
+﻿namespace MonoGame_Common.Util.Enum;
 
 public enum Direction
 {
@@ -33,27 +33,15 @@ public class DirectionHelper
 
     public static Direction GetDirection(int x, int y)
     {
-        if (x == 0 && y > 0)
-        {
-            return Direction.Up;
-        }
-
-        if (x == 0 && y < 0)
-        {
-            return Direction.Down;
-        }
-
-        if (x > 0 && y == 0)
-        {
-            return Direction.Right;
-        }
-
-        if (x > 0 && y > 0)
-        {
-            return Direction.RightUp;
-        }
-
-        return x > 0 && y < 0
+        return x == 0 && y > 0
+            ? Direction.Up
+            : x == 0 && y < 0
+            ? Direction.Down
+            : x > 0 && y == 0
+            ? Direction.Right
+            : x > 0 && y > 0
+            ? Direction.RightUp
+            : x > 0 && y < 0
             ? Direction.RightDown
             : x < 0 && y == 0 ? Direction.Left : x < 0 && y > 0 ? Direction.LeftUp : x < 0 && y < 0 ? Direction.LeftDown : Direction.Up;
     }

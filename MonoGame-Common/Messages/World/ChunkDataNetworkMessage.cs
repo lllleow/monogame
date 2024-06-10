@@ -1,8 +1,8 @@
 ﻿using LiteNetLib.Utils;
-using MonoGame.Source.States;
-using MonoGame_Common.Messages;
+using MonoGame_Common.Attributes;
+using MonoGame_Common.States;
 
-namespace MonoGame.Source.Multiplayer.Messages.World
+namespace MonoGame_Common.Messages.World
 {
     [NetworkMessage(4)]
     public class ChunkDataNetworkMessage : NetworkMessage

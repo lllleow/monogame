@@ -1,7 +1,6 @@
 ﻿//-----------------------------------------------------------------------------
 
 using System;
-
 // PrimitiveBatch.cs
 //
 // Microsoft XNA Community Game Platform

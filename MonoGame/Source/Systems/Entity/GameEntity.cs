@@ -7,7 +7,6 @@ using MonoGame.Source.Systems.Components.Animator;
 using MonoGame.Source.Systems.Components.Interfaces;
 using MonoGame.Source.Systems.Entity.Interfaces;
 using MonoGame.Source.Systems.Tiles;
-using MonoGame.Source.Util.Enum;
 
 namespace MonoGame.Source.Systems.Entity;
 
@@ -76,13 +75,8 @@ public abstract class GameEntity : IGameEntity
 
     public Rectangle GetEntityBoundsAtPosition(Vector2 position)
     {
-        if (ContainsComponent<AnimatorComponent>())
-        {
-            return new Rectangle((int)position.X, (int)position.Y, Tile.PixelSizeX, Tile.PixelSizeY);
-        }
-        else
-        {
-            return Rectangle.Empty;
-        }
+        return ContainsComponent<AnimatorComponent>()
+            ? new Rectangle((int)position.X, (int)position.Y, Tile.PixelSizeX, Tile.PixelSizeY)
+            : Rectangle.Empty;
     }
 }

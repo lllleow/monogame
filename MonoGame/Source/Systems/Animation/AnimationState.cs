@@ -1,8 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using MonoGame.Source.Systems.Animation;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Animation;
 
 public class AnimationState : IAnimationState
 {
@@ -26,15 +25,15 @@ public class AnimationState : IAnimationState
 
     public (int TextureX, int TextureY) GetTextureCoordinates()
     {
-        int TextureX = AnimationBundle.GetSpritesheetColumnForAnimationPercentage(Animation.Id, GetAnimationPercentage());
-        int TextureY = AnimationBundle.GetSpritesheetRowForAnimation(Animation.Id);
+        var TextureX = AnimationBundle.GetSpritesheetColumnForAnimationPercentage(Animation.Id, GetAnimationPercentage());
+        var TextureY = AnimationBundle.GetSpritesheetRowForAnimation(Animation.Id);
 
         return (TextureX, TextureY);
     }
 
     public Rectangle GetTextureRectangle()
     {
-        (int TextureX, int TextureY) = GetTextureCoordinates();
+        (var TextureX, var TextureY) = GetTextureCoordinates();
         return new Rectangle(TextureX * AnimationBundle.SizeX, TextureY * AnimationBundle.SizeY, AnimationBundle.SizeX, AnimationBundle.SizeY);
     }
 
@@ -51,14 +50,7 @@ public class AnimationState : IAnimationState
         if (CurrentTime > Animation.Duration)
         {
             FinishedPlayingAnimation = true;
-            if (Animation.Repeats)
-            {
-                CurrentTime = Animation.Duration;
-            }
-            else
-            {
-                CurrentTime = 0;
-            }
+            CurrentTime = Animation.Repeats ? Animation.Duration : 0;
         }
 
         if (FinishedPlayingAnimation && !StateEnded)

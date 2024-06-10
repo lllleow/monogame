@@ -1,5 +1,4 @@
-﻿using System.IO;
-namespace MonoGame.Source.Util.Loaders;
+﻿namespace MonoGame_Common.Util.Loaders;
 
 public static class FileLoader
 {
@@ -10,7 +9,7 @@ public static class FileLoader
             throw new DirectoryNotFoundException($"The specified directory was not found: {folderPath}");
         }
 
-        string[] files = Directory.GetFiles(folderPath);
+        var files = Directory.GetFiles(folderPath);
         return files;
     }
 }

@@ -1,8 +1,8 @@
-﻿using LiteNetLib.Utils;
-using Microsoft.Xna.Framework;
-using MonoGame_Common.Messages;
+﻿using System.Numerics;
+using LiteNetLib.Utils;
+using MonoGame_Common.Attributes;
 
-namespace MonoGame.Source.Multiplayer.Messages.Player
+namespace MonoGame_Common.Messages.Player
 {
     [NetworkMessage(7)]
     public class UpdatePlayerPositionNetworkMessage : NetworkMessage

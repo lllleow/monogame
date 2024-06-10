@@ -1,7 +1,4 @@
-﻿using System;
-using LiteNetLib.Utils;
-
-namespace MonoGame.Source.States.Components;
+﻿namespace MonoGame_Common.States.Components;
 
 public class ComponentState
 {

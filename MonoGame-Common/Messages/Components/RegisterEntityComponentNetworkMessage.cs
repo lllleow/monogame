@@ -1,8 +1,7 @@
-﻿using System;
-using LiteNetLib.Utils;
-using MonoGame_Common.Messages;
+﻿using LiteNetLib.Utils;
+using MonoGame_Common.Attributes;
 
-namespace MonoGame
+namespace MonoGame_Common.Messages.Components
 {
     [NetworkMessage(16)]
     public class RegisterEntityComponentNetworkMessage : NetworkMessage
@@ -23,16 +22,16 @@ namespace MonoGame
         public override void Deserialize(NetDataReader reader)
         {
             UUID = reader.GetString();
-            string typeIdentifier = reader.GetString();
+            var typeIdentifier = reader.GetString();
             ComponentType = Type.GetType(typeIdentifier);
         }
 
         public override NetDataWriter Serialize()
         {
-            NetDataWriter data = new NetDataWriter();
+            var data = new NetDataWriter();
             data.Put(GetNetworkTypeId());
             data.Put(UUID);
-            string typeName = ComponentType.FullName;
+            var typeName = ComponentType.FullName;
             data.Put(typeName);
             return data;
         }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using MonoGame.Source.Systems.Tiles.Enums;
+using MonoGame_Common.Util.Enum;
+using MonoGame.Source.Systems.Tiles.Interfaces;
 using MonoGame.Source.Systems.Tiles.Utils;
-using MonoGame.Source.Util.Enum;
 
 namespace MonoGame.Source.Systems.Tiles.TextureProcessors;
 

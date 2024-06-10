@@ -1,10 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame_Common.Enums;
 using MonoGame.Source.Systems.Components.Animator;
 using MonoGame.Source.Systems.Components.Collision;
-using MonoGame.Source.Systems.Components.Collision.Enum;
 using MonoGame.Source.Systems.Components.SpriteRenderer;
 using MonoGame.Source.Systems.Scripts;
-namespace MonoGame.Source.Systems.Entity.PlayerNamespace;
+using MonoGame.Source.Systems.Components.Movement;
+namespace MonoGame.Source.Systems.Entity.Player;
 
 public class Player : GameEntity
 {

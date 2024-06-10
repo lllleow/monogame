@@ -1,8 +1,7 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using MonoGame.Source.Util.Enum;
+﻿using System.Numerics;
+using MonoGame_Common.Util.Enum;
 
-namespace MonoGame;
+namespace MonoGame_Common.Util.Helpers;
 
 public class MovementHelper
 {

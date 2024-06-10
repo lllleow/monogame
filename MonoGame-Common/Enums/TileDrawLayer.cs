@@ -1,4 +1,4 @@
-﻿namespace MonoGame.Source.Rendering.Enum
+﻿namespace MonoGame_Common.Enums
 {
     public enum TileDrawLayer
     {

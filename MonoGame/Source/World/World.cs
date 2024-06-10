@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Source.Multiplayer.Messages.Player;
-using MonoGame.Source.Multiplayer.Messages.World;
-using MonoGame.Source.Rendering.Enum;
-using MonoGame.Source.States;
+using MonoGame_Common.Enums;
+using MonoGame_Common.Messages.Player;
+using MonoGame_Common.Messages.World;
+using MonoGame_Common.States;
+using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.Systems.Chunks.Interfaces;
-using MonoGame.Source.Systems.Components.Collision;
-using MonoGame.Source.Systems.Components.Collision.Enum;
 using MonoGame.Source.Systems.Entity.Interfaces;
-using MonoGame.Source.Systems.Entity.PlayerNamespace;
+using MonoGame.Source.Systems.Entity.Player;
 using MonoGame.Source.Systems.Tiles;
 using MonoGame.Source.Systems.Tiles.Interfaces;
 
@@ -38,7 +36,7 @@ public class World
 
         ClientNetworkEventManager.Subscribe<PlaceTileNetworkMessage>(message =>
         {
-            SetTileAtPosition(message.TileId, TileDrawLayer.Tiles, message.PosX, message.PosY);
+            _ = SetTileAtPosition(message.TileId, TileDrawLayer.Tiles, message.PosX, message.PosY);
         });
 
         ClientNetworkEventManager.Subscribe<SpawnPlayerNetworkMessage>(message =>
@@ -124,19 +122,19 @@ public class World
 
     public ITile SetTileAtPosition(string tile, TileDrawLayer layer, int globalX, int globalY)
     {
-        var localPosition = GetLocalPositionFromGlobalPosition(globalX, globalY);
-        var chunkPosition = GetChunkPositionFromGlobalPosition(globalX, globalY);
+        var (LocalX, LocalY) = GetLocalPositionFromGlobalPosition(globalX, globalY);
+        var (ChunkPositionX, ChunkPositionY) = GetChunkPositionFromGlobalPosition(globalX, globalY);
 
-        var chunk = Globals.World.CreateOrGetChunk(chunkPosition.ChunkPositionX, chunkPosition.ChunkPositionY);
-        return chunk.SetTileAndUpdateNeighbors(tile, layer, localPosition.LocalX, localPosition.LocalY);
+        var chunk = Globals.World.CreateOrGetChunk(ChunkPositionX, ChunkPositionY);
+        return chunk.SetTileAndUpdateNeighbors(tile, layer, LocalX, LocalY);
     }
 
     public ITile GetTileAt(TileDrawLayer layer, int globalX, int globalY)
     {
-        var localPosition = GetLocalPositionFromGlobalPosition(globalX, globalY);
+        var (LocalX, LocalY) = GetLocalPositionFromGlobalPosition(globalX, globalY);
         var chunk = GetChunkFromGlobalPosition(globalX, globalY);
 
-        return chunk?.GetTile(layer: layer, x: localPosition.LocalX, y: localPosition.LocalY);
+        return chunk?.GetTile(layer: layer, x: LocalX, y: LocalY);
     }
 
     public List<ITile> GetAllTilesFromLayerAt(int globalX, int globalY)
@@ -182,8 +180,8 @@ public class World
 
     public IChunk GetChunkFromGlobalPosition(int globalPositionX, int globalPositionY)
     {
-        var chunkPosition = GetChunkPositionFromGlobalPosition(globalPositionX, globalPositionY);
-        return GetChunkAt(chunkPosition.ChunkPositionX, chunkPosition.ChunkPositionY);
+        var (ChunkPositionX, ChunkPositionY) = GetChunkPositionFromGlobalPosition(globalPositionX, globalPositionY);
+        return GetChunkAt(ChunkPositionX, ChunkPositionY);
     }
 
     public ITile GetTileFromScreenPosition(TileDrawLayer layer, int screenX, int screenY)
@@ -214,8 +212,8 @@ public class World
 
     public IChunk GetChunkFromScreenPosition(int layer, int screenX, int screenY)
     {
-        var chunkPosition = GetChunkPositionFromScreenPosition(new Vector2(screenX, screenY));
-        var chunk = Globals.World.GetChunkAt(chunkPosition.ChunkPositionX, chunkPosition.ChunkPositionY);
+        var (ChunkPositionX, ChunkPositionY) = GetChunkPositionFromScreenPosition(new Vector2(screenX, screenY));
+        var chunk = Globals.World.GetChunkAt(ChunkPositionX, ChunkPositionY);
         return chunk;
     }
 
@@ -259,7 +257,7 @@ public class World
     internal void DeleteTile(TileDrawLayer layer, int posX, int posY)
     {
         var chunk = GetChunkFromGlobalPosition(posX, posY);
-        var localPosition = GetLocalPositionFromGlobalPosition(posX, posY);
-        chunk.DeleteTile(layer, localPosition.LocalX, localPosition.LocalY);
+        var (LocalX, LocalY) = GetLocalPositionFromGlobalPosition(posX, posY);
+        chunk.DeleteTile(layer, LocalX, LocalY);
     }
 }

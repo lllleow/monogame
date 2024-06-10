@@ -1,8 +1,8 @@
 ﻿using LiteNetLib.Utils;
-using MonoGame.Source.Rendering.Enum;
-using MonoGame_Common.Messages;
+using MonoGame_Common.Attributes;
+using MonoGame_Common.Enums;
 
-namespace MonoGame.Source.Multiplayer.Messages.World
+namespace MonoGame_Common.Messages.World
 {
     [NetworkMessage(11)]
     public class DeleteTileNetworkMessage : NetworkMessage

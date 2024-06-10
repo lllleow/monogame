@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MonoGame;
+﻿namespace MonoGame_Common.Attributes;
 
 [AttributeUsage(AttributeTargets.Class, Inherited = false)]
 public class NetworkMessageAttribute : Attribute

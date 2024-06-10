@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame_Common.Messages.Player;
 using MonoGame.Source.Multiplayer;
-using MonoGame.Source.Systems.Components;
+using System.Linq;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Components.Movement;
 
 public class MovementComponent : EntityComponent
 {
@@ -14,7 +15,7 @@ public class MovementComponent : EntityComponent
     public override void Update(GameTime gameTime)
     {
         var state = Keyboard.GetState();
-        List<Keys> keys = new();
+        List<Keys> keys = [];
 
         if (state.IsKeyDown(Keys.W))
         {
@@ -36,14 +37,16 @@ public class MovementComponent : EntityComponent
             keys.Add(Keys.D);
         }
 
+        List<MonoGame_Common.Enums.Keys> commonsKeys = keys.Select(x => (MonoGame_Common.Enums.Keys)x).ToList();
+
         if (keys.Count > 0)
         {
             sentEmptyKeysMessage = false;
-            NetworkClient.SendMessage(new KeyClickedNetworkMessage(Entity.UUID, keys));
+            NetworkClient.SendMessage(new KeyClickedNetworkMessage(Entity.UUID, commonsKeys));
         }
         else if (!sentEmptyKeysMessage)
         {
-            NetworkClient.SendMessage(new KeyClickedNetworkMessage(Entity.UUID, keys));
+            NetworkClient.SendMessage(new KeyClickedNetworkMessage(Entity.UUID, commonsKeys));
             sentEmptyKeysMessage = true;
         }
     }

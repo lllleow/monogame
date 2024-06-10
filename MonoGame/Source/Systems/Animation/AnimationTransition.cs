@@ -1,7 +1,6 @@
 ﻿using System;
-using MonoGame.Source.Systems.Entity.Interfaces;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Animation;
 
 public class AnimationTransition
 {

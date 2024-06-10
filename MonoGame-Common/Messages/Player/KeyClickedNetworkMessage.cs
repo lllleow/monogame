@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using LiteNetLib.Utils;
-using Microsoft.Xna.Framework.Input;
-using MonoGame_Common.Messages;
+﻿using LiteNetLib.Utils;
+using MonoGame_Common.Attributes;
+using MonoGame_Common.Enums;
 
-namespace MonoGame
+namespace MonoGame_Common.Messages.Player
 {
     [NetworkMessage(15)]
     public class KeyClickedNetworkMessage : NetworkMessage
     {
         public string UUID { get; set; }
-        public List<Keys> Keys { get; set; } = new();
+        public List<Keys> Keys { get; set; } = [];
 
         public KeyClickedNetworkMessage()
         {
@@ -25,8 +23,8 @@ namespace MonoGame
         public override void Deserialize(NetDataReader reader)
         {
             UUID = reader.GetString();
-            int count = reader.GetInt();
-            for (int i = 0; i < count; i++)
+            var count = reader.GetInt();
+            for (var i = 0; i < count; i++)
             {
                 Keys.Add((Keys)reader.GetInt());
             }
@@ -34,7 +32,7 @@ namespace MonoGame
 
         public override NetDataWriter Serialize()
         {
-            NetDataWriter data = new NetDataWriter();
+            var data = new NetDataWriter();
             data.Put(GetNetworkTypeId());
             data.Put(UUID);
             data.Put(Keys.Count);

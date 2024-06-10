@@ -1,8 +1,8 @@
 ﻿using LiteNetLib.Utils;
-using MonoGame.Source.Rendering.Enum;
-using MonoGame_Common.Messages;
+using MonoGame_Common.Attributes;
+using MonoGame_Common.Enums;
 
-namespace MonoGame.Source.Multiplayer.Messages.Player
+namespace MonoGame_Common.Messages.Player
 {
     [NetworkMessage(9)]
     public class RequestToPlaceTileNetworkMessage : NetworkMessage
