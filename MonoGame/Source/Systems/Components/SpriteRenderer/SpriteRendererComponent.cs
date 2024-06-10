@@ -14,7 +14,10 @@ public class SpriteRendererComponent : EntityComponent
     public SpriteRendererComponent(string spritesheet, Vector2 textureCoordinates, Vector2 textureSize)
     {
         SpriteSheet = spritesheet;
-        TextureRectangle = new Rectangle((int)textureCoordinates.X, (int)textureCoordinates.Y, (int)textureSize.X,
+        TextureRectangle = new Rectangle(
+            (int)textureCoordinates.X,
+            (int)textureCoordinates.Y,
+            (int)textureSize.X,
             (int)textureSize.Y);
     }
 
@@ -34,8 +37,7 @@ public class SpriteRendererComponent : EntityComponent
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(SpriteSheet), Entity.Position, TextureRectangle, Color.White,
-            0f, Vector2.Zero, Scale, SpriteEffects.None, 0.5f);
+        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(SpriteSheet), Entity.Position, TextureRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0.5f);
     }
 
     public Rectangle GetRectangle()

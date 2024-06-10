@@ -31,7 +31,10 @@ public class WorldNetworkServerController : IServerNetworkController
             var existingPlayer = server.ServerWorld.Players?.FirstOrDefault(p => p.UUID == existingPlayerUUID);
             if (existingPlayer == null)
             {
-                var newPlayer = new PlayerState(existingPlayerUUID);
+                var newPlayer = new PlayerState(existingPlayerUUID)
+                {
+                    UUID = existingPlayerUUID
+                };
                 server.ServerWorld.Players?.Add(newPlayer);
                 var spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(newPlayer.UUID, newPlayer.Position);
                 server.BroadcastMessage(spawnPlayerNetworkMessage);

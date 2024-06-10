@@ -7,6 +7,7 @@ using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Rendering.Camera;
 using MonoGame.Source.Rendering.UI;
 using MonoGame.Source.Systems.Scripts;
+using MonoGame.Source.WorldNamespace;
 
 namespace MonoGame;
 

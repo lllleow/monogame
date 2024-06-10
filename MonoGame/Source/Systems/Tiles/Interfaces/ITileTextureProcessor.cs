@@ -1,5 +1,5 @@
-﻿using MonoGame.Source.Systems.Tiles.Utils;
-using MonoGame_Common.Util.Enum;
+﻿using MonoGame_Common.Util.Enum;
+using MonoGame.Source.Systems.Tiles.Utils;
 
 namespace MonoGame.Source.Systems.Tiles.Interfaces;
 

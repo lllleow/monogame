@@ -7,8 +7,7 @@ namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceComponent
 {
-    public DirectionalListUserInterfaceComponent(string name, ListDirection direction, Vector2 localPosition,
-        int spacing, List<IUserInterfaceComponent> children) : base(name, localPosition, children)
+    public DirectionalListUserInterfaceComponent(string name, ListDirection direction, Vector2 localPosition, int spacing, List<IUserInterfaceComponent> children) : base(name, localPosition, children)
     {
         Direction = direction;
         Spacing = spacing;

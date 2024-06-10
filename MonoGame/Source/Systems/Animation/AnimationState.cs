@@ -35,8 +35,7 @@ public class AnimationState : IAnimationState
     public Rectangle GetTextureRectangle()
     {
         var (TextureX, TextureY) = GetTextureCoordinates();
-        return new Rectangle(TextureX * AnimationBundle.SizeX, TextureY * AnimationBundle.SizeY, AnimationBundle.SizeX,
-            AnimationBundle.SizeY);
+        return new Rectangle(TextureX * AnimationBundle.SizeX, TextureY * AnimationBundle.SizeY, AnimationBundle.SizeX, AnimationBundle.SizeY);
     }
 
     public void Start()

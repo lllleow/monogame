@@ -21,7 +21,8 @@ public class UserInterfaceHandler
             Vector2.Transform(
                 new Vector2(
                     Globals.GraphicsDevice.GraphicsDevice.Viewport.Width,
-                    Globals.GraphicsDevice.GraphicsDevice.Viewport.Height), Matrix.Invert(Transform));
+                    Globals.GraphicsDevice.GraphicsDevice.Viewport.Height),
+                Matrix.Invert(Transform));
         UIScreenSize = new Vector2(transformed.X, transformed.Y);
     }
 

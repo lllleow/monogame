@@ -29,7 +29,6 @@ public class RectangleHelper
 
     public Rectangle GetTextureRectangleFromCoordinates(int x, int y)
     {
-        return new Rectangle(x * TileState.PixelSizeX, y * TileState.PixelSizeY, TileState.PixelSizeX,
-            TileState.PixelSizeY);
+        return new Rectangle(x * TileState.PixelSizeX, y * TileState.PixelSizeY, TileState.PixelSizeX, TileState.PixelSizeY);
     }
 }

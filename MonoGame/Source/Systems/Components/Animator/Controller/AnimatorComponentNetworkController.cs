@@ -1,6 +1,6 @@
-﻿using MonoGame.Source.Multiplayer;
+﻿using MonoGame_Common.Messages.Components.Animator;
+using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame_Common.Messages.Components.Animator;
 
 namespace MonoGame.Source.Systems.Components.Animator.Controller;
 
@@ -21,7 +21,8 @@ public class AnimatorComponentNetworkController : INetworkObjectController<Anima
     {
         var message = new SendAnimatorStateNetworkMessage(
             networkObject.Entity.UUID,
-            networkObject.StateMachine.CurrentState.Animation.Id, networkObject.StateMachine.CurrentState.CurrentTime,
+            networkObject.StateMachine.CurrentState.Animation.Id,
+            networkObject.StateMachine.CurrentState.CurrentTime,
             networkObject.StateMachine.AnimationBundle.Id);
         NetworkClient.SendMessage(message);
     }

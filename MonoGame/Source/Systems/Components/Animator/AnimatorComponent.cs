@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using MonoGame_Common.States.Components;
 using MonoGame.Source.Systems.Animation;
 using MonoGame.Source.Systems.Components.Animator.Controller;
 using MonoGame.Source.Systems.Components.SpriteRenderer;
 using MonoGame.Source.Systems.Entity.Interfaces;
-using MonoGame_Common.States.Components;
 
 namespace MonoGame.Source.Systems.Components.Animator;
 
@@ -23,8 +23,7 @@ public class AnimatorComponent : EntityComponent
             {
                 Entity.GetFirstComponent<SpriteRendererComponent>()?.UpdateTexture(
                     AnimationBundle.SpriteSheet,
-                    new Rectangle(CurrentTextureX * AnimationBundle.SizeX, CurrentTextureY * AnimationBundle.SizeY,
-                        AnimationBundle.SizeX, AnimationBundle.SizeY));
+                    new Rectangle(CurrentTextureX * AnimationBundle.SizeX, CurrentTextureY * AnimationBundle.SizeY, AnimationBundle.SizeX, AnimationBundle.SizeY));
             }
         };
     }

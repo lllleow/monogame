@@ -10,8 +10,7 @@ public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
 {
     private readonly RectangleHelper rectangleHelper = new();
 
-    public MultipleChildUserInterfaceComponent(string name, Vector2 localPosition,
-        List<IUserInterfaceComponent> children) : base(name, localPosition)
+    public MultipleChildUserInterfaceComponent(string name, Vector2 localPosition, List<IUserInterfaceComponent> children) : base(name, localPosition)
     {
         Children = children;
 
@@ -60,7 +59,9 @@ public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
             var size = Children[i].GetPreferredSize();
             rectangles[i] = new Rectangle(
                 (int)Children[i].GetPositionRelativeToParent().X,
-                (int)Children[i].GetPositionRelativeToParent().Y, (int)size.X, (int)size.Y);
+                (int)Children[i].GetPositionRelativeToParent().Y,
+                (int)size.X,
+                (int)size.Y);
         }
 
         var minimumBoundingRectangle = rectangleHelper.GetMinimumBoundingRectangle(rectangles);

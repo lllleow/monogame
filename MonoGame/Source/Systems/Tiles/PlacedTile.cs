@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame_Common.Enums;
+using MonoGame_Common.Util.Enum;
 using MonoGame.Source.Rendering.Utils;
 using MonoGame.Source.Systems.Tiles.Interfaces;
 using MonoGame.Source.Systems.Tiles.Utils;
-using MonoGame_Common.Enums;
-using MonoGame_Common.Util.Enum;
 
 namespace MonoGame.Source.Systems.Tiles;
 

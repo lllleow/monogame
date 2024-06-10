@@ -62,8 +62,7 @@ public class PrimitiveBatch : IDisposable
             VertexColorEnabled = true,
 
             // Setup the projection matrix for 2D projection with 0,0 in the upper left.
-            Projection = Matrix.CreateOrthographicOffCenter(0, graphicsDevice.Viewport.Width,
-                graphicsDevice.Viewport.Height, 0, 0, 1),
+            Projection = Matrix.CreateOrthographicOffCenter(0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height, 0, 0, 1),
 
             // Set the World matrix to Identity as default
             World = Matrix.Identity,
@@ -83,8 +82,7 @@ public class PrimitiveBatch : IDisposable
             VertexColorEnabled = true,
 
             // Setup the projection matrix for 2D projection with 0,0 in the upper left.
-            Projection = Matrix.CreateOrthographicOffCenter(0, graphicsDevice.Viewport.Width,
-                graphicsDevice.Viewport.Height, 0, 0, 1),
+            Projection = Matrix.CreateOrthographicOffCenter(0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height, 0, 0, 1),
 
             // Set the World matrix to Identity as default
             World = Matrix.Identity,

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.Camera;
 using MonoGame.Source.Rendering.UI;
+using MonoGame.Source.WorldNamespace;
 
 namespace MonoGame.Source;
 

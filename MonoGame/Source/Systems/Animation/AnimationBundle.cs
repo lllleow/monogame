@@ -18,7 +18,8 @@ public class AnimationBundle : IAnimationBundle
     {
         var rect = new Rectangle(
             GetSpritesheetColumnForAnimationPercentage(animationId, percentage) * Globals.PixelSizeX,
-            GetSpritesheetRowForAnimation(animationId) * Globals.PixelSizeY, SizeX * Globals.PixelSizeX,
+            GetSpritesheetRowForAnimation(animationId) * Globals.PixelSizeY,
+            SizeX * Globals.PixelSizeX,
             SizeY * Globals.PixelSizeY);
         return rect;
     }

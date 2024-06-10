@@ -2,8 +2,8 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Source.Multiplayer;
 using MonoGame_Common.Messages.Player;
+using MonoGame.Source.Multiplayer;
 
 namespace MonoGame.Source.Systems.Components.Movement;
 
