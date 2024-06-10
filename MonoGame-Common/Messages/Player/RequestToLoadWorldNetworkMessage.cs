@@ -1,4 +1,5 @@
 ﻿using LiteNetLib.Utils;
+using MonoGame_Common.Messages;
 
 namespace MonoGame.Source.Multiplayer.Messages.Player
 

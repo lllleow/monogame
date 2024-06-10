@@ -1,5 +1,6 @@
 ﻿using LiteNetLib.Utils;
 using MonoGame.Source.States;
+using MonoGame_Common.Messages;
 
 namespace MonoGame.Source.Multiplayer.Messages.World
 {

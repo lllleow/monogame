@@ -1,5 +1,6 @@
 ﻿using LiteNetLib.Utils;
 using MonoGame.Source.Rendering.Enum;
+using MonoGame_Common.Messages;
 
 namespace MonoGame.Source.Multiplayer.Messages.Player
 {

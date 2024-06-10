@@ -1,7 +1,5 @@
 ﻿using LiteNetLib.Utils;
-using Microsoft.Xna.Framework;
-using MonoGame.Source.Multiplayer;
-using MonoGame.Source.Systems.Components.Animator;
+using MonoGame_Common.Messages;
 
 namespace MonoGame
 {
@@ -17,12 +15,12 @@ namespace MonoGame
         {
         }
 
-        public SendAnimatorStateNetworkMessage(string uuid, AnimatorComponent animatorComponent)
+        public SendAnimatorStateNetworkMessage(string uuid, string currentComponentState, int currentTime, string animationBundleId)
         {
             UUID = uuid;
-            CurrentState = animatorComponent.GetCurrentStateId();
-            CurrentTime = animatorComponent.StateMachine.CurrentState.CurrentTime;
-            AnimationBundleId = animatorComponent.AnimationBundle.Id;
+            CurrentState = currentComponentState;
+            CurrentTime = currentTime;
+            AnimationBundleId = animationBundleId;
         }
 
         public override void Deserialize(NetDataReader reader)

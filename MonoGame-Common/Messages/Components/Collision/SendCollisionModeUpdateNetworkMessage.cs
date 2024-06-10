@@ -1,21 +1,22 @@
 ﻿using System;
 using LiteNetLib.Utils;
-using MonoGame.Source.Multiplayer;
-using MonoGame.Source.Systems.Components.Collision.Enum;
+using MonoGame;
+using MonoGame_Common.Messages;
 
 namespace MonoGame
 {
-    [NetworkMessage(17)]
-    public class SetCollisionModeNetworkMessage : NetworkMessage
+
+    [NetworkMessage(14)]
+    public class SendCollisionModeUpdateNetworkMessage : NetworkMessage
     {
         public string UUID { get; set; }
         public CollisionMode Mode { get; set; }
 
-        public SetCollisionModeNetworkMessage()
+        public SendCollisionModeUpdateNetworkMessage()
         {
         }
 
-        public SetCollisionModeNetworkMessage(string uuid, CollisionMode mode)
+        public SendCollisionModeUpdateNetworkMessage(string uuid, CollisionMode mode)
         {
             this.UUID = uuid;
             this.Mode = mode;
