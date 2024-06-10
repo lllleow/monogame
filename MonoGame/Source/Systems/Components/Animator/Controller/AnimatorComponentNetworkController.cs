@@ -1,9 +1,8 @@
-﻿using System;
+﻿using MonoGame_Common.Messages.Components.Animator;
 using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame.Source.Systems.Components.Animator;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Components.Animator.Controller;
 
 public class AnimatorComponentNetworkController : INetworkObjectController<AnimatorComponent>
 {
@@ -11,16 +10,16 @@ public class AnimatorComponentNetworkController : INetworkObjectController<Anima
     {
         ClientNetworkEventManager.Subscribe<UpdateAnimatorStateNetworkMessage>(message =>
         {
-            if (message.UUID == networkObject.Entity.UUID)
-            {
-                networkObject.SetState(message.TargetState);
-            }
+            if (message.UUID == networkObject.Entity.UUID) networkObject.SetState(message.TargetState);
         });
     }
 
     public void SendStateUpdate(AnimatorComponent networkObject)
     {
-        var message = new SendAnimatorStateNetworkMessage(networkObject.Entity.UUID, networkObject.GetCurrentStateId());
+        var message = new SendAnimatorStateNetworkMessage(
+            networkObject.Entity.UUID,
+            networkObject.StateMachine.CurrentState.Animation.Id, networkObject.StateMachine.CurrentState.CurrentTime,
+            networkObject.StateMachine.AnimationBundle.Id);
         NetworkClient.SendMessage(message);
     }
 }

@@ -5,12 +5,13 @@ namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class AlignmentUserInterfaceComponent : SingleChildUserInterfaceComponent
 {
-    public UserInterfaceAlignment Alignment { get; set; }
-
-    public AlignmentUserInterfaceComponent(IUserInterfaceComponent child, UserInterfaceAlignment alignment) : base("alignment", Vector2.Zero, child)
+    public AlignmentUserInterfaceComponent(IUserInterfaceComponent child, UserInterfaceAlignment alignment) : base(
+        "alignment", Vector2.Zero, child)
     {
         Alignment = alignment;
     }
+
+    public UserInterfaceAlignment Alignment { get; set; }
 
     public override Vector2 GetPositionRelativeToParent()
     {

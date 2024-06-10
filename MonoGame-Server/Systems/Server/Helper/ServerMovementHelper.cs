@@ -1,13 +1,12 @@
-﻿using Microsoft.Xna.Framework;
-using MonoGame;
-using MonoGame_Server.Systems.Server;
-using MonoGame.Source.States;
-using MonoGame.Source.States.Components;
-using MonoGame.Source.Systems.Components.Collision.Enum;
-using MonoGame.Source.Systems.Tiles;
-using MonoGame.Source.Util.Enum;
+﻿using System.Drawing;
+using System.Numerics;
+using MonoGame_Common.Enums;
+using MonoGame_Common.States;
+using MonoGame_Common.States.Components;
+using MonoGame_Common.Util.Enum;
+using MonoGame_Common.Util.Helpers;
 
-namespace MonoGame_Server;
+namespace MonoGame_Server.Systems.Server.Helper;
 
 public class ServerMovementHelper
 {
@@ -15,19 +14,33 @@ public class ServerMovementHelper
     {
         if (entity.HasComponent(typeof(CollisionComponentState)))
         {
-            Rectangle entityRectangle = this.GetEntityBoundsAtPosition(entity, newPosition);
-            CollisionComponentState collisionComponent = entity.GetComponent<CollisionComponentState>();
-            List<TileState> tiles;
+            var entityRectangle = GetEntityBoundsAtPosition(entity, newPosition);
+            var collisionComponent = entity.GetComponent<CollisionComponentState>();
+            List<TileState> tiles = [];
 
-            // TODO: Different collision methods
             if (collisionComponent.Mode == CollisionMode.BoundingBox)
             {
                 tiles = NetworkServer.Instance.ServerWorld.GetTilesIntersectingWithRectangle(entityRectangle);
             }
-            else if (collisionComponent.Mode is CollisionMode.PixelPerfect or CollisionMode.CollisionMask)
+            else if (collisionComponent.Mode is CollisionMode.CollisionMask)
             {
-                // PixelBoundsComponent pixelBounds = Entity.GetFirstComponent<PixelBoundsComponent>();
-                tiles = []; // collisionComponent.GetTilesCollidingWithMask(pixelBounds.Mask, entityRectangle);
+                if (entity.HasComponent(typeof(AnimatorComponentState)))
+                {
+                    // var animator = entity.GetComponent<AnimatorComponentState>();
+                    // IAnimationBundle animationBundle = AnimationBundleRegistry.GetAnimationBundle(animator.AnimationBundleId);
+                    // Animation currentAnimation = animationBundle.Animations[animator.CurrentState];
+                    // var animationState = new AnimationState(currentAnimation, animationBundle)
+                    // {
+                    //     CurrentTime = animator.CurrentTime
+                    // };
+                    // Rectangle textureRectangle = animationState.GetTextureRectangle();
+                    // bool[,] mask = ServerTextureHelper.GetImageMask(animationBundle.CollisionMaskSpritesheet);
+                    // tiles = NetworkServer.Instance.ServerWorld.GetTilesIntersectingWithMask(mask, entityRectangle);
+                }
+                else
+                {
+                    tiles = NetworkServer.Instance.ServerWorld.GetTilesIntersectingWithRectangle(entityRectangle);
+                }
             }
             else
             {
@@ -42,13 +55,8 @@ public class ServerMovementHelper
 
     public Rectangle GetEntityBoundsAtPosition(EntityState entity, Vector2 position)
     {
-        if (entity.HasComponent(typeof(AnimatorComponentState)))
-        {
-            return new Rectangle((int)position.X, (int)position.Y, Tile.PixelSizeX, Tile.PixelSizeY);
-        }
-        else
-        {
-            return Rectangle.Empty;
-        }
+        return entity.HasComponent(typeof(AnimatorComponentState))
+            ? new Rectangle((int)position.X, (int)position.Y, TileState.PixelSizeX, TileState.PixelSizeY)
+            : Rectangle.Empty;
     }
 }

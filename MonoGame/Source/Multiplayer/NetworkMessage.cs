@@ -1,13 +1,12 @@
 ﻿using System;
 using LiteNetLib.Utils;
-using MonoGame.Source.Multiplayer.Interfaces;
+using MonoGame_Common.Messages;
+using MonoGame_Common.Util;
 
 namespace MonoGame.Source.Multiplayer;
 
 public class NetworkMessage : INetworkMessage
 {
-    protected int MessageTypeId { get; set; }
-
     public NetworkMessage()
     {
         MessageTypeId = MessageRegistry.Instance.GetIdByType(GetType());
@@ -17,6 +16,8 @@ public class NetworkMessage : INetworkMessage
     {
         Deserialize(reader);
     }
+
+    protected int MessageTypeId { get; set; }
 
     public virtual void Deserialize(NetDataReader reader)
     {
@@ -28,5 +29,8 @@ public class NetworkMessage : INetworkMessage
         throw new NotImplementedException();
     }
 
-    protected byte GetNetworkTypeId() => (byte)MessageTypeId;
+    protected byte GetNetworkTypeId()
+    {
+        return (byte)MessageTypeId;
+    }
 }

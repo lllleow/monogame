@@ -10,15 +10,8 @@ namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class UserInterfaceComponent : IUserInterfaceComponent
 {
-    public string Name { get; set; }
-    public bool IsClickable { get; set; } = false;
-    public Vector2 LocalPosition { get; set; }
-    public IUserInterfaceComponent Parent { get; set; }
-    public static bool ShowBounds { get; set; } = false;
-    public static List<Type> BoundRenderOffForTypes { get; set; } = [typeof(PaddingUserInterfaceComponent)];
-    public MouseState CurrentMouseState { get; set; }
-    public MouseState PreviousMouseState { get; set; }
-    public Action<IUserInterfaceComponent> OnClick { get; set; }
+    private readonly PrimitiveBatch primitiveBatch =
+        new(Globals.GraphicsDevice.GraphicsDevice, Globals.UserInterfaceHandler.Transform);
 
     public UserInterfaceComponent(string name, Vector2 localPosition)
     {
@@ -26,12 +19,21 @@ public class UserInterfaceComponent : IUserInterfaceComponent
         LocalPosition = localPosition;
     }
 
-    private readonly PrimitiveBatch primitiveBatch = new(Globals.GraphicsDevice.GraphicsDevice, transform: Globals.UserInterfaceHandler.Transform);
+    public bool IsClickable { get; set; } = false;
+    public IUserInterfaceComponent Parent { get; set; }
+    public static bool ShowBounds { get; set; } = false;
+    public static List<Type> BoundRenderOffForTypes { get; set; } = [typeof(PaddingUserInterfaceComponent)];
+    public MouseState CurrentMouseState { get; set; }
+    public MouseState PreviousMouseState { get; set; }
+    public Action<IUserInterfaceComponent> OnClick { get; set; }
+    public string Name { get; set; }
+    public Vector2 LocalPosition { get; set; }
+
     public virtual void Draw(SpriteBatch spriteBatch)
     {
         if (ShowBounds && !BoundRenderOffForTypes.Contains(GetType()))
         {
-            primitiveBatch.Begin(PrimitiveType.LineList, transform: Globals.UserInterfaceHandler.Transform);
+            primitiveBatch.Begin(PrimitiveType.LineList, Globals.UserInterfaceHandler.Transform);
 
             var position = GetPositionRelativeToParent();
             var size = GetPreferredSize();
@@ -71,30 +73,6 @@ public class UserInterfaceComponent : IUserInterfaceComponent
         }
     }
 
-    private void HandleMouseClick(bool add, int x, int y)
-    {
-        var windowWidth = Globals.GraphicsDevice.PreferredBackBufferWidth;
-        var windowHeight = Globals.GraphicsDevice.PreferredBackBufferHeight;
-
-        if (!Globals.Game.IsActive)
-        {
-            return;
-        }
-
-        if (x < 0 || y < 0 || x >= windowWidth || y >= windowHeight)
-        {
-            return;
-        }
-
-        var worldPosition = new Vector2(x, y);
-        var screenPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.UserInterfaceHandler.GetUITransform()));
-
-        if (screenPosition.X >= GetPositionRelativeToParent().X && screenPosition.X <= GetPositionRelativeToParent().X + GetPreferredSize().X && screenPosition.Y >= GetPositionRelativeToParent().Y && screenPosition.Y <= GetPositionRelativeToParent().Y + GetPreferredSize().Y)
-        {
-            OnClick?.Invoke(this);
-        }
-    }
-
     public virtual void Initialize(IUserInterfaceComponent parent)
     {
         Parent = parent;
@@ -102,7 +80,8 @@ public class UserInterfaceComponent : IUserInterfaceComponent
 
     public virtual Vector2 GetPositionRelativeToParent()
     {
-        return (Parent?.GetPositionRelativeToParent() + LocalPosition ?? LocalPosition) + (Parent?.GetChildOffset(this) ?? Vector2.Zero);
+        return (Parent?.GetPositionRelativeToParent() + LocalPosition ?? LocalPosition) +
+               (Parent?.GetChildOffset(this) ?? Vector2.Zero);
     }
 
     public virtual Vector2 GetPreferredSize()
@@ -113,5 +92,24 @@ public class UserInterfaceComponent : IUserInterfaceComponent
     public virtual Vector2 GetChildOffset(IUserInterfaceComponent child)
     {
         return Vector2.Zero;
+    }
+
+    private void HandleMouseClick(bool add, int x, int y)
+    {
+        var windowWidth = Globals.GraphicsDevice.PreferredBackBufferWidth;
+        var windowHeight = Globals.GraphicsDevice.PreferredBackBufferHeight;
+
+        if (!Globals.Game.IsActive) return;
+
+        if (x < 0 || y < 0 || x >= windowWidth || y >= windowHeight) return;
+
+        var worldPosition = new Vector2(x, y);
+        var screenPosition =
+            Vector2.Transform(worldPosition, Matrix.Invert(Globals.UserInterfaceHandler.GetUITransform()));
+
+        if (screenPosition.X >= GetPositionRelativeToParent().X &&
+            screenPosition.X <= GetPositionRelativeToParent().X + GetPreferredSize().X &&
+            screenPosition.Y >= GetPositionRelativeToParent().Y &&
+            screenPosition.Y <= GetPositionRelativeToParent().Y + GetPreferredSize().Y) OnClick?.Invoke(this);
     }
 }

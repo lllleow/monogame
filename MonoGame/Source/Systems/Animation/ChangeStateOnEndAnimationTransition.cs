@@ -1,14 +1,9 @@
-﻿using System;
-
-namespace MonoGame;
+﻿namespace MonoGame.Source.Systems.Animation;
 
 public class ChangeStateOnEndAnimationTransition : AnimationTransition
 {
     public ChangeStateOnEndAnimationTransition(string from, string to) : base(from, to)
     {
-        Condition = (state) =>
-        {
-            return state.StateEnded;
-        };
+        Condition = state => { return state.StateEnded; };
     }
 }

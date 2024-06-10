@@ -4,45 +4,43 @@ using System.IO;
 using System.Reflection;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
+using MonoGame_Common.Util.Loaders;
 using MonoGame.Source.Systems.Tiles.Interfaces;
-using MonoGame.Source.Util.Loaders;
 
 namespace MonoGame.Source.Systems.Scripts;
 
 public static class TileRegistry
 {
-    public static Dictionary<string, Type> Tiles { get; private set; } = [];
+    public static Dictionary<string, Type> Tiles { get; } = [];
 
     public static void RegisterTile(string id, Type tileType)
     {
         if (!typeof(ITile).IsAssignableFrom(tileType))
-        {
             throw new ArgumentException("Tile type must implement ITile interface", nameof(tileType));
-        }
 
         Tiles.Add(id, tileType);
     }
 
     public static ITile GetTile(string id)
     {
-        Type tileType = Tiles[id];
-        ITile tile = Activator.CreateInstance(tileType) as ITile;
+        var tileType = Tiles[id];
+        var tile = Activator.CreateInstance(tileType) as ITile;
         return tile;
     }
 
     public static Type GetTileType(string id)
     {
-        Type tileType = Tiles[id];
+        var tileType = Tiles[id];
         return tileType;
     }
 
     public static void LoadTileScripts()
     {
-        string[] files = FileLoader.LoadAllFilesFromFolder(@"Scripts\Tiles");
-        foreach (string file in files)
+        var files = FileLoader.LoadAllFilesFromFolder(@"Scripts\Tiles");
+        foreach (var file in files)
         {
-            string code = File.ReadAllText(file);
-            ITile tile = LoadTileScript(code);
+            var code = File.ReadAllText(file);
+            var tile = LoadTileScript(code);
 
             RegisterTile(tile.Id, tile.GetType());
         }
@@ -50,13 +48,13 @@ public static class TileRegistry
 
     public static ITile LoadTileScript(string code)
     {
-        ScriptOptions options = ScriptOptions.Default
+        var options = ScriptOptions.Default
             .AddReferences(Assembly.GetExecutingAssembly())
             .AddImports("MonoGame");
 
         try
         {
-            ITile tile = CSharpScript.EvaluateAsync<ITile>(code, options).Result;
+            var tile = CSharpScript.EvaluateAsync<ITile>(code, options).Result;
             return tile;
         }
         catch (CompilationErrorException e)

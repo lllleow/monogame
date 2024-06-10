@@ -1,11 +1,8 @@
-﻿using MonoGame;
-using MonoGame_Server.Systems.Server;
-using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame.Source.Multiplayer.Messages.Authentication;
+﻿using MonoGame_Common.Messages.Authentication;
 
-namespace MonoGame_Server;
+namespace MonoGame_Server.Systems.Server.Controllers;
 
-public class AuthenticationNetworkServerController : IStandaloneNetworkController
+public class AuthenticationNetworkServerController : IServerNetworkController
 {
     public void InitializeListeners()
     {

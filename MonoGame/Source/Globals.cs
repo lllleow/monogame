@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.Camera;
 using MonoGame.Source.Rendering.UI;
 using MonoGame.Source.WorldNamespace;
+
 namespace MonoGame.Source;
 
 public class Globals
@@ -34,10 +35,10 @@ public class Globals
     public static string UUID { get; set; } = Guid.NewGuid().ToString();
 
     public static GameTime GameTime { get; set; }
-    public static string SaveLocation { get; set; } = @"C:\Users\Leonardo\Documents\Repositories\monogame\save\";
 
     public static void DefaultSpriteBatchBegin()
     {
-        SpriteBatch.Begin(transformMatrix: Camera.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+        SpriteBatch.Begin(transformMatrix: Camera.Transform, sortMode: SpriteSortMode.FrontToBack,
+            blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
     }
 }

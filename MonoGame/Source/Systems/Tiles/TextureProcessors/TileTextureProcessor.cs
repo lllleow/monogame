@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using MonoGame.Source.Systems.Tiles.Enums;
+using MonoGame_Common.Util.Enum;
+using MonoGame.Source.Systems.Tiles.Interfaces;
 using MonoGame.Source.Systems.Tiles.Utils;
-using MonoGame.Source.Util.Enum;
 
 namespace MonoGame.Source.Systems.Tiles.TextureProcessors;
 
@@ -21,26 +21,23 @@ public class TileTextureProcessor : ITileTextureProcessor
     public bool IsOfSameType(TileNeighborConfiguration configuration, Direction direction)
     {
         return configuration.Center is not null
-&& direction switch
-{
-    Direction.Left => configuration.Left?.GetType() == configuration.Center.GetType(),
-    Direction.Right => configuration.Right?.GetType() == configuration.Center.GetType(),
-    Direction.Up => configuration.Up?.GetType() == configuration.Center.GetType(),
-    Direction.Down => configuration.Down?.GetType() == configuration.Center.GetType(),
-    Direction.LeftUp => configuration.LeftTop?.GetType() == configuration.Center.GetType(),
-    Direction.RightUp => configuration.RightTop?.GetType() == configuration.Center.GetType(),
-    Direction.LeftDown => configuration.LeftBottom?.GetType() == configuration.Center.GetType(),
-    Direction.RightDown => configuration.RightBottom?.GetType() == configuration.Center.GetType(),
-    _ => false,
-};
+               && direction switch
+               {
+                   Direction.Left => configuration.Left?.GetType() == configuration.Center.GetType(),
+                   Direction.Right => configuration.Right?.GetType() == configuration.Center.GetType(),
+                   Direction.Up => configuration.Up?.GetType() == configuration.Center.GetType(),
+                   Direction.Down => configuration.Down?.GetType() == configuration.Center.GetType(),
+                   Direction.LeftUp => configuration.LeftTop?.GetType() == configuration.Center.GetType(),
+                   Direction.RightUp => configuration.RightTop?.GetType() == configuration.Center.GetType(),
+                   Direction.LeftDown => configuration.LeftBottom?.GetType() == configuration.Center.GetType(),
+                   Direction.RightDown => configuration.RightBottom?.GetType() == configuration.Center.GetType(),
+                   _ => false
+               };
     }
 
     public bool IsWhitelisted(TileNeighborConfiguration configuration, Direction direction)
     {
-        if (configuration.Center is null)
-        {
-            return false;
-        }
+        if (configuration.Center is null) return false;
 
         var connectableTiles = new List<string>(configuration.Center.ConnectableTiles);
         return direction switch
@@ -53,7 +50,7 @@ public class TileTextureProcessor : ITileTextureProcessor
             Direction.RightUp => connectableTiles.Contains(configuration.RightTop?.Id),
             Direction.LeftDown => connectableTiles.Contains(configuration.LeftBottom?.Id),
             Direction.RightDown => connectableTiles.Contains(configuration.RightBottom?.Id),
-            _ => false,
+            _ => false
         };
     }
 }

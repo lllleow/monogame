@@ -11,13 +11,17 @@ public class UserInterfaceHandler
     public List<IUserInterface> UserInterfaces { get; set; } = [];
     public float ScaleFactor { get; set; } = 3f;
     public Matrix Transform { get; set; } = Matrix.CreateScale(3f, 3f, 1f);
-    public Vector2 UIScreenSize { get; set; } = new Vector2(1280, 720);
+    public Vector2 UIScreenSize { get; set; } = new(1280, 720);
 
     public void Initialize()
     {
         UserInterfaces.Add(new LevelEditorUserInterface());
 
-        var transformed = Vector2.Transform(new Vector2(Globals.GraphicsDevice.GraphicsDevice.Viewport.Width, Globals.GraphicsDevice.GraphicsDevice.Viewport.Height), Matrix.Invert(Transform));
+        var transformed =
+            Vector2.Transform(
+                new Vector2(
+                    Globals.GraphicsDevice.GraphicsDevice.Viewport.Width,
+                    Globals.GraphicsDevice.GraphicsDevice.Viewport.Height), Matrix.Invert(Transform));
         UIScreenSize = new Vector2(transformed.X, transformed.Y);
     }
 
@@ -26,18 +30,13 @@ public class UserInterfaceHandler
         foreach (var userInterface in UserInterfaces)
         {
             if (userInterface.Visible)
-            {
                 userInterface.Draw(spriteBatch);
-            }
         }
     }
 
     public void Update(GameTime gameTime)
     {
-        foreach (var userInterface in UserInterfaces)
-        {
-            userInterface.Update(gameTime);
-        }
+        foreach (var userInterface in UserInterfaces) userInterface.Update(gameTime);
     }
 
     public IUserInterface GetUserInterface(string name)

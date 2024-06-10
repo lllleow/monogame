@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using MonoGame.Source.Rendering.Enum;
+using MonoGame_Common.Enums;
+using MonoGame_Common.Util.Enum;
 using MonoGame.Source.Rendering.Utils;
-using MonoGame.Source.Systems.Components.Collision.Enum;
-using MonoGame.Source.Systems.Tiles.Enums;
-using MonoGame.Source.Util.Enum;
 
 namespace MonoGame.Source.Systems.Tiles.Interfaces;
 
@@ -59,7 +57,8 @@ public interface ITile
 
     public Rectangle GetSpriteRectangle()
     {
-        return new Rectangle(TextureX * Tile.PixelSizeX, TextureY * Tile.PixelSizeY, SizeX * Tile.PixelSizeX, SizeY * Tile.PixelSizeY);
+        return new Rectangle(TextureX * Tile.PixelSizeX, TextureY * Tile.PixelSizeY, SizeX * Tile.PixelSizeX,
+            SizeY * Tile.PixelSizeY);
     }
 
     public Rectangle GetRectangle()

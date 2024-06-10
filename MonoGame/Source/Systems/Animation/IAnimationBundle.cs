@@ -12,6 +12,7 @@ public interface IAnimationBundle
     int SizeY { get; set; }
 
     string Id { get; set; }
+    public string CollisionMaskSpritesheet { get; set; }
 
     Dictionary<string, Animation> Animations { get; set; }
     List<AnimationTransition> AnimationTransitions { get; set; }

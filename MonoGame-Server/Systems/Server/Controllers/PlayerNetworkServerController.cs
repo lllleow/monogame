@@ -1,16 +1,17 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using MonoGame;
-using MonoGame.Source;
-using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame.Source.Multiplayer.Messages.Player;
-using MonoGame.Source.Util.Enum;
+﻿using System.Numerics;
+using MonoGame_Common.Enums;
+using MonoGame_Common.Messages.Components.Animator;
+using MonoGame_Common.Messages.Player;
+using MonoGame_Common.Util.Enum;
+using MonoGame_Common.Util.Helpers;
+using MonoGame_Server.Systems.Server.Helper;
 
-namespace MonoGame_Server;
+namespace MonoGame_Server.Systems.Server.Controllers;
 
-public class PlayerNetworkServerController : IStandaloneNetworkController
+public class PlayerNetworkServerController : IServerNetworkController
 {
-    private ServerMovementHelper ServerMovementHelper { get; set; } = new();
+    private ServerMovementHelper ServerMovementHelper { get; } = new();
+    private Vector2 SpawnPosition { get; } = new(128, 128);
 
     public void InitializeListeners()
     {
@@ -18,15 +19,13 @@ public class PlayerNetworkServerController : IStandaloneNetworkController
         {
             var playerState = server.GetPlayerFromPeer(peer);
 
-            if (playerState == null)
-            {
-                return;
-            }
+            if (playerState == null) return;
 
-            if (message.Keys.Contains(Keys.W) || message.Keys.Contains(Keys.A) || message.Keys.Contains(Keys.S) || message.Keys.Contains(Keys.D))
+            if (message.Keys.Contains(Keys.W) || message.Keys.Contains(Keys.A) || message.Keys.Contains(Keys.S) ||
+                message.Keys.Contains(Keys.D))
             {
-                Vector2 resultingDisplacement = Vector2.Zero;
-                foreach (Keys key in message.Keys)
+                var resultingDisplacement = Vector2.Zero;
+                foreach (var key in message.Keys)
                 {
                     switch (key)
                     {
@@ -45,32 +44,31 @@ public class PlayerNetworkServerController : IStandaloneNetworkController
                     }
                 }
 
-                var newPosition = (playerState?.Position ?? Globals.SpawnPosition) + resultingDisplacement;
-                Direction direction = DirectionHelper.GetDirection((int)resultingDisplacement.X, (int)resultingDisplacement.Y);
+                var newPosition = (playerState?.Position ?? SpawnPosition) + resultingDisplacement;
+                var direction =
+                    DirectionHelper.GetDirection((int)resultingDisplacement.X, (int)resultingDisplacement.Y);
 
-                if (!this.ServerMovementHelper.CanMove(playerState!, newPosition, direction))
-                {
-                    return;
-                }
+                if (!ServerMovementHelper.CanMove(playerState!, newPosition, direction)) return;
 
-                if (playerState?.Position != null)
-                {
-                    playerState.Position = newPosition;
-                }
+                if (playerState?.Position != null) playerState.Position = newPosition;
 
                 switch (direction)
                 {
                     case Direction.Up:
-                        server.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(playerState?.UUID, "walking_front"));
+                        server.BroadcastMessage(
+                            new UpdateAnimatorStateNetworkMessage(playerState?.UUID, "walking_front"));
                         break;
                     case Direction.Left:
-                        server.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(playerState?.UUID, "walking_left"));
+                        server.BroadcastMessage(
+                            new UpdateAnimatorStateNetworkMessage(playerState?.UUID, "walking_left"));
                         break;
                     case Direction.Down:
-                        server.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(playerState?.UUID, "walking_back"));
+                        server.BroadcastMessage(
+                            new UpdateAnimatorStateNetworkMessage(playerState?.UUID, "walking_back"));
                         break;
                     case Direction.Right:
-                        server.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(playerState?.UUID, "walking_right"));
+                        server.BroadcastMessage(
+                            new UpdateAnimatorStateNetworkMessage(playerState?.UUID, "walking_right"));
                         break;
                 }
 
@@ -78,9 +76,7 @@ public class PlayerNetworkServerController : IStandaloneNetworkController
             }
 
             if (message.Keys.Count == 0)
-            {
                 server.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(playerState?.UUID, "idle"));
-            }
         });
     }
 }

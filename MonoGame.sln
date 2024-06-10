@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame", "MonoGame\MonoGa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame-Server", "MonoGame-Server\MonoGame-Server.csproj", "{4940B631-3227-4B28-AEA0-0BE844B43447}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame-Common", "MonoGame-Common\MonoGame-Common.csproj", "{60455774-FF94-4AF3-AABC-1EA49E1A0655}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Client|Any CPU = Debug Client|Any CPU
@@ -31,6 +33,14 @@ Global
 		{4940B631-3227-4B28-AEA0-0BE844B43447}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4940B631-3227-4B28-AEA0-0BE844B43447}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4940B631-3227-4B28-AEA0-0BE844B43447}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60455774-FF94-4AF3-AABC-1EA49E1A0655}.Debug Client|Any CPU.ActiveCfg = Debug|Any CPU
+		{60455774-FF94-4AF3-AABC-1EA49E1A0655}.Debug Client|Any CPU.Build.0 = Debug|Any CPU
+		{60455774-FF94-4AF3-AABC-1EA49E1A0655}.Debug Server|Any CPU.ActiveCfg = Debug|Any CPU
+		{60455774-FF94-4AF3-AABC-1EA49E1A0655}.Debug Server|Any CPU.Build.0 = Debug|Any CPU
+		{60455774-FF94-4AF3-AABC-1EA49E1A0655}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60455774-FF94-4AF3-AABC-1EA49E1A0655}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60455774-FF94-4AF3-AABC-1EA49E1A0655}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60455774-FF94-4AF3-AABC-1EA49E1A0655}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

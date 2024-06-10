@@ -6,13 +6,14 @@ namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class SingleChildUserInterfaceComponent : UserInterfaceComponent
 {
-    public IUserInterfaceComponent Child { get; set; }
-
-    public SingleChildUserInterfaceComponent(string name, Vector2 localPosition, IUserInterfaceComponent child) : base(name, localPosition)
+    public SingleChildUserInterfaceComponent(string name, Vector2 localPosition, IUserInterfaceComponent child) : base(
+        name, localPosition)
     {
         child?.Initialize(this);
         Child = child;
     }
+
+    public IUserInterfaceComponent Child { get; set; }
 
     public void RemoveChild()
     {

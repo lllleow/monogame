@@ -1,11 +1,8 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using MonoGame.Source;
+﻿using MonoGame_Common.Messages.Player;
+using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame.Source.Multiplayer.Messages.Player;
-using MonoGame.Source.Systems.Entity.PlayerNamespace;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Entity.Player;
 
 public class PlayerNetworkController : INetworkObjectController<Player>
 {
@@ -13,10 +10,7 @@ public class PlayerNetworkController : INetworkObjectController<Player>
     {
         ClientNetworkEventManager.Subscribe<UpdatePlayerPositionNetworkMessage>(message =>
         {
-            if (player.UUID == message.UUID)
-            {
-                player.Position = message.Position;
-            }
+            if (player.UUID == message.UUID) player.Position = message.Position;
         });
     }
 }

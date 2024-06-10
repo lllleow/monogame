@@ -7,13 +7,9 @@ namespace MonoGame.Source.Rendering.Camera;
 
 public class Camera
 {
-    public Matrix Transform { get; set; } = Matrix.Identity;
-
-    private float ScreenSizeX { get; set; }
-    private float ScreenSizeY { get; set; }
-    private readonly float scaleFactor = 3f;
     private readonly float followSpeed = 7f;
     private readonly int previousScrollValue;
+    private readonly float scaleFactor = 3f;
 
     public Camera(int screenSizeX, int screenSizeY)
     {
@@ -22,23 +18,26 @@ public class Camera
         previousScrollValue = Mouse.GetState().ScrollWheelValue;
     }
 
+    public Matrix Transform { get; set; } = Matrix.Identity;
+
+    private float ScreenSizeX { get; }
+    private float ScreenSizeY { get; }
+
     public void Follow(IGameEntity entity, GameTime gameTime)
     {
-        if (entity == null)
-        {
-            return;
-        }
+        if (entity == null) return;
 
-        float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        Vector2 entityCenter = new Vector2(entity.Position.X + (Tile.PixelSizeX / 2), entity.Position.Y + (Tile.PixelSizeY / 2));
-        Vector2 screenCenter = new Vector2(ScreenSizeX / 2f, ScreenSizeY / 2f);
+        var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        var entityCenter =
+            new Vector2(entity.Position.X + (Tile.PixelSizeX / 2), entity.Position.Y + (Tile.PixelSizeY / 2));
+        var screenCenter = new Vector2(ScreenSizeX / 2f, ScreenSizeY / 2f);
 
-        Matrix targetTranslation = Matrix.CreateTranslation(
+        var targetTranslation = Matrix.CreateTranslation(
             screenCenter.X - (entityCenter.X * scaleFactor),
             screenCenter.Y - (entityCenter.Y * scaleFactor),
             0);
 
-        Matrix targetTransform = Matrix.Multiply(Matrix.CreateScale(scaleFactor, scaleFactor, 1f), targetTranslation);
+        var targetTransform = Matrix.Multiply(Matrix.CreateScale(scaleFactor, scaleFactor, 1f), targetTranslation);
 
         Transform = Matrix.Lerp(Transform, targetTransform, followSpeed * deltaTime);
     }

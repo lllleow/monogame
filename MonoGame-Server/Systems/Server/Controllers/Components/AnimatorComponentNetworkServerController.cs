@@ -1,25 +1,24 @@
-﻿using MonoGame;
-using MonoGame_Server.Systems.Server;
-using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame.Source.States;
-using MonoGame.Source.States.Components;
+﻿using MonoGame_Common.Messages.Components.Animator;
+using MonoGame_Common.States.Components;
 
-namespace MonoGame_Server;
+namespace MonoGame_Server.Systems.Server.Controllers.Components;
 
-public class AnimatorComponentNetworkServerController : IStandaloneNetworkController
+public class AnimatorComponentNetworkServerController : IServerNetworkController
 {
     public void InitializeListeners()
     {
         ServerNetworkEventManager.Subscribe<SendAnimatorStateNetworkMessage>((server, peer, message) =>
         {
             UpdateAnimatorStateNetworkMessage updateMessage = new(message.UUID, message.CurrentState);
-            EntityState? state = NetworkServer.Instance.ServerWorld.GetEntityByUUID(message.UUID);
-            AnimatorComponentState animatorState = new AnimatorComponentState
+            var state = NetworkServer.Instance.ServerWorld.GetEntityByUUID(message.UUID);
+            var animatorState = new AnimatorComponentState
             {
                 CurrentState = message.CurrentState,
+                CurrentTime = message.CurrentTime,
+                AnimationBundleId = message.AnimationBundleId
             };
-            state?.ReplaceComponent(animatorState);
-            NetworkServer.Instance.BroadcastMessage(updateMessage, blacklist: [peer]);
+            _ = state?.ReplaceComponent(animatorState);
+            NetworkServer.Instance.BroadcastMessage(updateMessage, [peer]);
         });
     }
 }

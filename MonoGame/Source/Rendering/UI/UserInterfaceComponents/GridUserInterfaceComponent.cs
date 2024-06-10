@@ -6,16 +6,17 @@ namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class GridUserInterfaceComponent : MultipleChildUserInterfaceComponent
 {
-    public int MaxColumns { get; set; }
-    public int MaxRows { get; set; }
-    public Vector2 Spacing { get; set; } = Vector2.Zero;
-
-    public GridUserInterfaceComponent(string name, int maxColumns, int maxRows, Vector2 spacing, Vector2 localPosition, List<IUserInterfaceComponent> children) : base(name, localPosition, children)
+    public GridUserInterfaceComponent(string name, int maxColumns, int maxRows, Vector2 spacing, Vector2 localPosition,
+        List<IUserInterfaceComponent> children) : base(name, localPosition, children)
     {
         MaxColumns = maxColumns;
         MaxRows = maxRows;
         Spacing = spacing;
     }
+
+    public int MaxColumns { get; set; }
+    public int MaxRows { get; set; }
+    public Vector2 Spacing { get; set; } = Vector2.Zero;
 
     public override Vector2 GetPreferredSize()
     {

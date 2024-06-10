@@ -1,13 +1,10 @@
-﻿using MonoGame;
-using MonoGame.Source;
-using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame.Source.Multiplayer.Messages.Player;
-using MonoGame.Source.Multiplayer.Messages.World;
-using MonoGame.Source.States;
+﻿using MonoGame_Common.Messages.Player;
+using MonoGame_Common.Messages.World;
+using MonoGame_Common.States;
 
-namespace MonoGame_Server;
+namespace MonoGame_Server.Systems.Server.Controllers;
 
-public class WorldNetworkServerController : IStandaloneNetworkController
+public class WorldNetworkServerController : IServerNetworkController
 {
     public void InitializeListeners()
     {
@@ -24,7 +21,8 @@ public class WorldNetworkServerController : IStandaloneNetworkController
                 var playerState = server.ServerWorld.Players?.FirstOrDefault(p => p.UUID == uuid);
                 if (playerState != null)
                 {
-                    var spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(playerState.UUID, playerState.Position);
+                    var spawnPlayerNetworkMessage =
+                        new SpawnPlayerNetworkMessage(playerState.UUID, playerState.Position);
                     server.SendMessageToPeer(peer, spawnPlayerNetworkMessage);
                 }
             }
@@ -44,13 +42,9 @@ public class WorldNetworkServerController : IStandaloneNetworkController
         {
             var tile = server.ServerWorld.GetTileAtPosition(message.Layer, message.PosX, message.PosY);
             if (tile == null)
-            {
                 server.ServerWorld.SetTileAtPosition(message.TileId, message.Layer, message.PosX, message.PosY);
-            }
             else
-            {
                 server.ServerWorld.DestroyTileAtPosition(message.Layer, message.PosX, message.PosY);
-            }
         });
     }
 }
