@@ -18,7 +18,7 @@ public class AnimatorComponentNetworkServerController : IServerNetworkController
                 AnimationBundleId = message.AnimationBundleId
             };
             _ = state?.ReplaceComponent(animatorState);
-            NetworkServer.Instance.BroadcastMessage(updateMessage, blacklist: [peer]);
+            NetworkServer.Instance.BroadcastMessage(updateMessage, [peer]);
         });
     }
 }

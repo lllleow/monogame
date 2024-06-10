@@ -10,9 +10,7 @@ namespace MonoGame.Source.Systems.Components.Animator;
 
 public class AnimatorComponent : EntityComponent
 {
-    public IAnimationBundle AnimationBundle { get; set; }
     private readonly AnimatorComponentNetworkController networkController = new();
-    public AnimationStateMachine StateMachine { get; set; }
 
     public AnimatorComponent(IGameEntity entity, IAnimationBundle animation)
     {
@@ -22,11 +20,16 @@ public class AnimatorComponent : EntityComponent
         StateMachine = new AnimationStateMachine(AnimationBundle)
         {
             OnSpriteChanged = (CurrentTextureX, CurrentTextureY) =>
-        {
-            Entity.GetFirstComponent<SpriteRendererComponent>()?.UpdateTexture(AnimationBundle.SpriteSheet, new Rectangle(CurrentTextureX * AnimationBundle.SizeX, CurrentTextureY * AnimationBundle.SizeY, AnimationBundle.SizeX, AnimationBundle.SizeY));
-        }
+            {
+                Entity.GetFirstComponent<SpriteRendererComponent>()?.UpdateTexture(AnimationBundle.SpriteSheet,
+                    new Rectangle(CurrentTextureX * AnimationBundle.SizeX, CurrentTextureY * AnimationBundle.SizeY,
+                        AnimationBundle.SizeX, AnimationBundle.SizeY));
+            }
         };
     }
+
+    public IAnimationBundle AnimationBundle { get; set; }
+    public AnimationStateMachine StateMachine { get; set; }
 
     public string GetCurrentStateId()
     {
@@ -43,9 +46,7 @@ public class AnimatorComponent : EntityComponent
     {
         base.Initialize();
         if (!Entity.ContainsComponent<SpriteRendererComponent>())
-        {
             throw new Exception("AnimatorComponent requires a SpriteRendererComponent to be present on the entity.");
-        }
     }
 
     public override void Update(GameTime gameTime)

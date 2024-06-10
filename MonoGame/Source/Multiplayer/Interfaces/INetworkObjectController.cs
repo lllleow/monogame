@@ -2,5 +2,5 @@
 
 public interface INetworkObjectController<T> : INetworkController
 {
-    public abstract void InitializeListeners(T networkObject);
+    public void InitializeListeners(T networkObject);
 }

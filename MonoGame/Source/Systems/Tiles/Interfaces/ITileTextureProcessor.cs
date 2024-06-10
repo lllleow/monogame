@@ -5,11 +5,11 @@ namespace MonoGame.Source.Systems.Tiles.Interfaces;
 
 public interface ITileTextureProcessor
 {
-    public abstract (int TextureCoordinateX, int TextureCoordinateY) Process(TileNeighborConfiguration configuration);
+    public (int TextureCoordinateX, int TextureCoordinateY) Process(TileNeighborConfiguration configuration);
 
-    public abstract bool CanConnect(TileNeighborConfiguration configuration, Direction direction);
+    public bool CanConnect(TileNeighborConfiguration configuration, Direction direction);
 
-    public abstract bool IsOfSameType(TileNeighborConfiguration configuration, Direction direction);
+    public bool IsOfSameType(TileNeighborConfiguration configuration, Direction direction);
 
-    public abstract bool IsWhitelisted(TileNeighborConfiguration configuration, Direction direction);
+    public bool IsWhitelisted(TileNeighborConfiguration configuration, Direction direction);
 }

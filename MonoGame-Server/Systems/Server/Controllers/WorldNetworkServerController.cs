@@ -21,7 +21,8 @@ public class WorldNetworkServerController : IServerNetworkController
                 var playerState = server.ServerWorld.Players?.FirstOrDefault(p => p.UUID == uuid);
                 if (playerState != null)
                 {
-                    var spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(playerState.UUID, playerState.Position);
+                    var spawnPlayerNetworkMessage =
+                        new SpawnPlayerNetworkMessage(playerState.UUID, playerState.Position);
                     server.SendMessageToPeer(peer, spawnPlayerNetworkMessage);
                 }
             }
@@ -41,13 +42,9 @@ public class WorldNetworkServerController : IServerNetworkController
         {
             var tile = server.ServerWorld.GetTileAtPosition(message.Layer, message.PosX, message.PosY);
             if (tile == null)
-            {
                 server.ServerWorld.SetTileAtPosition(message.TileId, message.Layer, message.PosX, message.PosY);
-            }
             else
-            {
                 server.ServerWorld.DestroyTileAtPosition(message.Layer, message.PosX, message.PosY);
-            }
         });
     }
 }

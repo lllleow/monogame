@@ -5,8 +5,6 @@ namespace MonoGame_Common.Messages;
 
 public class NetworkMessage : INetworkMessage
 {
-    protected int MessageTypeId { get; set; }
-
     public NetworkMessage()
     {
         MessageTypeId = MessageRegistry.Instance.GetIdByType(GetType());
@@ -16,6 +14,8 @@ public class NetworkMessage : INetworkMessage
     {
         Deserialize(reader);
     }
+
+    protected int MessageTypeId { get; set; }
 
     public virtual void Deserialize(NetDataReader reader)
     {

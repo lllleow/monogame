@@ -12,32 +12,26 @@ namespace MonoGame.Source.Systems.Entity;
 
 public abstract class GameEntity : IGameEntity
 {
-    public List<IEntityComponent> Components { get; set; }
-
-    public Vector2 Position { get; set; }
-
-    public string UUID { get; set; } = Guid.NewGuid().ToString();
-
     public GameEntity()
     {
         Components = [];
         Position = Vector2.Zero;
     }
 
+    public List<IEntityComponent> Components { get; set; }
+
+    public Vector2 Position { get; set; }
+
+    public string UUID { get; set; } = Guid.NewGuid().ToString();
+
     public virtual void Update(GameTime gameTime)
     {
-        foreach (var component in Components)
-        {
-            component.Update(gameTime);
-        }
+        foreach (var component in Components) component.Update(gameTime);
     }
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-        foreach (var component in Components)
-        {
-            component.Draw(spriteBatch);
-        }
+        foreach (var component in Components) component.Draw(spriteBatch);
     }
 
     public void AddComponent(IEntityComponent component)
@@ -68,15 +62,15 @@ public abstract class GameEntity : IGameEntity
         return Components.OfType<T>().Any();
     }
 
-    public void Teleport(Vector2 newPosition)
-    {
-        Position = newPosition;
-    }
-
     public Rectangle GetEntityBoundsAtPosition(Vector2 position)
     {
         return ContainsComponent<AnimatorComponent>()
             ? new Rectangle((int)position.X, (int)position.Y, Tile.PixelSizeX, Tile.PixelSizeY)
             : Rectangle.Empty;
+    }
+
+    public void Teleport(Vector2 newPosition)
+    {
+        Position = newPosition;
     }
 }

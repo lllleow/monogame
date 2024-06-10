@@ -1,12 +1,23 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame_Common.Enums;
 using MonoGame_Common.Util.Enum;
 using MonoGame.Source.Systems.Tiles.Interfaces;
 using MonoGame.Source.Systems.Tiles.Utils;
+
 namespace MonoGame.Source.Systems.Tiles;
 
 public class Tile : ITile
 {
+    public (int TextureCoordinateX, int TextureCoordinateY) CurrentTextureIndex { get; set; }
+
+    public Texture2D Texture { get; set; }
+
+    public static int PixelSizeX { get; set; } = 16;
+
+    public static int PixelSizeY { get; set; } = 16;
+
+    public static bool ShowTileBoundingBox { get; set; } = false;
     public string Id { get; set; }
 
     public string Name { get; set; }
@@ -17,10 +28,6 @@ public class Tile : ITile
 
     public int TextureY { get; set; }
 
-    public (int TextureCoordinateX, int TextureCoordinateY) CurrentTextureIndex { get; set; }
-
-    public Texture2D Texture { get; set; }
-
     public int SizeX { get; set; } = 1;
 
     public int SizeY { get; set; } = 1;
@@ -28,10 +35,6 @@ public class Tile : ITile
     public float Scale { get; set; } = 1;
 
     public float Opacity { get; set; } = 1;
-
-    public static int PixelSizeX { get; set; } = 16;
-
-    public static int PixelSizeY { get; set; } = 16;
 
     public int PixelOffsetX { get; set; }
 
@@ -49,17 +52,11 @@ public class Tile : ITile
 
     public bool Walkable { get; set; } = true;
 
-    public static bool ShowTileBoundingBox { get; set; } = false;
-
-    public string[] ConnectableTiles { get; set; } = System.Array.Empty<string>();
+    public string[] ConnectableTiles { get; set; } = Array.Empty<string>();
 
     public (int TextureCoordinateX, int TextureCoordinateY) DefaultTextureCoordinates { get; set; }
     public int LocalX { get; set; }
     public int LocalY { get; set; }
-
-    public Tile()
-    {
-    }
 
     public void Initialize(int localX, int localY, int worldX, int worldY)
     {
@@ -80,6 +77,11 @@ public class Tile : ITile
         TextureY = coordinates.TextureCoordinateY;
     }
 
+    public void OnNeighborChanged(ITile neighbor, TileDrawLayer layer, Direction direction)
+    {
+        if (TextureProcessor != null) UpdateTextureCoordinates(layer);
+    }
+
     public TileNeighborConfiguration GetNeighborConfiguration(TileDrawLayer layer)
     {
         var left = Globals.World.GetTileAt(layer, WorldX - 1, WorldY);
@@ -92,14 +94,7 @@ public class Tile : ITile
         var left_bottom = Globals.World.GetTileAt(layer, WorldX - 1, WorldY + 1);
         var right_bottom = Globals.World.GetTileAt(layer, WorldX + 1, WorldY + 1);
 
-        return new TileNeighborConfiguration(this, left, right, up, down, left_top, right_top, left_bottom, right_bottom);
-    }
-
-    public void OnNeighborChanged(ITile neighbor, TileDrawLayer layer, Direction direction)
-    {
-        if (TextureProcessor != null)
-        {
-            UpdateTextureCoordinates(layer);
-        }
+        return new TileNeighborConfiguration(this, left, right, up, down, left_top, right_top, left_bottom,
+            right_bottom);
     }
 }

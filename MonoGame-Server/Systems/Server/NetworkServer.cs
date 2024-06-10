@@ -11,13 +11,9 @@ namespace MonoGame_Server.Systems.Server;
 
 public class NetworkServer
 {
-    public static NetworkServer Instance { get; set; } = new();
     private readonly EventBasedNetListener listener;
     private readonly NetManager server;
-    public Dictionary<NetPeer, string> Connections { get; set; } = [];
-    public ServerWorld ServerWorld { get; set; }
-    public List<IServerNetworkController> NetworkControllers { get; set; } = [];
-    private int autoSaveCounter = 0;
+    private int autoSaveCounter;
 
     public NetworkServer()
     {
@@ -28,10 +24,15 @@ public class NetworkServer
         ServerWorld.Initialize();
     }
 
+    public static NetworkServer Instance { get; set; } = new();
+    public Dictionary<NetPeer, string> Connections { get; set; } = [];
+    public ServerWorld ServerWorld { get; set; }
+    public List<IServerNetworkController> NetworkControllers { get; set; } = [];
+
     public void InitializeServer()
     {
         Console.WriteLine("Initializing server");
-        int port = 25565;
+        var port = 25565;
         _ = server.Start(port);
 
         Console.WriteLine("Server started at port " + port);
@@ -43,33 +44,23 @@ public class NetworkServer
         listener.ConnectionRequestEvent += request =>
         {
             if (ShouldAcceptConnection())
-            {
                 _ = request.Accept();
-            }
             else
-            {
                 request.Reject();
-            }
         };
 
-        listener.PeerConnectedEvent += peer =>
-        {
-            Console.WriteLine("New connection: {0}", peer);
-        };
+        listener.PeerConnectedEvent += peer => { Console.WriteLine("New connection: {0}", peer); };
 
         listener.NetworkReceiveEvent += (peer, reader, channel, deliveryMethod) =>
         {
             Console.WriteLine("Network message received from {0}", peer.Address);
             if (reader.AvailableBytes > 0)
             {
-                byte messageTypeId = reader.GetByte();
-                Type messageType = MessageRegistry.Instance.GetTypeById((int)messageTypeId);
-                INetworkMessage? message = (INetworkMessage?)Activator.CreateInstance(messageType);
+                var messageTypeId = reader.GetByte();
+                var messageType = MessageRegistry.Instance.GetTypeById(messageTypeId);
+                var message = (INetworkMessage?)Activator.CreateInstance(messageType);
                 message?.Deserialize(reader);
-                if (message != null)
-                {
-                    ServerNetworkEventManager.RaiseEvent(this, peer, messageType, message);
-                }
+                if (message != null) ServerNetworkEventManager.RaiseEvent(this, peer, messageType, message);
 
                 Console.WriteLine("Server received: " + message);
             }
@@ -128,12 +119,9 @@ public class NetworkServer
     public void BroadcastMessage(INetworkMessage message, List<NetPeer>? blacklist = null)
     {
         blacklist ??= [];
-        List<NetPeer> whitelistedPeers = Connections.Keys.Except(blacklist).ToList();
+        var whitelistedPeers = Connections.Keys.Except(blacklist).ToList();
 
-        foreach (var peer in whitelistedPeers)
-        {
-            peer.Send(message.Serialize(), DeliveryMethod.Unreliable);
-        }
+        foreach (var peer in whitelistedPeers) peer.Send(message.Serialize(), DeliveryMethod.Unreliable);
     }
 
     public bool ShouldAcceptConnection()

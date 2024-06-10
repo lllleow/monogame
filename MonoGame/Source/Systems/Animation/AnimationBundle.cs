@@ -17,7 +17,9 @@ public class AnimationBundle : IAnimationBundle
 
     public Rectangle GetSpriteRectangle(string animationId, double percentage)
     {
-        var rect = new Rectangle(GetSpritesheetColumnForAnimationPercentage(animationId, percentage) * Tile.PixelSizeX, GetSpritesheetRowForAnimation(animationId) * Tile.PixelSizeY, SizeX * Tile.PixelSizeX, SizeY * Tile.PixelSizeY);
+        var rect = new Rectangle(GetSpritesheetColumnForAnimationPercentage(animationId, percentage) * Tile.PixelSizeX,
+            GetSpritesheetRowForAnimation(animationId) * Tile.PixelSizeY, SizeX * Tile.PixelSizeX,
+            SizeY * Tile.PixelSizeY);
         return rect;
     }
 
@@ -34,7 +36,9 @@ public class AnimationBundle : IAnimationBundle
 
     public void CreateAnimation(Animation animation)
     {
-        Animations[animation.Id] = Animations.ContainsKey(animation.Id) ? throw new Exception("Animation already registered " + animation.Id) : animation;
+        Animations[animation.Id] = Animations.ContainsKey(animation.Id)
+            ? throw new Exception("Animation already registered " + animation.Id)
+            : animation;
     }
 
     public void AddTransition(AnimationTransition animationTransition)

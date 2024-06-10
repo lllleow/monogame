@@ -4,8 +4,6 @@ namespace MonoGame_Common.States;
 
 public class PlayerState : EntityState
 {
-    public string? SelectedTile { get; set; }
-
     public PlayerState()
     {
     }
@@ -15,6 +13,8 @@ public class PlayerState : EntityState
         UUID = uuid;
         SelectedTile = null;
     }
+
+    public string? SelectedTile { get; set; }
 
     // public PlayerState(Player player) : base(player)
     // {

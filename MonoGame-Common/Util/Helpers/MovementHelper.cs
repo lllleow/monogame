@@ -17,7 +17,7 @@ public class MovementHelper
             Direction.RightUp => new Vector2(speed.X, -speed.Y),
             Direction.LeftDown => new Vector2(-speed.X, speed.Y),
             Direction.RightDown => new Vector2(speed.X, speed.Y),
-            _ => Vector2.Zero,
+            _ => Vector2.Zero
         };
     }
 }

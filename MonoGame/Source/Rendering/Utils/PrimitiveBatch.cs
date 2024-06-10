@@ -1,13 +1,13 @@
 ﻿//-----------------------------------------------------------------------------
 
 using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 // PrimitiveBatch.cs
 //
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Source.Rendering.Utils;
 
@@ -17,6 +17,11 @@ namespace MonoGame.Source.Rendering.Utils;
 // retro scene.
 public class PrimitiveBatch : IDisposable
 {
+    // this constant controls how large the vertices buffer is. Larger buffers will
+    // require flushing less often, which can increase performance. However, having
+    // buffer that is unnecessarily large will waste memory.
+    private const int DefaultBufferSize = 500;
+
     // a basic effect, which contains the shaders that we will use to draw our
     // primitives.
     private readonly BasicEffect basicEffect;
@@ -24,33 +29,28 @@ public class PrimitiveBatch : IDisposable
     // the device that we will issue draw calls to.
     private readonly GraphicsDevice device;
 
-    // this constant controls how large the vertices buffer is. Larger buffers will
-    // require flushing less often, which can increase performance. However, having
-    // buffer that is unnecessarily large will waste memory.
-    private const int DefaultBufferSize = 500;
-
     // a block of vertices that calling AddVertex will fill. Flush will draw using
     // this array, and will determine how many primitives to draw from
     // positionInBuffer.
     private readonly VertexPositionColor[] vertices = new VertexPositionColor[DefaultBufferSize];
 
-    // keeps track of how many vertices have been added. this value increases until
-    // we run out of space in the buffer, at which time Flush is automatically
-    // called.
-    private int positionInBuffer = 0;
-
-    // this value is set by Begin, and is the type of primitives that we are
-    // drawing.
-    private PrimitiveType primitiveType;
+    // hasBegun is flipped to true once Begin is called, and is used to make
+    // sure users don't call End before Begin is called.
+    private bool hasBegun;
+    private bool isDisposed;
 
     // how many verts does each of these primitives take up? points are 1,
     // lines are 2, and triangles are 3.
     private int numVertsPerPrimitive;
 
-    // hasBegun is flipped to true once Begin is called, and is used to make
-    // sure users don't call End before Begin is called.
-    private bool hasBegun = false;
-    private bool isDisposed = false;
+    // keeps track of how many vertices have been added. this value increases until
+    // we run out of space in the buffer, at which time Flush is automatically
+    // called.
+    private int positionInBuffer;
+
+    // this value is set by Begin, and is the type of primitives that we are
+    // drawing.
+    private PrimitiveType primitiveType;
 
     public PrimitiveBatch(GraphicsDevice graphicsDevice)
     {
@@ -62,7 +62,8 @@ public class PrimitiveBatch : IDisposable
             VertexColorEnabled = true,
 
             // Setup the projection matrix for 2D projection with 0,0 in the upper left.
-            Projection = Matrix.CreateOrthographicOffCenter(0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height, 0, 0, 1),
+            Projection = Matrix.CreateOrthographicOffCenter(0, graphicsDevice.Viewport.Width,
+                graphicsDevice.Viewport.Height, 0, 0, 1),
 
             // Set the World matrix to Identity as default
             World = Matrix.Identity,
@@ -82,7 +83,8 @@ public class PrimitiveBatch : IDisposable
             VertexColorEnabled = true,
 
             // Setup the projection matrix for 2D projection with 0,0 in the upper left.
-            Projection = Matrix.CreateOrthographicOffCenter(0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height, 0, 0, 1),
+            Projection = Matrix.CreateOrthographicOffCenter(0, graphicsDevice.Viewport.Width,
+                graphicsDevice.Viewport.Height, 0, 0, 1),
 
             // Set the World matrix to Identity as default
             World = Matrix.Identity,
@@ -113,10 +115,8 @@ public class PrimitiveBatch : IDisposable
     public void Begin(PrimitiveType primitiveType)
     {
         if (hasBegun)
-        {
             throw new InvalidOperationException(
                 "End must be called before Begin can be called again.");
-        }
 
         basicEffect.View = Globals.Camera.Transform;
 
@@ -125,10 +125,8 @@ public class PrimitiveBatch : IDisposable
         // simply disallow them.
         if (primitiveType is PrimitiveType.LineStrip or
             PrimitiveType.TriangleStrip)
-        {
             throw new NotSupportedException(
                 "The specified primitiveType is not supported by PrimitiveBatch.");
-        }
 
         this.primitiveType = primitiveType;
 
@@ -148,10 +146,8 @@ public class PrimitiveBatch : IDisposable
     public void Begin(PrimitiveType primitiveType, Matrix transform)
     {
         if (hasBegun)
-        {
             throw new InvalidOperationException(
                 "End must be called before Begin can be called again.");
-        }
 
         basicEffect.View = transform;
 
@@ -160,10 +156,8 @@ public class PrimitiveBatch : IDisposable
         // simply disallow them.
         if (primitiveType is PrimitiveType.LineStrip or
             PrimitiveType.TriangleStrip)
-        {
             throw new NotSupportedException(
                 "The specified primitiveType is not supported by PrimitiveBatch.");
-        }
 
         this.primitiveType = primitiveType;
 
@@ -186,10 +180,8 @@ public class PrimitiveBatch : IDisposable
     public void AddVertex(Vector2 vertex, Color color)
     {
         if (!hasBegun)
-        {
             throw new InvalidOperationException(
                 "Begin must be called before AddVertex can be called.");
-        }
 
         // are we starting a new primitive? if so, and there will not be enough room
         // for a whole primitive, flush.
@@ -197,9 +189,7 @@ public class PrimitiveBatch : IDisposable
 
         if (newPrimitive &&
             positionInBuffer + numVertsPerPrimitive >= vertices.Length)
-        {
             Flush();
-        }
 
         // once we know there's enough room, set the vertex in the buffer,
         // and increase position.
@@ -215,10 +205,8 @@ public class PrimitiveBatch : IDisposable
     public void End()
     {
         if (!hasBegun)
-        {
             throw new InvalidOperationException(
                 "Begin must be called before End can be called.");
-        }
 
         // Draw whatever the user wanted us to draw
         Flush();
@@ -234,16 +222,11 @@ public class PrimitiveBatch : IDisposable
     private void Flush()
     {
         if (!hasBegun)
-        {
             throw new InvalidOperationException(
                 "Begin must be called before Flush can be called.");
-        }
 
         // no work to do
-        if (positionInBuffer == 0)
-        {
-            return;
-        }
+        if (positionInBuffer == 0) return;
 
         // how many primitives will we draw?
         var primitiveCount = positionInBuffer / numVertsPerPrimitive;
@@ -264,7 +247,7 @@ public class PrimitiveBatch : IDisposable
         {
             PrimitiveType.LineList => 2,
             PrimitiveType.TriangleList => 3,
-            _ => throw new InvalidOperationException("primitive is not valid"),
+            _ => throw new InvalidOperationException("primitive is not valid")
         };
         return numVertsPerPrimitive;
     }

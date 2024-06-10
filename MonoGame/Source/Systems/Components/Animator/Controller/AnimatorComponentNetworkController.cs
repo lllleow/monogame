@@ -10,16 +10,15 @@ public class AnimatorComponentNetworkController : INetworkObjectController<Anima
     {
         ClientNetworkEventManager.Subscribe<UpdateAnimatorStateNetworkMessage>(message =>
         {
-            if (message.UUID == networkObject.Entity.UUID)
-            {
-                networkObject.SetState(message.TargetState);
-            }
+            if (message.UUID == networkObject.Entity.UUID) networkObject.SetState(message.TargetState);
         });
     }
 
     public void SendStateUpdate(AnimatorComponent networkObject)
     {
-        var message = new SendAnimatorStateNetworkMessage(networkObject.Entity.UUID, networkObject.StateMachine.CurrentState.Animation.Id, networkObject.StateMachine.CurrentState.CurrentTime, networkObject.StateMachine.AnimationBundle.Id);
+        var message = new SendAnimatorStateNetworkMessage(networkObject.Entity.UUID,
+            networkObject.StateMachine.CurrentState.Animation.Id, networkObject.StateMachine.CurrentState.CurrentTime,
+            networkObject.StateMachine.AnimationBundle.Id);
         NetworkClient.SendMessage(message);
     }
 }

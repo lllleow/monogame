@@ -2,38 +2,37 @@
 using LiteNetLib.Utils;
 using MonoGame_Common.Attributes;
 
-namespace MonoGame_Common.Messages.Player
+namespace MonoGame_Common.Messages.Player;
+
+[NetworkMessage(5)]
+public class SpawnPlayerNetworkMessage : NetworkMessage
 {
-    [NetworkMessage(5)]
-    public class SpawnPlayerNetworkMessage : NetworkMessage
+    public SpawnPlayerNetworkMessage()
     {
-        public string UUID { get; set; }
-        public Vector2 Position { get; set; }
+    }
 
-        public SpawnPlayerNetworkMessage() : base()
-        {
-        }
+    public SpawnPlayerNetworkMessage(string uuid, Vector2 position)
+    {
+        UUID = uuid;
+        Position = position;
+    }
 
-        public SpawnPlayerNetworkMessage(string uuid, Vector2 position) : base()
-        {
-            UUID = uuid;
-            Position = position;
-        }
+    public string UUID { get; set; }
+    public Vector2 Position { get; set; }
 
-        public override void Deserialize(NetDataReader reader)
-        {
-            UUID = reader.GetString();
-            Position = new Vector2(reader.GetFloat(), reader.GetFloat());
-        }
+    public override void Deserialize(NetDataReader reader)
+    {
+        UUID = reader.GetString();
+        Position = new Vector2(reader.GetFloat(), reader.GetFloat());
+    }
 
-        public override NetDataWriter Serialize()
-        {
-            var data = new NetDataWriter();
-            data.Put(GetNetworkTypeId());
-            data.Put(UUID);
-            data.Put(Position.X);
-            data.Put(Position.Y);
-            return data;
-        }
+    public override NetDataWriter Serialize()
+    {
+        var data = new NetDataWriter();
+        data.Put(GetNetworkTypeId());
+        data.Put(UUID);
+        data.Put(Position.X);
+        data.Put(Position.Y);
+        return data;
     }
 }

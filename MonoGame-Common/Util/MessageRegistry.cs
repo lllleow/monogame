@@ -1,11 +1,10 @@
-﻿using MonoGame_Common.Attributes;
-using System.Reflection;
+﻿using System.Reflection;
+using MonoGame_Common.Attributes;
 
 namespace MonoGame_Common.Util;
 
 public class MessageRegistry
 {
-    public static MessageRegistry Instance { get; } = new();
     private readonly Dictionary<int, Type> idToTypeMap = [];
     private readonly Dictionary<Type, int> typeToIdMap = [];
 
@@ -13,6 +12,8 @@ public class MessageRegistry
     {
         RegisterMessages();
     }
+
+    public static MessageRegistry Instance { get; } = new();
 
     private void RegisterMessages()
     {

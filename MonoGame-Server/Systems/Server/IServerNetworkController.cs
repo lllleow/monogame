@@ -2,5 +2,5 @@
 
 public interface IServerNetworkController
 {
-    public abstract void InitializeListeners();
+    public void InitializeListeners();
 }

@@ -6,18 +6,18 @@ namespace MonoGame_Common.Messages.Authentication;
 [NetworkMessage(2)]
 public class AuthenticationResultNetworkMessage : NetworkMessage
 {
-    public bool Success { get; set; }
-    public string Reason { get; set; }
-
-    public AuthenticationResultNetworkMessage() : base()
+    public AuthenticationResultNetworkMessage()
     {
     }
 
-    public AuthenticationResultNetworkMessage(bool success, string reason) : base()
+    public AuthenticationResultNetworkMessage(bool success, string reason)
     {
         Success = success;
         Reason = reason;
     }
+
+    public bool Success { get; set; }
+    public string Reason { get; set; }
 
     public override void Deserialize(NetDataReader reader)
     {

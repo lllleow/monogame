@@ -6,19 +6,20 @@ namespace MonoGame.Source.Systems.Components.BoundingBox;
 
 public class BoundingBoxComponent : EntityComponent
 {
-    public Vector2 Size { get; set; }
+    private readonly PrimitiveBatch primitiveBatch = new(Globals.GraphicsDevice.GraphicsDevice);
 
     public BoundingBoxComponent(Vector2 size)
     {
         Size = size;
     }
 
+    public Vector2 Size { get; set; }
+
     public Rectangle GetRectangle()
     {
         return new Rectangle((int)Entity.Position.X, (int)Entity.Position.Y, (int)Size.X, (int)Size.Y);
     }
 
-    private readonly PrimitiveBatch primitiveBatch = new(Globals.GraphicsDevice.GraphicsDevice);
     public override void Draw(SpriteBatch spriteBatch)
     {
         // Globals.spriteBatch.End();

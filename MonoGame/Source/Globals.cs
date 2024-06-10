@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.Camera;
 using MonoGame.Source.Rendering.UI;
 using MonoGame.Source.WorldNamespace;
+
 namespace MonoGame.Source;
 
 public class Globals
@@ -37,6 +38,7 @@ public class Globals
 
     public static void DefaultSpriteBatchBegin()
     {
-        SpriteBatch.Begin(transformMatrix: Camera.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+        SpriteBatch.Begin(transformMatrix: Camera.Transform, sortMode: SpriteSortMode.FrontToBack,
+            blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
     }
 }

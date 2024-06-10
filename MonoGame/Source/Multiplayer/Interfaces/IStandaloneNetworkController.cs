@@ -2,5 +2,5 @@
 
 public interface IStandaloneNetworkController : INetworkController
 {
-    public abstract void InitializeListeners();
+    public void InitializeListeners();
 }

@@ -18,10 +18,6 @@ namespace MonoGame.Source.WorldNamespace;
 
 public class World
 {
-    private List<IGameEntity> Entities { get; set; } = [];
-    public List<Player> Players { get; set; } = [];
-    private List<IChunk> Chunks { get; set; } = [];
-
     public World()
     {
         ClientNetworkEventManager.Subscribe<ChunkDataNetworkMessage>(message =>
@@ -46,6 +42,10 @@ public class World
         });
     }
 
+    private List<IGameEntity> Entities { get; } = [];
+    public List<Player> Players { get; set; } = [];
+    private List<IChunk> Chunks { get; } = [];
+
     public void LoadChunkFromChunkState(ChunkState chunkState)
     {
         IChunk chunk = new Chunk(chunkState);
@@ -55,23 +55,17 @@ public class World
 
     public void Update(GameTime gameTime)
     {
-        foreach (var entity in GetEntities())
-        {
-            entity.Update(gameTime);
-        }
+        foreach (var entity in GetEntities()) entity.Update(gameTime);
     }
 
     public void UpdateAllTextureCoordinates()
     {
-        foreach (var chunk in Chunks)
-        {
-            chunk.UpdateTextureCoordinates();
-        }
+        foreach (var chunk in Chunks) chunk.UpdateTextureCoordinates();
     }
 
     public List<IGameEntity> GetEntities()
     {
-        return Players.Cast<IGameEntity>().Concat(Entities).ToList();
+        return Players.Concat(Entities).ToList();
     }
 
     public IChunk GetChunkAt(int x, int y)
@@ -88,19 +82,14 @@ public class World
             Chunks.Add(chunk);
             return chunk;
         }
-        else
-        {
-            return existingChunk;
-        }
+
+        return existingChunk;
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
         DrawWorld();
-        foreach (var entity in GetEntities())
-        {
-            entity.Draw(spriteBatch);
-        }
+        foreach (var entity in GetEntities()) entity.Draw(spriteBatch);
     }
 
     public Player GetPlayerByUUID(string id)
@@ -134,7 +123,7 @@ public class World
         var (LocalX, LocalY) = GetLocalPositionFromGlobalPosition(globalX, globalY);
         var chunk = GetChunkFromGlobalPosition(globalX, globalY);
 
-        return chunk?.GetTile(layer: layer, x: LocalX, y: LocalY);
+        return chunk?.GetTile(layer, LocalX, LocalY);
     }
 
     public List<ITile> GetAllTilesFromLayerAt(int globalX, int globalY)
@@ -156,10 +145,8 @@ public class World
 
             return tiles;
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
     public (int LocalX, int LocalY) GetLocalPositionFromGlobalPosition(int globalPositionX, int globalPositionY)
@@ -170,7 +157,8 @@ public class World
         return (localX, localY);
     }
 
-    public (int ChunkPositionX, int ChunkPositionY) GetChunkPositionFromGlobalPosition(int globalPositionX, int globalPositionY)
+    public (int ChunkPositionX, int ChunkPositionY) GetChunkPositionFromGlobalPosition(int globalPositionX,
+        int globalPositionY)
     {
         var chunkX = globalPositionX / Chunk.SizeX;
         var chunkY = globalPositionY / Chunk.SizeY;
@@ -230,10 +218,11 @@ public class World
         var localX = (int)(screenPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
         var localY = (int)(screenPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
 
-        return ((chunkX * Chunk.SizeX) + localX, (chunkY * Chunk.SizeY) + localY);
+        return (chunkX * Chunk.SizeX + localX, chunkY * Chunk.SizeY + localY);
     }
 
-    public (int ChunkPositionX, int ChunkPositionY) GetChunkPositionFromScreenPosition(Vector2 screenPositionBeforeTransform)
+    public (int ChunkPositionX, int ChunkPositionY) GetChunkPositionFromScreenPosition(
+        Vector2 screenPositionBeforeTransform)
     {
         var screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.Camera.Transform));
 
@@ -248,10 +237,7 @@ public class World
 
     private void DrawWorld()
     {
-        foreach (var chunk in Chunks)
-        {
-            chunk.Draw(Globals.SpriteBatch);
-        }
+        foreach (var chunk in Chunks) chunk.Draw(Globals.SpriteBatch);
     }
 
     internal void DeleteTile(TileDrawLayer layer, int posX, int posY)

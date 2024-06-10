@@ -6,12 +6,9 @@ internal class Server
 {
     public static void Main(string[] args)
     {
-        NetworkServer server = NetworkServer.Instance;
+        var server = NetworkServer.Instance;
         server.InitializeServer();
 
-        while (true)
-        {
-            server.Update();
-        }
+        while (true) server.Update();
     }
 }

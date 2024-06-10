@@ -2,17 +2,16 @@
 using MonoGame_Common.Enums;
 using MonoGame.Source.Systems.Components.Animator;
 using MonoGame.Source.Systems.Components.Collision;
+using MonoGame.Source.Systems.Components.Movement;
 using MonoGame.Source.Systems.Components.SpriteRenderer;
 using MonoGame.Source.Systems.Scripts;
-using MonoGame.Source.Systems.Components.Movement;
+
 namespace MonoGame.Source.Systems.Entity.Player;
 
 public class Player : GameEntity
 {
     private readonly AnimatorComponent animator;
     private readonly SpriteRendererComponent spriteRenderer;
-    public string SelectedTile { get; set; } = "base.grass";
-    public PlayerNetworkController NetworkController { get; set; } = new();
 
     public Player(string uuid, Vector2 position)
     {
@@ -29,6 +28,9 @@ public class Player : GameEntity
         AddComponent(new CollisionComponent(CollisionMode.CollisionMask));
         AddComponent(new MovementComponent());
     }
+
+    public string SelectedTile { get; set; } = "base.grass";
+    public PlayerNetworkController NetworkController { get; set; } = new();
 
     public void SetSelectedTile(string selectedTileId)
     {

@@ -27,7 +27,7 @@ public class DirectionHelper
             Direction.RightUp => Direction.LeftDown,
             Direction.LeftDown => Direction.RightUp,
             Direction.RightDown => Direction.LeftUp,
-            _ => Direction.Up,
+            _ => Direction.Up
         };
     }
 
@@ -36,13 +36,19 @@ public class DirectionHelper
         return x == 0 && y > 0
             ? Direction.Up
             : x == 0 && y < 0
-            ? Direction.Down
-            : x > 0 && y == 0
-            ? Direction.Right
-            : x > 0 && y > 0
-            ? Direction.RightUp
-            : x > 0 && y < 0
-            ? Direction.RightDown
-            : x < 0 && y == 0 ? Direction.Left : x < 0 && y > 0 ? Direction.LeftUp : x < 0 && y < 0 ? Direction.LeftDown : Direction.Up;
+                ? Direction.Down
+                : x > 0 && y == 0
+                    ? Direction.Right
+                    : x > 0 && y > 0
+                        ? Direction.RightUp
+                        : x > 0 && y < 0
+                            ? Direction.RightDown
+                            : x < 0 && y == 0
+                                ? Direction.Left
+                                : x < 0 && y > 0
+                                    ? Direction.LeftUp
+                                    : x < 0 && y < 0
+                                        ? Direction.LeftDown
+                                        : Direction.Up;
     }
 }

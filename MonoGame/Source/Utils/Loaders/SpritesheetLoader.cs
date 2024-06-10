@@ -13,11 +13,9 @@ public class SpritesheetLoader
         {
             return SpriteSheets[spritesheet];
         }
-        else
-        {
-            var texture = Globals.ContentManager.Load<Texture2D>(spritesheet);
-            SpriteSheets.Add(spritesheet, texture);
-            return texture;
-        }
+
+        var texture = Globals.ContentManager.Load<Texture2D>(spritesheet);
+        SpriteSheets.Add(spritesheet, texture);
+        return texture;
     }
 }

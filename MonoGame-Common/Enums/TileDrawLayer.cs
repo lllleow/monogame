@@ -1,24 +1,23 @@
-﻿namespace MonoGame_Common.Enums
+﻿namespace MonoGame_Common.Enums;
+
+public enum TileDrawLayer
 {
-    public enum TileDrawLayer
+    Background,
+
+    Terrain,
+
+    Tiles
+}
+
+public static class TileDrawLayerPriority
+{
+    public static TileDrawLayer[] GetPriority()
     {
-        Background,
-
-        Terrain,
-
-        Tiles
-    }
-
-    public static class TileDrawLayerPriority
-    {
-        public static TileDrawLayer[] GetPriority()
+        return new[]
         {
-            return new TileDrawLayer[]
-            {
-                TileDrawLayer.Background,
-                TileDrawLayer.Terrain,
-                TileDrawLayer.Tiles
-            };
-        }
+            TileDrawLayer.Background,
+            TileDrawLayer.Terrain,
+            TileDrawLayer.Tiles
+        };
     }
 }

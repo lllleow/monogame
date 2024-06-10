@@ -13,12 +13,12 @@ public class LevelEditorUserInterface : UserInterface
             new AlignmentUserInterfaceComponent(
                 alignment: UserInterfaceAlignment.CenterDown,
                 child: new PaddingUserInterfaceComponent(
-                    paddingLeft: 0,
-                    paddingRight: 0,
-                    paddingTop: 0,
-                    paddingBottom: 8,
-                    child: new HotbarUserInterfaceComponent(
-                        localPosition: new Vector2(0, 0)
+                    0,
+                    0,
+                    0,
+                    8,
+                    new HotbarUserInterfaceComponent(
+                        new Vector2(0, 0)
                     )
                 )
             )

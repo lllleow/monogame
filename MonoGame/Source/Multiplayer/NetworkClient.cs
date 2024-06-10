@@ -12,8 +12,6 @@ namespace MonoGame.Source.Multiplayer;
 public static class NetworkClient
 {
     private static readonly EventBasedNetListener Listener;
-    public static NetManager Client { get; set; }
-    public static List<INetworkController> NetworkControllers { get; set; } = [];
 
     static NetworkClient()
     {
@@ -31,20 +29,20 @@ public static class NetworkClient
         AuthenticateUser();
     }
 
+    public static NetManager Client { get; set; }
+    public static List<INetworkController> NetworkControllers { get; set; } = [];
+
     public static void InitializeNetworkClient()
     {
-        Listener.PeerConnectedEvent += peer =>
-        {
-            AuthenticateUser();
-        };
+        Listener.PeerConnectedEvent += peer => { AuthenticateUser(); };
 
         Listener.NetworkReceiveEvent += (peer, reader, channel, deliveryMethod) =>
         {
             if (reader.AvailableBytes > 0)
             {
-                byte messageTypeId = reader.GetByte();
-                Type messageType = MessageRegistry.Instance.GetTypeById(messageTypeId);
-                INetworkMessage message = (INetworkMessage)Activator.CreateInstance(messageType);
+                var messageTypeId = reader.GetByte();
+                var messageType = MessageRegistry.Instance.GetTypeById(messageTypeId);
+                var message = (INetworkMessage)Activator.CreateInstance(messageType);
                 message.Deserialize(reader);
                 ClientNetworkEventManager.RaiseEvent(messageType, message);
                 Console.WriteLine("Client Received: " + message);

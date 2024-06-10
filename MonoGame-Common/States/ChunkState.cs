@@ -5,12 +5,6 @@ namespace MonoGame_Common.States;
 
 public class ChunkState : INetSerializable
 {
-    public static int SizeX { get; set; } = 16;
-    public static int SizeY { get; set; } = 16;
-    public List<TileState> Tiles { get; set; }
-    public int X { get; set; }
-    public int Y { get; set; }
-
     public ChunkState()
     {
         Tiles = [];
@@ -21,6 +15,34 @@ public class ChunkState : INetSerializable
         Tiles = [];
         X = x;
         Y = y;
+    }
+
+    public static int SizeX { get; set; } = 16;
+    public static int SizeY { get; set; } = 16;
+    public List<TileState> Tiles { get; set; }
+    public int X { get; set; }
+    public int Y { get; set; }
+
+    public void Serialize(NetDataWriter writer)
+    {
+        writer.Put(X);
+        writer.Put(Y);
+        writer.Put(Tiles.Count);
+        foreach (var tile in Tiles) tile.Serialize(writer);
+    }
+
+    public void Deserialize(NetDataReader reader)
+    {
+        X = reader.GetInt();
+        Y = reader.GetInt();
+        var tileCount = reader.GetInt();
+        Tiles = [];
+        for (var i = 0; i < tileCount; i++)
+        {
+            var tile = new TileState();
+            tile.Deserialize(reader);
+            Tiles.Add(tile);
+        }
     }
 
     // public ChunkState(IChunk chunk)
@@ -56,11 +78,9 @@ public class ChunkState : INetSerializable
         {
             return false;
         }
-        else
-        {
-            Tiles.Add(new TileState(tileId, layer, posX, posY));
-            return true;
-        }
+
+        Tiles.Add(new TileState(tileId, layer, posX, posY));
+        return true;
     }
 
     public bool DestroyTile(TileDrawLayer layer, int posX, int posY)
@@ -78,30 +98,5 @@ public class ChunkState : INetSerializable
     public TileState GetTile(TileDrawLayer layer, int posX, int posY)
     {
         return Tiles.FirstOrDefault(x => x.LocalX == posX && x.LocalY == posY && x.Layer == layer);
-    }
-
-    public void Serialize(NetDataWriter writer)
-    {
-        writer.Put(X);
-        writer.Put(Y);
-        writer.Put(Tiles.Count);
-        foreach (var tile in Tiles)
-        {
-            tile.Serialize(writer);
-        }
-    }
-
-    public void Deserialize(NetDataReader reader)
-    {
-        X = reader.GetInt();
-        Y = reader.GetInt();
-        var tileCount = reader.GetInt();
-        Tiles = [];
-        for (var i = 0; i < tileCount; i++)
-        {
-            var tile = new TileState();
-            tile.Deserialize(reader);
-            Tiles.Add(tile);
-        }
     }
 }

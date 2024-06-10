@@ -9,9 +9,9 @@ public interface IEntityComponent
 {
     IGameEntity Entity { get; set; }
     bool Initialized { get; set; }
-    abstract void Initialize();
-    public abstract void SetEntity(IGameEntity entity);
-    public abstract void Update(GameTime gameTime);
-    public abstract void Draw(SpriteBatch spriteBatch);
+    void Initialize();
+    public void SetEntity(IGameEntity entity);
+    public void Update(GameTime gameTime);
+    public void Draw(SpriteBatch spriteBatch);
     public Type GetComponentStateType();
 }

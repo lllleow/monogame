@@ -4,5 +4,5 @@ namespace MonoGame.Source.Rendering.UI.Interfaces;
 
 public interface ISlotComponent : IUserInterfaceComponent
 {
-    public abstract TextureLocation GetDrawable();
+    public TextureLocation GetDrawable();
 }

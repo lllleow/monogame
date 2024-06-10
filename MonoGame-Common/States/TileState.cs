@@ -5,13 +5,6 @@ namespace MonoGame_Common.States;
 
 public class TileState : INetSerializable
 {
-    public static int PixelSizeX { get; set; } = 16;
-    public static int PixelSizeY { get; set; } = 16;
-    public string Id { get; set; }
-    public int? LocalX { get; set; }
-    public int? LocalY { get; set; }
-    public TileDrawLayer Layer { get; set; }
-
     public TileState()
     {
     }
@@ -23,6 +16,13 @@ public class TileState : INetSerializable
         LocalY = y;
         Layer = layer;
     }
+
+    public static int PixelSizeX { get; set; } = 16;
+    public static int PixelSizeY { get; set; } = 16;
+    public string Id { get; set; }
+    public int? LocalX { get; set; }
+    public int? LocalY { get; set; }
+    public TileDrawLayer Layer { get; set; }
 
     // public TileState(TileDrawLayer layer, ITile tile)
     // {

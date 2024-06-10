@@ -5,14 +5,14 @@ namespace MonoGame.Source.Rendering.Utils;
 
 public class TextureLocation
 {
-    public string Spritesheet { get; set; }
-    public Rectangle TextureRectangle { get; set; }
-
     public TextureLocation(string spritesheet, Rectangle textureRectangle)
     {
         Spritesheet = spritesheet;
         TextureRectangle = textureRectangle;
     }
+
+    public string Spritesheet { get; set; }
+    public Rectangle TextureRectangle { get; set; }
 
     public static TextureLocation FirstTextureCoordinate(string spritesheet)
     {

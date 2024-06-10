@@ -57,7 +57,8 @@ public interface ITile
 
     public Rectangle GetSpriteRectangle()
     {
-        return new Rectangle(TextureX * Tile.PixelSizeX, TextureY * Tile.PixelSizeY, SizeX * Tile.PixelSizeX, SizeY * Tile.PixelSizeY);
+        return new Rectangle(TextureX * Tile.PixelSizeX, TextureY * Tile.PixelSizeY, SizeX * Tile.PixelSizeX,
+            SizeY * Tile.PixelSizeY);
     }
 
     public Rectangle GetRectangle()
