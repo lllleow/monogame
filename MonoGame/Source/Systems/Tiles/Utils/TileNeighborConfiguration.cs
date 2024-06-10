@@ -4,8 +4,7 @@ namespace MonoGame.Source.Systems.Tiles.Utils;
 
 public class TileNeighborConfiguration
 {
-    public TileNeighborConfiguration(ITile tile, ITile left, ITile right, ITile up, ITile down, ITile leftTop,
-        ITile rightTop, ITile leftBottom, ITile rightBottom)
+    public TileNeighborConfiguration(PlacedTile tile, PlacedTile left, PlacedTile right, PlacedTile up, PlacedTile down, PlacedTile leftTop, PlacedTile rightTop, PlacedTile leftBottom, PlacedTile rightBottom)
     {
         Center = tile;
         Left = left;
@@ -18,15 +17,15 @@ public class TileNeighborConfiguration
         RightBottom = rightBottom;
     }
 
-    public ITile Center { get; set; }
+    public PlacedTile Center { get; set; }
 
-    public ITile Left { get; set; }
-    public ITile Right { get; set; }
-    public ITile Up { get; set; }
-    public ITile Down { get; set; }
+    public PlacedTile Left { get; set; }
+    public PlacedTile Right { get; set; }
+    public PlacedTile Up { get; set; }
+    public PlacedTile Down { get; set; }
 
-    public ITile LeftTop { get; set; }
-    public ITile RightTop { get; set; }
-    public ITile LeftBottom { get; set; }
-    public ITile RightBottom { get; set; }
+    public PlacedTile LeftTop { get; set; }
+    public PlacedTile RightTop { get; set; }
+    public PlacedTile LeftBottom { get; set; }
+    public PlacedTile RightBottom { get; set; }
 }

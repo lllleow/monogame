@@ -102,14 +102,14 @@ public class World
         return Players.Where(p => p.UUID == Globals.UUID).FirstOrDefault();
     }
 
-    public ITile GetTileAtPosition(Vector2 worldPosition)
+    public PlacedTile GetTileAtPosition(Vector2 worldPosition)
     {
         var globalX = (int)(worldPosition.X / Chunk.SizeX);
         var globalY = (int)(worldPosition.Y / Chunk.SizeY);
         return GetTileAt(0, globalX, globalY);
     }
 
-    public ITile SetTileAtPosition(string tile, TileDrawLayer layer, int globalX, int globalY)
+    public PlacedTile SetTileAtPosition(string tile, TileDrawLayer layer, int globalX, int globalY)
     {
         var (LocalX, LocalY) = GetLocalPositionFromGlobalPosition(globalX, globalY);
         var (ChunkPositionX, ChunkPositionY) = GetChunkPositionFromGlobalPosition(globalX, globalY);
@@ -118,7 +118,7 @@ public class World
         return chunk.SetTileAndUpdateNeighbors(tile, layer, LocalX, LocalY);
     }
 
-    public ITile GetTileAt(TileDrawLayer layer, int globalX, int globalY)
+    public PlacedTile GetTileAt(TileDrawLayer layer, int globalX, int globalY)
     {
         var (LocalX, LocalY) = GetLocalPositionFromGlobalPosition(globalX, globalY);
         var chunk = GetChunkFromGlobalPosition(globalX, globalY);
@@ -126,7 +126,7 @@ public class World
         return chunk?.GetTile(layer, LocalX, LocalY);
     }
 
-    public List<ITile> GetAllTilesFromLayerAt(int globalX, int globalY)
+    public List<PlacedTile> GetAllTilesFromLayerAt(int globalX, int globalY)
     {
         var chunkX = globalX / Chunk.SizeX;
         var chunkY = globalY / Chunk.SizeY;
@@ -136,7 +136,7 @@ public class World
 
         if (chunk != null)
         {
-            List<ITile> tiles = [];
+            List<PlacedTile> tiles = [];
             foreach (var layer in chunk.Tiles.Keys)
             {
                 var tile = chunk.GetTile(layer, tileX, tileY);
@@ -173,19 +173,19 @@ public class World
         return GetChunkAt(ChunkPositionX, ChunkPositionY);
     }
 
-    public ITile GetTileFromScreenPosition(TileDrawLayer layer, int screenX, int screenY)
+    public PlacedTile GetTileFromScreenPosition(TileDrawLayer layer, int screenX, int screenY)
     {
         var worldPosition = new Vector2(screenX, screenY);
         worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.Camera.Transform));
 
-        var chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
-        var chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+        var chunkSizeInPixelsX = Chunk.SizeX * Globals.PixelSizeX;
+        var chunkSizeInPixelsY = Chunk.SizeY * Globals.PixelSizeY;
 
         var chunkX = (int)(worldPosition.X / chunkSizeInPixelsX);
         var chunkY = (int)(worldPosition.Y / chunkSizeInPixelsY);
 
-        var localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
-        var localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
+        var localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Globals.PixelSizeX;
+        var localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Globals.PixelSizeY;
 
         var chunk = Globals.World.GetChunkAt(chunkX, chunkY);
         return chunk?.GetTile(layer, localX, localY) ?? null;
@@ -210,14 +210,14 @@ public class World
     {
         var screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.Camera.Transform));
 
-        var chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
-        var chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+        var chunkSizeInPixelsX = Chunk.SizeX * Globals.PixelSizeX;
+        var chunkSizeInPixelsY = Chunk.SizeY * Globals.PixelSizeY;
 
         var chunkX = (int)(screenPosition.X / chunkSizeInPixelsX);
         var chunkY = (int)(screenPosition.Y / chunkSizeInPixelsY);
 
-        var localX = (int)(screenPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
-        var localY = (int)(screenPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
+        var localX = (int)(screenPosition.X % chunkSizeInPixelsX) / Globals.PixelSizeX;
+        var localY = (int)(screenPosition.Y % chunkSizeInPixelsY) / Globals.PixelSizeY;
 
         return ((chunkX * Chunk.SizeX) + localX, (chunkY * Chunk.SizeY) + localY);
     }
@@ -227,8 +227,8 @@ public class World
     {
         var screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.Camera.Transform));
 
-        var chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
-        var chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+        var chunkSizeInPixelsX = Chunk.SizeX * Globals.PixelSizeX;
+        var chunkSizeInPixelsY = Chunk.SizeY * Globals.PixelSizeY;
 
         var chunkX = (int)(screenPosition.X / chunkSizeInPixelsX);
         var chunkY = (int)(screenPosition.Y / chunkSizeInPixelsY);

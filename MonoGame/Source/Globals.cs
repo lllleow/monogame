@@ -35,6 +35,9 @@ public class Globals
     public static string UUID { get; set; } = Guid.NewGuid().ToString();
 
     public static GameTime GameTime { get; set; }
+    public static int PixelSizeX { get; set; } = 16;
+    public static int PixelSizeY { get; set; } = 16;
+    public static bool ShowTileBoundingBox { get; set; } = false;
 
     public static void DefaultSpriteBatchBegin()
     {

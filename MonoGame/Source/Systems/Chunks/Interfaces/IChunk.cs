@@ -7,7 +7,7 @@ namespace MonoGame.Source.Systems.Chunks.Interfaces;
 
 public interface IChunk
 {
-    public Dictionary<TileDrawLayer, ITile[,]> Tiles { get; set; }
+    public Dictionary<TileDrawLayer, PlacedTile[,]> Tiles { get; set; }
 
     public int X { get; set; }
 
@@ -23,9 +23,9 @@ public interface IChunk
 
     public void Draw(SpriteBatch spriteBatch);
 
-    public ITile GetTile(TileDrawLayer layer, int x, int y);
+    public PlacedTile GetTile(TileDrawLayer layer, int x, int y);
 
-    public ITile SetTile(string id, TileDrawLayer layer, int x, int y);
+    public PlacedTile SetTile(string id, TileDrawLayer layer, int x, int y);
 
-    public ITile SetTileAndUpdateNeighbors(string id, TileDrawLayer layer, int x, int y);
+    public PlacedTile SetTileAndUpdateNeighbors(string id, TileDrawLayer layer, int x, int y);
 }

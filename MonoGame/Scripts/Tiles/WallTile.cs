@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Source.Systems.Tiles;
+using MonoGame.Source.Systems.Tiles.Interfaces;
 using MonoGame.Source.Systems.Tiles.TextureProcessors;
 using MonoGame_Common.Enums;
 
-public class FenceTile : Tile
+public class FenceTile : ITile
 {
     public FenceTile()
     {

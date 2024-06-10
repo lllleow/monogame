@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Components.Animator;
 using MonoGame.Source.Systems.Components.Interfaces;
 using MonoGame.Source.Systems.Entity.Interfaces;
-using MonoGame.Source.Systems.Tiles;
 
 namespace MonoGame.Source.Systems.Entity;
 
@@ -65,7 +64,7 @@ public abstract class GameEntity : IGameEntity
     public Rectangle GetEntityBoundsAtPosition(Vector2 position)
     {
         return ContainsComponent<AnimatorComponent>()
-            ? new Rectangle((int)position.X, (int)position.Y, Tile.PixelSizeX, Tile.PixelSizeY)
+            ? new Rectangle((int)position.X, (int)position.Y, Globals.PixelSizeX, Globals.PixelSizeY)
             : Rectangle.Empty;
     }
 

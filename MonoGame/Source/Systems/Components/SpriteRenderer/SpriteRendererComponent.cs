@@ -25,7 +25,7 @@ public class SpriteRendererComponent : EntityComponent
 
     public Vector2 Scale { get; set; } = new(1, 1);
 
-    public Vector2 Size { get; set; } = new(Tile.PixelSizeX, Tile.PixelSizeY);
+    public Vector2 Size { get; set; } = new(Globals.PixelSizeX, Globals.PixelSizeY);
 
     public void UpdateTexture(string spritesheet, Rectangle textureRectangle)
     {

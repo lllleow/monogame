@@ -20,10 +20,7 @@ public class TileSlotComponent : SlotComponent
 
     public override TextureLocation GetDrawable()
     {
-        var textureLocation = Tile?.GetTextureLocation();
-        textureLocation.TextureRectangle = RectangleHelper.GetTextureRectangleFromCoordinates(
-            Tile?.DefaultTextureCoordinates.TextureCoordinateX ?? 0,
-            Tile?.DefaultTextureCoordinates.TextureCoordinateY ?? 0);
+        TextureLocation textureLocation = new TextureLocation(Tile?.SpritesheetName, RectangleHelper.GetTextureRectangleFromCoordinates(Tile?.DefaultTextureCoordinates.TextureCoordinateX ?? 0, Tile?.DefaultTextureCoordinates.TextureCoordinateY ?? 0));
         return textureLocation;
     }
 }

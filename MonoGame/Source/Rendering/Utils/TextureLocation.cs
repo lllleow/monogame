@@ -16,6 +16,6 @@ public class TextureLocation
 
     public static TextureLocation FirstTextureCoordinate(string spritesheet)
     {
-        return new TextureLocation(spritesheet, new Rectangle(0, 0, Tile.PixelSizeX, Tile.PixelSizeY));
+        return new TextureLocation(spritesheet, new Rectangle(0, 0, Globals.PixelSizeX, Globals.PixelSizeY));
     }
 }
