@@ -16,7 +16,8 @@ public class AnimatorComponentNetworkController : INetworkObjectController<Anima
 
     public void SendStateUpdate(AnimatorComponent networkObject)
     {
-        var message = new SendAnimatorStateNetworkMessage(networkObject.Entity.UUID,
+        var message = new SendAnimatorStateNetworkMessage(
+            networkObject.Entity.UUID,
             networkObject.StateMachine.CurrentState.Animation.Id, networkObject.StateMachine.CurrentState.CurrentTime,
             networkObject.StateMachine.AnimationBundle.Id);
         NetworkClient.SendMessage(message);

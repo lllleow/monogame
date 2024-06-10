@@ -21,7 +21,8 @@ public class AnimatorComponent : EntityComponent
         {
             OnSpriteChanged = (CurrentTextureX, CurrentTextureY) =>
             {
-                Entity.GetFirstComponent<SpriteRendererComponent>()?.UpdateTexture(AnimationBundle.SpriteSheet,
+                Entity.GetFirstComponent<SpriteRendererComponent>()?.UpdateTexture(
+                    AnimationBundle.SpriteSheet,
                     new Rectangle(CurrentTextureX * AnimationBundle.SizeX, CurrentTextureY * AnimationBundle.SizeY,
                         AnimationBundle.SizeX, AnimationBundle.SizeY));
             }

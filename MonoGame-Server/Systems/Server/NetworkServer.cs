@@ -14,6 +14,7 @@ public class NetworkServer
     private readonly EventBasedNetListener listener;
     private readonly NetManager server;
     private int autoSaveCounter;
+    public static string ScriptsLocation { get; set; } = @"C:\Users\Leonardo\Documents\Repositories\monogame\MonoGame\Scripts";
 
     public NetworkServer()
     {

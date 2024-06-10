@@ -6,6 +6,8 @@ namespace MonoGame_Common.Messages.Authentication;
 [NetworkMessage(1)]
 public class AuthenticateUserNetworkMessage : NetworkMessage
 {
+    public string? UUID { get; set; }
+
     public AuthenticateUserNetworkMessage()
     {
     }
@@ -14,8 +16,6 @@ public class AuthenticateUserNetworkMessage : NetworkMessage
     {
         UUID = uuid;
     }
-
-    public string UUID { get; set; }
 
     public override NetDataWriter Serialize()
     {

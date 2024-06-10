@@ -110,23 +110,29 @@ public class ServerWorld
         var endChunkY = rectangle.Bottom / chunkSizeInPixelsY;
 
         for (var chunkX = startChunkX; chunkX <= endChunkX; chunkX++)
-        for (var chunkY = startChunkY; chunkY <= endChunkY; chunkY++)
         {
-            var chunk = GetChunkAt(chunkX, chunkY);
-            if (chunk != null)
+            for (var chunkY = startChunkY; chunkY <= endChunkY; chunkY++)
             {
-                var startTileX = Math.Max(0, (rectangle.Left - chunkX * chunkSizeInPixelsX) / TileState.PixelSizeX);
-                var startTileY = Math.Max(0, (rectangle.Top - chunkY * chunkSizeInPixelsY) / TileState.PixelSizeY);
-                var endTileX = Math.Min(ChunkState.SizeX - 1,
-                    (rectangle.Right - chunkX * chunkSizeInPixelsX) / TileState.PixelSizeX);
-                var endTileY = Math.Min(ChunkState.SizeY - 1,
-                    (rectangle.Bottom - chunkY * chunkSizeInPixelsY) / TileState.PixelSizeY);
-
-                for (var tileX = startTileX; tileX <= endTileX; tileX++)
-                for (var tileY = startTileY; tileY <= endTileY; tileY++)
+                var chunk = GetChunkAt(chunkX, chunkY);
+                if (chunk != null)
                 {
-                    var tile = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
-                    if (tile != null) intersectingTiles.Add(tile);
+                    var startTileX = Math.Max(0, (rectangle.Left - (chunkX * chunkSizeInPixelsX)) / TileState.PixelSizeX);
+                    var startTileY = Math.Max(0, (rectangle.Top - (chunkY * chunkSizeInPixelsY)) / TileState.PixelSizeY);
+                    var endTileX = Math.Min(
+                        ChunkState.SizeX - 1,
+                        (rectangle.Right - (chunkX * chunkSizeInPixelsX)) / TileState.PixelSizeX);
+                    var endTileY = Math.Min(
+                        ChunkState.SizeY - 1,
+                        (rectangle.Bottom - (chunkY * chunkSizeInPixelsY)) / TileState.PixelSizeY);
+
+                    for (var tileX = startTileX; tileX <= endTileX; tileX++)
+                    {
+                        for (var tileY = startTileY; tileY <= endTileY; tileY++)
+                        {
+                            var tile = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
+                            if (tile != null) intersectingTiles.Add(tile);
+                        }
+                    }
                 }
             }
         }

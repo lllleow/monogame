@@ -31,16 +31,19 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
             ? RectangleHelper.GetTextureRectangleFromCoordinates(1, 0)
             : RectangleHelper.GetTextureRectangleFromCoordinates(0, 0);
 
-        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(SlotTexture.Spritesheet),
+        spriteBatch.Draw(
+            SpritesheetLoader.GetSpritesheet(SlotTexture.Spritesheet),
             new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y), SlotTexture.TextureRectangle,
             Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1f);
         var iconSize = size * 0.75f;
 
         if (textureLocation != null)
         {
-            var iconPosition = new Vector2(position.X + (size.X / 2 - iconSize.X / 2),
-                position.Y + (size.Y / 2 - iconSize.Y / 2));
-            spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(textureLocation.Spritesheet),
+            var iconPosition = new Vector2(
+                position.X + ((size.X / 2) - (iconSize.X / 2)),
+                position.Y + ((size.Y / 2) - (iconSize.Y / 2)));
+            spriteBatch.Draw(
+                SpritesheetLoader.GetSpritesheet(textureLocation.Spritesheet),
                 new Rectangle((int)iconPosition.X, (int)iconPosition.Y, (int)iconSize.X, (int)iconSize.Y),
                 textureLocation.TextureRectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1f);
         }

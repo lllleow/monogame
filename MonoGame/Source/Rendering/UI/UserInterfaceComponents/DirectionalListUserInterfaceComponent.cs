@@ -23,10 +23,12 @@ public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceC
         var offset = Vector2.Zero;
 
         for (var i = 0; i < index; i++)
+        {
             if (Direction == ListDirection.Horizontal)
                 offset.X += Children[i].GetPreferredSize().X + Spacing;
             else
                 offset.Y += Children[i].GetPreferredSize().Y + Spacing;
+        }
 
         return offset + base.GetChildOffset(child);
     }

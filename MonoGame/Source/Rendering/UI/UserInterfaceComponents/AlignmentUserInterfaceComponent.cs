@@ -31,13 +31,13 @@ public class AlignmentUserInterfaceComponent : SingleChildUserInterfaceComponent
             case UserInterfaceAlignment.RightCenter:
                 position = new Vector2(
                     parentPosition.X + parentSize.X - componentSize.X,
-                    parentPosition.Y + parentSize.Y / 2 - componentSize.Y / 2
+                    parentPosition.Y + (parentSize.Y / 2) - (componentSize.Y / 2)
                 );
                 break;
             case UserInterfaceAlignment.LeftCenter:
                 position = new Vector2(
                     parentPosition.X,
-                    parentPosition.Y + parentSize.Y / 2 - componentSize.Y / 2
+                    parentPosition.Y + (parentSize.Y / 2) - (componentSize.Y / 2)
                 );
                 break;
             case UserInterfaceAlignment.LeftDown:
@@ -48,19 +48,19 @@ public class AlignmentUserInterfaceComponent : SingleChildUserInterfaceComponent
                 break;
             case UserInterfaceAlignment.CenterUp:
                 position = new Vector2(
-                    parentPosition.X + parentSize.X / 2 - componentSize.X / 2,
+                    parentPosition.X + (parentSize.X / 2) - (componentSize.X / 2),
                     parentPosition.Y
                 );
                 break;
             case UserInterfaceAlignment.Center:
                 position = new Vector2(
-                    parentPosition.X + parentSize.X / 2 - componentSize.X / 2,
-                    parentPosition.Y + parentSize.Y / 2 - componentSize.Y / 2
+                    parentPosition.X + (parentSize.X / 2) - (componentSize.X / 2),
+                    parentPosition.Y + (parentSize.Y / 2) - (componentSize.Y / 2)
                 );
                 break;
             case UserInterfaceAlignment.CenterDown:
                 position = new Vector2(
-                    parentPosition.X + parentSize.X / 2 - componentSize.X / 2,
+                    parentPosition.X + (parentSize.X / 2) - (componentSize.X / 2),
                     parentPosition.Y + parentSize.Y - componentSize.Y
                 );
                 break;

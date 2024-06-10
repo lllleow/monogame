@@ -29,12 +29,12 @@ public class Camera
 
         var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
         var entityCenter =
-            new Vector2(entity.Position.X + Tile.PixelSizeX / 2, entity.Position.Y + Tile.PixelSizeY / 2);
+            new Vector2(entity.Position.X + (Tile.PixelSizeX / 2), entity.Position.Y + (Tile.PixelSizeY / 2));
         var screenCenter = new Vector2(ScreenSizeX / 2f, ScreenSizeY / 2f);
 
         var targetTranslation = Matrix.CreateTranslation(
-            screenCenter.X - entityCenter.X * scaleFactor,
-            screenCenter.Y - entityCenter.Y * scaleFactor,
+            screenCenter.X - (entityCenter.X * scaleFactor),
+            screenCenter.Y - (entityCenter.Y * scaleFactor),
             0);
 
         var targetTransform = Matrix.Multiply(Matrix.CreateScale(scaleFactor, scaleFactor, 1f), targetTranslation);

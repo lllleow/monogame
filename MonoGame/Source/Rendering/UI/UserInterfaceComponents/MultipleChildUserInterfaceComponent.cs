@@ -49,7 +49,8 @@ public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
         for (var i = 0; i < Children.Count; i++)
         {
             var size = Children[i].GetPreferredSize();
-            rectangles[i] = new Rectangle((int)Children[i].GetPositionRelativeToParent().X,
+            rectangles[i] = new Rectangle(
+                (int)Children[i].GetPositionRelativeToParent().X,
                 (int)Children[i].GetPositionRelativeToParent().Y, (int)size.X, (int)size.Y);
         }
 

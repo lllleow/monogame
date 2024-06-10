@@ -115,8 +115,10 @@ public class PrimitiveBatch : IDisposable
     public void Begin(PrimitiveType primitiveType)
     {
         if (hasBegun)
+        {
             throw new InvalidOperationException(
                 "End must be called before Begin can be called again.");
+        }
 
         basicEffect.View = Globals.Camera.Transform;
 
@@ -125,8 +127,10 @@ public class PrimitiveBatch : IDisposable
         // simply disallow them.
         if (primitiveType is PrimitiveType.LineStrip or
             PrimitiveType.TriangleStrip)
+        {
             throw new NotSupportedException(
                 "The specified primitiveType is not supported by PrimitiveBatch.");
+        }
 
         this.primitiveType = primitiveType;
 
@@ -146,8 +150,10 @@ public class PrimitiveBatch : IDisposable
     public void Begin(PrimitiveType primitiveType, Matrix transform)
     {
         if (hasBegun)
+        {
             throw new InvalidOperationException(
                 "End must be called before Begin can be called again.");
+        }
 
         basicEffect.View = transform;
 
@@ -156,8 +162,10 @@ public class PrimitiveBatch : IDisposable
         // simply disallow them.
         if (primitiveType is PrimitiveType.LineStrip or
             PrimitiveType.TriangleStrip)
+        {
             throw new NotSupportedException(
                 "The specified primitiveType is not supported by PrimitiveBatch.");
+        }
 
         this.primitiveType = primitiveType;
 
@@ -180,8 +188,10 @@ public class PrimitiveBatch : IDisposable
     public void AddVertex(Vector2 vertex, Color color)
     {
         if (!hasBegun)
+        {
             throw new InvalidOperationException(
                 "Begin must be called before AddVertex can be called.");
+        }
 
         // are we starting a new primitive? if so, and there will not be enough room
         // for a whole primitive, flush.
@@ -205,8 +215,10 @@ public class PrimitiveBatch : IDisposable
     public void End()
     {
         if (!hasBegun)
+        {
             throw new InvalidOperationException(
                 "Begin must be called before End can be called.");
+        }
 
         // Draw whatever the user wanted us to draw
         Flush();
@@ -222,8 +234,10 @@ public class PrimitiveBatch : IDisposable
     private void Flush()
     {
         if (!hasBegun)
+        {
             throw new InvalidOperationException(
                 "Begin must be called before Flush can be called.");
+        }
 
         // no work to do
         if (positionInBuffer == 0) return;

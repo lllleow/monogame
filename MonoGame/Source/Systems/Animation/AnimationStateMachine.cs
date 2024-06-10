@@ -46,7 +46,9 @@ public class AnimationStateMachine
         OnSpriteChanged?.Invoke(TextureX, TextureY);
 
         if (AnimationBundle?.AnimationTransitions != null && AnimationBundle.AnimationTransitions.Count > 0)
+        {
             foreach (var transition in AnimationBundle.AnimationTransitions)
+            {
                 if (transition.From == CurrentState.Animation.Id && transition.Condition(CurrentState))
                 {
                     var newState = AnimationStates[transition.To];
@@ -54,5 +56,7 @@ public class AnimationStateMachine
                     CurrentState.Start();
                     break;
                 }
+            }
+        }
     }
 }

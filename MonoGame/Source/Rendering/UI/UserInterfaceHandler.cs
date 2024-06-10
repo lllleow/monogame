@@ -19,7 +19,8 @@ public class UserInterfaceHandler
 
         var transformed =
             Vector2.Transform(
-                new Vector2(Globals.GraphicsDevice.GraphicsDevice.Viewport.Width,
+                new Vector2(
+                    Globals.GraphicsDevice.GraphicsDevice.Viewport.Width,
                     Globals.GraphicsDevice.GraphicsDevice.Viewport.Height), Matrix.Invert(Transform));
         UIScreenSize = new Vector2(transformed.X, transformed.Y);
     }
@@ -27,8 +28,10 @@ public class UserInterfaceHandler
     public void Draw(SpriteBatch spriteBatch)
     {
         foreach (var userInterface in UserInterfaces)
+        {
             if (userInterface.Visible)
                 userInterface.Draw(spriteBatch);
+        }
     }
 
     public void Update(GameTime gameTime)

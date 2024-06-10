@@ -157,7 +157,8 @@ public class World
         return (localX, localY);
     }
 
-    public (int ChunkPositionX, int ChunkPositionY) GetChunkPositionFromGlobalPosition(int globalPositionX,
+    public (int ChunkPositionX, int ChunkPositionY) GetChunkPositionFromGlobalPosition(
+        int globalPositionX,
         int globalPositionY)
     {
         var chunkX = globalPositionX / Chunk.SizeX;
@@ -218,7 +219,7 @@ public class World
         var localX = (int)(screenPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
         var localY = (int)(screenPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
 
-        return (chunkX * Chunk.SizeX + localX, chunkY * Chunk.SizeY + localY);
+        return ((chunkX * Chunk.SizeX) + localX, (chunkY * Chunk.SizeY) + localY);
     }
 
     public (int ChunkPositionX, int ChunkPositionY) GetChunkPositionFromScreenPosition(

@@ -20,8 +20,10 @@ public class CollisionComponent : EntityComponent
     {
         base.Initialize();
         if (Mode == CollisionMode.BoundingBox && !Entity.ContainsComponent<BoundingBoxComponent>())
+        {
             throw new Exception(
                 "CollisionComponent in BoundingBox mode requires a BoundingBoxComponent to be present on the entity.");
+        }
 
         NetworkController = new CollisionComponentNetworkController();
         NetworkController.SetCollisionMode(this);

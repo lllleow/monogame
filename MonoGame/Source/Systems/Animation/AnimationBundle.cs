@@ -17,7 +17,8 @@ public class AnimationBundle : IAnimationBundle
 
     public Rectangle GetSpriteRectangle(string animationId, double percentage)
     {
-        var rect = new Rectangle(GetSpritesheetColumnForAnimationPercentage(animationId, percentage) * Tile.PixelSizeX,
+        var rect = new Rectangle(
+            GetSpritesheetColumnForAnimationPercentage(animationId, percentage) * Tile.PixelSizeX,
             GetSpritesheetRowForAnimation(animationId) * Tile.PixelSizeY, SizeX * Tile.PixelSizeX,
             SizeY * Tile.PixelSizeY);
         return rect;

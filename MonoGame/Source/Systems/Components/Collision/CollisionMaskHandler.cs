@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using MonoGame.Source.Utils.Loaders;
+using System.Drawing;
 
 namespace MonoGame.Source.Systems.Components.Collision;
 
@@ -50,10 +49,12 @@ public class CollisionMaskHandler
         var mask = new bool[width, height];
 
         for (var y = 0; y < height; y++)
-        for (var x = 0; x < width; x++)
         {
-            var index = x + y * width;
-            mask[x, y] = textureData[index].A != 0;
+            for (var x = 0; x < width; x++)
+            {
+                var index = x + (y * width);
+                mask[x, y] = textureData[index].A != 0;
+            }
         }
 
         return mask;
@@ -69,18 +70,20 @@ public class CollisionMaskHandler
         if (overlapWidth <= 0 || overlapHeight <= 0) return false;
 
         for (var y = 0; y < overlapHeight; y++)
-        for (var x = 0; x < overlapWidth; x++)
         {
-            var mask1X = overlapX - rect1.X + x;
-            var mask1Y = overlapY - rect1.Y + y;
-            var mask2X = overlapX - rect2.X + x;
-            var mask2Y = overlapY - rect2.Y + y;
+            for (var x = 0; x < overlapWidth; x++)
+            {
+                var mask1X = overlapX - rect1.X + x;
+                var mask1Y = overlapY - rect1.Y + y;
+                var mask2X = overlapX - rect2.X + x;
+                var mask2Y = overlapY - rect2.Y + y;
 
-            if (mask1X < 0 || mask1Y < 0 || mask1X >= mask1.GetLength(0) || mask1Y >= mask1.GetLength(1)) continue;
+                if (mask1X < 0 || mask1Y < 0 || mask1X >= mask1.GetLength(0) || mask1Y >= mask1.GetLength(1)) continue;
 
-            if (mask2X < 0 || mask2Y < 0 || mask2X >= mask2.GetLength(0) || mask2Y >= mask2.GetLength(1)) continue;
+                if (mask2X < 0 || mask2Y < 0 || mask2X >= mask2.GetLength(0) || mask2Y >= mask2.GetLength(1)) continue;
 
-            if (mask1[mask1X, mask1Y] && mask2[mask2X, mask2Y]) return true;
+                if (mask1[mask1X, mask1Y] && mask2[mask2X, mask2Y]) return true;
+            }
         }
 
         return false;

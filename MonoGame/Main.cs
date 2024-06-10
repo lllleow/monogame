@@ -81,7 +81,8 @@ public class Main : Game
         Globals.World.Draw(Globals.SpriteBatch);
         Globals.SpriteBatch.End();
 
-        Globals.SpriteBatch.Begin(transformMatrix: Globals.UserInterfaceHandler.Transform,
+        Globals.SpriteBatch.Begin(
+            transformMatrix: Globals.UserInterfaceHandler.Transform,
             sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend,
             samplerState: SamplerState.PointClamp);
         Globals.UserInterfaceHandler.Draw(Globals.SpriteBatch);

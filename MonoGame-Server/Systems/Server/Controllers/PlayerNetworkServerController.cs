@@ -26,6 +26,7 @@ public class PlayerNetworkServerController : IServerNetworkController
             {
                 var resultingDisplacement = Vector2.Zero;
                 foreach (var key in message.Keys)
+                {
                     switch (key)
                     {
                         case Keys.W:
@@ -41,6 +42,7 @@ public class PlayerNetworkServerController : IServerNetworkController
                             resultingDisplacement += MovementHelper.GetDisplacement(Direction.Right, new Vector2(1, 1));
                             break;
                     }
+                }
 
                 var newPosition = (playerState?.Position ?? SpawnPosition) + resultingDisplacement;
                 var direction =
