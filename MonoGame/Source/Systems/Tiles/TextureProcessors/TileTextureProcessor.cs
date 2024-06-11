@@ -42,17 +42,17 @@ public class TileTextureProcessor : ITileTextureProcessor
             return false;
         }
 
-        var connectableTiles = new List<string>(configuration.Center.Tile.ConnectableTiles);
+        var connectableTiles = new List<string>(configuration.Center.ConnectableTiles);
         return direction switch
         {
-            Direction.Left => connectableTiles.Contains(configuration.Left?.Tile.Id),
-            Direction.Right => connectableTiles.Contains(configuration.Right?.Tile.Id),
-            Direction.Up => connectableTiles.Contains(configuration.Up?.Tile.Id),
-            Direction.Down => connectableTiles.Contains(configuration.Down?.Tile.Id),
-            Direction.LeftUp => connectableTiles.Contains(configuration.LeftTop?.Tile.Id),
-            Direction.RightUp => connectableTiles.Contains(configuration.RightTop?.Tile.Id),
-            Direction.LeftDown => connectableTiles.Contains(configuration.LeftBottom?.Tile.Id),
-            Direction.RightDown => connectableTiles.Contains(configuration.RightBottom?.Tile.Id),
+            Direction.Left => connectableTiles.Contains(configuration.Left?.Id),
+            Direction.Right => connectableTiles.Contains(configuration.Right?.Id),
+            Direction.Up => connectableTiles.Contains(configuration.Up?.Id),
+            Direction.Down => connectableTiles.Contains(configuration.Down?.Id),
+            Direction.LeftUp => connectableTiles.Contains(configuration.LeftTop?.Id),
+            Direction.RightUp => connectableTiles.Contains(configuration.RightTop?.Id),
+            Direction.LeftDown => connectableTiles.Contains(configuration.LeftBottom?.Id),
+            Direction.RightDown => connectableTiles.Contains(configuration.RightBottom?.Id),
             _ => false
         };
     }

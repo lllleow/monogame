@@ -4,7 +4,7 @@ using MonoGame.Source.Systems.Tiles.Interfaces;
 using MonoGame.Source.Systems.Tiles.TextureProcessors;
 using MonoGame_Common.Enums;
 
-public class PipeTile : ITile
+public class PipeTile : Tile
 {
     public PipeTile()
     {

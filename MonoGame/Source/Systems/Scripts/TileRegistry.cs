@@ -15,7 +15,7 @@ public static class TileRegistry
 
     public static void RegisterTile(string id, Type tileType)
     {
-        if (!typeof(ITile).IsAssignableFrom(tileType))
+        if (!typeof(Tile).IsAssignableFrom(tileType))
         {
             throw new ArgumentException("Tile type must implement ITile interface", nameof(tileType));
         }
@@ -23,10 +23,10 @@ public static class TileRegistry
         Tiles.Add(id, tileType);
     }
 
-    public static ITile GetTile(string id)
+    public static Tile GetTile(string id)
     {
         var tileType = Tiles[id];
-        var tile = Activator.CreateInstance(tileType) as ITile;
+        var tile = Activator.CreateInstance(tileType) as Tile;
         return tile;
     }
 
@@ -48,7 +48,7 @@ public static class TileRegistry
         }
     }
 
-    public static ITile LoadTileScript(string code)
+    public static Tile LoadTileScript(string code)
     {
         var options = ScriptOptions.Default
             .AddReferences(Assembly.GetExecutingAssembly())
@@ -56,7 +56,7 @@ public static class TileRegistry
 
         try
         {
-            var tile = CSharpScript.EvaluateAsync<ITile>(code, options).Result;
+            var tile = CSharpScript.EvaluateAsync<Tile>(code, options).Result;
             return tile;
         }
         catch (CompilationErrorException e)

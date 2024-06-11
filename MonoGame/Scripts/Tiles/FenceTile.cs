@@ -3,7 +3,7 @@ using MonoGame.Source.Systems.Tiles.Interfaces;
 using MonoGame.Source.Systems.Tiles.TextureProcessors;
 using MonoGame_Common.Enums;
 
-public class FenceTile : ITile
+public class FenceTile : Tile
 {
     public FenceTile()
     {

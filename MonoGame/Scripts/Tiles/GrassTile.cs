@@ -3,7 +3,7 @@ using MonoGame.Source.Systems.Tiles.Interfaces;
 using MonoGame.Source.Systems.Tiles.TextureProcessors;
 using MonoGame_Common.Enums;
 
-public class GrassTile : ITile
+public class GrassTile : Tile
 {
     public GrassTile()
     {

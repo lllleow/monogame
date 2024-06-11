@@ -6,14 +6,14 @@ namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class TileSlotComponent : SlotComponent
 {
-    public TileSlotComponent(string name, ITile tile, Vector2 localPosition) : base(name, localPosition)
+    public TileSlotComponent(string name, Tile tile, Vector2 localPosition) : base(name, localPosition)
     {
         Tile = tile;
     }
 
-    public ITile Tile { get; set; }
+    public Tile Tile { get; set; }
 
-    public void SetTile(ITile tile)
+    public void SetTile(Tile tile)
     {
         Tile = tile;
     }

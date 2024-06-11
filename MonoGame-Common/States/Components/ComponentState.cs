@@ -1,5 +1,5 @@
 ﻿namespace MonoGame_Common.States.Components;
 
-public class ComponentState
+public abstract class ComponentState
 {
 }

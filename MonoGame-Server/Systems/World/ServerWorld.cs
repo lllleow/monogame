@@ -22,6 +22,17 @@ public class ServerWorld
         Chunks = worldState.Chunks ?? [];
         Players = worldState.Players ?? [];
         Entities = worldState.Entities ?? [];
+
+        ChunkState state = new ChunkState(0, 0);
+        for (var x = 0; x < 16; x++)
+        {
+            for (var y = 0; y < 16; y++)
+            {
+                state.Tiles.Add(new TileState("base.grass", TileDrawLayer.Background, x, y));
+            }
+        }
+
+        Chunks.Add(state);
     }
 
     public ChunkState? GetChunkAt(int chunkX, int chunkY)
