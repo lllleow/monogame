@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using MonoGame_Common.Messages;
 using MonoGame.Source.Multiplayer.Interfaces;
+using MonoGame_Common.Messages;
 
 namespace MonoGame.Source.Multiplayer;
 

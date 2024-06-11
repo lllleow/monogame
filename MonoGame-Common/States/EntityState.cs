@@ -1,6 +1,6 @@
-﻿using System.Numerics;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 using MonoGame_Common.States.Components;
+using System.Numerics;
 
 namespace MonoGame_Common.States;
 

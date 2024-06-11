@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Components.Animator;
 using MonoGame.Source.Systems.Components.Interfaces;
 using MonoGame.Source.Systems.Entity.Interfaces;
+using MonoGame_Common;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MonoGame.Source.Systems.Entity;
 
@@ -70,7 +71,7 @@ public abstract class GameEntity : IGameEntity
     public Rectangle GetEntityBoundsAtPosition(Vector2 position)
     {
         return ContainsComponent<AnimatorComponent>()
-            ? new Rectangle((int)position.X, (int)position.Y, Globals.PixelSizeX, Globals.PixelSizeY)
+            ? new Rectangle((int)position.X, (int)position.Y, SharedGlobals.PixelSizeX, SharedGlobals.PixelSizeY)
             : Rectangle.Empty;
     }
 

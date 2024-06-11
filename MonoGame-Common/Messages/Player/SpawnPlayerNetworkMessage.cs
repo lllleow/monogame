@@ -1,6 +1,6 @@
-﻿using System.Numerics;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 using MonoGame_Common.Attributes;
+using System.Numerics;
 
 namespace MonoGame_Common.Messages.Player;
 

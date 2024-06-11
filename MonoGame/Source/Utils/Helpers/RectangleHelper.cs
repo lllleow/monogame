@@ -1,12 +1,11 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using MonoGame_Common.States;
-
 namespace MonoGame.Source.Utils.Helpers;
 
-public class RectangleHelper
+public static class RectangleHelper
 {
-    public Rectangle GetMinimumBoundingRectangle(Rectangle[] rectangles)
+    public static Rectangle GetMinimumBoundingRectangle(Rectangle[] rectangles)
     {
         var minX = int.MaxValue;
         var minY = int.MaxValue;
@@ -27,7 +26,17 @@ public class RectangleHelper
         return new Rectangle(minX, minY, width, height);
     }
 
-    public Rectangle GetTextureRectangleFromCoordinates(int x, int y)
+    public static Rectangle ConvertToXNARectangle(System.Drawing.Rectangle rectangle)
+    {
+        return new Rectangle((int)rectangle.X, (int)rectangle.Y, (int)rectangle.Width, (int)rectangle.Height);
+    }
+
+    public static System.Drawing.Rectangle ConvertToDrawingRectangle(Rectangle rectangle)
+    {
+        return new System.Drawing.Rectangle((int)rectangle.X, (int)rectangle.Y, (int)rectangle.Width, (int)rectangle.Height);
+    }
+
+    public static Rectangle GetTextureRectangleFromCoordinates(int x, int y)
     {
         return new Rectangle(x * TileState.PixelSizeX, y * TileState.PixelSizeY, TileState.PixelSizeX, TileState.PixelSizeY);
     }

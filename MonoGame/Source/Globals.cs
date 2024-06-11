@@ -1,10 +1,10 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.Camera;
 using MonoGame.Source.Rendering.UI;
 using MonoGame.Source.WorldNamespace;
+using System;
 
 namespace MonoGame.Source;
 
@@ -30,13 +30,10 @@ public class Globals
 
     public static SpriteFont DefaultFont { get; set; }
 
-    public static Vector2 SpawnPosition { get; set; } = new(128, 128);
-
     public static string UUID { get; set; } = Guid.NewGuid().ToString();
 
     public static GameTime GameTime { get; set; }
-    public static int PixelSizeX { get; set; } = 16;
-    public static int PixelSizeY { get; set; } = 16;
+
     public static bool ShowTileBoundingBox { get; set; } = false;
 
     public static void DefaultSpriteBatchBegin()

@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using MonoGame_Common;
+using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 
 namespace MonoGame.Source.Systems.Animation;
 
@@ -17,10 +18,10 @@ public class AnimationBundle : IAnimationBundle
     public Rectangle GetSpriteRectangle(string animationId, double percentage)
     {
         var rect = new Rectangle(
-            GetSpritesheetColumnForAnimationPercentage(animationId, percentage) * Globals.PixelSizeX,
-            GetSpritesheetRowForAnimation(animationId) * Globals.PixelSizeY,
-            SizeX * Globals.PixelSizeX,
-            SizeY * Globals.PixelSizeY);
+            GetSpritesheetColumnForAnimationPercentage(animationId, percentage) * SharedGlobals.PixelSizeX,
+            GetSpritesheetRowForAnimation(animationId) * SharedGlobals.PixelSizeY,
+            SizeX * SharedGlobals.PixelSizeX,
+            SizeY * SharedGlobals.PixelSizeY);
         return rect;
     }
 

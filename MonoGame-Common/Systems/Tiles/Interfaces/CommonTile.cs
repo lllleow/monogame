@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using MonoGame.Source.Systems.Tiles.TileComponents;
 using MonoGame_Common.Enums;
+using MonoGame_Common.Util.Tile;
+using MonoGame_Common.Util.Tile.TileComponents;
 
-namespace MonoGame.Source.Systems.Tiles.Interfaces;
+namespace MonoGame_Common.Systems.Tiles.Interfaces;
 
-public abstract class Tile
+public class CommonTile
 {
     public string Id { get; set; } = "base.abstract.tile";
 
@@ -16,11 +17,9 @@ public abstract class Tile
 
     public int TileSizeY { get; set; } = 1;
 
-    public ITileTextureProcessor TextureProcessor { get; set; }
-
     public CollisionMode CollisionMode { get; set; } = CollisionMode.BoundingBox;
 
-    public string CollisionMaskSpritesheetName { get; set; } = null;
+    public string? CollisionMaskSpritesheetName { get; set; } = null;
 
     public bool Walkable { get; set; } = false;
 
@@ -28,9 +27,10 @@ public abstract class Tile
 
     public string[] ConnectableTiles { get; set; } = [];
 
-    public List<ITileComponent> Components { get; set; } = new();
+    public List<ITileComponent> Components { get; set; } = [];
+    public ITileTextureProcessor? TextureProcessor { get; set; }
 
-    public Tile()
+    public CommonTile()
     {
         Components.Add(new TextureRendererTileComponent(DefaultTextureCoordinates.TextureCoordinateX, DefaultTextureCoordinates.TextureCoordinateY, this));
     }
@@ -43,7 +43,7 @@ public abstract class Tile
     public void RemoveComponent<T>()
     where T : ITileComponent
     {
-        Components.RemoveAll(component => component is T);
+        _ = Components.RemoveAll(component => component is T);
     }
 
     public T GetComponent<T>()

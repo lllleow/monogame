@@ -3,14 +3,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame_Common.Enums;
 using MonoGame_Common.States;
-using MonoGame_Common.Util.Enum;
 using MonoGame.Source.Rendering.Utils;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Scripts;
-using MonoGame.Source.Systems.Tiles;
-using MonoGame.Source.Systems.Tiles.Interfaces;
 using MonoGame.Source.Utils.Loaders;
 using MonoGame.Source.WorldNamespace;
+using MonoGame.Source.Systems.Tiles.TileComponents;
+using MonoGame_Common;
+using MonoGame.Source.Utils.Helpers;
+using MonoGame_Common.Util.Tile;
 
 namespace MonoGame.Source.Systems.Chunks;
 
@@ -100,8 +101,8 @@ public class Chunk : IChunk
             return null;
         }
 
-        var tile = TileRegistry.GetTile(id);
-        var worldPosition = GetWorldPosition(x, y);
+        var tile = (Tile)TileRegistry.GetTile(id);
+        _ = GetWorldPosition(x, y);
 
         Tiles[layer][x, y] = tile;
         return tile;
@@ -128,7 +129,8 @@ public class Chunk : IChunk
                         TextureRendererTileComponent textureRendererTileComponent = tile.GetComponent<TextureRendererTileComponent>();
                         (int localX, int localY) = GetTilePosition(tile);
                         var worldPosition = GetWorldPosition(localX, localY);
-                        textureRendererTileComponent.UpdateTextureCoordinates((int)worldPosition.X, (int)worldPosition.Y, layer.Key);
+                        TileNeighborConfiguration tileNeighborConfiguration = TileClientHelper.GetNeighborConfiguration(tile, layer.Key, X, Y);
+                        textureRendererTileComponent.UpdateTextureCoordinates(tileNeighborConfiguration, (int)worldPosition.X, (int)worldPosition.Y, layer.Key);
                     }
                 }
             }
@@ -165,14 +167,14 @@ public class Chunk : IChunk
                     var tile = GetTile(layer.Key, chunkX, chunkY);
                     if (tile != null)
                     {
-                        var x = (X * SizeX * Globals.PixelSizeX) + (chunkX * tile.TileSizeX * Globals.PixelSizeX);
-                        var y = (Y * SizeY * Globals.PixelSizeY) + (chunkY * tile.TileSizeY * Globals.PixelSizeY);
+                        var x = (X * SizeX * SharedGlobals.PixelSizeX) + (chunkX * tile.TileSizeX * SharedGlobals.PixelSizeX);
+                        var y = (Y * SizeY * SharedGlobals.PixelSizeY) + (chunkY * tile.TileSizeY * SharedGlobals.PixelSizeY);
 
                         var scale = new Vector2(1, 1);
-                        var origin = new Vector2(tile.TileSizeX * Globals.PixelSizeX / 2, tile.TileSizeX * Globals.PixelSizeY / 2);
+                        var origin = new Vector2(tile.TileSizeX * SharedGlobals.PixelSizeX / 2, tile.TileSizeX * SharedGlobals.PixelSizeY / 2);
                         var position = new Vector2(x, y) + origin;
 
-                        var tileRectangle = new Rectangle(x, y, tile.TileSizeX * Globals.PixelSizeX, tile.TileSizeY * Globals.PixelSizeY);
+                        var tileRectangle = new Rectangle(x, y, tile.TileSizeX * SharedGlobals.PixelSizeX, tile.TileSizeY * SharedGlobals.PixelSizeY);
                         var colorWithOpacity = Color.White;
 
                         var layerDepth = 1f;
@@ -194,7 +196,7 @@ public class Chunk : IChunk
                             spriteBatch.Draw(
                                 SpritesheetLoader.GetSpritesheet(tile.SpritesheetName),
                                 position,
-                                textureRendererTileComponent.GetSpriteRectangle(),
+                                RectangleHelper.ConvertToXNARectangle(textureRendererTileComponent.GetSpriteRectangle()),
                                 colorWithOpacity,
                                 0f,
                                 origin,
@@ -208,7 +210,7 @@ public class Chunk : IChunk
                                 spriteBatch.Draw(
                                     SpritesheetLoader.GetSpritesheet(tile.CollisionMaskSpritesheetName),
                                     position,
-                                    textureRendererTileComponent.GetSpriteRectangle(),
+                                    RectangleHelper.ConvertToXNARectangle(textureRendererTileComponent.GetSpriteRectangle()),
                                     colorWithOpacity,
                                     0f,
                                     origin,

@@ -1,6 +1,6 @@
 ﻿using LiteNetLib.Utils;
 
-namespace MonoGame_Common;
+namespace MonoGame_Common.States.TileComponents;
 
 public class TextureRendererTileComponentState : TileComponentState
 {

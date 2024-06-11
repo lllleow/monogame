@@ -131,7 +131,7 @@ public class NetworkServer
 
         foreach (var peer in whitelistedPeers)
         {
-            peer.Send(message.Serialize(), DeliveryMethod.Unreliable);
+            peer.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
         }
     }
 

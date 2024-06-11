@@ -1,6 +1,6 @@
-﻿using MonoGame_Common.Messages.Components.Animator;
-using MonoGame.Source.Multiplayer;
+﻿using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Multiplayer.Interfaces;
+using MonoGame_Common.Messages.Components.Animator;
 
 namespace MonoGame.Source.Systems.Components.Animator.Controller;
 

@@ -1,14 +1,12 @@
-﻿using System;
-using MonoGame.Source;
-using MonoGame.Source.Systems.Tiles.Interfaces;
-using MonoGame.Source.Systems.Tiles.Utils;
+﻿using MonoGame.Source;
 using MonoGame_Common.Enums;
+using MonoGame_Common.Systems.Tiles.Interfaces;
 
-namespace MonoGame;
+namespace MonoGame_Common.Util.Tile;
 
-public class TileHelper
+public class TileClientHelper
 {
-    public static TileNeighborConfiguration GetNeighborConfiguration(Tile centerTile, TileDrawLayer layer, int worldX, int worldY)
+    public static TileNeighborConfiguration GetNeighborConfiguration(CommonTile centerTile, TileDrawLayer layer, int worldX, int worldY)
     {
         var left = Globals.World.GetTileAt(layer, worldX - 1, worldY);
         var right = Globals.World.GetTileAt(layer, worldX + 1, worldY);

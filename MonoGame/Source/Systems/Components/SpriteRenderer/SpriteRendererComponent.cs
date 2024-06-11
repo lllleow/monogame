@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Source.Rendering.Utils;
+using MonoGame.Source.Utils.Helpers;
 using MonoGame.Source.Utils.Loaders;
+using MonoGame_Common;
+using MonoGame_Common.Util.Helpers;
 
 namespace MonoGame.Source.Systems.Components.SpriteRenderer;
 
@@ -27,7 +29,7 @@ public class SpriteRendererComponent : EntityComponent
 
     public Vector2 Scale { get; set; } = new(1, 1);
 
-    public Vector2 Size { get; set; } = new(Globals.PixelSizeX, Globals.PixelSizeY);
+    public Vector2 Size { get; set; } = new(SharedGlobals.PixelSizeX, SharedGlobals.PixelSizeY);
 
     public void UpdateTexture(string spritesheet, Rectangle textureRectangle)
     {
@@ -47,6 +49,6 @@ public class SpriteRendererComponent : EntityComponent
 
     public TextureLocation GetTextureLocation()
     {
-        return new TextureLocation(SpriteSheet, TextureRectangle);
+        return new TextureLocation(SpriteSheet, RectangleHelper.ConvertToDrawingRectangle(TextureRectangle));
     }
 }

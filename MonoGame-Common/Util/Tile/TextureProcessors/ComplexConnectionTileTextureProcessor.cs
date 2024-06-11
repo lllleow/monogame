@@ -1,7 +1,6 @@
 ﻿using MonoGame_Common.Util.Enum;
-using MonoGame.Source.Systems.Tiles.Utils;
 
-namespace MonoGame.Source.Systems.Tiles.TextureProcessors;
+namespace MonoGame_Common.Util.Tile.TextureProcessors;
 
 public class ComplexConnectionTileTextureProcessor : TileTextureProcessor
 {

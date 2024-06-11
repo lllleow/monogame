@@ -2,17 +2,16 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame_Common.Enums;
-using MonoGame_Common.Messages.Player;
-using MonoGame_Common.Messages.World;
-using MonoGame_Common.States;
 using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Entity.Interfaces;
 using MonoGame.Source.Systems.Entity.Player;
-using MonoGame.Source.Systems.Tiles;
-using MonoGame.Source.Systems.Tiles.Interfaces;
+using MonoGame_Common;
+using MonoGame_Common.Enums;
+using MonoGame_Common.Messages.Player;
+using MonoGame_Common.Messages.World;
+using MonoGame_Common.States;
 
 namespace MonoGame.Source.WorldNamespace;
 
@@ -187,14 +186,14 @@ public class World
         var worldPosition = new Vector2(screenX, screenY);
         worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.Camera.Transform));
 
-        var chunkSizeInPixelsX = Chunk.SizeX * Globals.PixelSizeX;
-        var chunkSizeInPixelsY = Chunk.SizeY * Globals.PixelSizeY;
+        var chunkSizeInPixelsX = Chunk.SizeX * SharedGlobals.PixelSizeX;
+        var chunkSizeInPixelsY = Chunk.SizeY * SharedGlobals.PixelSizeY;
 
         var chunkX = (int)(worldPosition.X / chunkSizeInPixelsX);
         var chunkY = (int)(worldPosition.Y / chunkSizeInPixelsY);
 
-        var localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Globals.PixelSizeX;
-        var localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Globals.PixelSizeY;
+        var localX = (int)(worldPosition.X % chunkSizeInPixelsX) / SharedGlobals.PixelSizeX;
+        var localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / SharedGlobals.PixelSizeY;
 
         var chunk = Globals.World.GetChunkAt(chunkX, chunkY);
         return chunk?.GetTile(layer, localX, localY) ?? null;
@@ -219,14 +218,14 @@ public class World
     {
         var screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.Camera.Transform));
 
-        var chunkSizeInPixelsX = Chunk.SizeX * Globals.PixelSizeX;
-        var chunkSizeInPixelsY = Chunk.SizeY * Globals.PixelSizeY;
+        var chunkSizeInPixelsX = Chunk.SizeX * SharedGlobals.PixelSizeX;
+        var chunkSizeInPixelsY = Chunk.SizeY * SharedGlobals.PixelSizeY;
 
         var chunkX = (int)(screenPosition.X / chunkSizeInPixelsX);
         var chunkY = (int)(screenPosition.Y / chunkSizeInPixelsY);
 
-        var localX = (int)(screenPosition.X % chunkSizeInPixelsX) / Globals.PixelSizeX;
-        var localY = (int)(screenPosition.Y % chunkSizeInPixelsY) / Globals.PixelSizeY;
+        var localX = (int)(screenPosition.X % chunkSizeInPixelsX) / SharedGlobals.PixelSizeX;
+        var localY = (int)(screenPosition.Y % chunkSizeInPixelsY) / SharedGlobals.PixelSizeY;
 
         return ((chunkX * Chunk.SizeX) + localX, (chunkY * Chunk.SizeY) + localY);
     }
@@ -236,8 +235,8 @@ public class World
     {
         var screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.Camera.Transform));
 
-        var chunkSizeInPixelsX = Chunk.SizeX * Globals.PixelSizeX;
-        var chunkSizeInPixelsY = Chunk.SizeY * Globals.PixelSizeY;
+        var chunkSizeInPixelsX = Chunk.SizeX * SharedGlobals.PixelSizeX;
+        var chunkSizeInPixelsY = Chunk.SizeY * SharedGlobals.PixelSizeY;
 
         var chunkX = (int)(screenPosition.X / chunkSizeInPixelsX);
         var chunkY = (int)(screenPosition.Y / chunkSizeInPixelsY);

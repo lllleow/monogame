@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Source.Systems.Entity.Interfaces;
+using MonoGame_Common;
 
 namespace MonoGame.Source.Rendering.Camera;
 
@@ -31,7 +32,7 @@ public class Camera
 
         var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
         var entityCenter =
-            new Vector2(entity.Position.X + (Globals.PixelSizeX / 2), entity.Position.Y + (Globals.PixelSizeY / 2));
+            new Vector2(entity.Position.X + (SharedGlobals.PixelSizeX / 2), entity.Position.Y + (SharedGlobals.PixelSizeY / 2));
         var screenCenter = new Vector2(ScreenSizeX / 2f, ScreenSizeY / 2f);
 
         var targetTranslation = Matrix.CreateTranslation(

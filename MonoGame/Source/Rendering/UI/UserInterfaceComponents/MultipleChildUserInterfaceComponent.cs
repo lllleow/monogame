@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.UI.Interfaces;
 using MonoGame.Source.Utils.Helpers;
+using System.Collections.Generic;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
 {
-    private readonly RectangleHelper rectangleHelper = new();
-
     public MultipleChildUserInterfaceComponent(string name, Vector2 localPosition, List<IUserInterfaceComponent> children) : base(name, localPosition)
     {
         Children = children;
@@ -64,7 +62,7 @@ public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
                 (int)size.Y);
         }
 
-        var minimumBoundingRectangle = rectangleHelper.GetMinimumBoundingRectangle(rectangles);
+        var minimumBoundingRectangle = RectangleHelper.GetMinimumBoundingRectangle(rectangles);
         return new Vector2(minimumBoundingRectangle.Width, minimumBoundingRectangle.Height);
     }
 }

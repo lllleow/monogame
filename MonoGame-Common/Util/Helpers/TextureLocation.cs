@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Drawing;
 
-namespace MonoGame.Source.Rendering.Utils;
+namespace MonoGame_Common.Util.Helpers;
 
 public class TextureLocation
 {
@@ -15,6 +15,6 @@ public class TextureLocation
 
     public static TextureLocation FirstTextureCoordinate(string spritesheet)
     {
-        return new TextureLocation(spritesheet, new Rectangle(0, 0, Globals.PixelSizeX, Globals.PixelSizeY));
+        return new TextureLocation(spritesheet, new Rectangle(0, 0, SharedGlobals.PixelSizeX, SharedGlobals.PixelSizeY));
     }
 }

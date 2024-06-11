@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using MonoGame.Source.Utils.Loaders;
+using System;
+using System.Collections.Generic;
 
 namespace MonoGame.Source.Systems.Components.Collision;
 
