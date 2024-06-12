@@ -1,4 +1,5 @@
-﻿using LiteNetLib;
+﻿using System.Collections.Concurrent;
+using LiteNetLib;
 using MonoGame_Common.Messages;
 using MonoGame_Common.States;
 using MonoGame_Common.Systems.Scripts;
@@ -26,7 +27,7 @@ public class NetworkServer
     }
 
     public static NetworkServer Instance { get; set; } = new();
-    public Dictionary<NetPeer, string> Connections { get; set; } = [];
+    public ConcurrentDictionary<NetPeer, string> Connections { get; set; } = [];
     public ServerWorld ServerWorld { get; set; }
     public List<IServerNetworkController> NetworkControllers { get; set; } = [];
 
@@ -113,7 +114,7 @@ public class NetworkServer
 
     public NetPeer RegisterConnection(string UUID, NetPeer peer)
     {
-        Connections.Add(peer, UUID);
+        Connections.TryAdd(peer, UUID);
         return peer;
     }
 

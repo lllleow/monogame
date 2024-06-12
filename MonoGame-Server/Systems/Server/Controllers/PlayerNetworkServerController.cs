@@ -1,10 +1,10 @@
-﻿using MonoGame_Common.Enums;
+﻿using System.Numerics;
+using MonoGame_Common.Enums;
 using MonoGame_Common.Messages.Components.Animator;
 using MonoGame_Common.Messages.Player;
 using MonoGame_Common.Util.Enum;
 using MonoGame_Common.Util.Helpers;
 using MonoGame_Server.Systems.Server.Helper;
-using System.Numerics;
 
 namespace MonoGame_Server.Systems.Server.Controllers;
 
@@ -50,6 +50,8 @@ public class PlayerNetworkServerController : IServerNetworkController
                 var newPosition = (playerState?.Position ?? SpawnPosition) + resultingDisplacement;
                 var direction =
                     DirectionHelper.GetDirection((int)resultingDisplacement.X, (int)resultingDisplacement.Y);
+
+                Console.WriteLine("Displacement: " + resultingDisplacement);
 
                 if (!ServerMovementHelper.CanMove(playerState!, newPosition, direction))
                 {

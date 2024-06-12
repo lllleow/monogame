@@ -6,8 +6,27 @@ namespace MonoGame_Common.States;
 
 public class EntityState : INetSerializable
 {
-    public required string UUID { get; set; }
-    public Vector2 Position { get; set; }
+    public string UUID { get; set; }
+    private readonly object positionLock = new object();
+    private Vector2 position;
+    public Vector2 Position
+    {
+        get
+        {
+            lock (positionLock)
+            {
+                return position;
+            }
+        }
+        set
+        {
+            lock (positionLock)
+            {
+                position = value;
+            }
+        }
+    }
+
     public List<ComponentState> Components { get; set; } = [];
 
     public virtual void Serialize(NetDataWriter writer)
