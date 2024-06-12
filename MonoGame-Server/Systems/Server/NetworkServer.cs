@@ -1,6 +1,7 @@
 ﻿using LiteNetLib;
 using MonoGame_Common.Messages;
 using MonoGame_Common.States;
+using MonoGame_Common.Systems.Scripts;
 using MonoGame_Common.Util;
 using MonoGame_Server.Systems.Saving;
 using MonoGame_Server.Systems.Server.Controllers;
@@ -37,9 +38,13 @@ public class NetworkServer
 
         Console.WriteLine("Server started at port " + port);
 
-        // Console.WriteLine("Loading scripts");
-        // AnimationBundleRegistry.LoadAnimationBundleScripts();
-        // Console.WriteLine("Finished loading scripts");
+        Console.WriteLine("Loading scripts");
+
+        TileRegistry.LoadTileScripts();
+        AnimationBundleRegistry.LoadAnimationBundleScripts();
+
+        Console.WriteLine("Finished loading scripts");
+
         Console.WriteLine("Server is listening for connections");
         listener.ConnectionRequestEvent += request =>
         {

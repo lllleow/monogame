@@ -26,6 +26,8 @@ public class AnimatorComponent : EntityComponent
                     new Rectangle(CurrentTextureX * AnimationBundle.SizeX, CurrentTextureY * AnimationBundle.SizeY, AnimationBundle.SizeX, AnimationBundle.SizeY));
             }
         };
+
+        networkController.SendStateUpdate(this);
     }
 
     public IAnimationBundle AnimationBundle { get; set; }
