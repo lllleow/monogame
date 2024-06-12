@@ -41,9 +41,4 @@ public class Player : GameEntity
     {
         return this == Globals.World.GetLocalPlayer();
     }
-
-    public override void Update(GameTime gameTime)
-    {
-        base.Update(gameTime);
-    }
 }
