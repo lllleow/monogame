@@ -35,7 +35,8 @@ public static class TileRegistry
 
     public static void LoadTileScripts()
     {
-        var files = FileLoader.LoadAllFilesFromFolder(@"Scripts\Tiles");
+        var folderPath = Path.Combine(SharedGlobals.ScriptsLocation, "Tiles");
+        var files = Directory.GetFiles(folderPath);
         foreach (var file in files)
         {
             var code = File.ReadAllText(file);

@@ -29,7 +29,8 @@ public static class AnimationBundleRegistry
 
     public static void LoadAnimationBundleScripts()
     {
-        var files = FileLoader.LoadAllFilesFromFolder(@"Scripts\AnimationBundles");
+        var folderPath = Path.Combine(SharedGlobals.ScriptsLocation, "AnimationBundles");
+        var files = Directory.GetFiles(folderPath);
         foreach (var file in files)
         {
             var code = File.ReadAllText(file);
