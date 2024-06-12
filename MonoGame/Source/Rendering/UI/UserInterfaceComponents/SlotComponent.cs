@@ -28,7 +28,7 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
 
         var textureRectangle = IsSelected
             ? RectangleHelper.GetTextureRectangleFromCoordinates(1, 0)
-            : RectangleHelper.GetTextureRectangleFromCoordinates(1, 0);
+            : RectangleHelper.GetTextureRectangleFromCoordinates(0, 0);
         SlotTexture.TextureRectangle = RectangleHelper.ConvertToDrawingRectangle(textureRectangle);
         spriteBatch.Draw(
             SpritesheetLoader.GetSpritesheet(SlotTexture.Spritesheet),
