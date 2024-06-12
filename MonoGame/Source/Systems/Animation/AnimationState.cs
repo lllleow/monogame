@@ -1,25 +1,22 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using MonoGame.Source.Systems.Animation;
+﻿using Microsoft.Xna.Framework;
+using System;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Animation;
 
 public class AnimationState : IAnimationState
 {
-    public AnimationStateMachine StateMachine { get; set; }
-    public Animation Animation { get; set; }
-    public IAnimationBundle AnimationBundle { get; set; }
-    public Action<IAnimationState> OnStateEnded { get; set; } = (state) => { };
-    public int CurrentTime { get; set; } = 0;
-    public bool FinishedPlayingAnimation { get; set; } = false;
-    public bool StateEnded { get; set; } = false;
-
-    public AnimationState(AnimationStateMachine stateMachine, Animation animation, IAnimationBundle animationBundle)
+    public AnimationState(Animation animation, IAnimationBundle animationBundle)
     {
-        StateMachine = stateMachine;
         Animation = animation;
         AnimationBundle = animationBundle;
     }
+
+    public Animation Animation { get; set; }
+    public IAnimationBundle AnimationBundle { get; set; }
+    public Action<IAnimationState> OnStateEnded { get; set; } = state => { };
+    public int CurrentTime { get; set; }
+    public bool FinishedPlayingAnimation { get; set; }
+    public bool StateEnded { get; set; }
 
     public double GetAnimationPercentage()
     {
@@ -28,10 +25,17 @@ public class AnimationState : IAnimationState
 
     public (int TextureX, int TextureY) GetTextureCoordinates()
     {
-        int TextureX = AnimationBundle.GetSpritesheetColumnForAnimationPercentage(Animation.Id, GetAnimationPercentage());
-        int TextureY = AnimationBundle.GetSpritesheetRowForAnimation(Animation.Id);
+        var TextureX =
+            AnimationBundle.GetSpritesheetColumnForAnimationPercentage(Animation.Id, GetAnimationPercentage());
+        var TextureY = AnimationBundle.GetSpritesheetRowForAnimation(Animation.Id);
 
         return (TextureX, TextureY);
+    }
+
+    public Rectangle GetTextureRectangle()
+    {
+        var (TextureX, TextureY) = GetTextureCoordinates();
+        return new Rectangle(TextureX * AnimationBundle.SizeX, TextureY * AnimationBundle.SizeY, AnimationBundle.SizeX, AnimationBundle.SizeY);
     }
 
     public void Start()
@@ -47,14 +51,7 @@ public class AnimationState : IAnimationState
         if (CurrentTime > Animation.Duration)
         {
             FinishedPlayingAnimation = true;
-            if (Animation.Repeats)
-            {
-                CurrentTime = Animation.Duration;
-            }
-            else
-            {
-                CurrentTime = 0;
-            }
+            CurrentTime = Animation.Repeats ? Animation.Duration : 0;
         }
 
         if (FinishedPlayingAnimation && !StateEnded)

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Tiles;
-using MonoGame.Source.Systems.Components.Collision.Enum;
-using MonoGame.Source.Systems.Tiles.TextureProcessors;
+using MonoGame_Common.Util.Tile.TextureProcessors;
+using MonoGame_Common.Enums;
 
 public class StoneTile : Tile
 {

@@ -1,5 +1,7 @@
 ﻿//-----------------------------------------------------------------------------
 
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 
 // PrimitiveBatch.cs
@@ -7,9 +9,6 @@ using System;
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
 namespace MonoGame.Source.Rendering.Utils;
 
 // PrimitiveBatch is a class that handles efficient rendering automatically for its
@@ -18,6 +17,11 @@ namespace MonoGame.Source.Rendering.Utils;
 // retro scene.
 public class PrimitiveBatch : IDisposable
 {
+    // this constant controls how large the vertices buffer is. Larger buffers will
+    // require flushing less often, which can increase performance. However, having
+    // buffer that is unnecessarily large will waste memory.
+    private const int DefaultBufferSize = 500;
+
     // a basic effect, which contains the shaders that we will use to draw our
     // primitives.
     private readonly BasicEffect basicEffect;
@@ -25,33 +29,28 @@ public class PrimitiveBatch : IDisposable
     // the device that we will issue draw calls to.
     private readonly GraphicsDevice device;
 
-    // this constant controls how large the vertices buffer is. Larger buffers will
-    // require flushing less often, which can increase performance. However, having
-    // buffer that is unnecessarily large will waste memory.
-    private const int DefaultBufferSize = 500;
-
     // a block of vertices that calling AddVertex will fill. Flush will draw using
     // this array, and will determine how many primitives to draw from
     // positionInBuffer.
     private readonly VertexPositionColor[] vertices = new VertexPositionColor[DefaultBufferSize];
 
-    // keeps track of how many vertices have been added. this value increases until
-    // we run out of space in the buffer, at which time Flush is automatically
-    // called.
-    private int positionInBuffer = 0;
-
-    // this value is set by Begin, and is the type of primitives that we are
-    // drawing.
-    private PrimitiveType primitiveType;
+    // hasBegun is flipped to true once Begin is called, and is used to make
+    // sure users don't call End before Begin is called.
+    private bool hasBegun;
+    private bool isDisposed;
 
     // how many verts does each of these primitives take up? points are 1,
     // lines are 2, and triangles are 3.
     private int numVertsPerPrimitive;
 
-    // hasBegun is flipped to true once Begin is called, and is used to make
-    // sure users don't call End before Begin is called.
-    private bool hasBegun = false;
-    private bool isDisposed = false;
+    // keeps track of how many vertices have been added. this value increases until
+    // we run out of space in the buffer, at which time Flush is automatically
+    // called.
+    private int positionInBuffer;
+
+    // this value is set by Begin, and is the type of primitives that we are
+    // drawing.
+    private PrimitiveType primitiveType;
 
     public PrimitiveBatch(GraphicsDevice graphicsDevice)
     {
@@ -265,7 +264,7 @@ public class PrimitiveBatch : IDisposable
         {
             PrimitiveType.LineList => 2,
             PrimitiveType.TriangleList => 3,
-            _ => throw new InvalidOperationException("primitive is not valid"),
+            _ => throw new InvalidOperationException("primitive is not valid")
         };
         return numVertsPerPrimitive;
     }

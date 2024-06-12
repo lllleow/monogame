@@ -5,13 +5,13 @@ namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class LabelUserInterfaceComponent : UserInterfaceComponent
 {
-    public string Text { get; set; } = string.Empty;
-    public float Scale { get; set; } = 0.3f;
-
     public LabelUserInterfaceComponent(string text, Vector2 localPosition) : base("label", localPosition)
     {
         Text = text;
     }
+
+    public string Text { get; set; } = string.Empty;
+    public float Scale { get; set; } = 0.3f;
 
     public override void Draw(SpriteBatch batch)
     {

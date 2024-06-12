@@ -7,10 +7,10 @@ public interface IUserInterfaceComponent
 {
     public string Name { get; set; }
     public Vector2 LocalPosition { get; set; }
-    public abstract void Initialize(IUserInterfaceComponent parent);
-    public abstract void Draw(SpriteBatch spriteBatch);
-    public abstract void Update(GameTime gameTime);
-    public abstract Vector2 GetPositionRelativeToParent();
-    public abstract Vector2 GetPreferredSize();
-    public abstract Vector2 GetChildOffset(IUserInterfaceComponent child);
+    public void Initialize(IUserInterfaceComponent parent);
+    public void Draw(SpriteBatch spriteBatch);
+    public void Update(GameTime gameTime);
+    public Vector2 GetPositionRelativeToParent();
+    public Vector2 GetPreferredSize();
+    public Vector2 GetChildOffset(IUserInterfaceComponent child);
 }

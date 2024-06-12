@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame_Common.Messages.Player;
 using MonoGame.Source.Multiplayer;
-using MonoGame.Source.Systems.Components;
-using MonoGame.Source.Systems.Components.Collision;
-using MonoGame.Source.Systems.Components.Collision.Enum;
-using MonoGame.Source.Systems.Components.PixelBounds;
-using MonoGame.Source.Systems.Tiles.Interfaces;
-using MonoGame.Source.Util.Enum;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Components.Movement;
 
 public class MovementComponent : EntityComponent
 {
+    private bool sentEmptyKeysMessage;
     public Vector2 Speed { get; set; } = new(1, 1);
-    private bool sentEmptyKeysMessage = false;
 
     public override void Update(GameTime gameTime)
     {
         var state = Keyboard.GetState();
-        List<Keys> keys = new();
+        List<Keys> keys = [];
 
         if (state.IsKeyDown(Keys.W))
         {
@@ -42,43 +37,17 @@ public class MovementComponent : EntityComponent
             keys.Add(Keys.D);
         }
 
+        var commonsKeys = keys.Select(x => (MonoGame_Common.Enums.Keys)x).ToList();
+
         if (keys.Count > 0)
         {
             sentEmptyKeysMessage = false;
-            NetworkClient.SendMessage(new KeyClickedNetworkMessage(Entity.UUID, keys));
+            NetworkClient.SendMessage(new KeyClickedNetworkMessage(Entity.UUID, commonsKeys));
         }
         else if (!sentEmptyKeysMessage)
         {
-            NetworkClient.SendMessage(new KeyClickedNetworkMessage(Entity.UUID, keys));
+            NetworkClient.SendMessage(new KeyClickedNetworkMessage(Entity.UUID, commonsKeys));
             sentEmptyKeysMessage = true;
         }
-    }
-
-    public bool CanMove(Vector2 newPosition, Direction direction)
-    {
-        if (Entity.ContainsComponent<CollisionComponent>())
-        {
-            Rectangle entityRectangle = Entity.GetEntityBoundsAtPosition(newPosition);
-            CollisionComponent collisionComponent = Entity.GetFirstComponent<CollisionComponent>();
-            List<ITile> tiles;
-
-            if (collisionComponent.Mode == CollisionMode.BoundingBox)
-            {
-                tiles = collisionComponent.GetTilesCollidingWithRectangle(entityRectangle);
-            }
-            else if (collisionComponent.Mode is CollisionMode.PixelPerfect or CollisionMode.CollisionMask)
-            {
-                PixelBoundsComponent pixelBounds = Entity.GetFirstComponent<PixelBoundsComponent>();
-                tiles = collisionComponent.GetTilesCollidingWithMask(pixelBounds.Mask, entityRectangle);
-            }
-            else
-            {
-                return true;
-            }
-
-            return tiles.Count == 0;
-        }
-
-        return true;
     }
 }

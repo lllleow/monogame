@@ -1,31 +1,22 @@
-﻿using System;
+﻿using LiteNetLib;
+using MonoGame_Common.Messages;
 
-namespace MonoGame;
-
-using System;
-using System.Collections.Generic;
-using LiteNetLib;
-using MonoGame.Source.Multiplayer.Interfaces;
-using MonoGame_Server;
-using MonoGame_Server.Systems.Server;
+namespace MonoGame_Server.Systems.Server;
 
 public static class ServerNetworkEventManager
 {
-    private static Dictionary<Type, Action<NetworkServer, NetPeer, INetworkMessage>> _subscriptions;
-    private static List<INetworkController> _controllers = new();
+    private static readonly Dictionary<Type, Action<NetworkServer, NetPeer, INetworkMessage>> _subscriptions;
+    private static readonly List<IServerNetworkController> _controllers = [];
 
     static ServerNetworkEventManager()
     {
-        _subscriptions = new Dictionary<Type, Action<NetworkServer, NetPeer, INetworkMessage>>();
+        _subscriptions = [];
     }
 
-    public static void AddController(INetworkController controller)
+    public static void AddController(IServerNetworkController controller)
     {
-        if (controller is IStandaloneNetworkController)
-        {
-            _controllers.Add(controller);
-            (controller as IStandaloneNetworkController)?.InitializeListeners();
-        }
+        _controllers.Add(controller);
+        controller.InitializeListeners();
     }
 
     public static void Subscribe<T>(Action<NetworkServer, NetPeer, T> handler)
@@ -60,7 +51,7 @@ public static class ServerNetworkEventManager
             currentHandlers -= (server, peer, msg) => handler(server, peer, (T)msg);
             if (currentHandlers == null)
             {
-                _subscriptions.Remove(messageType);
+                _ = _subscriptions.Remove(messageType);
             }
             else
             {

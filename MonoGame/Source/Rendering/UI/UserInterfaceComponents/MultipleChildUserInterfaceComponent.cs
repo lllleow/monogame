@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.UI.Interfaces;
-using MonoGame.Source.Util.Helpers;
+using MonoGame.Source.Utils.Helpers;
+using System.Collections.Generic;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
 {
-    public List<IUserInterfaceComponent> Children { get; set; }
-    private readonly RectangleHelper rectangleHelper = new();
-
     public MultipleChildUserInterfaceComponent(string name, Vector2 localPosition, List<IUserInterfaceComponent> children) : base(name, localPosition)
     {
         Children = children;
@@ -20,6 +17,8 @@ public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
             child.Initialize(this);
         }
     }
+
+    public List<IUserInterfaceComponent> Children { get; set; }
 
     public void AddChild(IUserInterfaceComponent child)
     {
@@ -52,14 +51,18 @@ public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
 
     public override Vector2 GetPreferredSize()
     {
-        Rectangle[] rectangles = new Rectangle[Children.Count];
-        for (int i = 0; i < Children.Count; i++)
+        var rectangles = new Rectangle[Children.Count];
+        for (var i = 0; i < Children.Count; i++)
         {
-            Vector2 size = Children[i].GetPreferredSize();
-            rectangles[i] = new Rectangle((int)Children[i].GetPositionRelativeToParent().X, (int)Children[i].GetPositionRelativeToParent().Y, (int)size.X, (int)size.Y);
+            var size = Children[i].GetPreferredSize();
+            rectangles[i] = new Rectangle(
+                (int)Children[i].GetPositionRelativeToParent().X,
+                (int)Children[i].GetPositionRelativeToParent().Y,
+                (int)size.X,
+                (int)size.Y);
         }
 
-        Rectangle minimumBoundingRectangle = rectangleHelper.GetMinimumBoundingRectangle(rectangles);
+        var minimumBoundingRectangle = RectangleHelper.GetMinimumBoundingRectangle(rectangles);
         return new Vector2(minimumBoundingRectangle.Width, minimumBoundingRectangle.Height);
     }
 }

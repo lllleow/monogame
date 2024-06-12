@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Tiles;
-using MonoGame.Source.Systems.Tiles.TextureProcessors;
-using MonoGame.Source.Systems.Components.Collision.Enum;
+using MonoGame_Common.Util.Tile.TextureProcessors;
+using MonoGame_Common.Enums;
 
 public class FenceTile : Tile
 {
@@ -14,8 +14,6 @@ public class FenceTile : Tile
         CollisionMode = CollisionMode.CollisionMask;
         TextureProcessor = SimpleConnectionTileTextureProcessor.Instance;
         ConnectableTiles = ["base.grass", "base.stone"];
-        PixelOffsetY = 8;
-        PixelOffsetX = 8;
         Walkable = false;
     }
 }

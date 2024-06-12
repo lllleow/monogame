@@ -4,14 +4,14 @@ using System.IO;
 using System.Reflection;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
+using MonoGame_Common.Util.Loaders;
 using MonoGame.Source.Systems.Animation;
-using MonoGame.Source.Util.Loaders;
 
 namespace MonoGame.Source.Systems.Scripts;
 
 public static class AnimationBundleRegistry
 {
-    public static Dictionary<string, Type> AnimationBundles { get; private set; } = [];
+    public static Dictionary<string, Type> AnimationBundles { get; } = [];
 
     public static void RegisterAnimationBundle(string id, Type bundleType)
     {
@@ -25,31 +25,31 @@ public static class AnimationBundleRegistry
 
     public static IAnimationBundle GetAnimationBundle(string id)
     {
-        Type bundleType = AnimationBundles[id];
-        IAnimationBundle bundle = Activator.CreateInstance(bundleType) as IAnimationBundle;
+        var bundleType = AnimationBundles[id];
+        var bundle = Activator.CreateInstance(bundleType) as IAnimationBundle;
         return bundle;
     }
 
     public static void LoadAnimationBundleScripts()
     {
-        string[] files = FileLoader.LoadAllFilesFromFolder(@"Scripts\AnimationBundles");
-        foreach (string file in files)
+        var files = FileLoader.LoadAllFilesFromFolder(@"Scripts\AnimationBundles");
+        foreach (var file in files)
         {
-            string code = File.ReadAllText(file);
-            IAnimationBundle animation = LoadAnimationBundleScript(code);
+            var code = File.ReadAllText(file);
+            var animation = LoadAnimationBundleScript(code);
             RegisterAnimationBundle(animation.Id, animation.GetType());
         }
     }
 
     public static IAnimationBundle LoadAnimationBundleScript(string code)
     {
-        ScriptOptions options = ScriptOptions.Default
+        var options = ScriptOptions.Default
             .AddReferences(Assembly.GetExecutingAssembly())
             .AddImports("MonoGame");
 
         try
         {
-            IAnimationBundle bundle = CSharpScript.EvaluateAsync<IAnimationBundle>(code, options).Result;
+            var bundle = CSharpScript.EvaluateAsync<IAnimationBundle>(code, options).Result;
             return bundle;
         }
         catch (CompilationErrorException e)

@@ -1,7 +1,6 @@
-﻿using System;
-namespace MonoGame.Source.Multiplayer.Interfaces;
+﻿namespace MonoGame.Source.Multiplayer.Interfaces;
 
 public interface IStandaloneNetworkController : INetworkController
 {
-    public abstract void InitializeListeners();
+    public void InitializeListeners();
 }

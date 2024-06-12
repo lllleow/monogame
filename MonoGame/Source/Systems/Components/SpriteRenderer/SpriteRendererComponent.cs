@@ -1,21 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Source.Rendering.Utils;
-using MonoGame.Source.Systems.Tiles;
-using MonoGame.Source.Util.Loaders;
+using MonoGame_Common;
+using MonoGame_Common.Util.Helpers;
+using MonoGame.Source.Utils.Helpers;
+using MonoGame.Source.Utils.Loaders;
 
 namespace MonoGame.Source.Systems.Components.SpriteRenderer;
 
 public class SpriteRendererComponent : EntityComponent
 {
-    public string SpriteSheet { get; set; }
-
-    public Rectangle TextureRectangle { get; set; } = Rectangle.Empty;
-
-    public Vector2 Scale { get; set; } = new(1, 1);
-
-    public Vector2 Size { get; set; } = new(Tile.PixelSizeX, Tile.PixelSizeY);
-
     public SpriteRendererComponent()
     {
     }
@@ -23,8 +16,20 @@ public class SpriteRendererComponent : EntityComponent
     public SpriteRendererComponent(string spritesheet, Vector2 textureCoordinates, Vector2 textureSize)
     {
         SpriteSheet = spritesheet;
-        TextureRectangle = new Rectangle((int)textureCoordinates.X, (int)textureCoordinates.Y, (int)textureSize.X, (int)textureSize.Y);
+        TextureRectangle = new Rectangle(
+            (int)textureCoordinates.X,
+            (int)textureCoordinates.Y,
+            (int)textureSize.X,
+            (int)textureSize.Y);
     }
+
+    public string SpriteSheet { get; set; }
+
+    public Rectangle TextureRectangle { get; set; } = Rectangle.Empty;
+
+    public Vector2 Scale { get; set; } = new(1, 1);
+
+    public Vector2 Size { get; set; } = new(SharedGlobals.PixelSizeX, SharedGlobals.PixelSizeY);
 
     public void UpdateTexture(string spritesheet, Rectangle textureRectangle)
     {
@@ -44,6 +49,6 @@ public class SpriteRendererComponent : EntityComponent
 
     public TextureLocation GetTextureLocation()
     {
-        return new TextureLocation(SpriteSheet, TextureRectangle);
+        return new TextureLocation(SpriteSheet, RectangleHelper.ConvertToDrawingRectangle(TextureRectangle));
     }
 }

@@ -3,27 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame_Common;
 using MonoGame.Source.Systems.Components.Animator;
 using MonoGame.Source.Systems.Components.Interfaces;
 using MonoGame.Source.Systems.Entity.Interfaces;
-using MonoGame.Source.Systems.Tiles;
-using MonoGame.Source.Util.Enum;
 
 namespace MonoGame.Source.Systems.Entity;
 
 public abstract class GameEntity : IGameEntity
 {
-    public List<IEntityComponent> Components { get; set; }
-
-    public Vector2 Position { get; set; }
-
-    public string UUID { get; set; } = Guid.NewGuid().ToString();
-
     public GameEntity()
     {
         Components = [];
         Position = Vector2.Zero;
     }
+
+    public List<IEntityComponent> Components { get; set; }
+
+    public Vector2 Position { get; set; }
+
+    public string UUID { get; set; } = Guid.NewGuid().ToString();
 
     public virtual void Update(GameTime gameTime)
     {
@@ -69,21 +68,15 @@ public abstract class GameEntity : IGameEntity
         return Components.OfType<T>().Any();
     }
 
+    public Rectangle GetEntityBoundsAtPosition(Vector2 position)
+    {
+        return ContainsComponent<AnimatorComponent>()
+            ? new Rectangle((int)position.X, (int)position.Y, SharedGlobals.PixelSizeX, SharedGlobals.PixelSizeY)
+            : Rectangle.Empty;
+    }
+
     public void Teleport(Vector2 newPosition)
     {
         Position = newPosition;
-    }
-
-    public Rectangle GetEntityBoundsAtPosition(Vector2 position)
-    {
-        if (ContainsComponent<AnimatorComponent>())
-        {
-            _ = GetFirstComponent<AnimatorComponent>();
-            return new Rectangle((int)position.X, (int)position.Y, Tile.PixelSizeX, Tile.PixelSizeY);
-        }
-        else
-        {
-            return Rectangle.Empty;
-        }
     }
 }

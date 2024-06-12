@@ -1,0 +1,54 @@
+﻿using MonoGame_Common.States;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+
+namespace MonoGame_Server.Systems.Server.Helper;
+
+public static class ServerTextureHelper
+{
+    public static Dictionary<string, bool[,]> TextureMasks { get; set; } = [];
+    public static Dictionary<string, Image> Textures { get; set; } = [];
+
+    public static bool[,] GetImageMask(Image<Rgba32> image)
+    {
+        var width = image.Width;
+        var height = image.Height;
+        var mask = new bool[width, height];
+
+        for (var y = 0; y < height; y++)
+        {
+            for (var x = 0; x < width; x++)
+            {
+                var pixel = image[x, y];
+                mask[x, y] = pixel.A > 0;
+            }
+        }
+
+        return mask;
+    }
+
+    public static Image GetImage(string imagePath)
+    {
+        if (Textures.ContainsKey(imagePath))
+        {
+            return Textures[imagePath];
+        }
+
+        using var image = Image.Load(imagePath);
+        Textures.Add(imagePath, image);
+        return image;
+    }
+
+    public static Image GetImageInRectangle(string imagePath, System.Drawing.Rectangle rectangle)
+    {
+        var image = GetImage(imagePath);
+        var textureImage = image.Clone(image => image.Crop(new Rectangle(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height)));
+        return textureImage;
+    }
+
+    public static Image GetImageInCoordinates(string imagePath, int x, int y, int sizeX, int sizeY)
+    {
+        return GetImageInRectangle(imagePath, new System.Drawing.Rectangle(x * TileState.PixelSizeX, y * TileState.PixelSizeY, sizeX * TileState.PixelSizeX, sizeY * TileState.PixelSizeY));
+    }
+}

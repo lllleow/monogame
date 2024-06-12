@@ -1,20 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using MonoGame.Source.Rendering.UI.Interfaces;
 using MonoGame.Source.Systems.Scripts;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents.Custom;
 
 public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
 {
     private readonly List<TileSlotComponent> tiles;
+
     public HotbarUserInterfaceComponent(Vector2 localPosition) : base(localPosition, null)
     {
-        tiles = TileRegistry.Tiles.Keys.Select(tile => new TileSlotComponent("tile_slot", tile: TileRegistry.GetTile(tile), localPosition: new Vector2(0, 0))).ToList();
+        tiles = TileRegistry.Tiles.Keys
+            .Select(tile => new TileSlotComponent("tile_slot", TileRegistry.GetTile(tile), new Vector2(0, 0))).ToList();
 
         SetChild(new DirectionalListUserInterfaceComponent(
-            name: "list",
+            "list",
             spacing: 2,
             localPosition: new Vector2(0, 0),
             direction: ListDirection.Horizontal,
@@ -25,7 +27,7 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
     public override void Initialize(IUserInterfaceComponent parent)
     {
         base.Initialize(parent);
-        tiles.ForEach(tile => tile.OnClick = (component) => SetSelected(component as TileSlotComponent));
+        tiles.ForEach(tile => tile.OnClick = component => SetSelected(component as TileSlotComponent));
         SetSelected(tiles[0]);
     }
 

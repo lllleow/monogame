@@ -1,27 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using MonoGame.Source.Rendering.UI.Interfaces;
+using System;
+using System.Collections.Generic;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceComponent
 {
-    public ListDirection Direction { get; set; } = ListDirection.Horizontal;
-    public int Spacing { get; set; } = 2;
-
     public DirectionalListUserInterfaceComponent(string name, ListDirection direction, Vector2 localPosition, int spacing, List<IUserInterfaceComponent> children) : base(name, localPosition, children)
     {
         Direction = direction;
         Spacing = spacing;
     }
 
+    public ListDirection Direction { get; set; } = ListDirection.Horizontal;
+    public int Spacing { get; set; } = 2;
+
     public override Vector2 GetChildOffset(IUserInterfaceComponent child)
     {
-        int index = Children.IndexOf(child);
-        Vector2 offset = Vector2.Zero;
+        var index = Children.IndexOf(child);
+        var offset = Vector2.Zero;
 
-        for (int i = 0; i < index; i++)
+        for (var i = 0; i < index; i++)
         {
             if (Direction == ListDirection.Horizontal)
             {
@@ -43,7 +43,7 @@ public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceC
 
         foreach (var child in Children)
         {
-            Vector2 childPreferredSize = child.GetPreferredSize();
+            var childPreferredSize = child.GetPreferredSize();
 
             if (Direction == ListDirection.Vertical)
             {

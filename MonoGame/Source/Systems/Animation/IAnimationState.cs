@@ -1,20 +1,19 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using MonoGame.Source.Systems.Animation;
+﻿using Microsoft.Xna.Framework;
+using System;
 
-namespace MonoGame;
+namespace MonoGame.Source.Systems.Animation;
 
 public interface IAnimationState
 {
-    public AnimationStateMachine StateMachine { get; set; }
     public Animation Animation { get; set; }
     public IAnimationBundle AnimationBundle { get; set; }
     public Action<IAnimationState> OnStateEnded { get; set; }
     public int CurrentTime { get; set; }
     public bool FinishedPlayingAnimation { get; set; }
     public bool StateEnded { get; set; }
-    public abstract void Update(GameTime gameTime);
-    public abstract void Start();
-    public abstract (int TextureX, int TextureY) GetTextureCoordinates();
-    public abstract double GetAnimationPercentage();
+    public void Update(GameTime gameTime);
+    public void Start();
+    public (int TextureX, int TextureY) GetTextureCoordinates();
+    public Rectangle GetTextureRectangle();
+    public double GetAnimationPercentage();
 }

@@ -6,6 +6,7 @@ public class PlayerMovementAnimationBundle : AnimationBundle
     {
         Id = "base.player";
         SpriteSheet = "textures/player_sprite_2";
+        CollisionMaskSpritesheet = "textures/player_collision_mask";
 
         // AddTransition(new ChangeStateOnEndAnimationTransition("walking_front", "idle"));
         // AddTransition(new ChangeStateOnEndAnimationTransition("walking_back", "idle"));

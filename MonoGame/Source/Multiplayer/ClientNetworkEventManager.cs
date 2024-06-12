@@ -1,19 +1,18 @@
 ﻿using System;
-
-namespace MonoGame;
-
-using System;
 using System.Collections.Generic;
+using MonoGame_Common.Messages;
 using MonoGame.Source.Multiplayer.Interfaces;
+
+namespace MonoGame.Source.Multiplayer;
 
 public static class ClientNetworkEventManager
 {
-    private static Dictionary<Type, Action<INetworkMessage>> _subscriptions;
-    private static List<INetworkController> _controllers = new();
+    private static readonly Dictionary<Type, Action<INetworkMessage>> _subscriptions;
+    private static readonly List<INetworkController> _controllers = [];
 
     static ClientNetworkEventManager()
     {
-        _subscriptions = new Dictionary<Type, Action<INetworkMessage>>();
+        _subscriptions = [];
     }
 
     public static void AddController(INetworkController controller)
@@ -28,21 +27,21 @@ public static class ClientNetworkEventManager
     public static void Subscribe<T>(Action<T> handler)
         where T : INetworkMessage
     {
-        Type messageType = typeof(T);
+        var messageType = typeof(T);
         if (!_subscriptions.ContainsKey(messageType))
         {
-            _subscriptions[messageType] = (msg) => handler((T)msg);
+            _subscriptions[messageType] = msg => handler((T)msg);
         }
         else
         {
-            _subscriptions[messageType] += (msg) => handler((T)msg);
+            _subscriptions[messageType] += msg => handler((T)msg);
         }
     }
 
     public static void RaiseEvent<T>(Type messageType, T message)
         where T : INetworkMessage
     {
-        if (_subscriptions.TryGetValue(messageType, out Action<INetworkMessage> handlers))
+        if (_subscriptions.TryGetValue(messageType, out var handlers))
         {
             handlers(message);
         }
@@ -51,13 +50,13 @@ public static class ClientNetworkEventManager
     public static void Unsubscribe<T>(Action<T> handler)
         where T : INetworkMessage
     {
-        Type messageType = typeof(T);
-        if (_subscriptions.TryGetValue(messageType, out Action<INetworkMessage> currentHandlers))
+        var messageType = typeof(T);
+        if (_subscriptions.TryGetValue(messageType, out var currentHandlers))
         {
-            currentHandlers -= (msg) => handler((T)msg);
+            currentHandlers -= msg => handler((T)msg);
             if (currentHandlers == null)
             {
-                _subscriptions.Remove(messageType);
+                _ = _subscriptions.Remove(messageType);
             }
             else
             {
