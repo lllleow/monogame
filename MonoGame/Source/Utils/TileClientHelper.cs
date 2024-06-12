@@ -1,8 +1,8 @@
 ﻿using MonoGame_Common.Enums;
 using MonoGame_Common.Systems.Tiles.Interfaces;
-using MonoGame.Source;
+using MonoGame_Common.Util.Tile;
 
-namespace MonoGame_Common.Util.Tile;
+namespace MonoGame.Source.Utils;
 
 public class TileClientHelper
 {

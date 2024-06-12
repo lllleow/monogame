@@ -1,7 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using System.Collections.Generic;
+﻿using System.Drawing;
 
-namespace MonoGame.Source.Systems.Animation;
+namespace MonoGame_Common.Systems.Animation;
 
 public interface IAnimationBundle
 {

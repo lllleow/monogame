@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
+﻿using System.Reflection;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
+using MonoGame_Common.Systems.Animation;
 using MonoGame_Common.Util.Loaders;
-using MonoGame.Source.Systems.Animation;
 
-namespace MonoGame.Source.Systems.Scripts;
+namespace MonoGame_Common.Systems.Scripts;
 
 public static class AnimationBundleRegistry
 {
@@ -45,7 +42,7 @@ public static class AnimationBundleRegistry
     {
         var options = ScriptOptions.Default
             .AddReferences(Assembly.GetExecutingAssembly())
-            .AddImports("MonoGame");
+            .AddImports("MonoGame_Common");
 
         try
         {

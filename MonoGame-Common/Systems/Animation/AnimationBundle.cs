@@ -1,18 +1,15 @@
-﻿using Microsoft.Xna.Framework;
-using MonoGame_Common;
-using System;
-using System.Collections.Generic;
+﻿using System.Drawing;
 
-namespace MonoGame.Source.Systems.Animation;
+namespace MonoGame_Common.Systems.Animation;
 
 public class AnimationBundle : IAnimationBundle
 {
     public string Id { get; set; }
     public string SpriteSheet { get; set; }
+    public string CollisionMaskSpritesheet { get; set; }
     public int SizeX { get; set; } = 16;
     public int SizeY { get; set; } = 16;
     public Dictionary<string, Animation> Animations { get; set; } = [];
-    public string CollisionMaskSpritesheet { get; set; }
     public List<AnimationTransition> AnimationTransitions { get; set; } = [];
 
     public Rectangle GetSpriteRectangle(string animationId, double percentage)

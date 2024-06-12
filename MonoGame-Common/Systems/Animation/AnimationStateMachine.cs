@@ -1,9 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace MonoGame.Source.Systems.Animation;
+﻿namespace MonoGame_Common.Systems.Animation;
 
 public class AnimationStateMachine
 {
@@ -41,9 +36,9 @@ public class AnimationStateMachine
         }
     }
 
-    public void Update(GameTime gameTime)
+    public void Update()
     {
-        CurrentState?.Update(gameTime);
+        CurrentState?.Update();
         var (TextureX, TextureY) = CurrentState?.GetTextureCoordinates() ?? (0, 0);
         OnSpriteChanged?.Invoke(TextureX, TextureY);
 

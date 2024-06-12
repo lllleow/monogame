@@ -1,4 +1,4 @@
-﻿namespace MonoGame.Source.Systems.Animation;
+﻿namespace MonoGame_Common.Systems.Animation;
 
 public class ChangeStateOnEndAnimationTransition : AnimationTransition
 {

@@ -4,11 +4,13 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame_Common;
 using MonoGame_Common.Enums;
 using MonoGame_Common.States;
+using MonoGame_Common.Systems.Scripts;
+using MonoGame_Common.Systems.Tiles.Interfaces;
 using MonoGame_Common.Util.Tile;
+using MonoGame_Common.Util.Tile.TileComponents;
 using MonoGame.Source.Rendering.Utils;
 using MonoGame.Source.Systems.Chunks.Interfaces;
-using MonoGame.Source.Systems.Scripts;
-using MonoGame.Source.Systems.Tiles.TileComponents;
+using MonoGame.Source.Utils;
 using MonoGame.Source.Utils.Helpers;
 using MonoGame.Source.Utils.Loaders;
 using MonoGame.Source.WorldNamespace;
@@ -30,7 +32,7 @@ public class Chunk : IChunk
 
         foreach (var layer in TileDrawLayerPriority.GetPriority())
         {
-            Tiles[layer] = new Tile[SizeX, SizeY];
+            Tiles[layer] = new CommonTile[SizeX, SizeY];
         }
 
         for (var chunkX = 0; chunkX < SizeX; chunkX++)
@@ -50,7 +52,7 @@ public class Chunk : IChunk
 
         foreach (var layer in TileDrawLayerPriority.GetPriority())
         {
-            Tiles[layer] = new Tile[SizeX, SizeY];
+            Tiles[layer] = new CommonTile[SizeX, SizeY];
         }
 
         foreach (var tileState in chunkState.Tiles)
@@ -70,13 +72,13 @@ public class Chunk : IChunk
     public static int SizeX { get; set; } = 16;
 
     public static int SizeY { get; set; } = 16;
-    public Dictionary<TileDrawLayer, Tile[,]> Tiles { get; set; }
+    public Dictionary<TileDrawLayer, CommonTile[,]> Tiles { get; set; }
 
     public int X { get; set; }
 
     public int Y { get; set; }
 
-    public Tile GetTile(TileDrawLayer layer, int x, int y)
+    public CommonTile GetTile(TileDrawLayer layer, int x, int y)
     {
         return x >= SizeX || y >= SizeY || x < 0 || y < 0 ? null : Tiles[layer][x, y];
     }
@@ -92,25 +94,25 @@ public class Chunk : IChunk
         UpdateNeighborChunks();
     }
 
-    public Tile SetTile(string id, TileDrawLayer layer, int x, int y)
+    public CommonTile SetTile(string id, TileDrawLayer layer, int x, int y)
     {
         if (x > SizeX || y > SizeY || x < 0 || y < 0)
         {
             return null;
         }
 
-        var tile = (Tile)TileRegistry.GetTile(id);
+        var tile = (CommonTile)TileRegistry.GetTile(id);
         _ = GetWorldPosition(x, y);
 
         Tiles[layer][x, y] = tile;
         return tile;
     }
 
-    public Tile SetTileAndUpdateNeighbors(string id, TileDrawLayer layer, int x, int y)
+    public CommonTile SetTileAndUpdateNeighbors(string id, TileDrawLayer layer, int x, int y)
     {
-        var Tile = SetTile(id, layer, x, y);
+        var tile = SetTile(id, layer, x, y);
         UpdateNeighborChunks();
-        return Tile;
+        return tile;
     }
 
     public void UpdateTextureCoordinates()

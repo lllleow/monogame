@@ -1,13 +1,10 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
+﻿using System.Reflection;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using MonoGame_Common.Systems.Tiles.Interfaces;
 using MonoGame_Common.Util.Loaders;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 
-namespace MonoGame.Source.Systems.Scripts;
+namespace MonoGame_Common.Systems.Scripts;
 
 public static class TileRegistry
 {
@@ -52,7 +49,7 @@ public static class TileRegistry
     {
         var options = ScriptOptions.Default
             .AddReferences(Assembly.GetExecutingAssembly())
-            .AddImports("MonoGame");
+            .AddImports("MonoGame_Common");
 
         try
         {

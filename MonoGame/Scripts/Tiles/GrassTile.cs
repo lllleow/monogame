@@ -1,9 +1,8 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Source.Systems.Tiles;
+﻿using MonoGame_Common.Systems.Tiles.Interfaces;
 using MonoGame_Common.Util.Tile.TextureProcessors;
 using MonoGame_Common.Enums;
 
-public class GrassTile : Tile
+public class GrassTile : CommonTile
 {
     public GrassTile()
     {

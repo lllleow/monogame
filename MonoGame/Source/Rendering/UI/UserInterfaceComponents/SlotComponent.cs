@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame_Common.Util.Helpers;
 using MonoGame.Source.Rendering.UI.Interfaces;
 using MonoGame.Source.Utils.Helpers;
 using MonoGame.Source.Utils.Loaders;
+using MonoGame_Common.Util.Helpers;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
@@ -26,16 +26,9 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
         var position = GetPositionRelativeToParent();
         var size = GetPreferredSize();
 
-        Rectangle textureRectangle;
-        if (IsSelected)
-        {
-            textureRectangle = RectangleHelper.GetTextureRectangleFromCoordinates(1, 0);
-        }
-        else
-        {
-            textureRectangle = RectangleHelper.GetTextureRectangleFromCoordinates(1, 0);
-        }
-
+        var textureRectangle = IsSelected
+            ? RectangleHelper.GetTextureRectangleFromCoordinates(1, 0)
+            : RectangleHelper.GetTextureRectangleFromCoordinates(1, 0);
         SlotTexture.TextureRectangle = RectangleHelper.ConvertToDrawingRectangle(textureRectangle);
         spriteBatch.Draw(
             SpritesheetLoader.GetSpritesheet(SlotTexture.Spritesheet),

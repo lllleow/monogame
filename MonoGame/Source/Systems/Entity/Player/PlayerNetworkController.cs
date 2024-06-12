@@ -1,6 +1,6 @@
-﻿using MonoGame_Common.Messages.Player;
-using MonoGame.Source.Multiplayer;
+﻿using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Multiplayer.Interfaces;
+using MonoGame_Common.Messages.Player;
 
 namespace MonoGame.Source.Systems.Entity.Player;
 

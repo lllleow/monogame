@@ -1,13 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Source;
 using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Rendering.Camera;
 using MonoGame.Source.Rendering.UI;
-using MonoGame.Source.Systems.Scripts;
 using MonoGame.Source.WorldNamespace;
-using System;
+using MonoGame_Common.Systems.Scripts;
 
 namespace MonoGame;
 

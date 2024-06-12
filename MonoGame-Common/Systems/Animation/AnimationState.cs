@@ -1,7 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System.Drawing;
 
-namespace MonoGame.Source.Systems.Animation;
+namespace MonoGame_Common.Systems.Animation;
 
 public class AnimationState : IAnimationState
 {
@@ -45,7 +44,7 @@ public class AnimationState : IAnimationState
         StateEnded = false;
     }
 
-    public void Update(GameTime gameTime)
+    public void Update()
     {
         CurrentTime++;
         if (CurrentTime > Animation.Duration)

@@ -1,7 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System.Drawing;
 
-namespace MonoGame.Source.Systems.Animation;
+namespace MonoGame_Common.Systems.Animation;
 
 public interface IAnimationState
 {
@@ -11,7 +10,7 @@ public interface IAnimationState
     public int CurrentTime { get; set; }
     public bool FinishedPlayingAnimation { get; set; }
     public bool StateEnded { get; set; }
-    public void Update(GameTime gameTime);
+    public void Update();
     public void Start();
     public (int TextureX, int TextureY) GetTextureCoordinates();
     public Rectangle GetTextureRectangle();

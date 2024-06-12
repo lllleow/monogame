@@ -7,6 +7,7 @@ using MonoGame_Common.Enums;
 using MonoGame_Common.Messages.Player;
 using MonoGame_Common.Messages.World;
 using MonoGame_Common.States;
+using MonoGame_Common.Systems.Tiles.Interfaces;
 using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.Systems.Chunks.Interfaces;
@@ -110,14 +111,14 @@ public class World
         return Players.Where(p => p.UUID == Globals.UUID).FirstOrDefault();
     }
 
-    public Tile GetTileAtPosition(Vector2 worldPosition)
+    public CommonTile GetTileAtPosition(Vector2 worldPosition)
     {
         var globalX = (int)(worldPosition.X / Chunk.SizeX);
         var globalY = (int)(worldPosition.Y / Chunk.SizeY);
         return GetTileAt(0, globalX, globalY);
     }
 
-    public Tile SetTileAtPosition(string tile, TileDrawLayer layer, int globalX, int globalY)
+    public CommonTile SetTileAtPosition(string tile, TileDrawLayer layer, int globalX, int globalY)
     {
         var (LocalX, LocalY) = GetLocalPositionFromGlobalPosition(globalX, globalY);
         var (ChunkPositionX, ChunkPositionY) = GetChunkPositionFromGlobalPosition(globalX, globalY);
@@ -126,7 +127,7 @@ public class World
         return chunk.SetTileAndUpdateNeighbors(tile, layer, LocalX, LocalY);
     }
 
-    public Tile GetTileAt(TileDrawLayer layer, int globalX, int globalY)
+    public CommonTile GetTileAt(TileDrawLayer layer, int globalX, int globalY)
     {
         var (LocalX, LocalY) = GetLocalPositionFromGlobalPosition(globalX, globalY);
         var chunk = GetChunkFromGlobalPosition(globalX, globalY);
@@ -134,7 +135,7 @@ public class World
         return chunk?.GetTile(layer, LocalX, LocalY);
     }
 
-    public List<Tile> GetAllTilesFromLayerAt(int globalX, int globalY)
+    public List<CommonTile> GetAllTilesFromLayerAt(int globalX, int globalY)
     {
         var chunkX = globalX / Chunk.SizeX;
         var chunkY = globalY / Chunk.SizeY;
@@ -144,7 +145,7 @@ public class World
 
         if (chunk != null)
         {
-            List<Tile> tiles = [];
+            List<CommonTile> tiles = [];
             foreach (var layer in chunk.Tiles.Keys)
             {
                 var tile = chunk.GetTile(layer, tileX, tileY);
@@ -181,7 +182,7 @@ public class World
         return GetChunkAt(ChunkPositionX, ChunkPositionY);
     }
 
-    public Tile GetTileFromScreenPosition(TileDrawLayer layer, int screenX, int screenY)
+    public CommonTile GetTileFromScreenPosition(TileDrawLayer layer, int screenX, int screenY)
     {
         var worldPosition = new Vector2(screenX, screenY);
         worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.Camera.Transform));
