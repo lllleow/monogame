@@ -1,7 +1,7 @@
 ﻿using System;
-using MonoGame.Source.Multiplayer.Interfaces;
 using MonoGame_Common.Messages.Authentication;
 using MonoGame_Common.Messages.Player;
+using MonoGame.Source.Multiplayer.Interfaces;
 
 namespace MonoGame.Source.Multiplayer.Controllers;
 

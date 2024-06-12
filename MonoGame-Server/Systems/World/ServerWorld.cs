@@ -1,4 +1,6 @@
-﻿using MonoGame_Common;
+﻿using System.Drawing;
+using System.Numerics;
+using MonoGame_Common;
 using MonoGame_Common.Enums;
 using MonoGame_Common.Messages.World;
 using MonoGame_Common.States;
@@ -9,8 +11,6 @@ using MonoGame_Common.Util.Tile.TileComponents;
 using MonoGame_Server.Systems.Saving;
 using MonoGame_Server.Systems.Server;
 using MonoGame_Server.Systems.Server.Helper;
-using System.Drawing;
-using System.Numerics;
 
 namespace MonoGame_Server.Systems.World;
 
@@ -178,7 +178,7 @@ public class ServerWorld
                         for (var tileY = startTileY; tileY <= endTileY; tileY++)
                         {
                             var tileState = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
-                            if(tileState == null)
+                            if (tileState == null)
                             {
                                 continue;
                             }
@@ -280,8 +280,10 @@ public class ServerWorld
                 }
             }
         }
+
         return intersectingTiles;
     }
+
     public bool Intersects(Rectangle rectA, Rectangle rectB)
     {
         return rectA.X < rectB.X + rectB.Width &&

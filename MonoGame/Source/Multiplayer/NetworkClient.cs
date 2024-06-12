@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using LiteNetLib;
-using MonoGame.Source.Multiplayer.Controllers;
-using MonoGame.Source.Multiplayer.Interfaces;
 using MonoGame_Common.Messages;
 using MonoGame_Common.Messages.Authentication;
 using MonoGame_Common.Util;
+using MonoGame.Source.Multiplayer.Controllers;
+using MonoGame.Source.Multiplayer.Interfaces;
 
 namespace MonoGame.Source.Multiplayer;
 

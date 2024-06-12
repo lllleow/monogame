@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame_Common.Enums;
+using MonoGame_Common.Systems.Scripts;
 using MonoGame.Source.Systems.Components.Animator;
 using MonoGame.Source.Systems.Components.Collision;
 using MonoGame.Source.Systems.Components.Movement;
 using MonoGame.Source.Systems.Components.SpriteRenderer;
-using MonoGame_Common.Enums;
-using MonoGame_Common.Systems.Scripts;
 
 namespace MonoGame.Source.Systems.Entity.Player;
 

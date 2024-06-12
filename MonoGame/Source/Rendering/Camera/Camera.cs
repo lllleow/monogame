@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Source.Systems.Entity.Interfaces;
 using MonoGame_Common;
+using MonoGame.Source.Systems.Entity.Interfaces;
 
 namespace MonoGame.Source.Rendering.Camera;
 

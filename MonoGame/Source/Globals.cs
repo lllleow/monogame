@@ -1,10 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.Camera;
 using MonoGame.Source.Rendering.UI;
 using MonoGame.Source.WorldNamespace;
-using System;
 
 namespace MonoGame.Source;
 

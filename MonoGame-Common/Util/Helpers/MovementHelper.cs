@@ -1,5 +1,5 @@
-﻿using MonoGame_Common.Util.Enum;
-using System.Numerics;
+﻿using System.Numerics;
+using MonoGame_Common.Util.Enum;
 
 namespace MonoGame_Common.Util.Helpers;
 
