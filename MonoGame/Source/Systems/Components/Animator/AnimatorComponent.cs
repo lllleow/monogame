@@ -23,8 +23,7 @@ public class AnimatorComponent : EntityComponent
             {
                 Entity.GetFirstComponent<SpriteRendererComponent>()?.UpdateTexture(
                     AnimationBundle.SpriteSheet,
-                    new Rectangle(CurrentTextureX * AnimationBundle.SizeX, CurrentTextureY * AnimationBundle.SizeY,
-                        AnimationBundle.SizeX, AnimationBundle.SizeY));
+                    new Rectangle(CurrentTextureX * AnimationBundle.SizeX, CurrentTextureY * AnimationBundle.SizeY, AnimationBundle.SizeX, AnimationBundle.SizeY));
             }
         };
     }
@@ -47,7 +46,9 @@ public class AnimatorComponent : EntityComponent
     {
         base.Initialize();
         if (!Entity.ContainsComponent<SpriteRendererComponent>())
+        {
             throw new Exception("AnimatorComponent requires a SpriteRendererComponent to be present on the entity.");
+        }
     }
 
     public override void Update(GameTime gameTime)

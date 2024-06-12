@@ -5,8 +5,7 @@ namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class PaddingUserInterfaceComponent : SingleChildUserInterfaceComponent
 {
-    public PaddingUserInterfaceComponent(int paddingLeft, int paddingRight, int paddingTop, int paddingBottom,
-        IUserInterfaceComponent child) : base("padding", new Vector2(0, 0), child)
+    public PaddingUserInterfaceComponent(int paddingLeft, int paddingRight, int paddingTop, int paddingBottom, IUserInterfaceComponent child) : base("padding", new Vector2(0, 0), child)
     {
         PaddingLeft = paddingLeft;
         PaddingRight = paddingRight;

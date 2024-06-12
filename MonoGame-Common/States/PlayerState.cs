@@ -16,12 +16,6 @@ public class PlayerState : EntityState
 
     public string? SelectedTile { get; set; }
 
-    // public PlayerState(Player player) : base(player)
-    // {
-    //     SelectedTile = player.SelectedTile;
-    //     Position = player.Position;
-    // }
-
     public override void Serialize(NetDataWriter writer)
     {
         base.Serialize(writer);

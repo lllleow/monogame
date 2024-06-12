@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame_Common;
 using MonoGame.Source.Systems.Entity.Interfaces;
-using MonoGame.Source.Systems.Tiles;
 
 namespace MonoGame.Source.Rendering.Camera;
 
@@ -25,11 +25,14 @@ public class Camera
 
     public void Follow(IGameEntity entity, GameTime gameTime)
     {
-        if (entity == null) return;
+        if (entity == null)
+        {
+            return;
+        }
 
         var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
         var entityCenter =
-            new Vector2(entity.Position.X + (Tile.PixelSizeX / 2), entity.Position.Y + (Tile.PixelSizeY / 2));
+            new Vector2(entity.Position.X + (SharedGlobals.PixelSizeX / 2), entity.Position.Y + (SharedGlobals.PixelSizeY / 2));
         var screenCenter = new Vector2(ScreenSizeX / 2f, ScreenSizeY / 2f);
 
         var targetTranslation = Matrix.CreateTranslation(

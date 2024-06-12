@@ -1,12 +1,12 @@
-﻿using System.Numerics;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 using MonoGame_Common.States.Components;
+using System.Numerics;
 
 namespace MonoGame_Common.States;
 
 public class EntityState : INetSerializable
 {
-    public string UUID { get; set; }
+    public required string UUID { get; set; }
     public Vector2 Position { get; set; }
     public List<ComponentState> Components { get; set; } = [];
 
@@ -28,7 +28,6 @@ public class EntityState : INetSerializable
     //     UUID = entity.UUID;
     //     Position = entity.Position;
     // }
-
     public T GetComponent<T>()
         where T : ComponentState
     {

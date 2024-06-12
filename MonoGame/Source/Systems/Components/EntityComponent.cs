@@ -27,7 +27,9 @@ public abstract class EntityComponent : IEntityComponent
     {
         var componentStateType = GetComponentStateType();
         if (componentStateType != null)
+        {
             NetworkClient.SendMessage(new RegisterEntityComponentNetworkMessage(Entity.UUID, componentStateType));
+        }
     }
 
     public void SetEntity(IGameEntity entity)

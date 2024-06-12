@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
+using MonoGame_Common.Systems.Tiles.Interfaces;
+using MonoGame_Common.Util.Loaders;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Microsoft.CodeAnalysis.CSharp.Scripting;
-using Microsoft.CodeAnalysis.Scripting;
-using MonoGame_Common.Util.Loaders;
-using MonoGame.Source.Systems.Tiles.Interfaces;
 
 namespace MonoGame.Source.Systems.Scripts;
 
@@ -15,16 +15,18 @@ public static class TileRegistry
 
     public static void RegisterTile(string id, Type tileType)
     {
-        if (!typeof(ITile).IsAssignableFrom(tileType))
+        if (!typeof(CommonTile).IsAssignableFrom(tileType))
+        {
             throw new ArgumentException("Tile type must implement ITile interface", nameof(tileType));
+        }
 
         Tiles.Add(id, tileType);
     }
 
-    public static ITile GetTile(string id)
+    public static CommonTile GetTile(string id)
     {
         var tileType = Tiles[id];
-        var tile = Activator.CreateInstance(tileType) as ITile;
+        var tile = Activator.CreateInstance(tileType) as CommonTile;
         return tile;
     }
 
@@ -46,7 +48,7 @@ public static class TileRegistry
         }
     }
 
-    public static ITile LoadTileScript(string code)
+    public static CommonTile LoadTileScript(string code)
     {
         var options = ScriptOptions.Default
             .AddReferences(Assembly.GetExecutingAssembly())
@@ -54,7 +56,7 @@ public static class TileRegistry
 
         try
         {
-            var tile = CSharpScript.EvaluateAsync<ITile>(code, options).Result;
+            var tile = CSharpScript.EvaluateAsync<CommonTile>(code, options).Result;
             return tile;
         }
         catch (CompilationErrorException e)

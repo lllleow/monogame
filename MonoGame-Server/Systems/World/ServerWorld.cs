@@ -1,10 +1,10 @@
-﻿using System.Drawing;
-using System.Numerics;
-using MonoGame_Common.Enums;
+﻿using MonoGame_Common.Enums;
 using MonoGame_Common.Messages.World;
 using MonoGame_Common.States;
 using MonoGame_Server.Systems.Saving;
 using MonoGame_Server.Systems.Server;
+using System.Drawing;
+using System.Numerics;
 
 namespace MonoGame_Server.Systems.World;
 
@@ -130,7 +130,10 @@ public class ServerWorld
                         for (var tileY = startTileY; tileY <= endTileY; tileY++)
                         {
                             var tile = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
-                            if (tile != null) intersectingTiles.Add(tile);
+                            if (tile != null)
+                            {
+                                intersectingTiles.Add(tile);
+                            }
                         }
                     }
                 }
@@ -164,14 +167,14 @@ public class ServerWorld
         //             var endTileX = Math.Min(ChunkState.SizeX - 1, (rectangle.Right - 1 - (chunkX * chunkSizeInPixelsX)) / Tile.PixelSizeX);
         //             var endTileY = Math.Min(ChunkState.SizeY - 1, (rectangle.Bottom - 1 - (chunkY * chunkSizeInPixelsY)) / Tile.PixelSizeY);
 
-        //             for (var tileX = startTileX; tileX <= endTileX; tileX++)
+        // for (var tileX = startTileX; tileX <= endTileX; tileX++)
         //             {
         //                 for (var tileY = startTileY; tileY <= endTileY; tileY++)
         //                 {
         //                     var tileState = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
         //                     ITile tile = TileRegistry.GetTile(tileState.Id);
 
-        //                     if (tile != null)
+        // if (tile != null)
         //                     {
         //                         if (tile.CollisionMode is CollisionMode.CollisionMask or CollisionMode.PixelPerfect)
         //                         {
@@ -181,7 +184,7 @@ public class ServerWorld
         //                                 Tile.PixelSizeX,
         //                                 Tile.PixelSizeY);
 
-        //                             var tileMask = tile.CollisionMode == CollisionMode.CollisionMask && tile.CollisionMaskSpritesheetName != null
+        // var tileMask = tile.CollisionMode == CollisionMode.CollisionMask && tile.CollisionMaskSpritesheetName != null
         //                                 ? CollisionMaskHandler.GetMaskForTexture(tile.CollisionMaskSpritesheetName, tile.GetSpriteRectangle())
         //                                 : CollisionMaskHandler.GetMaskForTexture(tile.SpritesheetName, tile.GetSpriteRectangle());
         //                             var intersects = false;
@@ -194,10 +197,10 @@ public class ServerWorld
         //                                         var globalMaskX = rectangle.Left + mx;
         //                                         var globalMaskY = rectangle.Top + my;
 
-        //                                         var localTileX = globalMaskX - tileRect.Left;
+        // var localTileX = globalMaskX - tileRect.Left;
         //                                         var localTileY = globalMaskY - tileRect.Top;
 
-        //                                         if (localTileX >= 0 && localTileX < Tile.PixelSizeX && localTileY >= 0 && localTileY < Tile.PixelSizeY)
+        // if (localTileX >= 0 && localTileX < Tile.PixelSizeX && localTileY >= 0 && localTileY < Tile.PixelSizeY)
         //                                         {
         //                                             if (tileMask[localTileX, localTileY])
         //                                             {
@@ -208,13 +211,13 @@ public class ServerWorld
         //                                     }
         //                                 }
 
-        //                                 if (intersects)
+        // if (intersects)
         //                                 {
         //                                     break;
         //                                 }
         //                             }
 
-        //                             if (intersects && !intersectingTiles.Contains(tileState))
+        // if (intersects && !intersectingTiles.Contains(tileState))
         //                             {
         //                                 intersectingTiles.Add(tileState);
         //                             }
@@ -227,7 +230,7 @@ public class ServerWorld
         //                                 Tile.PixelSizeX,
         //                                 Tile.PixelSizeY);
 
-        //                             var intersects = false;
+        // var intersects = false;
         //                             for (var mx = 0; mx < mask.GetLength(0); mx++)
         //                             {
         //                                 for (var my = 0; my < mask.GetLength(1); my++)
@@ -243,13 +246,13 @@ public class ServerWorld
         //                                     }
         //                                 }
 
-        //                                 if (intersects)
+        // if (intersects)
         //                                 {
         //                                     break;
         //                                 }
         //                             }
 
-        //                             if (intersects && !intersectingTiles.Contains(tileState))
+        // if (intersects && !intersectingTiles.Contains(tileState))
         //                             {
         //                                 intersectingTiles.Add(tileState);
         //                             }
@@ -260,7 +263,6 @@ public class ServerWorld
         //         }
         //     }
         // }
-
         return intersectingTiles;
     }
 }

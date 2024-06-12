@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame_Common;
 using MonoGame_Common.Enums;
 using MonoGame_Common.Messages.Player;
 using MonoGame_Common.Messages.World;
@@ -11,8 +12,6 @@ using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Entity.Interfaces;
 using MonoGame.Source.Systems.Entity.Player;
-using MonoGame.Source.Systems.Tiles;
-using MonoGame.Source.Systems.Tiles.Interfaces;
 
 namespace MonoGame.Source.WorldNamespace;
 
@@ -55,12 +54,18 @@ public class World
 
     public void Update(GameTime gameTime)
     {
-        foreach (var entity in GetEntities()) entity.Update(gameTime);
+        foreach (var entity in GetEntities())
+        {
+            entity.Update(gameTime);
+        }
     }
 
     public void UpdateAllTextureCoordinates()
     {
-        foreach (var chunk in Chunks) chunk.UpdateTextureCoordinates();
+        foreach (var chunk in Chunks)
+        {
+            chunk.UpdateTextureCoordinates();
+        }
     }
 
     public List<IGameEntity> GetEntities()
@@ -89,7 +94,10 @@ public class World
     public void Draw(SpriteBatch spriteBatch)
     {
         DrawWorld();
-        foreach (var entity in GetEntities()) entity.Draw(spriteBatch);
+        foreach (var entity in GetEntities())
+        {
+            entity.Draw(spriteBatch);
+        }
     }
 
     public Player GetPlayerByUUID(string id)
@@ -102,14 +110,14 @@ public class World
         return Players.Where(p => p.UUID == Globals.UUID).FirstOrDefault();
     }
 
-    public ITile GetTileAtPosition(Vector2 worldPosition)
+    public Tile GetTileAtPosition(Vector2 worldPosition)
     {
         var globalX = (int)(worldPosition.X / Chunk.SizeX);
         var globalY = (int)(worldPosition.Y / Chunk.SizeY);
         return GetTileAt(0, globalX, globalY);
     }
 
-    public ITile SetTileAtPosition(string tile, TileDrawLayer layer, int globalX, int globalY)
+    public Tile SetTileAtPosition(string tile, TileDrawLayer layer, int globalX, int globalY)
     {
         var (LocalX, LocalY) = GetLocalPositionFromGlobalPosition(globalX, globalY);
         var (ChunkPositionX, ChunkPositionY) = GetChunkPositionFromGlobalPosition(globalX, globalY);
@@ -118,7 +126,7 @@ public class World
         return chunk.SetTileAndUpdateNeighbors(tile, layer, LocalX, LocalY);
     }
 
-    public ITile GetTileAt(TileDrawLayer layer, int globalX, int globalY)
+    public Tile GetTileAt(TileDrawLayer layer, int globalX, int globalY)
     {
         var (LocalX, LocalY) = GetLocalPositionFromGlobalPosition(globalX, globalY);
         var chunk = GetChunkFromGlobalPosition(globalX, globalY);
@@ -126,7 +134,7 @@ public class World
         return chunk?.GetTile(layer, LocalX, LocalY);
     }
 
-    public List<ITile> GetAllTilesFromLayerAt(int globalX, int globalY)
+    public List<Tile> GetAllTilesFromLayerAt(int globalX, int globalY)
     {
         var chunkX = globalX / Chunk.SizeX;
         var chunkY = globalY / Chunk.SizeY;
@@ -136,7 +144,7 @@ public class World
 
         if (chunk != null)
         {
-            List<ITile> tiles = [];
+            List<Tile> tiles = [];
             foreach (var layer in chunk.Tiles.Keys)
             {
                 var tile = chunk.GetTile(layer, tileX, tileY);
@@ -173,19 +181,19 @@ public class World
         return GetChunkAt(ChunkPositionX, ChunkPositionY);
     }
 
-    public ITile GetTileFromScreenPosition(TileDrawLayer layer, int screenX, int screenY)
+    public Tile GetTileFromScreenPosition(TileDrawLayer layer, int screenX, int screenY)
     {
         var worldPosition = new Vector2(screenX, screenY);
         worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.Camera.Transform));
 
-        var chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
-        var chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+        var chunkSizeInPixelsX = Chunk.SizeX * SharedGlobals.PixelSizeX;
+        var chunkSizeInPixelsY = Chunk.SizeY * SharedGlobals.PixelSizeY;
 
         var chunkX = (int)(worldPosition.X / chunkSizeInPixelsX);
         var chunkY = (int)(worldPosition.Y / chunkSizeInPixelsY);
 
-        var localX = (int)(worldPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
-        var localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
+        var localX = (int)(worldPosition.X % chunkSizeInPixelsX) / SharedGlobals.PixelSizeX;
+        var localY = (int)(worldPosition.Y % chunkSizeInPixelsY) / SharedGlobals.PixelSizeY;
 
         var chunk = Globals.World.GetChunkAt(chunkX, chunkY);
         return chunk?.GetTile(layer, localX, localY) ?? null;
@@ -210,14 +218,14 @@ public class World
     {
         var screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.Camera.Transform));
 
-        var chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
-        var chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+        var chunkSizeInPixelsX = Chunk.SizeX * SharedGlobals.PixelSizeX;
+        var chunkSizeInPixelsY = Chunk.SizeY * SharedGlobals.PixelSizeY;
 
         var chunkX = (int)(screenPosition.X / chunkSizeInPixelsX);
         var chunkY = (int)(screenPosition.Y / chunkSizeInPixelsY);
 
-        var localX = (int)(screenPosition.X % chunkSizeInPixelsX) / Tile.PixelSizeX;
-        var localY = (int)(screenPosition.Y % chunkSizeInPixelsY) / Tile.PixelSizeY;
+        var localX = (int)(screenPosition.X % chunkSizeInPixelsX) / SharedGlobals.PixelSizeX;
+        var localY = (int)(screenPosition.Y % chunkSizeInPixelsY) / SharedGlobals.PixelSizeY;
 
         return ((chunkX * Chunk.SizeX) + localX, (chunkY * Chunk.SizeY) + localY);
     }
@@ -227,8 +235,8 @@ public class World
     {
         var screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.Camera.Transform));
 
-        var chunkSizeInPixelsX = Chunk.SizeX * Tile.PixelSizeX;
-        var chunkSizeInPixelsY = Chunk.SizeY * Tile.PixelSizeY;
+        var chunkSizeInPixelsX = Chunk.SizeX * SharedGlobals.PixelSizeX;
+        var chunkSizeInPixelsY = Chunk.SizeY * SharedGlobals.PixelSizeY;
 
         var chunkX = (int)(screenPosition.X / chunkSizeInPixelsX);
         var chunkY = (int)(screenPosition.Y / chunkSizeInPixelsY);
@@ -238,7 +246,10 @@ public class World
 
     private void DrawWorld()
     {
-        foreach (var chunk in Chunks) chunk.Draw(Globals.SpriteBatch);
+        foreach (var chunk in Chunks)
+        {
+            chunk.Draw(Globals.SpriteBatch);
+        }
     }
 
     internal void DeleteTile(TileDrawLayer layer, int posX, int posY)

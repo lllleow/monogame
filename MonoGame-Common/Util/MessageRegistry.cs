@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using MonoGame_Common.Attributes;
+﻿using MonoGame_Common.Attributes;
+using System.Reflection;
 
 namespace MonoGame_Common.Util;
 

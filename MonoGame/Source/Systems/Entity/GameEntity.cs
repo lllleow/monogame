@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame_Common;
 using MonoGame.Source.Systems.Components.Animator;
 using MonoGame.Source.Systems.Components.Interfaces;
 using MonoGame.Source.Systems.Entity.Interfaces;
-using MonoGame.Source.Systems.Tiles;
 
 namespace MonoGame.Source.Systems.Entity;
 
@@ -26,12 +26,18 @@ public abstract class GameEntity : IGameEntity
 
     public virtual void Update(GameTime gameTime)
     {
-        foreach (var component in Components) component.Update(gameTime);
+        foreach (var component in Components)
+        {
+            component.Update(gameTime);
+        }
     }
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-        foreach (var component in Components) component.Draw(spriteBatch);
+        foreach (var component in Components)
+        {
+            component.Draw(spriteBatch);
+        }
     }
 
     public void AddComponent(IEntityComponent component)
@@ -65,7 +71,7 @@ public abstract class GameEntity : IGameEntity
     public Rectangle GetEntityBoundsAtPosition(Vector2 position)
     {
         return ContainsComponent<AnimatorComponent>()
-            ? new Rectangle((int)position.X, (int)position.Y, Tile.PixelSizeX, Tile.PixelSizeY)
+            ? new Rectangle((int)position.X, (int)position.Y, SharedGlobals.PixelSizeX, SharedGlobals.PixelSizeY)
             : Rectangle.Empty;
     }
 

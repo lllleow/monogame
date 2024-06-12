@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame_Common.Util.Helpers;
 using MonoGame.Source.Rendering.UI.Interfaces;
-using MonoGame.Source.Rendering.Utils;
 using MonoGame.Source.Utils.Helpers;
 using MonoGame.Source.Utils.Loaders;
 
@@ -17,7 +17,6 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
 
     public TextureLocation SlotTexture { get; set; } = TextureLocation.FirstTextureCoordinate("textures/slot");
     public bool IsSelected { get; set; } = false;
-    public RectangleHelper RectangleHelper { get; set; } = new();
 
     public override void Draw(SpriteBatch spriteBatch)
     {
@@ -27,14 +26,26 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
         var position = GetPositionRelativeToParent();
         var size = GetPreferredSize();
 
-        SlotTexture.TextureRectangle = IsSelected
-            ? RectangleHelper.GetTextureRectangleFromCoordinates(1, 0)
-            : RectangleHelper.GetTextureRectangleFromCoordinates(0, 0);
+        Rectangle textureRectangle;
+        if (IsSelected)
+        {
+            textureRectangle = RectangleHelper.GetTextureRectangleFromCoordinates(1, 0);
+        }
+        else
+        {
+            textureRectangle = RectangleHelper.GetTextureRectangleFromCoordinates(1, 0);
+        }
 
+        SlotTexture.TextureRectangle = RectangleHelper.ConvertToDrawingRectangle(textureRectangle);
         spriteBatch.Draw(
             SpritesheetLoader.GetSpritesheet(SlotTexture.Spritesheet),
-            new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y), SlotTexture.TextureRectangle,
-            Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1f);
+            new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y),
+            textureRectangle,
+            Color.White,
+            0f,
+            Vector2.Zero,
+            SpriteEffects.None,
+            1f);
         var iconSize = size * 0.75f;
 
         if (textureLocation != null)
@@ -45,7 +56,12 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
             spriteBatch.Draw(
                 SpritesheetLoader.GetSpritesheet(textureLocation.Spritesheet),
                 new Rectangle((int)iconPosition.X, (int)iconPosition.Y, (int)iconSize.X, (int)iconSize.Y),
-                textureLocation.TextureRectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1f);
+                textureRectangle,
+                Color.White,
+                0f,
+                Vector2.Zero,
+                SpriteEffects.None,
+                1f);
         }
     }
 

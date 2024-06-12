@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.UI.Interfaces;
 using MonoGame.Source.Rendering.UI.UserInterfaces;
+using System.Collections.Generic;
 
 namespace MonoGame.Source.Rendering.UI;
 
@@ -21,7 +21,8 @@ public class UserInterfaceHandler
             Vector2.Transform(
                 new Vector2(
                     Globals.GraphicsDevice.GraphicsDevice.Viewport.Width,
-                    Globals.GraphicsDevice.GraphicsDevice.Viewport.Height), Matrix.Invert(Transform));
+                    Globals.GraphicsDevice.GraphicsDevice.Viewport.Height),
+                Matrix.Invert(Transform));
         UIScreenSize = new Vector2(transformed.X, transformed.Y);
     }
 
@@ -30,13 +31,18 @@ public class UserInterfaceHandler
         foreach (var userInterface in UserInterfaces)
         {
             if (userInterface.Visible)
+            {
                 userInterface.Draw(spriteBatch);
+            }
         }
     }
 
     public void Update(GameTime gameTime)
     {
-        foreach (var userInterface in UserInterfaces) userInterface.Update(gameTime);
+        foreach (var userInterface in UserInterfaces)
+        {
+            userInterface.Update(gameTime);
+        }
     }
 
     public IUserInterface GetUserInterface(string name)

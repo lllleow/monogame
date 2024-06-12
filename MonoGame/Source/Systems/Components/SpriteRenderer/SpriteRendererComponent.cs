@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Source.Rendering.Utils;
-using MonoGame.Source.Systems.Tiles;
+using MonoGame_Common;
+using MonoGame_Common.Util.Helpers;
+using MonoGame.Source.Utils.Helpers;
 using MonoGame.Source.Utils.Loaders;
 
 namespace MonoGame.Source.Systems.Components.SpriteRenderer;
@@ -15,7 +16,10 @@ public class SpriteRendererComponent : EntityComponent
     public SpriteRendererComponent(string spritesheet, Vector2 textureCoordinates, Vector2 textureSize)
     {
         SpriteSheet = spritesheet;
-        TextureRectangle = new Rectangle((int)textureCoordinates.X, (int)textureCoordinates.Y, (int)textureSize.X,
+        TextureRectangle = new Rectangle(
+            (int)textureCoordinates.X,
+            (int)textureCoordinates.Y,
+            (int)textureSize.X,
             (int)textureSize.Y);
     }
 
@@ -25,7 +29,7 @@ public class SpriteRendererComponent : EntityComponent
 
     public Vector2 Scale { get; set; } = new(1, 1);
 
-    public Vector2 Size { get; set; } = new(Tile.PixelSizeX, Tile.PixelSizeY);
+    public Vector2 Size { get; set; } = new(SharedGlobals.PixelSizeX, SharedGlobals.PixelSizeY);
 
     public void UpdateTexture(string spritesheet, Rectangle textureRectangle)
     {
@@ -35,8 +39,7 @@ public class SpriteRendererComponent : EntityComponent
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(SpriteSheet), Entity.Position, TextureRectangle, Color.White,
-            0f, Vector2.Zero, Scale, SpriteEffects.None, 0.5f);
+        spriteBatch.Draw(SpritesheetLoader.GetSpritesheet(SpriteSheet), Entity.Position, TextureRectangle, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0.5f);
     }
 
     public Rectangle GetRectangle()
@@ -46,6 +49,6 @@ public class SpriteRendererComponent : EntityComponent
 
     public TextureLocation GetTextureLocation()
     {
-        return new TextureLocation(SpriteSheet, TextureRectangle);
+        return new TextureLocation(SpriteSheet, RectangleHelper.ConvertToDrawingRectangle(TextureRectangle));
     }
 }

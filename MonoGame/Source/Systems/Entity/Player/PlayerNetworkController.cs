@@ -10,7 +10,10 @@ public class PlayerNetworkController : INetworkObjectController<Player>
     {
         ClientNetworkEventManager.Subscribe<UpdatePlayerPositionNetworkMessage>(message =>
         {
-            if (player.UUID == message.UUID) player.Position = message.Position;
+            if (player.UUID == message.UUID)
+            {
+                player.Position = message.Position;
+            }
         });
     }
 }

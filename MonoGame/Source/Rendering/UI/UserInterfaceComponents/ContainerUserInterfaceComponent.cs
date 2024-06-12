@@ -5,9 +5,7 @@ namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class ContainerUserInterfaceComponent : SingleChildUserInterfaceComponent
 {
-    public ContainerUserInterfaceComponent(Vector2 localPosition, IUserInterfaceComponent child) : base(
-        "container",
-        localPosition, child)
+    public ContainerUserInterfaceComponent(Vector2 localPosition, IUserInterfaceComponent child) : base("container", localPosition, child)
     {
     }
 }

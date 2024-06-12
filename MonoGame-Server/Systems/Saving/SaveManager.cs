@@ -59,7 +59,10 @@ public class SaveManager
             foreach (var chunkJson in chunksJson)
             {
                 var chunkState = Deserialize<ChunkState>(chunkJson);
-                if (chunkState != null) chunkStates.Add(chunkState);
+                if (chunkState != null)
+                {
+                    chunkStates.Add(chunkState);
+                }
             }
 
             // Players
@@ -79,7 +82,10 @@ public class SaveManager
             foreach (var playerJson in playersJson)
             {
                 var playerState = Deserialize<PlayerState>(playerJson);
-                if (playerState != null) playerStates.Add(playerState);
+                if (playerState != null)
+                {
+                    playerStates.Add(playerState);
+                }
             }
 
             // Entities

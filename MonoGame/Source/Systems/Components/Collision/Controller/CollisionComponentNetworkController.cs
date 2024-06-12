@@ -10,7 +10,10 @@ public class CollisionComponentNetworkController : INetworkObjectController<Coll
     {
         ClientNetworkEventManager.Subscribe<SetCollisionModeNetworkMessage>(message =>
         {
-            if (networkObject.Entity.UUID == message.UUID) networkObject.Mode = message.Mode;
+            if (networkObject.Entity.UUID == message.UUID)
+            {
+                networkObject.Mode = message.Mode;
+            }
         });
     }
 

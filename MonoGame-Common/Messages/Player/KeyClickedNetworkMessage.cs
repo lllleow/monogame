@@ -24,7 +24,10 @@ public class KeyClickedNetworkMessage : NetworkMessage
     {
         UUID = reader.GetString();
         var count = reader.GetInt();
-        for (var i = 0; i < count; i++) Keys.Add((Keys)reader.GetInt());
+        for (var i = 0; i < count; i++)
+        {
+            Keys.Add((Keys)reader.GetInt());
+        }
     }
 
     public override NetDataWriter Serialize()
@@ -33,7 +36,10 @@ public class KeyClickedNetworkMessage : NetworkMessage
         data.Put(GetNetworkTypeId());
         data.Put(UUID);
         data.Put(Keys.Count);
-        foreach (var key in Keys) data.Put((int)key);
+        foreach (var key in Keys)
+        {
+            data.Put((int)key);
+        }
 
         return data;
     }

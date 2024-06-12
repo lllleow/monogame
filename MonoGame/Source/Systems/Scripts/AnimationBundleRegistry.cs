@@ -16,7 +16,9 @@ public static class AnimationBundleRegistry
     public static void RegisterAnimationBundle(string id, Type bundleType)
     {
         if (!typeof(IAnimationBundle).IsAssignableFrom(bundleType))
+        {
             throw new ArgumentException("Bundle type must implement IAnimationBundle interface", nameof(bundleType));
+        }
 
         AnimationBundles.Add(id, bundleType);
     }
