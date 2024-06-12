@@ -24,6 +24,7 @@ public class AnimatorComponentNetworkController : INetworkObjectController<Anima
             networkObject.StateMachine.CurrentState.Animation.Id,
             networkObject.StateMachine.CurrentState.CurrentTime,
             networkObject.StateMachine.AnimationBundle.Id);
+
         NetworkClient.SendMessage(message);
     }
 }

@@ -38,7 +38,6 @@ public class AnimatorComponent : EntityComponent
 
     public void SetState(string animationId)
     {
-        networkController.SendStateUpdate(this);
         StateMachine.SetState(animationId);
     }
 
