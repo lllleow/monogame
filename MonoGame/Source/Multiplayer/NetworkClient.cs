@@ -22,7 +22,7 @@ public static class NetworkClient
 
         _ = Globals.Args.Length > 0 && Globals.Args[0] == "localhost"
             ? Client.Connect("localhost", 25565, "key")
-            : Client.Connect("189.30.162.90", 25565, "monogame");
+            : Client.Connect("192.168.0.123", 25565, "monogame");
 
         InitializeNetworkClient();
         InitializeControllers();
