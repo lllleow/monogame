@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame_Common.Messages.Components;
 using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Systems.Components.Interfaces;
 using MonoGame.Source.Systems.Entity.Interfaces;
-using MonoGame_Common.Messages.Components;
 
 namespace MonoGame.Source.Systems.Components;
 

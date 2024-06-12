@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using MonoGame_Common.States.Components;
 using MonoGame.Source.Systems.Animation;
 using MonoGame.Source.Systems.Components.Animator.Controller;
 using MonoGame.Source.Systems.Components.SpriteRenderer;
 using MonoGame.Source.Systems.Entity.Interfaces;
-using MonoGame_Common.States.Components;
 
 namespace MonoGame.Source.Systems.Components.Animator;
 

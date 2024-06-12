@@ -1,7 +1,7 @@
-﻿using MonoGame.Source.Systems.Tiles.TileComponents;
-using MonoGame_Common.Enums;
+﻿using MonoGame_Common.Enums;
 using MonoGame_Common.Util.Tile;
 using MonoGame_Common.Util.Tile.TileComponents;
+using MonoGame.Source.Systems.Tiles.TileComponents;
 
 namespace MonoGame_Common.Systems.Tiles.Interfaces;
 

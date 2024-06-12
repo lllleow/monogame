@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame_Common;
 using MonoGame_Common.Enums;
 using MonoGame_Common.States;
+using MonoGame_Common.Util.Tile;
 using MonoGame.Source.Rendering.Utils;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Scripts;
+using MonoGame.Source.Systems.Tiles.TileComponents;
+using MonoGame.Source.Utils.Helpers;
 using MonoGame.Source.Utils.Loaders;
 using MonoGame.Source.WorldNamespace;
-using MonoGame.Source.Systems.Tiles.TileComponents;
-using MonoGame_Common;
-using MonoGame.Source.Utils.Helpers;
-using MonoGame_Common.Util.Tile;
 
 namespace MonoGame.Source.Systems.Chunks;
 
@@ -65,8 +65,6 @@ public class Chunk : IChunk
                 _ = SetTile("base.grass", TileDrawLayer.Background, chunkX, chunkY);
             }
         }
-
-        Globals.World.UpdateAllTextureCoordinates();
     }
 
     public static int SizeX { get; set; } = 16;
@@ -127,33 +125,13 @@ public class Chunk : IChunk
                     if (tile?.HasComponent<TextureRendererTileComponent>() ?? false)
                     {
                         TextureRendererTileComponent textureRendererTileComponent = tile.GetComponent<TextureRendererTileComponent>();
-                        (int localX, int localY) = GetTilePosition(tile);
-                        var worldPosition = GetWorldPosition(localX, localY);
-                        TileNeighborConfiguration tileNeighborConfiguration = TileClientHelper.GetNeighborConfiguration(tile, layer.Key, X, Y);
-                        textureRendererTileComponent.UpdateTextureCoordinates(tileNeighborConfiguration, (int)worldPosition.X, (int)worldPosition.Y, layer.Key);
+                        var worldPosition = GetWorldPosition(x, y);
+                        TileNeighborConfiguration tileNeighborConfiguration = TileClientHelper.GetNeighborConfiguration(tile, layer.Key, (int)worldPosition.X, (int)worldPosition.Y);
+                        textureRendererTileComponent.UpdateTextureCoordinates(tileNeighborConfiguration, layer.Key);
                     }
                 }
             }
         }
-    }
-
-    public (int PosX, int PosY) GetTilePosition(Tile tile)
-    {
-        for (var x = 0; x < SizeX; x++)
-        {
-            for (var y = 0; y < SizeY; y++)
-            {
-                foreach (var layer in Tiles)
-                {
-                    if (GetTile(layer.Key, x, y) == tile)
-                    {
-                        return (x, y);
-                    }
-                }
-            }
-        }
-
-        return (-1, -1);
     }
 
     public void Draw(SpriteBatch spriteBatch)

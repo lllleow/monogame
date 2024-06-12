@@ -31,7 +31,7 @@ public class TextureRendererTileComponent : ITileComponent
         return new Rectangle(TextureX * SharedGlobals.PixelSizeX, TextureY * SharedGlobals.PixelSizeY, Tile.TileSizeX * SharedGlobals.PixelSizeX, Tile.TileSizeY * SharedGlobals.PixelSizeY);
     }
 
-    public void UpdateTextureCoordinates(TileNeighborConfiguration configuration, int worldX, int worldY, TileDrawLayer layer)
+    public void UpdateTextureCoordinates(TileNeighborConfiguration configuration, TileDrawLayer layer)
     {
         (int, int) coordinates = Tile.TextureProcessor?.Process(configuration) ?? (0, 0);
         TextureX = coordinates.Item1;
