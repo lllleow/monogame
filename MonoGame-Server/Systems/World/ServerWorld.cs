@@ -217,13 +217,10 @@ public class ServerWorld
                                                 var localTileX = globalMaskX - tileRect.Left;
                                                 var localTileY = globalMaskY - tileRect.Top;
 
-                                                if (localTileX >= 0 && localTileX < SharedGlobals.PixelSizeX && localTileY >= 0 && localTileY < SharedGlobals.PixelSizeY)
+                                                if (localTileX >= 0 && localTileX < SharedGlobals.PixelSizeX && localTileY >= 0 && localTileY < SharedGlobals.PixelSizeY && tileMask[localTileX, localTileY])
                                                 {
-                                                    if (tileMask[localTileX, localTileY])
-                                                    {
-                                                        intersects = true;
-                                                        break;
-                                                    }
+                                                    intersects = true;
+                                                    break;
                                                 }
                                             }
                                         }
