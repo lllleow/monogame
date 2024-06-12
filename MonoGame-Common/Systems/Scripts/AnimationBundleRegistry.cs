@@ -20,7 +20,7 @@ public static class AnimationBundleRegistry
         AnimationBundles.Add(id, bundleType);
     }
 
-    public static IAnimationBundle GetAnimationBundle(string id)
+    public static IAnimationBundle? GetAnimationBundle(string id)
     {
         var bundleType = AnimationBundles[id];
         var bundle = Activator.CreateInstance(bundleType) as IAnimationBundle;
@@ -42,7 +42,7 @@ public static class AnimationBundleRegistry
     public static IAnimationBundle LoadAnimationBundleScript(string code)
     {
         var options = ScriptOptions.Default
-            .AddReferences(Assembly.GetExecutingAssembly())
+            .AddReferences(typeof(IAnimationBundle).Assembly)
             .AddImports("MonoGame_Common");
 
         try

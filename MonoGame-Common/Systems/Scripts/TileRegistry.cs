@@ -20,7 +20,7 @@ public static class TileRegistry
         Tiles.Add(id, tileType);
     }
 
-    public static CommonTile GetTile(string id)
+    public static CommonTile? GetTile(string id)
     {
         var tileType = Tiles[id];
         var tile = Activator.CreateInstance(tileType) as CommonTile;
@@ -49,7 +49,7 @@ public static class TileRegistry
     public static CommonTile LoadTileScript(string code)
     {
         var options = ScriptOptions.Default
-            .AddReferences(Assembly.GetExecutingAssembly())
+            .AddReferences(typeof(CommonTile).Assembly)
             .AddImports("MonoGame_Common");
 
         try
