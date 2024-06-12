@@ -14,9 +14,9 @@ public static class ClientTextureHelper
         var tuple = new Tuple<string, Rectangle>(spritesheet, region);
         var key = tuple.GetHashCode();
 
-        if (CollisionMasks.ContainsKey(key))
+        if (CollisionMasks.TryGetValue(key, out var val))
         {
-            return CollisionMasks[key];
+            return val;
         }
 
         var mask = CreateCollisionMask(spritesheet, region);
