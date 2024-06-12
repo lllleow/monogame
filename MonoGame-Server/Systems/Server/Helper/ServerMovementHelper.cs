@@ -36,7 +36,6 @@ public class ServerMovementHelper
                         CurrentTime = animator.CurrentTime
                     };
                     System.Drawing.Rectangle textureRectangle = animationState.GetTextureRectangle();
-                    Image<Rgba32> image = ImageLoader.LoadImage(animationBundle.CollisionMaskSpritesheet);
                     Image<Rgba32> croppedImage = ServerTextureHelper.GetImageInRectangle(animationBundle.CollisionMaskSpritesheet, textureRectangle);
                     bool[,] mask = ServerTextureHelper.GetImageMask(croppedImage);
                     tiles = NetworkServer.Instance.ServerWorld.GetTilesIntersectingWithMask(mask, entityRectangle);

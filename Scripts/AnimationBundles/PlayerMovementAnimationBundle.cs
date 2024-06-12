@@ -6,7 +6,7 @@ public class PlayerMovementAnimationBundle : AnimationBundle
     {
         Id = "base.player";
         SpriteSheet = "textures/player_sprite_2";
-        CollisionMaskSpritesheet = "textures/player_collision_mask";
+        CollisionMaskSpritesheet = "textures/player_sprite_2_collision_mask";
 
         CreateAnimation(new Animation("walking_front", false, 0, 25, 3));
         CreateAnimation(new Animation("walking_back", false, 1, 25, 3));

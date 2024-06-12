@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk" InitialTargets="BeforeBuild">
     <ItemGroup>
         <ContentWithTargetPath Include="Scripts\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>Scripts\%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
-    <ItemGroup>
+	<ItemGroup>
         <MonoGameContentReference Include="Content\Content.mgcb" />
     </ItemGroup>
     <PropertyGroup>
@@ -38,7 +38,7 @@
     <ItemGroup>
         <ProjectReference Include="..\MonoGame-Common\MonoGame-Common.csproj" />
     </ItemGroup>
-    <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
+    <Target Name="RestoreDotnetTools">
         <Message Text="Restoring dotnet tools" Importance="High" />
         <Exec Command="dotnet tool restore" />
     </Target>

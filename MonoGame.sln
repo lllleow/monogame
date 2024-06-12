@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame", "MonoGame\MonoGa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame-Server", "MonoGame-Server\MonoGame-Server.csproj", "{4940B631-3227-4B28-AEA0-0BE844B43447}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame-Common", "MonoGame-Common\MonoGame-Common.csproj", "{60455774-FF94-4AF3-AABC-1EA49E1A0655}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame-Common", "MonoGame-Common\MonoGame-Common.csproj", "{60455774-FF94-4AF3-AABC-1EA49E1A0655}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

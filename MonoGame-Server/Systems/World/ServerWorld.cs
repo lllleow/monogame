@@ -1,8 +1,14 @@
-﻿using MonoGame_Common.Enums;
+﻿using MonoGame_Common;
+using MonoGame_Common.Enums;
 using MonoGame_Common.Messages.World;
 using MonoGame_Common.States;
+using MonoGame_Common.Systems.Scripts;
+using MonoGame_Common.Systems.Tiles.Interfaces;
+using MonoGame_Common.Util;
+using MonoGame_Common.Util.Tile.TileComponents;
 using MonoGame_Server.Systems.Saving;
 using MonoGame_Server.Systems.Server;
+using MonoGame_Server.Systems.Server.Helper;
 using System.Drawing;
 using System.Numerics;
 
@@ -147,122 +153,140 @@ public class ServerWorld
     {
         List<TileState> intersectingTiles = [];
 
-        // var chunkSizeInPixelsX = ChunkState.SizeX * TileState.PixelSizeX;
-        // var chunkSizeInPixelsY = ChunkState.SizeY * TileState.PixelSizeY;
+        var chunkSizeInPixelsX = ChunkState.SizeX * TileState.PixelSizeX;
+        var chunkSizeInPixelsY = ChunkState.SizeY * TileState.PixelSizeY;
 
-        // var startChunkX = rectangle.Left / chunkSizeInPixelsX;
-        // var startChunkY = rectangle.Top / chunkSizeInPixelsY;
-        // var endChunkX = (rectangle.Right - 1) / chunkSizeInPixelsX;
-        // var endChunkY = (rectangle.Bottom - 1) / chunkSizeInPixelsY;
+        var startChunkX = rectangle.Left / chunkSizeInPixelsX;
+        var startChunkY = rectangle.Top / chunkSizeInPixelsY;
+        var endChunkX = (rectangle.Right - 1) / chunkSizeInPixelsX;
+        var endChunkY = (rectangle.Bottom - 1) / chunkSizeInPixelsY;
 
-        // for (var chunkX = startChunkX; chunkX <= endChunkX; chunkX++)
-        // {
-        //     for (var chunkY = startChunkY; chunkY <= endChunkY; chunkY++)
-        //     {
-        //         var chunk = GetChunkAt(chunkX, chunkY);
-        //         if (chunk != null)
-        //         {
-        //             var startTileX = Math.Max(0, (rectangle.Left - (chunkX * chunkSizeInPixelsX)) / Tile.PixelSizeX);
-        //             var startTileY = Math.Max(0, (rectangle.Top - (chunkY * chunkSizeInPixelsY)) / Tile.PixelSizeY);
-        //             var endTileX = Math.Min(ChunkState.SizeX - 1, (rectangle.Right - 1 - (chunkX * chunkSizeInPixelsX)) / Tile.PixelSizeX);
-        //             var endTileY = Math.Min(ChunkState.SizeY - 1, (rectangle.Bottom - 1 - (chunkY * chunkSizeInPixelsY)) / Tile.PixelSizeY);
+        for (var chunkX = startChunkX; chunkX <= endChunkX; chunkX++)
+        {
+            for (var chunkY = startChunkY; chunkY <= endChunkY; chunkY++)
+            {
+                var chunk = GetChunkAt(chunkX, chunkY);
+                if (chunk != null)
+                {
+                    var startTileX = Math.Max(0, (rectangle.Left - (chunkX * chunkSizeInPixelsX)) / SharedGlobals.PixelSizeX);
+                    var startTileY = Math.Max(0, (rectangle.Top - (chunkY * chunkSizeInPixelsY)) / SharedGlobals.PixelSizeY);
+                    var endTileX = Math.Min(ChunkState.SizeX - 1, (rectangle.Right - 1 - (chunkX * chunkSizeInPixelsX)) / SharedGlobals.PixelSizeX);
+                    var endTileY = Math.Min(ChunkState.SizeY - 1, (rectangle.Bottom - 1 - (chunkY * chunkSizeInPixelsY)) / SharedGlobals.PixelSizeY);
 
-        // for (var tileX = startTileX; tileX <= endTileX; tileX++)
-        //             {
-        //                 for (var tileY = startTileY; tileY <= endTileY; tileY++)
-        //                 {
-        //                     var tileState = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
-        //                     ITile tile = TileRegistry.GetTile(tileState.Id);
+                    for (var tileX = startTileX; tileX <= endTileX; tileX++)
+                    {
+                        for (var tileY = startTileY; tileY <= endTileY; tileY++)
+                        {
+                            var tileState = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
+                            if(tileState == null)
+                            {
+                                continue;
+                            }
 
-        // if (tile != null)
-        //                     {
-        //                         if (tile.CollisionMode is CollisionMode.CollisionMask or CollisionMode.PixelPerfect)
-        //                         {
-        //                             var tileRect = new Rectangle(
-        //                                 (chunkX * chunkSizeInPixelsX) + (tileX * Tile.PixelSizeX),
-        //                                 (chunkY * chunkSizeInPixelsY) + (tileY * Tile.PixelSizeY),
-        //                                 Tile.PixelSizeX,
-        //                                 Tile.PixelSizeY);
+                            CommonTile tile = TileRegistry.GetTile(tileState.Id);
 
-        // var tileMask = tile.CollisionMode == CollisionMode.CollisionMask && tile.CollisionMaskSpritesheetName != null
-        //                                 ? CollisionMaskHandler.GetMaskForTexture(tile.CollisionMaskSpritesheetName, tile.GetSpriteRectangle())
-        //                                 : CollisionMaskHandler.GetMaskForTexture(tile.SpritesheetName, tile.GetSpriteRectangle());
-        //                             var intersects = false;
-        //                             for (var mx = 0; mx < mask.GetLength(0); mx++)
-        //                             {
-        //                                 for (var my = 0; my < mask.GetLength(1); my++)
-        //                                 {
-        //                                     if (mask[mx, my])
-        //                                     {
-        //                                         var globalMaskX = rectangle.Left + mx;
-        //                                         var globalMaskY = rectangle.Top + my;
+                            if (!tile.HasComponent<TextureRendererTileComponent>())
+                            {
+                                continue;
+                            }
 
-        // var localTileX = globalMaskX - tileRect.Left;
-        //                                         var localTileY = globalMaskY - tileRect.Top;
+                            TextureRendererTileComponent textureRendererTileComponent = tile.GetComponent<TextureRendererTileComponent>();
+                            if (tile != null)
+                            {
+                                if (tile.CollisionMode is CollisionMode.CollisionMask or CollisionMode.PixelPerfect)
+                                {
+                                    var tileRect = new Rectangle(
+                                        (chunkX * chunkSizeInPixelsX) + (tileX * SharedGlobals.PixelSizeX),
+                                        (chunkY * chunkSizeInPixelsY) + (tileY * SharedGlobals.PixelSizeY),
+                                        SharedGlobals.PixelSizeX,
+                                        SharedGlobals.PixelSizeY);
 
-        // if (localTileX >= 0 && localTileX < Tile.PixelSizeX && localTileY >= 0 && localTileY < Tile.PixelSizeY)
-        //                                         {
-        //                                             if (tileMask[localTileX, localTileY])
-        //                                             {
-        //                                                 intersects = true;
-        //                                                 break;
-        //                                             }
-        //                                         }
-        //                                     }
-        //                                 }
+                                    bool[,] tileMask = tile.CollisionMode == CollisionMode.CollisionMask && tile.CollisionMaskSpritesheetName != null
+                                                                    ? ServerTextureHelper.GetImageMaskForRectangle(tile.CollisionMaskSpritesheetName, textureRendererTileComponent.GetSpriteRectangle())
+                                                                    : ServerTextureHelper.GetImageMaskForRectangle(tile.SpritesheetName, textureRendererTileComponent.GetSpriteRectangle());
+                                    var intersects = false;
+                                    for (var mx = 0; mx < mask.GetLength(0); mx++)
+                                    {
+                                        for (var my = 0; my < mask.GetLength(1); my++)
+                                        {
+                                            if (mask[mx, my])
+                                            {
+                                                var globalMaskX = rectangle.Left + mx;
+                                                var globalMaskY = rectangle.Top + my;
 
-        // if (intersects)
-        //                                 {
-        //                                     break;
-        //                                 }
-        //                             }
+                                                var localTileX = globalMaskX - tileRect.Left;
+                                                var localTileY = globalMaskY - tileRect.Top;
 
-        // if (intersects && !intersectingTiles.Contains(tileState))
-        //                             {
-        //                                 intersectingTiles.Add(tileState);
-        //                             }
-        //                         }
-        //                         else
-        //                         {
-        //                             var tileRect = new Rectangle(
-        //                                 (chunkX * chunkSizeInPixelsX) + (tileX * Tile.PixelSizeX),
-        //                                 (chunkY * chunkSizeInPixelsY) + (tileY * Tile.PixelSizeY),
-        //                                 Tile.PixelSizeX,
-        //                                 Tile.PixelSizeY);
+                                                if (localTileX >= 0 && localTileX < SharedGlobals.PixelSizeX && localTileY >= 0 && localTileY < SharedGlobals.PixelSizeY)
+                                                {
+                                                    if (tileMask[localTileX, localTileY])
+                                                    {
+                                                        intersects = true;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
 
-        // var intersects = false;
-        //                             for (var mx = 0; mx < mask.GetLength(0); mx++)
-        //                             {
-        //                                 for (var my = 0; my < mask.GetLength(1); my++)
-        //                                 {
-        //                                     if (mask[mx, my])
-        //                                     {
-        //                                         var maskRect = new Rectangle(rectangle.Left + mx, rectangle.Top + my, 1, 1);
-        //                                         if (tileRect.Intersects(maskRect))
-        //                                         {
-        //                                             intersects = true;
-        //                                             break;
-        //                                         }
-        //                                     }
-        //                                 }
+                                        if (intersects)
+                                        {
+                                            break;
+                                        }
+                                    }
 
-        // if (intersects)
-        //                                 {
-        //                                     break;
-        //                                 }
-        //                             }
+                                    if (intersects && !intersectingTiles.Contains(tileState))
+                                    {
+                                        intersectingTiles.Add(tileState);
+                                    }
+                                }
+                                else
+                                {
+                                    var tileRect = new Rectangle(
+                                        (chunkX * chunkSizeInPixelsX) + (tileX * SharedGlobals.PixelSizeX),
+                                        (chunkY * chunkSizeInPixelsY) + (tileY * SharedGlobals.PixelSizeY),
+                                        SharedGlobals.PixelSizeX,
+                                        SharedGlobals.PixelSizeY);
 
-        // if (intersects && !intersectingTiles.Contains(tileState))
-        //                             {
-        //                                 intersectingTiles.Add(tileState);
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+                                    var intersects = false;
+                                    for (var mx = 0; mx < mask.GetLength(0); mx++)
+                                    {
+                                        for (var my = 0; my < mask.GetLength(1); my++)
+                                        {
+                                            if (mask[mx, my])
+                                            {
+                                                var maskRect = new Rectangle(rectangle.Left + mx, rectangle.Top + my, 1, 1);
+                                                if (Intersects(tileRect, maskRect))
+                                                {
+                                                    intersects = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        if (intersects)
+                                        {
+                                            break;
+                                        }
+                                    }
+
+                                    if (intersects && !intersectingTiles.Contains(tileState))
+                                    {
+                                        intersectingTiles.Add(tileState);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return intersectingTiles;
+    }
+    public bool Intersects(Rectangle rectA, Rectangle rectB)
+    {
+        return rectA.X < rectB.X + rectB.Width &&
+               rectA.X + rectA.Width > rectB.X &&
+               rectA.Y < rectB.Y + rectB.Height &&
+               rectA.Y + rectA.Height > rectB.Y;
     }
 }

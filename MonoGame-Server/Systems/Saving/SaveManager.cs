@@ -6,7 +6,7 @@ namespace MonoGame_Server.Systems.Saving;
 
 public class SaveManager
 {
-    public static string SaveLocation { get; set; } = @"C:\Users\Leonardo\Documents\Repositories\monogame\save\";
+    public static string SaveLocation { get; set; } = @"C:\Users\Leonardo\Documents\Repositories\monogame\Save\";
 
     public static void SaveGame()
     {
