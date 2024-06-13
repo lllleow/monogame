@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Drawing;
 using MonoGame_Common.States;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -43,7 +44,7 @@ public static class ServerTextureHelper
         }
         else
         {
-            var image = Image.Load<Rgba32>("../Assets/" + imagePath + ".png");
+            var image = SixLabors.ImageSharp.Image.Load<Rgba32>("../Assets/" + imagePath + ".png");
             Textures.TryAdd(imagePath, image.Clone());
 
             return image;
@@ -53,7 +54,7 @@ public static class ServerTextureHelper
     public static Image<Rgba32> GetImageInRectangle(string imagePath, System.Drawing.Rectangle rectangle)
     {
         var image = GetImage(imagePath);
-        Image<Rgba32> croppedImage = image.Clone(img => img.Crop(new Rectangle(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height)));
+        Image<Rgba32> croppedImage = image.Clone(img => img.Crop(new SixLabors.ImageSharp.Rectangle(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height)));
         return croppedImage;
     }
 

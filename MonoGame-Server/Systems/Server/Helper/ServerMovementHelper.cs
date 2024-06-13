@@ -29,16 +29,20 @@ public class ServerMovementHelper
                 if (entity.HasComponent(typeof(AnimatorComponentState)))
                 {
                     AnimatorComponentState animator = entity.GetComponent<AnimatorComponentState>();
-                    IAnimationBundle animationBundle = AnimationBundleRegistry.GetAnimationBundle(animator.AnimationBundleId);
-                    Animation currentAnimation = animationBundle.Animations[animator.CurrentState];
-                    var animationState = new AnimationState(currentAnimation, animationBundle)
+                    IAnimationBundle? animationBundle = AnimationBundleRegistry.GetAnimationBundle(animator.AnimationBundleId);
+                    Animation? currentAnimation = animationBundle?.Animations[animator.CurrentState];
+                    if (currentAnimation != null && animationBundle != null)
                     {
-                        CurrentTime = animator.CurrentTime
-                    };
-                    System.Drawing.Rectangle textureRectangle = animationState.GetTextureRectangle();
-                    Image<Rgba32> croppedImage = ServerTextureHelper.GetImageInRectangle(animationBundle.CollisionMaskSpritesheet, textureRectangle);
-                    bool[,] mask = ServerTextureHelper.GetImageMask(croppedImage);
-                    tiles = NetworkServer.Instance.ServerWorld.GetTilesIntersectingWithMask(mask, entityRectangle);
+                        var animationState = new AnimationState(currentAnimation, animationBundle)
+                        {
+                            CurrentTime = animator.CurrentTime
+                        };
+
+                        System.Drawing.Rectangle textureRectangle = animationState.GetTextureRectangle();
+                        Image<Rgba32> croppedImage = ServerTextureHelper.GetImageInRectangle(animationBundle.CollisionMaskSpritesheet, textureRectangle);
+                        bool[,] mask = ServerTextureHelper.GetImageMask(croppedImage);
+                        tiles = NetworkServer.Instance.ServerWorld.GetTilesIntersectingWithMask(mask, entityRectangle);
+                    }
                 }
                 else
                 {

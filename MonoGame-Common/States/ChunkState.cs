@@ -1,5 +1,9 @@
-﻿using LiteNetLib.Utils;
+﻿using System.Numerics;
+using LiteNetLib.Utils;
 using MonoGame_Common.Enums;
+using MonoGame_Common.Systems.Scripts;
+using MonoGame_Common.Util.Tile;
+using MonoGame_Common.Util.Tile.TileComponents;
 
 namespace MonoGame_Common.States;
 
@@ -48,30 +52,6 @@ public class ChunkState : INetSerializable
         }
     }
 
-    // public ChunkState(IChunk chunk)
-    // {
-    //     Tiles = [];
-    //     X = chunk.X;
-    //     Y = chunk.Y;
-
-    // foreach (var layer in chunk.Tiles)
-    //     {
-    //         if (layer.Key != TileDrawLayer.Background)
-    //         {
-    //             for (var x = 0; x < layer.Value.GetLength(0); x++)
-    //             {
-    //                 for (var y = 0; y < layer.Value.GetLength(1); y++)
-    //                 {
-    //                     var tile = layer.Value[x, y];
-    //                     if (tile != null)
-    //                     {
-    //                         Tiles.Add(new TileState(layer.Key, tile));
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
     public bool SetTile(string tileId, TileDrawLayer layer, int posX, int posY)
     {
         var tile = Tiles.FirstOrDefault(x => x.LocalX == posX && x.LocalY == posY && x.Layer == layer);
@@ -81,7 +61,7 @@ public class ChunkState : INetSerializable
             return false;
         }
 
-        Tiles.Add(new TileState(tileId, layer, posX, posY));
+        Tiles.Add(new TileState(tileId, layer, X, Y, posX, posY));
         return true;
     }
 
@@ -100,5 +80,12 @@ public class ChunkState : INetSerializable
     public TileState GetTile(TileDrawLayer layer, int posX, int posY)
     {
         return Tiles.FirstOrDefault(x => x.LocalX == posX && x.LocalY == posY && x.Layer == layer);
+    }
+
+    public Vector2 GetWorldPosition(int x, int y)
+    {
+        var worldX = (X * SizeX) + x;
+        var worldY = (Y * SizeY) + y;
+        return new Vector2(worldX, worldY);
     }
 }

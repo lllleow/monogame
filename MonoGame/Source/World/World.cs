@@ -13,6 +13,7 @@ using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Entity.Interfaces;
 using MonoGame.Source.Systems.Entity.Player;
+using MonoGame.Source.Rendering.Utils;
 
 namespace MonoGame.Source.WorldNamespace;
 
@@ -40,11 +41,17 @@ public class World
             var player = new Player(message.UUID, message.Position);
             Players.Add(player);
         });
+
+        ClientNetworkEventManager.Subscribe<RenderMaskNetworkMessage>(message =>
+        {
+            CollisionMasks[message.Rectangle] = message.Mask;
+        });
     }
 
     private List<IGameEntity> Entities { get; } = [];
     public List<Player> Players { get; set; } = [];
     private List<IChunk> Chunks { get; } = [];
+    private Dictionary<System.Drawing.Rectangle, bool[,]> CollisionMasks { get; } = [];
 
     public void LoadChunkFromChunkState(ChunkState chunkState)
     {
@@ -99,6 +106,48 @@ public class World
         {
             entity.Draw(spriteBatch);
         }
+        DrawCollisionMasks(spriteBatch);
+    }
+
+    private readonly PrimitiveBatch primitiveBatch = new(Globals.GraphicsDevice.GraphicsDevice);
+    private void DrawCollisionMasks(SpriteBatch spriteBatch)
+    {
+        spriteBatch.End();
+        primitiveBatch.Begin(PrimitiveType.LineList);
+        foreach (var rectangle in CollisionMasks.Keys)
+        {
+            var Mask = CollisionMasks[rectangle];
+            var drawingArea = rectangle;
+
+            for (var x = 0; x < Mask.GetLength(0); x++)
+            {
+                for (var y = 0; y < Mask.GetLength(1); y++)
+                {
+                    if (Mask[x, y])
+                    {
+                        var topLeft = new Vector2(drawingArea.X + x, drawingArea.Y + y);
+                        var topRight = new Vector2(topLeft.X + 1, topLeft.Y);
+                        var bottomLeft = new Vector2(topLeft.X, topLeft.Y + 1);
+                        var bottomRight = new Vector2(topRight.X, bottomLeft.Y);
+
+                        primitiveBatch.AddVertex(topLeft, Color.Red);
+                        primitiveBatch.AddVertex(topRight, Color.Red);
+
+                        primitiveBatch.AddVertex(topRight, Color.Red);
+                        primitiveBatch.AddVertex(bottomRight, Color.Red);
+
+                        primitiveBatch.AddVertex(bottomRight, Color.Red);
+                        primitiveBatch.AddVertex(bottomLeft, Color.Red);
+
+                        primitiveBatch.AddVertex(bottomLeft, Color.Red);
+                        primitiveBatch.AddVertex(topLeft, Color.Red);
+                    }
+                }
+            }
+        }
+
+        primitiveBatch.End();
+        Globals.DefaultSpriteBatchBegin();
     }
 
     public Player GetPlayerByUUID(string id)

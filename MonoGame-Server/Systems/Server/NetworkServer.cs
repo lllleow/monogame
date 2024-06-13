@@ -79,6 +79,8 @@ public class NetworkServer
 
             reader.Recycle();
         };
+
+        ServerWorld.UpdateTextureCoordinates();
     }
 
     public void SetEntity(EntityState entity)
@@ -154,15 +156,15 @@ public class NetworkServer
     {
         server.PollEvents();
 
-        if (autoSaveCounter >= 1000)
-        {
-            SaveManager.SaveGame();
-            autoSaveCounter = 0;
-        }
-        else
-        {
-            autoSaveCounter++;
-        }
+        // if (autoSaveCounter >= 1000)
+        // {
+        //     SaveManager.SaveGame();
+        //     autoSaveCounter = 0;
+        // }
+        // else
+        // {
+        //     autoSaveCounter++;
+        // }
 
         foreach (var controller in ServerNetworkEventManager.NetworkControllers ?? [])
         {

@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Numerics;
+using MonoGame;
 using MonoGame_Common;
 using MonoGame_Common.Enums;
 using MonoGame_Common.Messages.World;
@@ -7,6 +8,7 @@ using MonoGame_Common.States;
 using MonoGame_Common.Systems.Scripts;
 using MonoGame_Common.Systems.Tiles.Interfaces;
 using MonoGame_Common.Util;
+using MonoGame_Common.Util.Tile;
 using MonoGame_Common.Util.Tile.TileComponents;
 using MonoGame_Server.Systems.Saving;
 using MonoGame_Server.Systems.Server;
@@ -68,8 +70,9 @@ public class ServerWorld
         if (removedAny ?? true)
         {
             NetworkServer.Instance.BroadcastMessage(new DeleteTileNetworkMessage(layer, posX, posY));
-            SaveManager.SaveGame();
         }
+
+        UpdateTextureCoordinates();
     }
 
     public void SetTileAtPosition(string tileId, TileDrawLayer layer, int posX, int posY)
@@ -94,7 +97,6 @@ public class ServerWorld
         if (success)
         {
             NetworkServer.Instance.BroadcastMessage(new PlaceTileNetworkMessage(tileId, layer, posX, posY));
-            SaveManager.SaveGame();
         }
     }
 
@@ -152,97 +154,78 @@ public class ServerWorld
     public List<TileState> GetTilesIntersectingWithMask(bool[,] mask, Rectangle rectangle)
     {
         List<TileState> intersectingTiles = new List<TileState>();
-        int chunkSizeInPixelsX = ChunkState.SizeX * TileState.PixelSizeX;
-        int chunkSizeInPixelsY = ChunkState.SizeY * TileState.PixelSizeY;
+        List<TileState> tilesIntersectingRectangle = GetTilesIntersectingWithRectangle(rectangle);
 
-        int startChunkX = rectangle.Left / chunkSizeInPixelsX;
-        int startChunkY = rectangle.Top / chunkSizeInPixelsY;
-        int endChunkX = (rectangle.Right - 1) / chunkSizeInPixelsX;
-        int endChunkY = (rectangle.Bottom - 1) / chunkSizeInPixelsY;
-
-        for (int chunkX = startChunkX; chunkX <= endChunkX; chunkX++)
+        foreach (TileState tileState in tilesIntersectingRectangle)
         {
-            for (int chunkY = startChunkY; chunkY <= endChunkY; chunkY++)
+            CommonTile? tile = TileRegistry.GetTile(tileState.Id);
+            if (tile == null || (tile.CollisionMode != CollisionMode.CollisionMask && tile.CollisionMode != CollisionMode.PixelPerfect)) continue;
+
+            TextureRendererTileComponent tileComponent = tile.GetComponent<TextureRendererTileComponent>();
+
+            bool[,] tileMask = tile.CollisionMode == CollisionMode.CollisionMask && tile.CollisionMaskSpritesheetName != null
+                ? ServerTextureHelper.GetImageMaskForRectangle(tile.CollisionMaskSpritesheetName, tileComponent.GetSpriteRectangle())
+                : ServerTextureHelper.GetImageMaskForRectangle(tile.SpritesheetName, tileComponent.GetSpriteRectangle());
+
+            Rectangle tileRect = new Rectangle(((tileState.ChunkX ?? 0) * SharedGlobals.PixelSizeX) + ((tileState.LocalX ?? 0) * SharedGlobals.PixelSizeX), ((tileState.ChunkY ?? 0) * SharedGlobals.PixelSizeY) + ((tileState.LocalY ?? 0) * SharedGlobals.PixelSizeY), tile.TileSizeX * SharedGlobals.PixelSizeX, tile.TileSizeY * SharedGlobals.PixelSizeY);
+
+            NetworkServer.Instance.BroadcastMessage(new RenderMaskNetworkMessage(tileRect, tileMask));
+            if (IsMaskIntersecting(tileMask, tileRect, mask, rectangle))
             {
-                ProcessChunk(chunkX, chunkY, rectangle, mask, intersectingTiles, chunkSizeInPixelsX, chunkSizeInPixelsY);
+                intersectingTiles.Add(tileState);
             }
         }
 
         return intersectingTiles;
     }
 
-    private void ProcessChunk(int chunkX, int chunkY, Rectangle rectangle, bool[,] mask, List<TileState> intersectingTiles, int chunkSizeInPixelsX, int chunkSizeInPixelsY)
-    {
-        ChunkState? chunk = GetChunkAt(chunkX, chunkY);
-        if (chunk == null) return;
-
-        int startTileX = Math.Max(0, (rectangle.Left - (chunkX * chunkSizeInPixelsX)) / SharedGlobals.PixelSizeX);
-        int startTileY = Math.Max(0, (rectangle.Top - (chunkY * chunkSizeInPixelsY)) / SharedGlobals.PixelSizeY);
-        int endTileX = Math.Min(ChunkState.SizeX - 1, (rectangle.Right - 1 - (chunkX * chunkSizeInPixelsX)) / SharedGlobals.PixelSizeX);
-        int endTileY = Math.Min(ChunkState.SizeY - 1, (rectangle.Bottom - 1 - (chunkY * chunkSizeInPixelsY)) / SharedGlobals.PixelSizeY);
-
-        for (int tileX = startTileX; tileX <= endTileX; tileX++)
-        {
-            for (int tileY = startTileY; tileY <= endTileY; tileY++)
-            {
-                ProcessTile(chunk, tileX, tileY, chunkX, chunkY, rectangle, mask, intersectingTiles, chunkSizeInPixelsX, chunkSizeInPixelsY);
-            }
-        }
-    }
-
-    private void ProcessTile(ChunkState chunk, int tileX, int tileY, int chunkX, int chunkY, Rectangle rectangle, bool[,] mask, List<TileState> intersectingTiles, int chunkSizeInPixelsX, int chunkSizeInPixelsY)
-    {
-        TileState tileState = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
-        if (tileState == null || !(TileRegistry.GetTile(tileState.Id)?.HasComponent<TextureRendererTileComponent>() == true)) return;
-
-        Rectangle tileRect = new((chunkX * chunkSizeInPixelsX) + (tileX * SharedGlobals.PixelSizeX), (chunkY * chunkSizeInPixelsY) + (tileY * SharedGlobals.PixelSizeY), SharedGlobals.PixelSizeX, SharedGlobals.PixelSizeY);
-
-        if (CheckTileIntersection(tileState, tileRect, mask, rectangle) && !intersectingTiles.Contains(tileState))
-        {
-            intersectingTiles.Add(tileState);
-        }
-    }
-
-    private bool CheckTileIntersection(TileState tileState, Rectangle tileRect, bool[,] mask, Rectangle rectangle)
-    {
-        CommonTile? tile = TileRegistry.GetTile(tileState.Id);
-        if (tile == null) return false;
-
-        TextureRendererTileComponent tileComponent = tile.GetComponent<TextureRendererTileComponent>();
-        bool[,] tileMask = tile.CollisionMode == CollisionMode.CollisionMask && tile.CollisionMaskSpritesheetName != null
-            ? ServerTextureHelper.GetImageMaskForRectangle(tile.CollisionMaskSpritesheetName, tileComponent.GetSpriteRectangle())
-            : ServerTextureHelper.GetImageMaskForRectangle(tile.SpritesheetName, tileComponent.GetSpriteRectangle());
-
-        return IsMaskIntersecting(tileMask, tileRect, mask, rectangle);
-    }
-
     private bool IsMaskIntersecting(bool[,] tileMask, Rectangle tileRect, bool[,] globalMask, Rectangle globalRect)
     {
-        for (int mx = 0; mx < globalMask.GetLength(0); mx++)
+        int startX = Math.Max(tileRect.Left, globalRect.Left);
+        int endX = Math.Min(tileRect.Right, globalRect.Right);
+        int startY = Math.Max(tileRect.Top, globalRect.Top);
+        int endY = Math.Min(tileRect.Bottom, globalRect.Bottom);
+
+        for (int y = startY; y < endY; y++)
         {
-            for (int my = 0; my < globalMask.GetLength(1); my++)
+            for (int x = startX; x < endX; x++)
             {
-                if (!globalMask[mx, my]) continue;
+                int tileX = x - tileRect.Left;
+                int tileY = y - tileRect.Top;
+                int globalX = x - globalRect.Left;
+                int globalY = y - globalRect.Top;
 
-                int globalMaskX = globalRect.Left + mx;
-                int globalMaskY = globalRect.Top + my;
-                int localTileX = globalMaskX - tileRect.Left;
-                int localTileY = globalMaskY - tileRect.Top;
-
-                if (localTileX >= 0 && localTileX < SharedGlobals.PixelSizeX && localTileY >= 0 && localTileY < SharedGlobals.PixelSizeY && tileMask[localTileX, localTileY])
+                if (tileX >= 0 && tileX < tileMask.GetLength(1) &&
+                    tileY >= 0 && tileY < tileMask.GetLength(0) &&
+                    globalX >= 0 && globalX < globalMask.GetLength(1) &&
+                    globalY >= 0 && globalY < globalMask.GetLength(0))
                 {
-                    return true;
+                    if (tileMask[tileY, tileX] && globalMask[globalY, globalX])
+                    {
+                        return true;
+                    }
                 }
             }
         }
+
         return false;
     }
 
-    public bool Intersects(Rectangle rectA, Rectangle rectB)
+    public void UpdateTextureCoordinates()
     {
-        return rectA.X < rectB.X + rectB.Width &&
-               rectA.X + rectA.Width > rectB.X &&
-               rectA.Y < rectB.Y + rectB.Height &&
-               rectA.Y + rectA.Height > rectB.Y;
+        foreach (var chunk in Chunks)
+        {
+            foreach (var tileState in chunk.Tiles)
+            {
+                var tile = TileRegistry.GetTile(tileState.Id);
+                if (tile?.HasComponent<TextureRendererTileComponent>() ?? false)
+                {
+                    TextureRendererTileComponent textureRendererTileComponent = tile.GetComponent<TextureRendererTileComponent>();
+                    var worldPosition = chunk.GetWorldPosition(tileState.LocalX ?? 0, tileState.LocalY ?? 0);
+                    TileNeighborConfiguration tileNeighborConfiguration = TileServerHelper.GetNeighborConfiguration(tile, tileState.Layer, (int)worldPosition.X, (int)worldPosition.Y);
+                    textureRendererTileComponent.UpdateTextureCoordinates(tileNeighborConfiguration, tileState.Layer);
+                }
+            }
+        }
     }
 }
