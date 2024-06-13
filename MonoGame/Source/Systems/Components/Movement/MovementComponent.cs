@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame_Common.Messages.Player;
 using MonoGame.Source.Multiplayer;
-using System;
 
 namespace MonoGame.Source.Systems.Components.Movement;
 
@@ -49,6 +49,7 @@ public class MovementComponent : EntityComponent
         {
             Console.WriteLine(key);
         }
+
         NetworkClient.SendMessage(new KeyClickedNetworkMessage(Entity.UUID, commonsKeys));
     }
 }

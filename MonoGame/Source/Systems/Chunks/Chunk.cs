@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame_Common;
@@ -14,7 +15,6 @@ using MonoGame.Source.Utils;
 using MonoGame.Source.Utils.Helpers;
 using MonoGame.Source.Utils.Loaders;
 using MonoGame.Source.WorldNamespace;
-using System.Linq;
 
 namespace MonoGame.Source.Systems.Chunks;
 
@@ -200,7 +200,7 @@ public class Chunk : IChunk
                                 layerDepth
                             );
 
-                            if (tile.CollisionMaskSpritesheetName != null && tile.CollisionMode == CollisionMode.CollisionMask)
+                            /* if (tile.CollisionMaskSpritesheetName != null && tile.CollisionMode == CollisionMode.CollisionMask)
                             {
                                 spriteBatch.Draw(
                                     SpritesheetLoader.GetSpritesheet(tile.CollisionMaskSpritesheetName),
@@ -213,7 +213,7 @@ public class Chunk : IChunk
                                     SpriteEffects.None,
                                     1f
                                 );
-                            }
+                            } */
 
                             if (layer.Key != TileDrawLayer.Background && Globals.ShowTileBoundingBox)
                             {
