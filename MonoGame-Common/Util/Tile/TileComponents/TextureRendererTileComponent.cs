@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using MonoGame_Common.Enums;
+using MonoGame_Common.States.TileComponents;
 using MonoGame_Common.Systems.Tiles.Interfaces;
 using MonoGame_Common.Util.Helpers;
 
@@ -28,10 +29,18 @@ public class TextureRendererTileComponent : ITileComponent
         return new Rectangle(TextureX * SharedGlobals.PixelSizeX, TextureY * SharedGlobals.PixelSizeY, Tile.TileSizeX * SharedGlobals.PixelSizeX, Tile.TileSizeY * SharedGlobals.PixelSizeY);
     }
 
-    public void UpdateTextureCoordinates(TileNeighborConfiguration configuration, TileDrawLayer layer)
+    public void UpdateTextureCoordinates(TileNeighborConfiguration configuration)
     {
         (int, int) coordinates = Tile.TextureProcessor?.Process(configuration) ?? (0, 0);
         TextureX = coordinates.Item1;
         TextureY = coordinates.Item2;
+    }
+
+    public TileComponentState GetTileComponentState()
+    {
+        TextureRendererTileComponentState tileComponentState = new TextureRendererTileComponentState();
+        tileComponentState.TextureX = TextureX;
+        tileComponentState.TextureY = TextureY;
+        return tileComponentState;
     }
 }

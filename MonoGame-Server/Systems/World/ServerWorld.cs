@@ -5,6 +5,7 @@ using MonoGame_Common;
 using MonoGame_Common.Enums;
 using MonoGame_Common.Messages.World;
 using MonoGame_Common.States;
+using MonoGame_Common.States.TileComponents;
 using MonoGame_Common.Systems.Scripts;
 using MonoGame_Common.Systems.Tiles.Interfaces;
 using MonoGame_Common.Util;
@@ -25,11 +26,19 @@ public class ServerWorld
 
     public void Initialize()
     {
-        var worldState = saveManager.LoadGame();
+        // var worldState = saveManager.LoadGame();
 
-        Chunks = worldState.Chunks ?? [];
-        Players = worldState.Players ?? [];
-        Entities = worldState.Entities ?? [];
+        // Chunks = worldState.Chunks ?? [];
+        // Players = worldState.Players ?? [];
+        // Entities = worldState.Entities ?? [];
+
+        Chunks = [];
+        Players = [];
+        Entities = [];
+
+        ChunkState newChunk = new ChunkState();
+        newChunk.SetTile("base.wall", TileDrawLayer.Tiles, 8, 8);
+        Chunks.Add(newChunk);
     }
 
     public ChunkState? GetChunkAt(int chunkX, int chunkY)
@@ -105,12 +114,12 @@ public class ServerWorld
         return (Entities ?? [])?.Concat(Players ?? [])?.FirstOrDefault(x => x.UUID == UUID);
     }
 
-    public List<TileState> GetTilesIntersectingWithRectangle(Rectangle rectangle)
+    public List<PositionedTileHelper> GetTilesIntersectingWithRectangle(Rectangle rectangle)
     {
-        List<TileState> intersectingTiles = [];
+        List<PositionedTileHelper> intersectingTiles = [];
 
-        var chunkSizeInPixelsX = ChunkState.SizeX * TileState.PixelSizeX;
-        var chunkSizeInPixelsY = ChunkState.SizeY * TileState.PixelSizeY;
+        var chunkSizeInPixelsX = ChunkState.SizeX * SharedGlobals.PixelSizeX;
+        var chunkSizeInPixelsY = ChunkState.SizeY * SharedGlobals.PixelSizeY;
 
         var startChunkX = rectangle.Left / chunkSizeInPixelsX;
         var startChunkY = rectangle.Top / chunkSizeInPixelsY;
@@ -124,23 +133,24 @@ public class ServerWorld
                 var chunk = GetChunkAt(chunkX, chunkY);
                 if (chunk != null)
                 {
-                    var startTileX = Math.Max(0, (rectangle.Left - (chunkX * chunkSizeInPixelsX)) / TileState.PixelSizeX);
-                    var startTileY = Math.Max(0, (rectangle.Top - (chunkY * chunkSizeInPixelsY)) / TileState.PixelSizeY);
+                    var startTileX = Math.Max(0, (rectangle.Left - (chunkX * chunkSizeInPixelsX)) / SharedGlobals.PixelSizeX);
+                    var startTileY = Math.Max(0, (rectangle.Top - (chunkY * chunkSizeInPixelsY)) / SharedGlobals.PixelSizeY);
                     var endTileX = Math.Min(
                         ChunkState.SizeX - 1,
-                        (rectangle.Right - (chunkX * chunkSizeInPixelsX)) / TileState.PixelSizeX);
+                        (rectangle.Right - (chunkX * chunkSizeInPixelsX)) / SharedGlobals.PixelSizeX);
                     var endTileY = Math.Min(
                         ChunkState.SizeY - 1,
-                        (rectangle.Bottom - (chunkY * chunkSizeInPixelsY)) / TileState.PixelSizeY);
+                        (rectangle.Bottom - (chunkY * chunkSizeInPixelsY)) / SharedGlobals.PixelSizeY);
 
                     for (var tileX = startTileX; tileX <= endTileX; tileX++)
                     {
                         for (var tileY = startTileY; tileY <= endTileY; tileY++)
                         {
                             var tile = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
+                            PositionedTileHelper positionedTile = new PositionedTileHelper(tile, chunk, tileX, tileY);
                             if (tile != null)
                             {
-                                intersectingTiles.Add(tile);
+                                intersectingTiles.Add(positionedTile);
                             }
                         }
                     }
@@ -151,28 +161,28 @@ public class ServerWorld
         return intersectingTiles;
     }
 
-    public List<TileState> GetTilesIntersectingWithMask(bool[,] mask, Rectangle rectangle)
+    public List<PositionedTileHelper> GetTilesIntersectingWithMask(bool[,] mask, Rectangle rectangle)
     {
-        List<TileState> intersectingTiles = new List<TileState>();
-        List<TileState> tilesIntersectingRectangle = GetTilesIntersectingWithRectangle(rectangle);
+        List<PositionedTileHelper> intersectingTiles = new List<PositionedTileHelper>();
+        List<PositionedTileHelper> tilesIntersectingRectangle = GetTilesIntersectingWithRectangle(rectangle);
 
-        foreach (TileState tileState in tilesIntersectingRectangle)
+        foreach (PositionedTileHelper positionedTile in tilesIntersectingRectangle)
         {
-            CommonTile? tile = TileRegistry.GetTile(tileState.Id);
-            if (tile == null || (tile.CollisionMode != CollisionMode.CollisionMask && tile.CollisionMode != CollisionMode.PixelPerfect)) continue;
+            CommonTile? commonTile = positionedTile.Tile.GetCommonTile();
+            if (commonTile == null || (commonTile.CollisionMode != CollisionMode.CollisionMask && commonTile.CollisionMode != CollisionMode.PixelPerfect)) continue;
 
-            TextureRendererTileComponent tileComponent = tile.GetComponent<TextureRendererTileComponent>();
+            TextureRendererTileComponentState tileComponent = positionedTile.Tile.GetComponent<TextureRendererTileComponentState>();
 
-            bool[,] tileMask = tile.CollisionMode == CollisionMode.CollisionMask && tile.CollisionMaskSpritesheetName != null
-                ? ServerTextureHelper.GetImageMaskForRectangle(tile.CollisionMaskSpritesheetName, tileComponent.GetSpriteRectangle())
-                : ServerTextureHelper.GetImageMaskForRectangle(tile.SpritesheetName, tileComponent.GetSpriteRectangle());
+            bool[,] tileMask = commonTile.CollisionMode == CollisionMode.CollisionMask && commonTile.CollisionMaskSpritesheetName != null
+                ? ServerTextureHelper.GetImageMaskForRectangle(commonTile.CollisionMaskSpritesheetName, tileComponent.GetSpriteRectangle())
+                : ServerTextureHelper.GetImageMaskForRectangle(commonTile.SpritesheetName, tileComponent.GetSpriteRectangle());
 
-            Rectangle tileRect = new Rectangle(((tileState.ChunkX ?? 0) * SharedGlobals.PixelSizeX) + ((tileState.LocalX ?? 0) * SharedGlobals.PixelSizeX), ((tileState.ChunkY ?? 0) * SharedGlobals.PixelSizeY) + ((tileState.LocalY ?? 0) * SharedGlobals.PixelSizeY), tile.TileSizeX * SharedGlobals.PixelSizeX, tile.TileSizeY * SharedGlobals.PixelSizeY);
-
+            Rectangle tileRect = positionedTile.GetTileRect();
             NetworkServer.Instance.BroadcastMessage(new RenderMaskNetworkMessage(tileRect, tileMask));
+
             if (IsMaskIntersecting(tileMask, tileRect, mask, rectangle))
             {
-                intersectingTiles.Add(tileState);
+                intersectingTiles.Add(positionedTile);
             }
         }
 
@@ -215,15 +225,17 @@ public class ServerWorld
     {
         foreach (var chunk in Chunks)
         {
-            foreach (var tileState in chunk.Tiles)
+            foreach (var layer in chunk.Tiles.Keys)
             {
-                var tile = TileRegistry.GetTile(tileState.Id);
-                if (tile?.HasComponent<TextureRendererTileComponent>() ?? false)
+                foreach (var tileState in chunk.Tiles[layer])
                 {
-                    TextureRendererTileComponent textureRendererTileComponent = tile.GetComponent<TextureRendererTileComponent>();
-                    var worldPosition = chunk.GetWorldPosition(tileState.LocalX ?? 0, tileState.LocalY ?? 0);
-                    TileNeighborConfiguration tileNeighborConfiguration = TileServerHelper.GetNeighborConfiguration(tile, tileState.Layer, (int)worldPosition.X, (int)worldPosition.Y);
-                    textureRendererTileComponent.UpdateTextureCoordinates(tileNeighborConfiguration, tileState.Layer);
+                    if (tileState?.HasComponent<TextureRendererTileComponentState>() ?? false)
+                    {
+                        TextureRendererTileComponentState textureRendererTileComponent = tileState.GetComponent<TextureRendererTileComponentState>();
+                        var worldPosition = chunk.GetWorldPosition(chunk.GetTilePosition(tileState));
+                        TileNeighborConfiguration tileNeighborConfiguration = TileServerHelper.GetNeighborConfiguration(tileState.GetCommonTile(), layer, (int)worldPosition.X, (int)worldPosition.Y);
+                        textureRendererTileComponent.UpdateTextureCoordinates(tileNeighborConfiguration);
+                    }
                 }
             }
         }

@@ -1,11 +1,13 @@
-﻿using LiteNetLib.Utils;
+﻿using System.Drawing;
+using LiteNetLib.Utils;
+using MonoGame_Common.Util.Helpers;
+using MonoGame_Common.Util.Tile;
 
 namespace MonoGame_Common.States.TileComponents;
 
 public class TextureRendererTileComponentState : TileComponentState
 {
     public int TextureX { get; set; }
-
     public int TextureY { get; set; }
 
     public override void Deserialize(NetDataReader reader)
@@ -18,5 +20,22 @@ public class TextureRendererTileComponentState : TileComponentState
     {
         writer.Put(TextureX);
         writer.Put(TextureY);
+    }
+
+    public TextureLocation GetTextureLocation()
+    {
+        return new TextureLocation(TileState.GetCommonTile().SpritesheetName, GetSpriteRectangle());
+    }
+
+    public Rectangle GetSpriteRectangle()
+    {
+        return new Rectangle(TextureX * SharedGlobals.PixelSizeX, TextureY * SharedGlobals.PixelSizeY, TileState.GetCommonTile().TileSizeX * SharedGlobals.PixelSizeX, TileState.GetCommonTile().TileSizeY * SharedGlobals.PixelSizeY);
+    }
+
+    public void UpdateTextureCoordinates(TileNeighborConfiguration configuration)
+    {
+        (int, int) coordinates = TileState?.GetCommonTile()?.TextureProcessor?.Process(configuration) ?? (0, 0);
+        TextureX = coordinates.Item1;
+        TextureY = coordinates.Item2;
     }
 }

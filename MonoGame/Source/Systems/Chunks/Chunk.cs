@@ -14,6 +14,7 @@ using MonoGame.Source.Utils;
 using MonoGame.Source.Utils.Helpers;
 using MonoGame.Source.Utils.Loaders;
 using MonoGame.Source.WorldNamespace;
+using System.Linq;
 
 namespace MonoGame.Source.Systems.Chunks;
 
@@ -55,9 +56,18 @@ public class Chunk : IChunk
             Tiles[layer] = new CommonTile[SizeX, SizeY];
         }
 
-        foreach (var tileState in chunkState.Tiles)
+        foreach (var layer in chunkState.Tiles)
         {
-            _ = SetTile(tileState.Id, tileState.Layer, tileState.LocalX.Value, tileState.LocalY.Value);
+            var commonTiles = new CommonTile[SizeX, SizeY];
+            for (var x = 0; x < SizeX; x++)
+            {
+                for (var y = 0; y < SizeY; y++)
+                {
+                    var tileState = layer.Value[x, y];
+                    commonTiles[x, y] = tileState?.GetCommonTile();
+                }
+            }
+            Tiles[layer.Key] = commonTiles;
         }
 
         for (var chunkX = 0; chunkX < SizeX; chunkX++)
@@ -129,7 +139,7 @@ public class Chunk : IChunk
                         TextureRendererTileComponent textureRendererTileComponent = tile.GetComponent<TextureRendererTileComponent>();
                         var worldPosition = GetWorldPosition(x, y);
                         TileNeighborConfiguration tileNeighborConfiguration = TileClientHelper.GetNeighborConfiguration(tile, layer.Key, (int)worldPosition.X, (int)worldPosition.Y);
-                        textureRendererTileComponent.UpdateTextureCoordinates(tileNeighborConfiguration, layer.Key);
+                        textureRendererTileComponent.UpdateTextureCoordinates(tileNeighborConfiguration);
                     }
                 }
             }

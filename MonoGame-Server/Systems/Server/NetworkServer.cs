@@ -21,9 +21,6 @@ public class NetworkServer
     {
         listener = new EventBasedNetListener();
         server = new NetManager(listener);
-        InitializeControllers();
-        ServerWorld = new ServerWorld();
-        ServerWorld.Initialize();
     }
 
     public static NetworkServer Instance { get; set; } = new();
@@ -44,6 +41,10 @@ public class NetworkServer
         AnimationBundleRegistry.LoadAnimationBundleScripts();
 
         Console.WriteLine("Finished loading scripts");
+
+        InitializeControllers();
+        ServerWorld = new ServerWorld();
+        ServerWorld.Initialize();
 
         Console.WriteLine("Server is listening for connections");
         listener.ConnectionRequestEvent += request =>

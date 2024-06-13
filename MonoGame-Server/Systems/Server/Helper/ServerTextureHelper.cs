@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Drawing;
+using MonoGame_Common;
 using MonoGame_Common.States;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -60,6 +61,6 @@ public static class ServerTextureHelper
 
     public static Image<Rgba32> GetImageInCoordinates(string imagePath, int x, int y, int sizeX, int sizeY)
     {
-        return GetImageInRectangle(imagePath, new System.Drawing.Rectangle(x * TileState.PixelSizeX, y * TileState.PixelSizeY, sizeX * TileState.PixelSizeX, sizeY * TileState.PixelSizeY));
+        return GetImageInRectangle(imagePath, new System.Drawing.Rectangle(x * SharedGlobals.PixelSizeX, y * SharedGlobals.PixelSizeY, sizeX * SharedGlobals.PixelSizeX, sizeY * SharedGlobals.PixelSizeY));
     }
 }

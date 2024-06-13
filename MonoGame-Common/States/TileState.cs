@@ -11,46 +11,41 @@ public class TileState : INetSerializable
 {
     public TileState()
     {
+        InitializeComponents();
     }
 
-    public TileState(string id, TileDrawLayer layer, int chunkX, int chunkY, int x, int y)
+    public TileState(string id)
     {
         Id = id;
-        LocalX = x;
-        LocalY = y;
-        Layer = layer;
-        ChunkX = chunkX;
-        ChunkY = chunkY;
+        InitializeComponents();
     }
 
-    public static int PixelSizeX { get; set; } = 16;
-    public static int PixelSizeY { get; set; } = 16;
     public string Id { get; set; }
-    public int? ChunkX { get; set; }
-    public int? ChunkY { get; set; }
-    public int? LocalX { get; set; }
-    public int? LocalY { get; set; }
-    public TileDrawLayer Layer { get; set; }
     public List<TileComponentState> Components { get; set; } = [];
+
+    public void InitializeComponents()
+    {
+        CommonTile? commonTile = GetCommonTile();
+        if (commonTile != null)
+        {
+            foreach (var component in commonTile.Components)
+            {
+                TileComponentState tileComponentState = component.GetTileComponentState();
+                tileComponentState.TileState = this;
+
+                AddComponent(tileComponentState);
+            }
+        }
+    }
 
     public void Serialize(NetDataWriter writer)
     {
         writer.Put(Id);
-        writer.Put(LocalX ?? 0);
-        writer.Put(LocalY ?? 0);
-        writer.Put(ChunkX ?? 0);
-        writer.Put(ChunkY ?? 0);
-        writer.Put((byte)Layer);
     }
 
     public void Deserialize(NetDataReader reader)
     {
         Id = reader.GetString();
-        LocalX = reader.GetInt();
-        LocalY = reader.GetInt();
-        ChunkX = reader.GetInt();
-        ChunkY = reader.GetInt();
-        Layer = (TileDrawLayer)reader.GetByte();
     }
 
     public CommonTile? GetCommonTile()

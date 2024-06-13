@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using MonoGame_Common;
 using MonoGame_Common.Enums;
 using MonoGame_Common.States;
 using MonoGame_Common.States.Components;
@@ -18,7 +19,7 @@ public class ServerMovementHelper
         {
             System.Drawing.Rectangle entityRectangle = GetEntityBoundsAtPosition(entity, newPosition);
             CollisionComponentState collisionComponent = entity.GetComponent<CollisionComponentState>();
-            List<TileState> tiles = [];
+            List<PositionedTileHelper> tiles = [];
 
             if (collisionComponent.Mode == CollisionMode.BoundingBox)
             {
@@ -63,7 +64,7 @@ public class ServerMovementHelper
     public System.Drawing.Rectangle GetEntityBoundsAtPosition(EntityState entity, Vector2 position)
     {
         return entity.HasComponent(typeof(AnimatorComponentState))
-            ? new System.Drawing.Rectangle((int)position.X, (int)position.Y, TileState.PixelSizeX, TileState.PixelSizeY)
+            ? new System.Drawing.Rectangle((int)position.X, (int)position.Y, SharedGlobals.PixelSizeX, SharedGlobals.PixelSizeY)
             : System.Drawing.Rectangle.Empty;
     }
 }
