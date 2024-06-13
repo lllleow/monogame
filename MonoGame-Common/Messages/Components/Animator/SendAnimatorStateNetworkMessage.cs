@@ -10,8 +10,7 @@ public class SendAnimatorStateNetworkMessage : NetworkMessage
     {
     }
 
-    public SendAnimatorStateNetworkMessage(string uuid, string currentComponentState, int currentTime,
-        string animationBundleId)
+    public SendAnimatorStateNetworkMessage(string uuid, string currentComponentState, int currentTime, string animationBundleId)
     {
         UUID = uuid;
         CurrentState = currentComponentState;

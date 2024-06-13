@@ -73,32 +73,47 @@ public class PlayerNetworkServerController : IServerNetworkController
 
                 if (ServerMovementHelper.CanMove(player, newPosition))
                 {
+                    string targetState = "walking_front";
                     switch (player.MovementDirection)
                     {
                         case Direction.Up:
-                            NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(player.UUID, "walking_back"));
+                            targetState = "walking_back";
                             break;
                         case Direction.Left:
-                            NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(player.UUID, "walking_left"));
+                            targetState = "walking_left";
                             break;
                         case Direction.Down:
-                            NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(player.UUID, "walking_front"));
+                            targetState = "walking_front";
                             break;
                         case Direction.Right:
-                            NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(player.UUID, "walking_right"));
+                            targetState = "walking_right";
                             break;
                     }
 
+                    NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage()
+                    {
+                        UUID = player.UUID,
+                        TargetState = targetState
+                    });
+
                     player.LastStateWasIdle = false;
                     player.Position = newPosition;
-                    NetworkServer.Instance.BroadcastMessage(new UpdatePlayerPositionNetworkMessage(player.UUID, player.Position));
+                    NetworkServer.Instance.BroadcastMessage(new UpdatePlayerPositionNetworkMessage()
+                    {
+                        UUID = player.UUID,
+                        Position = player.Position
+                    });
                 }
             }
             else
             {
                 if (!player.LastStateWasIdle)
                 {
-                    NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(player.UUID, "idle"));
+                    NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage()
+                    {
+                        UUID = player.UUID,
+                        TargetState = "idle"
+                    });
                     player.LastStateWasIdle = true;
                 }
             }

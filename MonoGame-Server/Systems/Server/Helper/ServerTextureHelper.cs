@@ -39,9 +39,9 @@ public static class ServerTextureHelper
 
     public static Image<Rgba32> GetImage(string imagePath)
     {
-        if (Textures.ContainsKey(imagePath))
+        if (Textures.TryGetValue(imagePath, out var value))
         {
-            return Textures[imagePath].Clone();
+            return value.Clone();
         }
         else
         {

@@ -11,14 +11,8 @@ public class SpawnPlayerNetworkMessage : NetworkMessage
     {
     }
 
-    public SpawnPlayerNetworkMessage(string uuid, Vector2 position)
-    {
-        UUID = uuid;
-        Position = position;
-    }
-
-    public string UUID { get; set; }
-    public Vector2 Position { get; set; }
+    required public string UUID { get; set; }
+    required public Vector2 Position { get; set; }
 
     public override void Deserialize(NetDataReader reader)
     {

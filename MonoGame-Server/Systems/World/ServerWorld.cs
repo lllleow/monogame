@@ -107,7 +107,13 @@ public class ServerWorld
         var success = chunk.SetTile(tileId, layer, localX, localY);
         if (success)
         {
-            NetworkServer.Instance.BroadcastMessage(new PlaceTileNetworkMessage(tileId, layer, posX, posY));
+            NetworkServer.Instance.BroadcastMessage(new PlaceTileNetworkMessage()
+            {
+                TileId = tileId,
+                Layer = layer,
+                PosX = posX,
+                PosY = posY
+            });
         }
     }
 
@@ -149,9 +155,9 @@ public class ServerWorld
                         for (var tileY = startTileY; tileY <= endTileY; tileY++)
                         {
                             var tile = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
-                            PositionedTileHelper positionedTile = new PositionedTileHelper(tile, chunk, tileX, tileY);
                             if (tile != null)
                             {
+                                PositionedTileHelper positionedTile = new PositionedTileHelper(tile, chunk, tileX, tileY);
                                 intersectingTiles.Add(positionedTile);
                             }
                         }
@@ -163,7 +169,7 @@ public class ServerWorld
         return intersectingTiles;
     }
 
-    public List<PositionedTileHelper> GetTilesIntersectingWithMask(bool[,] mask, Rectangle rectangle)
+    public static List<PositionedTileHelper> GetTilesIntersectingWithMask(bool[,] mask, Rectangle rectangle)
     {
         Dictionary<string, PositionedTileHelper> intersectingTiles = new Dictionary<string, PositionedTileHelper>();
 
@@ -197,7 +203,7 @@ public class ServerWorld
                         {
                             for (int tileY = startTileY; tileY <= endTileY; tileY++)
                             {
-                                TileState tile = chunk.GetTile(layer: layer, posX: tileX, posY: tileY);
+                                TileState? tile = chunk.GetTile(layer: layer, posX: tileX, posY: tileY);
                                 CommonTile? commonTile = tile?.GetCommonTile();
                                 if (commonTile == null) continue;
 
@@ -206,7 +212,8 @@ public class ServerWorld
                                     PositionedTileHelper positionedTileHelper = new(tile, chunk, tileX, tileY);
                                     Rectangle tileRect = positionedTileHelper.GetTileRect();
 
-                                    TextureRendererTileComponentState tileComponent = tile.GetComponent<TextureRendererTileComponentState>();
+                                    TextureRendererTileComponentState? tileComponent = tile.GetComponent<TextureRendererTileComponentState>();
+                                    if (tileComponent == null) continue;
 
                                     bool[,] tileMask;
                                     if (commonTile.CollisionMode == CollisionMode.CollisionMask && commonTile.CollisionMaskSpritesheetName != null)
@@ -215,15 +222,13 @@ public class ServerWorld
                                     }
                                     else
                                     {
+                                        if (commonTile.SpritesheetName == null) continue;
                                         tileMask = ServerTextureHelper.GetImageMaskForRectangle(commonTile.SpritesheetName, tileComponent.GetSpriteRectangle());
                                     }
 
-                                    if (CollisionMaskHandler.CheckMaskCollision(tileMask, rectangle, tileMask, tileRect))
+                                    if (tile.Id != null && CollisionMaskHandler.CheckMaskCollision(tileMask, rectangle, tileMask, tileRect))
                                     {
-                                        if (!intersectingTiles.ContainsKey(tile.Id))
-                                        {
-                                            intersectingTiles.Add(tile.Id, positionedTileHelper);
-                                        }
+                                        intersectingTiles.TryAdd(tile.Id, positionedTileHelper);
                                     }
                                 }
                             }
@@ -246,12 +251,12 @@ public class ServerWorld
                 {
                     if (tileState?.HasComponent<TextureRendererTileComponentState>() ?? false)
                     {
-                        TextureRendererTileComponentState textureRendererTileComponent = tileState.GetComponent<TextureRendererTileComponentState>();
+                        TextureRendererTileComponentState? textureRendererTileComponent = tileState.GetComponent<TextureRendererTileComponentState>();
                         var worldPosition = chunk.GetWorldPosition(chunk.GetTilePosition(tileState));
                         CommonTile? commonTile = tileState.GetCommonTile();
                         if (commonTile == null) continue;
                         TileNeighborConfiguration tileNeighborConfiguration = TileServerHelper.GetNeighborConfiguration(commonTile, layer, (int)worldPosition.X, (int)worldPosition.Y);
-                        textureRendererTileComponent.UpdateTextureCoordinates(tileNeighborConfiguration);
+                        textureRendererTileComponent?.UpdateTextureCoordinates(tileNeighborConfiguration);
                     }
                 }
             }

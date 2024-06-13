@@ -12,8 +12,11 @@ public class WorldNetworkServerController : IServerNetworkController
         {
             foreach (var chunk in server.ServerWorld.Chunks!)
             {
-                var chunkDataNetworkMessage = new ChunkDataNetworkMessage(chunk);
-                server.SendMessageToPeer(peer, chunkDataNetworkMessage);
+                var chunkDataNetworkMessage = new ChunkDataNetworkMessage()
+                {
+                    ChunkState = chunk
+                };
+                NetworkServer.SendMessageToPeer(peer, chunkDataNetworkMessage);
             }
 
             foreach (var uuid in server.Connections.Values)
@@ -21,9 +24,12 @@ public class WorldNetworkServerController : IServerNetworkController
                 var playerState = server.ServerWorld.Players?.FirstOrDefault(p => p.UUID == uuid);
                 if (playerState != null)
                 {
-                    var spawnPlayerNetworkMessage =
-                        new SpawnPlayerNetworkMessage(playerState.UUID, playerState.Position);
-                    server.SendMessageToPeer(peer, spawnPlayerNetworkMessage);
+                    var spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage()
+                    {
+                        UUID = playerState.UUID,
+                        Position = playerState.Position
+                    };
+                    NetworkServer.SendMessageToPeer(peer, spawnPlayerNetworkMessage);
                 }
             }
 
@@ -36,7 +42,11 @@ public class WorldNetworkServerController : IServerNetworkController
                     UUID = existingPlayerUUID
                 };
                 server.ServerWorld.Players?.Add(newPlayer);
-                var spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage(newPlayer.UUID, newPlayer.Position);
+                var spawnPlayerNetworkMessage = new SpawnPlayerNetworkMessage()
+                {
+                    UUID = newPlayer.UUID,
+                    Position = newPlayer.Position
+                };
                 server.BroadcastMessage(spawnPlayerNetworkMessage);
             }
         });

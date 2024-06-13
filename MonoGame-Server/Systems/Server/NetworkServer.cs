@@ -15,17 +15,21 @@ public class NetworkServer
 {
     private readonly EventBasedNetListener listener;
     private readonly NetManager server;
-    private int autoSaveCounter;
 
+    // private int autoSaveCounter;
     public NetworkServer()
     {
         listener = new EventBasedNetListener();
         server = new NetManager(listener);
     }
 
-    public static NetworkServer Instance { get; set; } = new();
+    public static NetworkServer Instance { get; set; } = new()
+    {
+        ServerWorld = new ServerWorld()
+    };
+
     public ConcurrentDictionary<NetPeer, string> Connections { get; set; } = [];
-    public ServerWorld ServerWorld { get; set; }
+    required public ServerWorld ServerWorld { get; set; }
 
     public void InitializeServer()
     {
@@ -43,7 +47,6 @@ public class NetworkServer
         Console.WriteLine("Finished loading scripts");
 
         InitializeControllers();
-        ServerWorld = new ServerWorld();
         ServerWorld.Initialize();
 
         Console.WriteLine("Server is listening for connections");
@@ -90,7 +93,7 @@ public class NetworkServer
         ServerWorld?.Entities?.Add(entity);
     }
 
-    public void InitializeControllers()
+    public static void InitializeControllers()
     {
         ServerNetworkEventManager.AddController(new AuthenticationNetworkServerController());
         ServerNetworkEventManager.AddController(new PlayerNetworkServerController());
@@ -132,7 +135,7 @@ public class NetworkServer
         peer?.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
     }
 
-    public void SendMessageToPeer(NetPeer peer, INetworkMessage message)
+    public static void SendMessageToPeer(NetPeer peer, INetworkMessage message)
     {
         peer.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
     }
@@ -166,7 +169,6 @@ public class NetworkServer
         // {
         //     autoSaveCounter++;
         // }
-
         foreach (var controller in ServerNetworkEventManager.NetworkControllers ?? [])
         {
             controller.Update();

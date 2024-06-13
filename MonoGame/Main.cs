@@ -73,7 +73,7 @@ public class Main : Game
         NetworkClient.Update();
         Globals.World.Update(gameTime);
         Globals.Camera.Follow(Globals.World.GetLocalPlayer(), gameTime);
-        Globals.Camera.Update(gameTime);
+        Camera.Update(gameTime);
         Globals.UserInterfaceHandler.Update(gameTime);
 
         base.Update(gameTime);

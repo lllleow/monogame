@@ -22,4 +22,3 @@ public class TileServerHelper
         return new TileNeighborConfiguration(centerTile, left, right, up, down, left_top, right_top, left_bottom, right_bottom);
     }
 }
-

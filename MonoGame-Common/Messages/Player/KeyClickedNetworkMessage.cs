@@ -11,14 +11,8 @@ public class KeyClickedNetworkMessage : NetworkMessage
     {
     }
 
-    public KeyClickedNetworkMessage(string uuid, List<Keys> keys)
-    {
-        UUID = uuid;
-        Keys = keys;
-    }
-
-    public string UUID { get; set; }
-    public List<Keys> Keys { get; set; } = [];
+    required public string UUID { get; set; }
+    required public List<Keys> Keys { get; set; } = [];
 
     public override void Deserialize(NetDataReader reader)
     {

@@ -27,7 +27,7 @@ public class AnimatorComponent : EntityComponent
             }
         };
 
-        networkController.SendStateUpdate(this);
+        AnimatorComponentNetworkController.SendStateUpdate(this);
     }
 
     public IAnimationBundle AnimationBundle { get; set; }

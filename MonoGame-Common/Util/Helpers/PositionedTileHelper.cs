@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Numerics;
 using MonoGame_Common.States;
+using MonoGame_Common.Systems.Tiles.Interfaces;
 
 namespace MonoGame_Common;
 
@@ -22,6 +23,8 @@ public class PositionedTileHelper
     public Rectangle GetTileRect()
     {
         Vector2 worldPosition = Chunk.GetWorldPosition(PosX, PosY);
-        return new Rectangle((int)worldPosition.X * SharedGlobals.PixelSizeX, (int)worldPosition.Y * SharedGlobals.PixelSizeY, Tile.GetCommonTile().TileSizeX * SharedGlobals.PixelSizeX, Tile.GetCommonTile().TileSizeY * SharedGlobals.PixelSizeY);
+        CommonTile? tile = Tile.GetCommonTile();
+        if (tile == null) return Rectangle.Empty;
+        return new Rectangle((int)worldPosition.X * SharedGlobals.PixelSizeX, (int)worldPosition.Y * SharedGlobals.PixelSizeY, tile.TileSizeX * SharedGlobals.PixelSizeX, tile.TileSizeY * SharedGlobals.PixelSizeY);
     }
 }

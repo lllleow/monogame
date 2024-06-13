@@ -118,7 +118,7 @@ public class World
         return GetTileAt(0, globalX, globalY);
     }
 
-    public CommonTile SetTileAtPosition(string tile, TileDrawLayer layer, int globalX, int globalY)
+    public static CommonTile SetTileAtPosition(string tile, TileDrawLayer layer, int globalX, int globalY)
     {
         var (LocalX, LocalY) = GetLocalPositionFromGlobalPosition(globalX, globalY);
         var (ChunkPositionX, ChunkPositionY) = GetChunkPositionFromGlobalPosition(globalX, globalY);
@@ -158,7 +158,7 @@ public class World
         return null;
     }
 
-    public (int LocalX, int LocalY) GetLocalPositionFromGlobalPosition(int globalPositionX, int globalPositionY)
+    public static (int LocalX, int LocalY) GetLocalPositionFromGlobalPosition(int globalPositionX, int globalPositionY)
     {
         var localX = globalPositionX % Chunk.SizeX;
         var localY = globalPositionY % Chunk.SizeY;
@@ -166,7 +166,7 @@ public class World
         return (localX, localY);
     }
 
-    public (int ChunkPositionX, int ChunkPositionY) GetChunkPositionFromGlobalPosition(
+    public static (int ChunkPositionX, int ChunkPositionY) GetChunkPositionFromGlobalPosition(
         int globalPositionX,
         int globalPositionY)
     {
@@ -182,7 +182,7 @@ public class World
         return GetChunkAt(ChunkPositionX, ChunkPositionY);
     }
 
-    public CommonTile GetTileFromScreenPosition(TileDrawLayer layer, int screenX, int screenY)
+    public static CommonTile GetTileFromScreenPosition(TileDrawLayer layer, int screenX, int screenY)
     {
         var worldPosition = new Vector2(screenX, screenY);
         worldPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.Camera.Transform));
@@ -200,7 +200,7 @@ public class World
         return chunk?.GetTile(layer, localX, localY) ?? null;
     }
 
-    public bool Intersects(Rectangle rectA, Rectangle rectB)
+    public static bool Intersects(Rectangle rectA, Rectangle rectB)
     {
         return rectA.X < rectB.X + rectB.Width &&
                rectA.X + rectA.Width > rectB.X &&
@@ -208,14 +208,14 @@ public class World
                rectA.Y + rectA.Height > rectB.Y;
     }
 
-    public IChunk GetChunkFromScreenPosition(int layer, int screenX, int screenY)
+    public static IChunk GetChunkFromScreenPosition(int layer, int screenX, int screenY)
     {
         var (ChunkPositionX, ChunkPositionY) = GetChunkPositionFromScreenPosition(new Vector2(screenX, screenY));
         var chunk = Globals.World.GetChunkAt(ChunkPositionX, ChunkPositionY);
         return chunk;
     }
 
-    public (int PosX, int PosY) GetGlobalPositionFromScreenPosition(Vector2 screenPositionBeforeTransform)
+    public static (int PosX, int PosY) GetGlobalPositionFromScreenPosition(Vector2 screenPositionBeforeTransform)
     {
         var screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.Camera.Transform));
 
@@ -231,7 +231,7 @@ public class World
         return ((chunkX * Chunk.SizeX) + localX, (chunkY * Chunk.SizeY) + localY);
     }
 
-    public (int ChunkPositionX, int ChunkPositionY) GetChunkPositionFromScreenPosition(
+    public static (int ChunkPositionX, int ChunkPositionY) GetChunkPositionFromScreenPosition(
         Vector2 screenPositionBeforeTransform)
     {
         var screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.Camera.Transform));

@@ -17,7 +17,7 @@ public class CollisionComponentNetworkController : INetworkObjectController<Coll
         });
     }
 
-    public void SetCollisionMode(CollisionComponent networkObject)
+    public static void SetCollisionMode(CollisionComponent networkObject)
     {
         var message = new SendCollisionModeUpdateNetworkMessage
         {

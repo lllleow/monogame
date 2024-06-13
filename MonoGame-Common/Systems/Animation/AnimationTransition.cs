@@ -17,5 +17,5 @@ public class AnimationTransition
 
     public string From { get; set; }
     public string To { get; set; }
-    public Func<IAnimationState, bool> Condition { get; set; }
+    public Func<IAnimationState, bool> Condition { get; set; } = (state) => true;
 }
