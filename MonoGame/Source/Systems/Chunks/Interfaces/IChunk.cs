@@ -1,12 +1,13 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame_Common.Enums;
-using System.Collections.Generic;
+using MonoGame_Common.Systems.Tiles.Interfaces;
 
 namespace MonoGame.Source.Systems.Chunks.Interfaces;
 
 public interface IChunk
 {
-    public Dictionary<TileDrawLayer, Tile[,]> Tiles { get; set; }
+    public Dictionary<TileDrawLayer, CommonTile[,]> Tiles { get; set; }
 
     public int X { get; set; }
 
@@ -20,9 +21,9 @@ public interface IChunk
 
     public void Draw(SpriteBatch spriteBatch);
 
-    public Tile GetTile(TileDrawLayer layer, int x, int y);
+    public CommonTile GetTile(TileDrawLayer layer, int x, int y);
 
-    public Tile SetTile(string id, TileDrawLayer layer, int x, int y);
+    public CommonTile SetTile(string id, TileDrawLayer layer, int x, int y);
 
-    public Tile SetTileAndUpdateNeighbors(string id, TileDrawLayer layer, int x, int y);
+    public CommonTile SetTileAndUpdateNeighbors(string id, TileDrawLayer layer, int x, int y);
 }

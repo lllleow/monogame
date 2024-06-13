@@ -28,12 +28,12 @@ public static class RectangleHelper
 
     public static Rectangle ConvertToXNARectangle(System.Drawing.Rectangle rectangle)
     {
-        return new Rectangle((int)rectangle.X, (int)rectangle.Y, (int)rectangle.Width, (int)rectangle.Height);
+        return new Rectangle(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
     }
 
     public static System.Drawing.Rectangle ConvertToDrawingRectangle(Rectangle rectangle)
     {
-        return new System.Drawing.Rectangle((int)rectangle.X, (int)rectangle.Y, (int)rectangle.Width, (int)rectangle.Height);
+        return new System.Drawing.Rectangle(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
     }
 
     public static Rectangle GetTextureRectangleFromCoordinates(int x, int y)

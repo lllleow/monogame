@@ -8,7 +8,7 @@ namespace MonoGame_Server.Systems.Server.Helper;
 public static class ServerTextureHelper
 {
     public static Dictionary<string, bool[,]> TextureMasks { get; set; } = [];
-    public static Dictionary<string, Image> Textures { get; set; } = [];
+    public static Dictionary<string, Image<Rgba32>> Textures { get; set; } = [];
 
     public static bool[,] GetImageMask(Image<Rgba32> image)
     {
@@ -28,26 +28,33 @@ public static class ServerTextureHelper
         return mask;
     }
 
-    public static Image GetImage(string imagePath)
+    public static bool[,] GetImageMaskForRectangle(string image, System.Drawing.Rectangle rectangle)
+    {
+        Image<Rgba32> croppedImage = GetImageInRectangle(image, rectangle);
+        return GetImageMask(croppedImage);
+    }
+
+    public static Image<Rgba32> GetImage(string imagePath)
     {
         if (Textures.ContainsKey(imagePath))
         {
-            return Textures[imagePath];
+            return Textures[imagePath].Clone();
         }
 
-        using var image = Image.Load(imagePath);
-        Textures.Add(imagePath, image);
+        var image = Image.Load<Rgba32>("../Assets/" + imagePath + ".png");
+        Textures.Add(imagePath, image.Clone());
+
         return image;
     }
 
-    public static Image GetImageInRectangle(string imagePath, System.Drawing.Rectangle rectangle)
+    public static Image<Rgba32> GetImageInRectangle(string imagePath, System.Drawing.Rectangle rectangle)
     {
         var image = GetImage(imagePath);
-        var textureImage = image.Clone(image => image.Crop(new Rectangle(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height)));
-        return textureImage;
+        Image<Rgba32> croppedImage = image.Clone(img => img.Crop(new Rectangle(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height)));
+        return croppedImage;
     }
 
-    public static Image GetImageInCoordinates(string imagePath, int x, int y, int sizeX, int sizeY)
+    public static Image<Rgba32> GetImageInCoordinates(string imagePath, int x, int y, int sizeX, int sizeY)
     {
         return GetImageInRectangle(imagePath, new System.Drawing.Rectangle(x * TileState.PixelSizeX, y * TileState.PixelSizeY, sizeX * TileState.PixelSizeX, sizeY * TileState.PixelSizeY));
     }

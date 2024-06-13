@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk" InitialTargets="BeforeBuild">
     <ItemGroup>
         <ContentWithTargetPath Include="Scripts\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>Scripts\%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
-    <ItemGroup>
+	<ItemGroup>
         <MonoGameContentReference Include="Content\Content.mgcb" />
     </ItemGroup>
     <PropertyGroup>
@@ -25,16 +25,10 @@
         <None Remove="Icon.bmp" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Remove="Scripts\**" />
-        <None Include="Scripts\**" />
-    </ItemGroup>
-    <ItemGroup>
         <EmbeddedResource Include="Icon.ico" />
         <EmbeddedResource Include="Icon.bmp" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" />
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.9.2" />
         <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
         <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
     </ItemGroup>
@@ -44,7 +38,7 @@
     <ItemGroup>
         <ProjectReference Include="..\MonoGame-Common\MonoGame-Common.csproj" />
     </ItemGroup>
-    <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
+    <Target Name="RestoreDotnetTools">
         <Message Text="Restoring dotnet tools" Importance="High" />
         <Exec Command="dotnet tool restore" />
     </Target>

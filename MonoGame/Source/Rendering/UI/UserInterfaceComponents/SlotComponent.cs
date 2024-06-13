@@ -26,16 +26,9 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
         var position = GetPositionRelativeToParent();
         var size = GetPreferredSize();
 
-        Rectangle textureRectangle;
-        if (IsSelected)
-        {
-            textureRectangle = RectangleHelper.GetTextureRectangleFromCoordinates(1, 0);
-        }
-        else
-        {
-            textureRectangle = RectangleHelper.GetTextureRectangleFromCoordinates(1, 0);
-        }
-
+        var textureRectangle = IsSelected
+            ? RectangleHelper.GetTextureRectangleFromCoordinates(1, 0)
+            : RectangleHelper.GetTextureRectangleFromCoordinates(0, 0);
         SlotTexture.TextureRectangle = RectangleHelper.ConvertToDrawingRectangle(textureRectangle);
         spriteBatch.Draw(
             SpritesheetLoader.GetSpritesheet(SlotTexture.Spritesheet),

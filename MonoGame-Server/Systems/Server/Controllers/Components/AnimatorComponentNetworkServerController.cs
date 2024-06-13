@@ -21,4 +21,8 @@ public class AnimatorComponentNetworkServerController : IServerNetworkController
             NetworkServer.Instance.BroadcastMessage(updateMessage, [peer]);
         });
     }
+
+    public void Update()
+    {
+    }
 }

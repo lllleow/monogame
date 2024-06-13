@@ -1,13 +1,35 @@
-﻿using LiteNetLib.Utils;
+﻿using System.Numerics;
+using LiteNetLib.Utils;
 using MonoGame_Common.States.Components;
-using System.Numerics;
+using MonoGame_Common.Util.Enum;
 
 namespace MonoGame_Common.States;
 
 public class EntityState : INetSerializable
 {
-    public required string UUID { get; set; }
-    public Vector2 Position { get; set; }
+    public string UUID { get; set; }
+    public bool IsMoving { get; set; } = false;
+    public Direction MovementDirection { get; set; }
+    private readonly object positionLock = new object();
+    private Vector2 position;
+    public Vector2 Position
+    {
+        get
+        {
+            lock (positionLock)
+            {
+                return position;
+            }
+        }
+        set
+        {
+            lock (positionLock)
+            {
+                position = value;
+            }
+        }
+    }
+
     public List<ComponentState> Components { get; set; } = [];
 
     public virtual void Serialize(NetDataWriter writer)

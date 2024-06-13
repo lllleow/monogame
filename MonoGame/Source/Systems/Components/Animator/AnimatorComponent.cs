@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using MonoGame_Common.States.Components;
-using MonoGame.Source.Systems.Animation;
+using MonoGame_Common.Systems.Animation;
 using MonoGame.Source.Systems.Components.Animator.Controller;
 using MonoGame.Source.Systems.Components.SpriteRenderer;
 using MonoGame.Source.Systems.Entity.Interfaces;
@@ -26,6 +26,8 @@ public class AnimatorComponent : EntityComponent
                     new Rectangle(CurrentTextureX * AnimationBundle.SizeX, CurrentTextureY * AnimationBundle.SizeY, AnimationBundle.SizeX, AnimationBundle.SizeY));
             }
         };
+
+        networkController.SendStateUpdate(this);
     }
 
     public IAnimationBundle AnimationBundle { get; set; }
@@ -52,7 +54,7 @@ public class AnimatorComponent : EntityComponent
 
     public override void Update(GameTime gameTime)
     {
-        StateMachine.Update(gameTime);
+        StateMachine.Update();
     }
 
     public override Type GetComponentStateType()

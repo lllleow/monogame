@@ -1,12 +1,9 @@
 ﻿using System.Drawing;
-using MonoGame_Common;
 using MonoGame_Common.Enums;
 using MonoGame_Common.Systems.Tiles.Interfaces;
 using MonoGame_Common.Util.Helpers;
-using MonoGame_Common.Util.Tile;
-using MonoGame_Common.Util.Tile.TileComponents;
 
-namespace MonoGame.Source.Systems.Tiles.TileComponents;
+namespace MonoGame_Common.Util.Tile.TileComponents;
 
 public class TextureRendererTileComponent : ITileComponent
 {

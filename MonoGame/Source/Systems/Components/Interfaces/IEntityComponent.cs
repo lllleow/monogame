@@ -1,7 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Systems.Entity.Interfaces;
-using System;
 
 namespace MonoGame.Source.Systems.Components.Interfaces;
 

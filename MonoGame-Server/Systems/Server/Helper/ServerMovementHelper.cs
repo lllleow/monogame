@@ -1,9 +1,12 @@
-﻿using MonoGame_Common.Enums;
+﻿using System.Numerics;
+using MonoGame_Common.Enums;
 using MonoGame_Common.States;
 using MonoGame_Common.States.Components;
+using MonoGame_Common.Systems.Animation;
+using MonoGame_Common.Systems.Scripts;
 using MonoGame_Common.Util.Enum;
-using System.Drawing;
-using System.Numerics;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace MonoGame_Server.Systems.Server.Helper;
 
@@ -13,8 +16,8 @@ public class ServerMovementHelper
     {
         if (entity.HasComponent(typeof(CollisionComponentState)))
         {
-            var entityRectangle = GetEntityBoundsAtPosition(entity, newPosition);
-            var collisionComponent = entity.GetComponent<CollisionComponentState>();
+            System.Drawing.Rectangle entityRectangle = GetEntityBoundsAtPosition(entity, newPosition);
+            CollisionComponentState collisionComponent = entity.GetComponent<CollisionComponentState>();
             List<TileState> tiles = [];
 
             if (collisionComponent.Mode == CollisionMode.BoundingBox)
@@ -25,16 +28,17 @@ public class ServerMovementHelper
             {
                 if (entity.HasComponent(typeof(AnimatorComponentState)))
                 {
-                    // var animator = entity.GetComponent<AnimatorComponentState>();
-                    // IAnimationBundle animationBundle = AnimationBundleRegistry.GetAnimationBundle(animator.AnimationBundleId);
-                    // Animation currentAnimation = animationBundle.Animations[animator.CurrentState];
-                    // var animationState = new AnimationState(currentAnimation, animationBundle)
-                    // {
-                    //     CurrentTime = animator.CurrentTime
-                    // };
-                    // Rectangle textureRectangle = animationState.GetTextureRectangle();
-                    // bool[,] mask = ServerTextureHelper.GetImageMask(animationBundle.CollisionMaskSpritesheet);
-                    // tiles = NetworkServer.Instance.ServerWorld.GetTilesIntersectingWithMask(mask, entityRectangle);
+                    AnimatorComponentState animator = entity.GetComponent<AnimatorComponentState>();
+                    IAnimationBundle animationBundle = AnimationBundleRegistry.GetAnimationBundle(animator.AnimationBundleId);
+                    Animation currentAnimation = animationBundle.Animations[animator.CurrentState];
+                    var animationState = new AnimationState(currentAnimation, animationBundle)
+                    {
+                        CurrentTime = animator.CurrentTime
+                    };
+                    System.Drawing.Rectangle textureRectangle = animationState.GetTextureRectangle();
+                    Image<Rgba32> croppedImage = ServerTextureHelper.GetImageInRectangle(animationBundle.CollisionMaskSpritesheet, textureRectangle);
+                    bool[,] mask = ServerTextureHelper.GetImageMask(croppedImage);
+                    tiles = NetworkServer.Instance.ServerWorld.GetTilesIntersectingWithMask(mask, entityRectangle);
                 }
                 else
                 {
@@ -52,10 +56,10 @@ public class ServerMovementHelper
         return true;
     }
 
-    public Rectangle GetEntityBoundsAtPosition(EntityState entity, Vector2 position)
+    public System.Drawing.Rectangle GetEntityBoundsAtPosition(EntityState entity, Vector2 position)
     {
         return entity.HasComponent(typeof(AnimatorComponentState))
-            ? new Rectangle((int)position.X, (int)position.Y, TileState.PixelSizeX, TileState.PixelSizeY)
-            : Rectangle.Empty;
+            ? new System.Drawing.Rectangle((int)position.X, (int)position.Y, TileState.PixelSizeX, TileState.PixelSizeY)
+            : System.Drawing.Rectangle.Empty;
     }
 }

@@ -6,7 +6,7 @@ namespace MonoGame_Server.Systems.Server;
 public static class ServerNetworkEventManager
 {
     private static readonly Dictionary<Type, Action<NetworkServer, NetPeer, INetworkMessage>> _subscriptions;
-    private static readonly List<IServerNetworkController> _controllers = [];
+    public static List<IServerNetworkController> NetworkControllers { get; set; } = [];
 
     static ServerNetworkEventManager()
     {
@@ -15,7 +15,7 @@ public static class ServerNetworkEventManager
 
     public static void AddController(IServerNetworkController controller)
     {
-        _controllers.Add(controller);
+        NetworkControllers.Add(controller);
         controller.InitializeListeners();
     }
 
