@@ -30,10 +30,6 @@ public class ServerWorld
         Entities = worldState.Entities ?? [];
     }
 
-    public void Update()
-    {
-    }
-
     public ChunkState? GetChunkAt(int chunkX, int chunkY)
     {
         return Chunks?.FirstOrDefault(x => x.X == chunkX && x.Y == chunkY);
@@ -197,13 +193,9 @@ public class ServerWorld
     private void ProcessTile(ChunkState chunk, int tileX, int tileY, int chunkX, int chunkY, Rectangle rectangle, bool[,] mask, List<TileState> intersectingTiles, int chunkSizeInPixelsX, int chunkSizeInPixelsY)
     {
         TileState tileState = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
-        if (tileState == null || !(TileRegistry.GetTile(tileState.Id)?.HasComponent<TextureRendererTileComponent>() ?? false)) return;
+        if (tileState == null || !(TileRegistry.GetTile(tileState.Id)?.HasComponent<TextureRendererTileComponent>() == true)) return;
 
-        Rectangle tileRect = new Rectangle(
-            (chunkX * chunkSizeInPixelsX) + (tileX * SharedGlobals.PixelSizeX),
-            (chunkY * chunkSizeInPixelsY) + (tileY * SharedGlobals.PixelSizeY),
-            SharedGlobals.PixelSizeX,
-            SharedGlobals.PixelSizeY);
+        Rectangle tileRect = new((chunkX * chunkSizeInPixelsX) + (tileX * SharedGlobals.PixelSizeX), (chunkY * chunkSizeInPixelsY) + (tileY * SharedGlobals.PixelSizeY), SharedGlobals.PixelSizeX, SharedGlobals.PixelSizeY);
 
         if (CheckTileIntersection(tileState, tileRect, mask, rectangle) && !intersectingTiles.Contains(tileState))
         {
