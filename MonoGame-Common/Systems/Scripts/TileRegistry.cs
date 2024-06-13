@@ -22,6 +22,7 @@ public static class TileRegistry
 
     public static CommonTile? GetTile(string id)
     {
+        if (id == null) return null;
         var tileType = Tiles[id];
         var tile = Activator.CreateInstance(tileType) as CommonTile;
         return tile;

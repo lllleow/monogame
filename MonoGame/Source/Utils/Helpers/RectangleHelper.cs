@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using MonoGame_Common;
 using MonoGame_Common.States;
 namespace MonoGame.Source.Utils.Helpers;
 
@@ -38,6 +39,6 @@ public static class RectangleHelper
 
     public static Rectangle GetTextureRectangleFromCoordinates(int x, int y)
     {
-        return new Rectangle(x * TileState.PixelSizeX, y * TileState.PixelSizeY, TileState.PixelSizeX, TileState.PixelSizeY);
+        return new Rectangle(x * SharedGlobals.PixelSizeX, y * SharedGlobals.PixelSizeY, SharedGlobals.PixelSizeX, SharedGlobals.PixelSizeY);
     }
 }

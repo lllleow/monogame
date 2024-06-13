@@ -21,9 +21,6 @@ public class NetworkServer
     {
         listener = new EventBasedNetListener();
         server = new NetManager(listener);
-        InitializeControllers();
-        ServerWorld = new ServerWorld();
-        ServerWorld.Initialize();
     }
 
     public static NetworkServer Instance { get; set; } = new();
@@ -44,6 +41,10 @@ public class NetworkServer
         AnimationBundleRegistry.LoadAnimationBundleScripts();
 
         Console.WriteLine("Finished loading scripts");
+
+        InitializeControllers();
+        ServerWorld = new ServerWorld();
+        ServerWorld.Initialize();
 
         Console.WriteLine("Server is listening for connections");
         listener.ConnectionRequestEvent += request =>
@@ -79,6 +80,8 @@ public class NetworkServer
 
             reader.Recycle();
         };
+
+        ServerWorld.UpdateTextureCoordinates();
     }
 
     public void SetEntity(EntityState entity)
@@ -154,15 +157,15 @@ public class NetworkServer
     {
         server.PollEvents();
 
-        if (autoSaveCounter >= 1000)
-        {
-            SaveManager.SaveGame();
-            autoSaveCounter = 0;
-        }
-        else
-        {
-            autoSaveCounter++;
-        }
+        // if (autoSaveCounter >= 1000)
+        // {
+        //     SaveManager.SaveGame();
+        //     autoSaveCounter = 0;
+        // }
+        // else
+        // {
+        //     autoSaveCounter++;
+        // }
 
         foreach (var controller in ServerNetworkEventManager.NetworkControllers ?? [])
         {

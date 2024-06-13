@@ -9,6 +9,7 @@ public class EntityState : INetSerializable
 {
     public string UUID { get; set; }
     public bool IsMoving { get; set; } = false;
+    public bool LastStateWasIdle { get; set; } = false;
     public Direction MovementDirection { get; set; }
     private readonly object positionLock = new object();
     private Vector2 position;
