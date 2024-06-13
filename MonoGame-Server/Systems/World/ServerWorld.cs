@@ -163,7 +163,7 @@ public class ServerWorld
         return intersectingTiles;
     }
 
-    public List<PositionedTileHelper> GetTilesIntersectingWithMask(bool[,] mask, Rectangle rectangle)
+    public static List<PositionedTileHelper> GetTilesIntersectingWithMask(bool[,] mask, Rectangle rectangle)
     {
         Dictionary<string, PositionedTileHelper> intersectingTiles = new Dictionary<string, PositionedTileHelper>();
 
@@ -220,10 +220,7 @@ public class ServerWorld
 
                                     if (CollisionMaskHandler.CheckMaskCollision(tileMask, rectangle, tileMask, tileRect))
                                     {
-                                        if (!intersectingTiles.ContainsKey(tile.Id))
-                                        {
-                                            intersectingTiles.Add(tile.Id, positionedTileHelper);
-                                        }
+                                        intersectingTiles.TryAdd(tile.Id, positionedTileHelper);
                                     }
                                 }
                             }

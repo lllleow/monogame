@@ -13,7 +13,7 @@ namespace MonoGame_Server.Systems.Server.Helper;
 
 public class ServerMovementHelper
 {
-    public bool CanMove(EntityState entity, Vector2 newPosition)
+    public static bool CanMove(EntityState entity, Vector2 newPosition)
     {
         if (entity.HasComponent(typeof(CollisionComponentState)))
         {
@@ -52,7 +52,7 @@ public class ServerMovementHelper
                         }
 
                         bool[,] mask = ServerTextureHelper.GetImageMask(croppedImage);
-                        tiles = NetworkServer.Instance.ServerWorld.GetTilesIntersectingWithMask(mask, entityRectangle);
+                        tiles = World.ServerWorld.GetTilesIntersectingWithMask(mask, entityRectangle);
                     }
                 }
                 else
@@ -71,7 +71,7 @@ public class ServerMovementHelper
         return true;
     }
 
-    public System.Drawing.Rectangle GetEntityBoundsAtPosition(EntityState entity, Vector2 position)
+    public static System.Drawing.Rectangle GetEntityBoundsAtPosition(EntityState entity, Vector2 position)
     {
         return entity.HasComponent(typeof(AnimatorComponentState))
             ? new System.Drawing.Rectangle((int)position.X, (int)position.Y, SharedGlobals.PixelSizeX, SharedGlobals.PixelSizeY)

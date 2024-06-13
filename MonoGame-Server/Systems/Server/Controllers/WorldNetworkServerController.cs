@@ -13,7 +13,7 @@ public class WorldNetworkServerController : IServerNetworkController
             foreach (var chunk in server.ServerWorld.Chunks!)
             {
                 var chunkDataNetworkMessage = new ChunkDataNetworkMessage(chunk);
-                server.SendMessageToPeer(peer, chunkDataNetworkMessage);
+                NetworkServer.SendMessageToPeer(peer, chunkDataNetworkMessage);
             }
 
             foreach (var uuid in server.Connections.Values)
@@ -23,7 +23,7 @@ public class WorldNetworkServerController : IServerNetworkController
                 {
                     var spawnPlayerNetworkMessage =
                         new SpawnPlayerNetworkMessage(playerState.UUID, playerState.Position);
-                    server.SendMessageToPeer(peer, spawnPlayerNetworkMessage);
+                    NetworkServer.SendMessageToPeer(peer, spawnPlayerNetworkMessage);
                 }
             }
 

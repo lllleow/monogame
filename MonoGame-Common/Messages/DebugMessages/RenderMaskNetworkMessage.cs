@@ -52,6 +52,7 @@ namespace MonoGame
                     data.Put(Mask[i, j]);
                 }
             }
+
             return data;
         }
     }

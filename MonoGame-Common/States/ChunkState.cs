@@ -150,6 +150,7 @@ public class ChunkState : INetSerializable
                 return (layer, tilePosition);
             }
         }
+
         return (TileDrawLayer.Tiles, Vector2.Zero);
     }
 

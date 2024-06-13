@@ -36,7 +36,7 @@ public class SaveManager
         File.WriteAllText(dirPath + "entities.json", json);
     }
 
-    public (List<PlayerState>? Players, List<ChunkState>? Chunks, List<EntityState>? Entities) LoadGame()
+    public static (List<PlayerState>? Players, List<ChunkState>? Chunks, List<EntityState>? Entities) LoadGame()
     {
         var dirPath = SaveLocation;
         if (Directory.Exists(dirPath) && Directory.Exists(dirPath + "players") &&

@@ -90,7 +90,7 @@ public class NetworkServer
         ServerWorld?.Entities?.Add(entity);
     }
 
-    public void InitializeControllers()
+    public static void InitializeControllers()
     {
         ServerNetworkEventManager.AddController(new AuthenticationNetworkServerController());
         ServerNetworkEventManager.AddController(new PlayerNetworkServerController());
@@ -132,7 +132,7 @@ public class NetworkServer
         peer?.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
     }
 
-    public void SendMessageToPeer(NetPeer peer, INetworkMessage message)
+    public static void SendMessageToPeer(NetPeer peer, INetworkMessage message)
     {
         peer.Send(message.Serialize(), DeliveryMethod.ReliableOrdered);
     }
@@ -166,7 +166,6 @@ public class NetworkServer
         // {
         //     autoSaveCounter++;
         // }
-
         foreach (var controller in ServerNetworkEventManager.NetworkControllers ?? [])
         {
             controller.Update();
