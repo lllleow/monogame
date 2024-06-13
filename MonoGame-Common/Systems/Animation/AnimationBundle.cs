@@ -4,9 +4,9 @@ namespace MonoGame_Common.Systems.Animation;
 
 public class AnimationBundle : IAnimationBundle
 {
-    public string Id { get; set; }
-    public string SpriteSheet { get; set; }
-    public string CollisionMaskSpritesheet { get; set; }
+    public string? Id { get; set; }
+    public string? SpriteSheet { get; set; }
+    public string? CollisionMaskSpritesheet { get; set; }
     public int SizeX { get; set; } = 16;
     public int SizeY { get; set; } = 16;
     public Dictionary<string, Animation> Animations { get; set; } = [];

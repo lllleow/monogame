@@ -67,6 +67,7 @@ public class Chunk : IChunk
                     commonTiles[x, y] = tileState?.GetCommonTile();
                 }
             }
+
             Tiles[layer.Key] = commonTiles;
         }
 
@@ -284,7 +285,7 @@ public class Chunk : IChunk
         return new Vector2(worldX, worldY);
     }
 
-    public void Initialize()
+    public static void Initialize()
     {
     }
 }

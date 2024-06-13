@@ -2,7 +2,7 @@
 
 public class AnimatorComponentState : ComponentState
 {
-    public required string CurrentState { get; set; }
+    required public string CurrentState { get; set; }
+    required public string AnimationBundleId { get; set; }
     public int CurrentTime { get; set; }
-    public required string AnimationBundleId { get; set; }
 }

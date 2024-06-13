@@ -26,7 +26,7 @@ public class CollisionComponent : EntityComponent
         }
 
         NetworkController = new CollisionComponentNetworkController();
-        NetworkController.SetCollisionMode(this);
+        CollisionComponentNetworkController.SetCollisionMode(this);
     }
 
     public override Type GetComponentStateType()

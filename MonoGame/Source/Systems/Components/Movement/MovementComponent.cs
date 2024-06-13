@@ -50,6 +50,10 @@ public class MovementComponent : EntityComponent
             Console.WriteLine(key);
         }
 
-        NetworkClient.SendMessage(new KeyClickedNetworkMessage(Entity.UUID, commonsKeys));
+        NetworkClient.SendMessage(new KeyClickedNetworkMessage()
+        {
+            UUID = Entity.UUID,
+            Keys = commonsKeys
+        });
     }
 }

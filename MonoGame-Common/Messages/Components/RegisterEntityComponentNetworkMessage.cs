@@ -10,14 +10,8 @@ public class RegisterEntityComponentNetworkMessage : NetworkMessage
     {
     }
 
-    public RegisterEntityComponentNetworkMessage(string uuid, Type componentType)
-    {
-        UUID = uuid;
-        ComponentType = componentType;
-    }
-
-    public string UUID { get; set; }
-    public Type ComponentType { get; set; }
+    required public string UUID { get; set; }
+    required public Type? ComponentType { get; set; }
 
     public override void Deserialize(NetDataReader reader)
     {
@@ -31,7 +25,7 @@ public class RegisterEntityComponentNetworkMessage : NetworkMessage
         var data = new NetDataWriter();
         data.Put(GetNetworkTypeId());
         data.Put(UUID);
-        var typeName = ComponentType.FullName;
+        var typeName = ComponentType?.FullName;
         data.Put(typeName);
         return data;
     }

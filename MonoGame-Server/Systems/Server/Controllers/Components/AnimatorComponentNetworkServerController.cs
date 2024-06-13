@@ -9,7 +9,11 @@ public class AnimatorComponentNetworkServerController : IServerNetworkController
     {
         ServerNetworkEventManager.Subscribe<SendAnimatorStateNetworkMessage>((server, peer, message) =>
         {
-            UpdateAnimatorStateNetworkMessage updateMessage = new(message.UUID, message.CurrentState);
+            UpdateAnimatorStateNetworkMessage updateMessage = new()
+            {
+                UUID = message.UUID,
+                TargetState = message.CurrentState
+            };
             var state = NetworkServer.Instance.ServerWorld.GetEntityByUUID(message.UUID);
             var animatorState = new AnimatorComponentState
             {

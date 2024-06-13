@@ -15,9 +15,9 @@ public class AnimationStateMachine
 
     public IAnimationBundle AnimationBundle { get; set; }
     private Dictionary<string, IAnimationState> AnimationStates { get; } = [];
-    public IAnimationState CurrentState { get; set; }
-    public Action<int, int> OnSpriteChanged { get; set; }
-    public Action<IAnimationState> OnStateEnded { get; set; }
+    public IAnimationState? CurrentState { get; set; }
+    public Action<int, int> OnSpriteChanged { get; set; } = (x, y) => { };
+    public Action<IAnimationState> OnStateEnded { get; set; } = (state) => { };
 
     public void AddState(IAnimationState state)
     {
@@ -28,7 +28,7 @@ public class AnimationStateMachine
 
     public void SetState(string animationId)
     {
-        if (CurrentState.Animation.Id != animationId)
+        if (CurrentState?.Animation.Id != animationId)
         {
             var newState = AnimationStates[animationId];
             CurrentState = newState;
@@ -46,7 +46,7 @@ public class AnimationStateMachine
         {
             foreach (var transition in AnimationBundle.AnimationTransitions)
             {
-                if (transition.From == CurrentState.Animation.Id && transition.Condition(CurrentState))
+                if (transition.From == CurrentState?.Animation.Id && transition.Condition(CurrentState))
                 {
                     var newState = AnimationStates[transition.To];
                     CurrentState = newState;

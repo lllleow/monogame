@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using LiteNetLib.Utils;
+using MonoGame_Common.Systems.Tiles.Interfaces;
 using MonoGame_Common.Util.Helpers;
 using MonoGame_Common.Util.Tile;
 
@@ -24,12 +25,14 @@ public class TextureRendererTileComponentState : TileComponentState
 
     public TextureLocation GetTextureLocation()
     {
-        return new TextureLocation(TileState.GetCommonTile().SpritesheetName, GetSpriteRectangle());
+        return new TextureLocation(TileState?.GetCommonTile()?.SpritesheetName, GetSpriteRectangle());
     }
 
     public Rectangle GetSpriteRectangle()
     {
-        return new Rectangle(TextureX * SharedGlobals.PixelSizeX, TextureY * SharedGlobals.PixelSizeY, TileState.GetCommonTile().TileSizeX * SharedGlobals.PixelSizeX, TileState.GetCommonTile().TileSizeY * SharedGlobals.PixelSizeY);
+        CommonTile? commonTile = TileState?.GetCommonTile();
+        if (commonTile == null) return Rectangle.Empty;
+        return new Rectangle(TextureX * SharedGlobals.PixelSizeX, TextureY * SharedGlobals.PixelSizeY, commonTile.TileSizeX * SharedGlobals.PixelSizeX, commonTile.TileSizeY * SharedGlobals.PixelSizeY);
     }
 
     public void UpdateTextureCoordinates(TileNeighborConfiguration configuration)

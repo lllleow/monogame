@@ -12,7 +12,7 @@ public class ChunkState : INetSerializable
 {
     public ChunkState()
     {
-        Tiles = new ConcurrentDictionary<TileDrawLayer, TileState[,]>();
+        Tiles = new ConcurrentDictionary<TileDrawLayer, TileState?[,]>();
         foreach (TileDrawLayer layer in TileDrawLayerPriority.GetPriority())
         {
             Tiles[layer] = new TileState[SizeX, SizeY];
@@ -21,7 +21,7 @@ public class ChunkState : INetSerializable
 
     public ChunkState(int x, int y)
     {
-        Tiles = new ConcurrentDictionary<TileDrawLayer, TileState[,]>();
+        Tiles = new ConcurrentDictionary<TileDrawLayer, TileState?[,]>();
         foreach (TileDrawLayer layer in TileDrawLayerPriority.GetPriority())
         {
             Tiles[layer] = new TileState[SizeX, SizeY];
@@ -52,9 +52,10 @@ public class ChunkState : INetSerializable
             {
                 for (var j = 0; j < Tiles[layer].GetLength(1); j++)
                 {
-                    if (Tiles[layer][i, j] != null)
+                    TileState? state = Tiles[layer][i, j];
+                    if (state != null)
                     {
-                        PositionedTileHelper positionedTile = new PositionedTileHelper(Tiles[layer][i, j], this, i, j);
+                        PositionedTileHelper positionedTile = new PositionedTileHelper(state, this, i, j);
                         positionedTileStates.Add(positionedTile);
                     }
                 }
@@ -118,7 +119,7 @@ public class ChunkState : INetSerializable
         return false;
     }
 
-    public TileState GetTile(TileDrawLayer layer, int posX, int posY)
+    public TileState? GetTile(TileDrawLayer layer, int posX, int posY)
     {
         return Tiles[layer][posX, posY];
     }
@@ -137,10 +138,10 @@ public class ChunkState : INetSerializable
 
     public Vector2 GetTilePosition(TileState tile)
     {
-        return GetTilePositionAndLayer(tile).position ?? Vector2.Zero;
+        return GetTilePositionAndLayer(tile).Position ?? Vector2.Zero;
     }
 
-    public (TileDrawLayer layer, Vector2? position) GetTilePositionAndLayer(TileState tile)
+    public (TileDrawLayer Layer, Vector2? Position) GetTilePositionAndLayer(TileState tile)
     {
         foreach (var layer in Tiles.Keys)
         {
@@ -150,6 +151,7 @@ public class ChunkState : INetSerializable
                 return (layer, tilePosition);
             }
         }
+
         return (TileDrawLayer.Tiles, Vector2.Zero);
     }
 

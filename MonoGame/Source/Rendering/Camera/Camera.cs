@@ -45,7 +45,7 @@ public class Camera
         Transform = Matrix.Lerp(Transform, targetTransform, followSpeed * deltaTime);
     }
 
-    public void Update(GameTime gameTime)
+    public static void Update(GameTime gameTime)
     {
     }
 }

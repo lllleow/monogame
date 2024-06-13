@@ -9,9 +9,9 @@ public class SpritesheetLoader
 
     public static Texture2D GetSpritesheet(string spritesheet)
     {
-        if (SpriteSheets.ContainsKey(spritesheet))
+        if (SpriteSheets.TryGetValue(spritesheet, out var value))
         {
-            return SpriteSheets[spritesheet];
+            return value;
         }
 
         var texture = Globals.ContentManager.Load<Texture2D>(spritesheet);
