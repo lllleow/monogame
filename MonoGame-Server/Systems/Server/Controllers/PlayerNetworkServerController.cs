@@ -23,8 +23,6 @@ public class PlayerNetworkServerController : IServerNetworkController
 
             if (message.Keys.Contains(Keys.W) || message.Keys.Contains(Keys.A) || message.Keys.Contains(Keys.S) || message.Keys.Contains(Keys.D))
             {
-                Console.WriteLine("Keys: " + message.Keys);
-
                 playerState.MovementDirection = Direction.None;
                 Direction direction = Direction.None;
                 foreach (var key in message.Keys)
@@ -71,29 +69,38 @@ public class PlayerNetworkServerController : IServerNetworkController
             if (player.IsMoving)
             {
                 Vector2 currentPosition = player.Position;
-                player.Position = currentPosition + MovementHelper.GetDisplacement(player.MovementDirection, SharedGlobals.PlayerSpeed);
+                Vector2 newPosition = currentPosition + MovementHelper.GetDisplacement(player.MovementDirection, SharedGlobals.PlayerSpeed);
 
-                switch (player.MovementDirection)
+                if (ServerMovementHelper.CanMove(player, newPosition))
                 {
-                    case Direction.Up:
-                        NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(player.UUID, "walking_back"));
-                        break;
-                    case Direction.Left:
-                        NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(player.UUID, "walking_left"));
-                        break;
-                    case Direction.Down:
-                        NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(player.UUID, "walking_front"));
-                        break;
-                    case Direction.Right:
-                        NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(player.UUID, "walking_right"));
-                        break;
-                }
+                    switch (player.MovementDirection)
+                    {
+                        case Direction.Up:
+                            NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(player.UUID, "walking_back"));
+                            break;
+                        case Direction.Left:
+                            NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(player.UUID, "walking_left"));
+                            break;
+                        case Direction.Down:
+                            NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(player.UUID, "walking_front"));
+                            break;
+                        case Direction.Right:
+                            NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(player.UUID, "walking_right"));
+                            break;
+                    }
 
-                NetworkServer.Instance.BroadcastMessage(new UpdatePlayerPositionNetworkMessage(player.UUID, player.Position));
+                    player.LastStateWasIdle = false;
+                    player.Position = newPosition;
+                    NetworkServer.Instance.BroadcastMessage(new UpdatePlayerPositionNetworkMessage(player.UUID, player.Position));
+                }
             }
             else
             {
-                NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(player.UUID, "idle"));
+                if (!player.LastStateWasIdle)
+                {
+                    NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage(player.UUID, "idle"));
+                    player.LastStateWasIdle = true;
+                }
             }
         }
     }

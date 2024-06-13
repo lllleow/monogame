@@ -169,6 +169,11 @@ public class Chunk : IChunk
                             layerDepth = 0f;
                         }
 
+                        if (layer.Key == TileDrawLayer.Tiles)
+                        {
+                            layerDepth = 0.9f;
+                        }
+
                         if (tile?.HasComponent<TextureRendererTileComponent>() ?? false)
                         {
                             TextureRendererTileComponent textureRendererTileComponent = tile.GetComponent<TextureRendererTileComponent>();

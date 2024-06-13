@@ -12,7 +12,7 @@ namespace MonoGame_Server.Systems.Server.Helper;
 
 public class ServerMovementHelper
 {
-    public bool CanMove(EntityState entity, Vector2 newPosition, Direction direction)
+    public bool CanMove(EntityState entity, Vector2 newPosition)
     {
         if (entity.HasComponent(typeof(CollisionComponentState)))
         {
