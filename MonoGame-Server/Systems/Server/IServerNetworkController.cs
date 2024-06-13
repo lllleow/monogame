@@ -3,4 +3,5 @@
 public interface IServerNetworkController
 {
     public void InitializeListeners();
+    public void Update();
 }

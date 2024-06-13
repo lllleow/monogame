@@ -30,6 +30,10 @@ public class ServerWorld
         Entities = worldState.Entities ?? [];
     }
 
+    public void Update()
+    {
+    }
+
     public ChunkState? GetChunkAt(int chunkX, int chunkY)
     {
         return Chunks?.FirstOrDefault(x => x.X == chunkX && x.Y == chunkY);
@@ -173,7 +177,7 @@ public class ServerWorld
 
     private void ProcessChunk(int chunkX, int chunkY, Rectangle rectangle, bool[,] mask, List<TileState> intersectingTiles, int chunkSizeInPixelsX, int chunkSizeInPixelsY)
     {
-        ChunkState chunk = GetChunkAt(chunkX, chunkY);
+        ChunkState? chunk = GetChunkAt(chunkX, chunkY);
         if (chunk == null) return;
 
         int startTileX = Math.Max(0, (rectangle.Left - (chunkX * chunkSizeInPixelsX)) / SharedGlobals.PixelSizeX);
@@ -193,7 +197,7 @@ public class ServerWorld
     private void ProcessTile(ChunkState chunk, int tileX, int tileY, int chunkX, int chunkY, Rectangle rectangle, bool[,] mask, List<TileState> intersectingTiles, int chunkSizeInPixelsX, int chunkSizeInPixelsY)
     {
         TileState tileState = chunk.GetTile(TileDrawLayer.Tiles, tileX, tileY);
-        if (tileState == null || !TileRegistry.GetTile(tileState.Id).HasComponent<TextureRendererTileComponent>()) return;
+        if (tileState == null || !(TileRegistry.GetTile(tileState.Id)?.HasComponent<TextureRendererTileComponent>() ?? false)) return;
 
         Rectangle tileRect = new Rectangle(
             (chunkX * chunkSizeInPixelsX) + (tileX * SharedGlobals.PixelSizeX),
@@ -209,7 +213,9 @@ public class ServerWorld
 
     private bool CheckTileIntersection(TileState tileState, Rectangle tileRect, bool[,] mask, Rectangle rectangle)
     {
-        CommonTile tile = TileRegistry.GetTile(tileState.Id);
+        CommonTile? tile = TileRegistry.GetTile(tileState.Id);
+        if (tile == null) return false;
+
         TextureRendererTileComponent tileComponent = tile.GetComponent<TextureRendererTileComponent>();
         bool[,] tileMask = tile.CollisionMode == CollisionMode.CollisionMask && tile.CollisionMaskSpritesheetName != null
             ? ServerTextureHelper.GetImageMaskForRectangle(tile.CollisionMaskSpritesheetName, tileComponent.GetSpriteRectangle())
@@ -239,8 +245,6 @@ public class ServerWorld
         }
         return false;
     }
-
-
 
     public bool Intersects(Rectangle rectA, Rectangle rectB)
     {

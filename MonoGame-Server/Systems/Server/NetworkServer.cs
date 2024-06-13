@@ -29,7 +29,6 @@ public class NetworkServer
     public static NetworkServer Instance { get; set; } = new();
     public ConcurrentDictionary<NetPeer, string> Connections { get; set; } = [];
     public ServerWorld ServerWorld { get; set; }
-    public List<IServerNetworkController> NetworkControllers { get; set; } = [];
 
     public void InitializeServer()
     {
@@ -80,6 +79,12 @@ public class NetworkServer
 
             reader.Recycle();
         };
+    }
+
+    public void SetEntity(EntityState entity)
+    {
+        ServerWorld?.Entities?.Remove(entity);
+        ServerWorld?.Entities?.Add(entity);
     }
 
     public void InitializeControllers()
@@ -157,6 +162,11 @@ public class NetworkServer
         else
         {
             autoSaveCounter++;
+        }
+
+        foreach (var controller in ServerNetworkEventManager.NetworkControllers ?? [])
+        {
+            controller.Update();
         }
     }
 

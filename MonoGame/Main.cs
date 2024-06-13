@@ -30,6 +30,9 @@ public class Main : Game
         Globals.GraphicsDevice.ApplyChanges();
 
         Globals.Camera = new Camera(ScreenSizeX, ScreenSizeY);
+
+        // IsFixedTimeStep = true;
+        // TargetElapsedTime = TimeSpan.FromMilliseconds(200);
     }
 
     protected override void Initialize()

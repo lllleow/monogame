@@ -8,8 +8,13 @@ public class AuthenticationNetworkServerController : IServerNetworkController
     {
         ServerNetworkEventManager.Subscribe<AuthenticateUserNetworkMessage>((server, peer, message) =>
         {
+            if (message.UUID == null) return;
             server.Connections[peer] = message.UUID;
             server.SendMessageToPeer(peer, new AuthenticationResultNetworkMessage(true, "Player authenticated"));
         });
+    }
+
+    public void Update()
+    {
     }
 }

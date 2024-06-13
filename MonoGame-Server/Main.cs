@@ -1,17 +1,35 @@
-﻿using MonoGame_Server.Systems.Server;
+﻿using System.Timers;
+using MonoGame_Server.Systems.Server;
 
 namespace MonoGame_Server;
 
 internal class Server
 {
+    private static System.Timers.Timer timer;
+    private static NetworkServer server;
+
     public static void Main(string[] args)
     {
-        var server = NetworkServer.Instance;
+        server = NetworkServer.Instance;
         server.InitializeServer();
+        SetupFixedTimer();
+        Console.WriteLine("Server is running. Press Enter to exit...");
+        Console.ReadLine();
+        timer.Stop();
+        timer.Dispose();
+        Console.WriteLine("Server stopped.");
+    }
 
-        while (true)
-        {
-            server.Update();
-        }
+    private static void SetupFixedTimer()
+    {
+        timer = new System.Timers.Timer(20);
+        timer.Elapsed += Update;
+        timer.AutoReset = true;
+        timer.Enabled = true;
+    }
+
+    private static void Update(object? source, ElapsedEventArgs e)
+    {
+        server.Update();
     }
 }

@@ -1,12 +1,15 @@
 ﻿using System.Numerics;
 using LiteNetLib.Utils;
 using MonoGame_Common.States.Components;
+using MonoGame_Common.Util.Enum;
 
 namespace MonoGame_Common.States;
 
 public class EntityState : INetSerializable
 {
     public string UUID { get; set; }
+    public bool IsMoving { get; set; } = false;
+    public Direction MovementDirection { get; set; }
     private readonly object positionLock = new object();
     private Vector2 position;
     public Vector2 Position

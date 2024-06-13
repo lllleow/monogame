@@ -4,13 +4,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame_Common.Messages.Player;
 using MonoGame.Source.Multiplayer;
+using System;
 
 namespace MonoGame.Source.Systems.Components.Movement;
 
 public class MovementComponent : EntityComponent
 {
-    private bool sentEmptyKeysMessage;
     public Vector2 Speed { get; set; } = new(1, 1);
+    private List<Keys> lastKeys = new();
 
     public override void Update(GameTime gameTime)
     {
@@ -37,17 +38,18 @@ public class MovementComponent : EntityComponent
             keys.Add(Keys.D);
         }
 
-        var commonsKeys = keys.Select(x => (MonoGame_Common.Enums.Keys)x).ToList();
+        bool keysChanged = keys.Count != lastKeys.Count || keys.Except(lastKeys).Any();
+        if (!keysChanged)
+        {
+            return;
+        }
 
-        if (keys.Count > 0)
+        lastKeys = keys;
+        var commonsKeys = keys.Select(x => (MonoGame_Common.Enums.Keys)x).ToList();
+        foreach (var key in keys)
         {
-            sentEmptyKeysMessage = false;
-            NetworkClient.SendMessage(new KeyClickedNetworkMessage(Entity.UUID, commonsKeys));
+            Console.WriteLine(key);
         }
-        else if (!sentEmptyKeysMessage)
-        {
-            NetworkClient.SendMessage(new KeyClickedNetworkMessage(Entity.UUID, commonsKeys));
-            sentEmptyKeysMessage = true;
-        }
+        NetworkClient.SendMessage(new KeyClickedNetworkMessage(Entity.UUID, commonsKeys));
     }
 }

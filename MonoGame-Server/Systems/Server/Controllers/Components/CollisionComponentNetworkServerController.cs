@@ -19,4 +19,8 @@ public class CollisionComponentNetworkServerController : IServerNetworkControlle
             }
         });
     }
+
+    public void Update()
+    {
+    }
 }

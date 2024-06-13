@@ -13,8 +13,13 @@ public class ComponentNetworkServerController : IServerNetworkController
             if (entityState != null && !entityState.HasComponent(message.ComponentType))
             {
                 var newComponentState = Activator.CreateInstance(message.ComponentType) as ComponentState;
+                if (newComponentState == null) return;
                 _ = entityState.AddComponent(newComponentState);
             }
         });
+    }
+
+    public void Update()
+    {
     }
 }
