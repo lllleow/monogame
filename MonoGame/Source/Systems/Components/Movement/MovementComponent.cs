@@ -10,7 +10,6 @@ namespace MonoGame.Source.Systems.Components.Movement;
 
 public class MovementComponent : EntityComponent
 {
-    public Vector2 Speed { get; set; } = new(1, 1);
     private List<Keys> lastKeys = new();
 
     public override void Update(GameTime gameTime)

@@ -22,7 +22,7 @@ internal class Server
 
     private static void SetupFixedTimer()
     {
-        timer = new System.Timers.Timer(0.01);
+        timer = new System.Timers.Timer(0.0001);
         timer.Elapsed += Update;
         timer.AutoReset = true;
         timer.Enabled = true;
