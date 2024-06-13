@@ -25,7 +25,7 @@ public class ServerMovementHelper
             {
                 tiles = NetworkServer.Instance.ServerWorld.GetTilesIntersectingWithRectangle(entityRectangle);
             }
-            else if (collisionComponent.Mode is CollisionMode.CollisionMask)
+            else if (collisionComponent.Mode == CollisionMode.CollisionMask || collisionComponent.Mode == CollisionMode.PixelPerfect)
             {
                 if (entity.HasComponent(typeof(AnimatorComponentState)))
                 {
@@ -40,7 +40,17 @@ public class ServerMovementHelper
                         };
 
                         System.Drawing.Rectangle textureRectangle = animationState.GetTextureRectangle();
-                        Image<Rgba32> croppedImage = ServerTextureHelper.GetImageInRectangle(animationBundle.CollisionMaskSpritesheet, textureRectangle);
+                        Image<Rgba32> croppedImage;
+
+                        if (collisionComponent.Mode == CollisionMode.CollisionMask)
+                        {
+                            croppedImage = ServerTextureHelper.GetImageInRectangle(animationBundle.CollisionMaskSpritesheet, textureRectangle);
+                        }
+                        else
+                        {
+                            croppedImage = ServerTextureHelper.GetImageInRectangle(animationBundle.SpriteSheet, textureRectangle);
+                        }
+
                         bool[,] mask = ServerTextureHelper.GetImageMask(croppedImage);
                         tiles = NetworkServer.Instance.ServerWorld.GetTilesIntersectingWithMask(mask, entityRectangle);
                     }

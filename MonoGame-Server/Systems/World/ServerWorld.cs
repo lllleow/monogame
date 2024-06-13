@@ -37,7 +37,10 @@ public class ServerWorld
         Entities = [];
 
         ChunkState newChunk = new ChunkState();
-        newChunk.SetTile("base.wall", TileDrawLayer.Tiles, 8, 8);
+        newChunk.SetTile("base.fence", TileDrawLayer.Tiles, 2, 2);
+        newChunk.SetTile("base.fence", TileDrawLayer.Tiles, 3, 2);
+        newChunk.SetTile("base.fence", TileDrawLayer.Tiles, 4, 2);
+        newChunk.SetTile("base.fence", TileDrawLayer.Tiles, 5, 2);
         Chunks.Add(newChunk);
     }
 

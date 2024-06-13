@@ -22,6 +22,6 @@ public class PositionedTileHelper
     public Rectangle GetTileRect()
     {
         Vector2 worldPosition = Chunk.GetWorldPosition(PosX, PosY);
-        return new Rectangle((int)worldPosition.X, (int)worldPosition.Y, Tile.GetCommonTile().TileSizeX * SharedGlobals.PixelSizeX, Tile.GetCommonTile().TileSizeY * SharedGlobals.PixelSizeY);
+        return new Rectangle((int)worldPosition.X * SharedGlobals.PixelSizeX, (int)worldPosition.Y * SharedGlobals.PixelSizeY, Tile.GetCommonTile().TileSizeX * SharedGlobals.PixelSizeX, Tile.GetCommonTile().TileSizeY * SharedGlobals.PixelSizeY);
     }
 }
