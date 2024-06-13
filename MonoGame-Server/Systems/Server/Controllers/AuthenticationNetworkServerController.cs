@@ -10,7 +10,11 @@ public class AuthenticationNetworkServerController : IServerNetworkController
         {
             if (message.UUID == null) return;
             server.Connections[peer] = message.UUID;
-            NetworkServer.SendMessageToPeer(peer, new AuthenticationResultNetworkMessage(true, "Player authenticated"));
+            NetworkServer.SendMessageToPeer(peer, new AuthenticationResultNetworkMessage()
+            {
+                Success = true,
+                Reason = "Player authenticated"
+            });
         });
     }
 

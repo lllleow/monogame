@@ -11,14 +11,8 @@ public class UpdatePlayerPositionNetworkMessage : NetworkMessage
     {
     }
 
-    public UpdatePlayerPositionNetworkMessage(string uuid, Vector2 position)
-    {
-        Position = position;
-        UUID = uuid;
-    }
-
-    public string UUID { get; set; }
-    public Vector2 Position { get; set; }
+    required public string UUID { get; set; }
+    required public Vector2 Position { get; set; }
 
     public override void Deserialize(NetDataReader reader)
     {

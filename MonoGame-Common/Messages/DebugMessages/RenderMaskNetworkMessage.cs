@@ -9,18 +9,12 @@ namespace MonoGame
     [NetworkMessage(18)]
     public class RenderMaskNetworkMessage : NetworkMessage
     {
-        public Rectangle Rectangle { get; set; }
-        public bool[,] Mask { get; set; }
-
         public RenderMaskNetworkMessage()
         {
         }
 
-        public RenderMaskNetworkMessage(Rectangle rectangle, bool[,] mask)
-        {
-            Rectangle = rectangle;
-            Mask = mask;
-        }
+        required public Rectangle Rectangle { get; set; }
+        required public bool[,] Mask { get; set; }
 
         public override void Deserialize(NetDataReader reader)
         {

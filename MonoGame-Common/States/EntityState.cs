@@ -7,7 +7,7 @@ namespace MonoGame_Common.States;
 
 public class EntityState : INetSerializable
 {
-    public string UUID { get; set; }
+    required public string UUID { get; set; }
     public bool IsMoving { get; set; } = false;
     public bool LastStateWasIdle { get; set; } = false;
     public Direction MovementDirection { get; set; }
@@ -46,19 +46,14 @@ public class EntityState : INetSerializable
         Position = new Vector2(reader.GetFloat(), reader.GetFloat());
     }
 
-    // public EntityState(IGameEntity entity)
-    // {
-    //     UUID = entity.UUID;
-    //     Position = entity.Position;
-    // }
     public T GetComponent<T>()
-        where T : ComponentState
+    where T : ComponentState
     {
-        return (T)Components.Find(x => x.GetType() == typeof(T));
+        return (T)Components.Find(x => x.GetType() == typeof(T))!;
     }
 
     public T ReplaceComponent<T>(T component)
-        where T : ComponentState
+    where T : ComponentState
     {
         _ = Components.RemoveAll(x => x.GetType() == component.GetType());
         Components.Add(component);
@@ -66,7 +61,7 @@ public class EntityState : INetSerializable
     }
 
     public T AddComponent<T>(T component)
-        where T : ComponentState
+    where T : ComponentState
     {
         Components.Add(component);
         return component;

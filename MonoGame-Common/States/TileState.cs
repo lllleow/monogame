@@ -20,7 +20,8 @@ public class TileState : INetSerializable
         InitializeComponents();
     }
 
-    public string Id { get; set; }
+    public string? Id { get; set; }
+
     public List<TileComponentState> Components { get; set; } = [];
 
     public void InitializeComponents()
@@ -50,7 +51,14 @@ public class TileState : INetSerializable
 
     public CommonTile? GetCommonTile()
     {
-        return TileRegistry.GetTile(Id);
+        if (Id != null)
+        {
+            return TileRegistry.GetTile(Id);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public void AddComponent(TileComponentState component)
@@ -63,10 +71,10 @@ public class TileState : INetSerializable
         _ = Components.Remove(component);
     }
 
-    public T GetComponent<T>()
+    public T? GetComponent<T>()
     where T : TileComponentState
     {
-        return (T)Components.FirstOrDefault(x => x.GetType() == typeof(T));
+        return Components.OfType<T>().FirstOrDefault();
     }
 
     public bool HasComponent<T>()

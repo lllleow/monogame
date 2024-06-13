@@ -41,14 +41,14 @@ public class TileTextureProcessor : ITileTextureProcessor
         var connectableTiles = new List<string>(configuration.Center.ConnectableTiles);
         return direction switch
         {
-            Direction.Left => connectableTiles.Contains(configuration.Left?.Id),
-            Direction.Right => connectableTiles.Contains(configuration.Right?.Id),
-            Direction.Up => connectableTiles.Contains(configuration.Up?.Id),
-            Direction.Down => connectableTiles.Contains(configuration.Down?.Id),
-            Direction.LeftUp => connectableTiles.Contains(configuration.LeftTop?.Id),
-            Direction.RightUp => connectableTiles.Contains(configuration.RightTop?.Id),
-            Direction.LeftDown => connectableTiles.Contains(configuration.LeftBottom?.Id),
-            Direction.RightDown => connectableTiles.Contains(configuration.RightBottom?.Id),
+            Direction.Left => connectableTiles.Contains(configuration.Left?.Id ?? ""),
+            Direction.Right => connectableTiles.Contains(configuration.Right?.Id ?? ""),
+            Direction.Up => connectableTiles.Contains(configuration.Up?.Id ?? ""),
+            Direction.Down => connectableTiles.Contains(configuration.Down?.Id ?? ""),
+            Direction.LeftUp => connectableTiles.Contains(configuration.LeftTop?.Id ?? ""),
+            Direction.RightUp => connectableTiles.Contains(configuration.RightTop?.Id ?? ""),
+            Direction.LeftDown => connectableTiles.Contains(configuration.LeftBottom?.Id ?? ""),
+            Direction.RightDown => connectableTiles.Contains(configuration.RightBottom?.Id ?? ""),
             _ => false
         };
     }

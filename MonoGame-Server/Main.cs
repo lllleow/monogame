@@ -5,8 +5,8 @@ namespace MonoGame_Server;
 
 internal class Server
 {
-    private static System.Timers.Timer timer;
-    private static NetworkServer server;
+    private static System.Timers.Timer? timer;
+    private static NetworkServer? server;
 
     public static void Main(string[] args)
     {
@@ -15,8 +15,8 @@ internal class Server
         SetupFixedTimer();
         Console.WriteLine("Server is running. Press Enter to exit...");
         Console.ReadLine();
-        timer.Stop();
-        timer.Dispose();
+        timer?.Stop();
+        timer?.Dispose();
         Console.WriteLine("Server stopped.");
     }
 
@@ -30,6 +30,6 @@ internal class Server
 
     private static void Update(object? source, ElapsedEventArgs e)
     {
-        server.Update();
+        server?.Update();
     }
 }

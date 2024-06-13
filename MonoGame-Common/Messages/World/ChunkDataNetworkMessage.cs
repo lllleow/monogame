@@ -11,12 +11,7 @@ public class ChunkDataNetworkMessage : NetworkMessage
     {
     }
 
-    public ChunkDataNetworkMessage(ChunkState chunkState)
-    {
-        ChunkState = chunkState;
-    }
-
-    public ChunkState ChunkState { get; set; }
+    required public ChunkState ChunkState { get; set; }
 
     public override void Deserialize(NetDataReader reader)
     {

@@ -14,7 +14,11 @@ public class CollisionComponentNetworkServerController : IServerNetworkControlle
             {
                 entity.GetComponent<CollisionComponentState>().Mode = message.Mode;
 
-                var setCollisionModeNetworkMessage = new SetCollisionModeNetworkMessage(message.UUID, message.Mode);
+                var setCollisionModeNetworkMessage = new SetCollisionModeNetworkMessage()
+                {
+                    UUID = message.UUID,
+                    Mode = message.Mode
+                };
                 NetworkServer.Instance.BroadcastMessage(setCollisionModeNetworkMessage);
             }
         });

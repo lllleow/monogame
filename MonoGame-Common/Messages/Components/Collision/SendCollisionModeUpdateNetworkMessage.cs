@@ -11,14 +11,8 @@ public class SendCollisionModeUpdateNetworkMessage : NetworkMessage
     {
     }
 
-    public SendCollisionModeUpdateNetworkMessage(string uuid, CollisionMode mode)
-    {
-        UUID = uuid;
-        Mode = mode;
-    }
-
-    public string UUID { get; set; }
-    public CollisionMode Mode { get; set; }
+    required public string UUID { get; set; }
+    required public CollisionMode Mode { get; set; }
 
     public override void Deserialize(NetDataReader reader)
     {

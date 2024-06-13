@@ -17,14 +17,21 @@ public class MessageRegistry
 
     private void RegisterMessages()
     {
-        var messageTypes = Assembly.GetExecutingAssembly().GetTypes()
-            .Where(t => t.GetCustomAttributes(typeof(NetworkMessageAttribute), false).Length > 0);
+        var messageTypes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetCustomAttributes(typeof(NetworkMessageAttribute), false).Length > 0);
 
         foreach (var type in messageTypes)
         {
             var attribute = type.GetCustomAttribute<NetworkMessageAttribute>();
-            idToTypeMap[attribute.Id] = type;
-            typeToIdMap[type] = attribute.Id;
+            var id = attribute?.Id;
+            if (id == null)
+            {
+                continue;
+            }
+            else
+            {
+                idToTypeMap[id.Value] = type;
+                typeToIdMap[type] = id.Value;
+            }
         }
     }
 

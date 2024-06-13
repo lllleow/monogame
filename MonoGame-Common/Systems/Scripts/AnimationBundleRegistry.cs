@@ -35,6 +35,7 @@ public static class AnimationBundleRegistry
         {
             var code = File.ReadAllText(file);
             var animation = LoadAnimationBundleScript(code);
+            if (animation == null || animation.Id == null) continue;
             RegisterAnimationBundle(animation.Id, animation.GetType());
         }
     }

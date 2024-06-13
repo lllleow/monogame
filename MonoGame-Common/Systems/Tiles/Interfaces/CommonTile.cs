@@ -10,7 +10,7 @@ public class CommonTile
 
     public string Name { get; set; } = "Abstract Tile";
 
-    public string SpritesheetName { get; set; }
+    public string? SpritesheetName { get; set; }
 
     public int TileSizeX { get; set; } = 1;
 
@@ -45,10 +45,10 @@ public class CommonTile
         _ = Components.RemoveAll(component => component is T);
     }
 
-    public T GetComponent<T>()
+    public T? GetComponent<T>()
     where T : ITileComponent
     {
-        return (T)Components.FirstOrDefault(component => component is T);
+        return Components.OfType<T>().FirstOrDefault();
     }
 
     public bool HasComponent<T>()

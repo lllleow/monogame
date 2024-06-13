@@ -10,14 +10,8 @@ public class UpdateAnimatorStateNetworkMessage : NetworkMessage
     {
     }
 
-    public UpdateAnimatorStateNetworkMessage(string uuid, string targetState)
-    {
-        UUID = uuid;
-        TargetState = targetState;
-    }
-
-    public string UUID { get; set; }
-    public string TargetState { get; set; }
+    required public string UUID { get; set; }
+    required public string TargetState { get; set; }
 
     public override void Deserialize(NetDataReader reader)
     {

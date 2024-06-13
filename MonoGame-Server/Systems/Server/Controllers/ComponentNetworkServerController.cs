@@ -10,9 +10,10 @@ public class ComponentNetworkServerController : IServerNetworkController
         ServerNetworkEventManager.Subscribe<RegisterEntityComponentNetworkMessage>((server, peer, message) =>
         {
             var entityState = server.ServerWorld.GetEntityByUUID(message.UUID);
-            if (entityState != null && !entityState.HasComponent(message.ComponentType))
+            Type? componentType = message.ComponentType;
+            if (entityState != null && componentType != null && !entityState.HasComponent(componentType))
             {
-                var newComponentState = Activator.CreateInstance(message.ComponentType) as ComponentState;
+                var newComponentState = Activator.CreateInstance(componentType) as ComponentState;
                 if (newComponentState == null) return;
                 _ = entityState.AddComponent(newComponentState);
             }

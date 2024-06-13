@@ -11,15 +11,7 @@ public class PlaceTileNetworkMessage : NetworkMessage
     {
     }
 
-    public PlaceTileNetworkMessage(string tileId, TileDrawLayer layer, int posX, int posY)
-    {
-        TileId = tileId;
-        Layer = layer;
-        PosX = posX;
-        PosY = posY;
-    }
-
-    public string TileId { get; set; }
+    required public string TileId { get; set; }
     public TileDrawLayer Layer { get; set; }
     public int PosX { get; set; }
     public int PosY { get; set; }

@@ -44,10 +44,12 @@ public class ServerMovementHelper
 
                         if (collisionComponent.Mode == CollisionMode.CollisionMask)
                         {
+                            if (animationBundle.CollisionMaskSpritesheet == null) return true;
                             croppedImage = ServerTextureHelper.GetImageInRectangle(animationBundle.CollisionMaskSpritesheet, textureRectangle);
                         }
                         else
                         {
+                            if (animationBundle.SpriteSheet == null) return true;
                             croppedImage = ServerTextureHelper.GetImageInRectangle(animationBundle.SpriteSheet, textureRectangle);
                         }
 
