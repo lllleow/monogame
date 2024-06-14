@@ -42,6 +42,7 @@ public class Player : GameEntity
 
         SetGameMode(GameMode.LevelEditor);
     }
+
     public PlayerNetworkController NetworkController { get; set; } = new();
 
     public void SetGameMode(GameMode gameMode)
