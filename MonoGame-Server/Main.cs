@@ -10,14 +10,25 @@ internal class Server
 
     public static void Main(string[] args)
     {
-        server = NetworkServer.Instance;
-        server.InitializeServer();
-        SetupFixedTimer();
-        Console.WriteLine("Server is running. Press Enter to exit...");
-        Console.ReadLine();
-        timer?.Stop();
-        timer?.Dispose();
-        Console.WriteLine("Server stopped.");
+        try
+        {
+            server = NetworkServer.Instance;
+            server.InitializeServer();
+            SetupFixedTimer();
+            Console.WriteLine("Server is running. Press Enter to exit...");
+            Console.ReadLine();
+            timer?.Stop();
+            timer?.Dispose();
+            Console.WriteLine("Server stopped.");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            using (var writer = new StreamWriter("server_error.log", true))
+            {
+                writer.WriteLine(e.ToString());
+            }
+        }
     }
 
     private static void SetupFixedTimer()

@@ -54,9 +54,17 @@ public static class ServerTextureHelper
 
     public static Image<Rgba32> GetImageInRectangle(string imagePath, System.Drawing.Rectangle rectangle)
     {
-        var image = GetImage(imagePath);
-        Image<Rgba32> croppedImage = image.Clone(img => img.Crop(new SixLabors.ImageSharp.Rectangle(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height)));
-        return croppedImage;
+        try
+        {
+            var image = GetImage(imagePath);
+            Image<Rgba32> croppedImage = image.Clone(img => img.Crop(new SixLabors.ImageSharp.Rectangle(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height)));
+            return croppedImage;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Error loading texture data for " + imagePath + " " + e);
+            return new Image<Rgba32>(1, 1);
+        }
     }
 
     public static Image<Rgba32> GetImageInCoordinates(string imagePath, int x, int y, int sizeX, int sizeY)

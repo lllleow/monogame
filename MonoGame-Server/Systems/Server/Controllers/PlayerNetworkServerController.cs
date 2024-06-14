@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Collections.Concurrent;
+using System.Numerics;
 using MonoGame;
 using MonoGame_Common;
 using MonoGame_Common.Enums;
@@ -12,7 +13,7 @@ namespace MonoGame_Server.Systems.Server.Controllers;
 
 public class PlayerNetworkServerController : IServerNetworkController
 {
-    public Dictionary<string, Vector2> LevelEditorCameraPositions { get; set; } = new();
+    public ConcurrentDictionary<string, Vector2> LevelEditorCameraPositions { get; set; } = new();
 
     public void InitializeListeners()
     {
@@ -124,7 +125,7 @@ public class PlayerNetworkServerController : IServerNetworkController
                 {
                     if (!LevelEditorCameraPositions.ContainsKey(player.UUID))
                     {
-                        LevelEditorCameraPositions.Add(player.UUID, player.Position);
+                        LevelEditorCameraPositions.TryAdd(player.UUID, player.Position);
                     }
 
                     Vector2 currentPosition = LevelEditorCameraPositions[player.UUID];

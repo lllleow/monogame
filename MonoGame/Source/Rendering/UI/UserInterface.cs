@@ -14,6 +14,8 @@ public class UserInterface : IUserInterface
     {
         foreach (var component in Components)
         {
+            Globals.SpriteBatch.End();
+            Globals.DefaultSpriteBatchUIBegin();
             component.Draw(spriteBatch);
         }
     }
