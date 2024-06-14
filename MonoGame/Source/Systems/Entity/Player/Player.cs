@@ -42,8 +42,6 @@ public class Player : GameEntity
 
         SetGameMode(GameMode.LevelEditor);
     }
-
-    public string SelectedTile { get; set; } = "base.grass";
     public PlayerNetworkController NetworkController { get; set; } = new();
 
     public void SetGameMode(GameMode gameMode)
@@ -53,11 +51,6 @@ public class Player : GameEntity
             UUID = UUID,
             DesiredGameMode = gameMode
         });
-    }
-
-    public void SetSelectedTile(string selectedTileId)
-    {
-        SelectedTile = selectedTileId;
     }
 
     public bool IsLocalPlayer()

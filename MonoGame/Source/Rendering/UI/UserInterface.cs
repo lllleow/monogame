@@ -23,6 +23,10 @@ public class UserInterface : IUserInterface
         return true;
     }
 
+    public virtual void Initialize()
+    {
+    }
+
     public virtual void Update(GameTime gameTime)
     {
         foreach (var component in Components)

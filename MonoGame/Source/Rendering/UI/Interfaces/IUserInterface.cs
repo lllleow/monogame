@@ -13,4 +13,5 @@ public interface IUserInterface
     public void AddComponent(IUserInterfaceComponent component);
     public void RemoveComponent(IUserInterfaceComponent component);
     public bool IsVisible();
+    public void Initialize();
 }

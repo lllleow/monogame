@@ -71,6 +71,7 @@ public class Main : Game
         }
 
         Globals.GameTime = gameTime;
+        Globals.InputManager.Update();
         NetworkClient.Update();
         Globals.World.Update(gameTime);
 

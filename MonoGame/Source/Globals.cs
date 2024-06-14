@@ -35,6 +35,7 @@ public class Globals
     public static GameTime GameTime { get; set; }
 
     public static bool ShowTileBoundingBox { get; set; } = false;
+    public static InputManager InputManager { get; set; } = new();
 
     public static void DefaultSpriteBatchBegin()
     {
