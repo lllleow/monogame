@@ -24,7 +24,9 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
 
         for (int i = 0; i < toolComponents.Count; i++)
         {
-            toolComponents[i].OnClick = component => SetSelectedTool(Tools[i]);
+            LevelEditorTool tool = Tools[i];
+            if (tool == null) continue;
+            toolComponents[i].OnClick = component => SetSelectedTool(tool);
         }
 
         foreach (var tool in Tools)
