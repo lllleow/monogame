@@ -96,15 +96,19 @@ public class ChunkState : INetSerializable
 
     public bool SetTile(string tileId, TileDrawLayer layer, int posX, int posY)
     {
-        var tile = Tiles[layer][posX, posY];
-
-        if (tile != null)
+        if (posX >= 0 && posY >= 0 && posX < SizeX && posY < SizeY)
         {
-            return false;
-        }
+            var tile = Tiles[layer][posX, posY];
 
-        Tiles[layer][posX, posY] = new TileState(tileId);
-        return true;
+            if (tile != null)
+            {
+                return false;
+            }
+
+            Tiles[layer][posX, posY] = new TileState(tileId);
+            return true;
+        }
+        return false;
     }
 
     public bool DestroyTile(TileDrawLayer layer, int posX, int posY)
@@ -121,7 +125,9 @@ public class ChunkState : INetSerializable
 
     public TileState? GetTile(TileDrawLayer layer, int posX, int posY)
     {
-        return Tiles[layer][posX, posY];
+        if (posX >= 0 && posY >= 0 && posX < SizeX && posY < SizeY)
+            return Tiles[layer][posX, posY];
+        return null;
     }
 
     public Vector2 GetWorldPosition(int x, int y)
