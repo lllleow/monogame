@@ -9,9 +9,21 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ContentWithTargetPath Include="..\Scripts\**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>Scripts\%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
+        </ContentWithTargetPath>
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="LiteNetLib" Version="1.2.0" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Compile Remove="Scripts\**"/>
+        <None Include="Scripts\**"/>
+    </ItemGroup>
+    
     <ItemGroup>
         <ProjectReference Include="..\MonoGame-Common\MonoGame-Common.csproj" />
     </ItemGroup>
