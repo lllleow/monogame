@@ -19,7 +19,14 @@ public class SaveManager
         {
             var playerJson = Serialize(Players[i]);
             var chunkFilePath = Path.Combine(playersFolderPath, $"player_{Players[i].UUID}.json");
-            File.WriteAllText(chunkFilePath, playerJson);
+            try
+            {
+                File.WriteAllText(chunkFilePath, playerJson);
+            }
+            catch (IOException)
+            {
+                // Handle the exception, e.g., retry or wait for the file to become available.
+            }
         }
 
         var chunksFolderPath = Path.Combine(dirPath, "chunks");
@@ -29,11 +36,27 @@ public class SaveManager
         {
             var chunkJson = Serialize(Chunks?[i]);
             var chunkFilePath = Path.Combine(chunksFolderPath, $"chunk_{Chunks?[i].X}_{Chunks?[i].Y}.json");
-            File.WriteAllText(chunkFilePath, chunkJson);
+
+            try
+            {
+                File.WriteAllText(chunkFilePath, chunkJson);
+            }
+            catch (IOException)
+            {
+                // Handle the exception, e.g., retry or wait for the file to become available.
+            }
         }
 
         var json = Serialize(Entities);
-        File.WriteAllText(dirPath + "entities.json", json);
+
+        try
+        {
+            File.WriteAllText(dirPath + "entities.json", json);
+        }
+        catch (IOException)
+        {
+            // Handle the exception, e.g., retry or wait for the file to become available.
+        }
     }
 
     public static (List<PlayerState>? Players, List<ChunkState>? Chunks, List<EntityState>? Entities) LoadGame()

@@ -26,21 +26,11 @@ public class ServerWorld
 
     public void Initialize()
     {
-        // var worldState = saveManager.LoadGame();
+        var worldState = SaveManager.LoadGame();
 
-        // Chunks = worldState.Chunks ?? [];
-        // Players = worldState.Players ?? [];
-        // Entities = worldState.Entities ?? [];
-        Chunks = [];
-        Players = [];
-        Entities = [];
-
-        ChunkState newChunk = new ChunkState();
-        newChunk.SetTile("base.fence", TileDrawLayer.Tiles, 2, 2);
-        newChunk.SetTile("base.fence", TileDrawLayer.Tiles, 3, 2);
-        newChunk.SetTile("base.fence", TileDrawLayer.Tiles, 4, 2);
-        newChunk.SetTile("base.fence", TileDrawLayer.Tiles, 5, 2);
-        Chunks.Add(newChunk);
+        Chunks = worldState.Chunks ?? [];
+        Players = worldState.Players ?? [];
+        Entities = worldState.Entities ?? [];
     }
 
     public ChunkState? GetChunkAt(int chunkX, int chunkY)

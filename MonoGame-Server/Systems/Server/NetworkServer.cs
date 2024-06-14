@@ -15,8 +15,8 @@ public class NetworkServer
 {
     private readonly EventBasedNetListener listener;
     private readonly NetManager server;
+    private int autoSaveCounter;
 
-    // private int autoSaveCounter;
     public NetworkServer()
     {
         listener = new EventBasedNetListener();
@@ -160,15 +160,16 @@ public class NetworkServer
     {
         server.PollEvents();
 
-        // if (autoSaveCounter >= 1000)
-        // {
-        //     SaveManager.SaveGame();
-        //     autoSaveCounter = 0;
-        // }
-        // else
-        // {
-        //     autoSaveCounter++;
-        // }
+        if (autoSaveCounter >= 1000)
+        {
+            autoSaveCounter = 0;
+            SaveManager.SaveGame();
+        }
+        else
+        {
+            autoSaveCounter++;
+        }
+
         foreach (var controller in ServerNetworkEventManager.NetworkControllers ?? [])
         {
             controller.Update();
