@@ -1,9 +1,11 @@
 ﻿using LiteNetLib.Utils;
+using Newtonsoft.Json;
 
 namespace MonoGame_Common.States.TileComponents;
 
 public class TileComponentState : INetSerializable
 {
+    [JsonIgnore]
     public TileState? TileState { get; set; }
 
     public virtual void Deserialize(NetDataReader reader)

@@ -23,25 +23,19 @@ public class Camera
     private float ScreenSizeX { get; }
     private float ScreenSizeY { get; }
 
-    public void Follow(IGameEntity entity, GameTime gameTime)
+    public void Follow(Vector2 position)
     {
-        if (entity == null)
-        {
-            return;
-        }
-
+        GameTime gameTime = Globals.GameTime;
         var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        var entityCenter =
-            new Vector2(entity.Position.X + (SharedGlobals.PixelSizeX / 2), entity.Position.Y + (SharedGlobals.PixelSizeY / 2));
+        var entityCenter = new Vector2(position.X + (SharedGlobals.PixelSizeX / 2), position.Y + (SharedGlobals.PixelSizeY / 2));
         var screenCenter = new Vector2(ScreenSizeX / 2f, ScreenSizeY / 2f);
-
         var targetTranslation = Matrix.CreateTranslation(
             screenCenter.X - (entityCenter.X * scaleFactor),
             screenCenter.Y - (entityCenter.Y * scaleFactor),
-            0);
+            0
+        );
 
         var targetTransform = Matrix.Multiply(Matrix.CreateScale(scaleFactor, scaleFactor, 1f), targetTranslation);
-
         Transform = Matrix.Lerp(Transform, targetTransform, followSpeed * deltaTime);
     }
 

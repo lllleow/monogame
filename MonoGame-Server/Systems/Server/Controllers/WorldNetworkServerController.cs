@@ -1,4 +1,5 @@
-﻿using MonoGame_Common.Messages.Player;
+﻿using MonoGame_Common;
+using MonoGame_Common.Messages.Player;
 using MonoGame_Common.Messages.World;
 using MonoGame_Common.States;
 
@@ -39,6 +40,7 @@ public class WorldNetworkServerController : IServerNetworkController
             {
                 var newPlayer = new PlayerState(existingPlayerUUID)
                 {
+                    GameMode = GameMode.Survival,
                     UUID = existingPlayerUUID
                 };
                 server.ServerWorld.Players?.Add(newPlayer);

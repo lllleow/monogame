@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk" InitialTargets="BeforeBuild">
     <ItemGroup>
-        <ContentWithTargetPath Include="Scripts\**">
+        <ContentWithTargetPath Include="..\Scripts\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>Scripts\%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
         </ContentWithTargetPath>
@@ -23,6 +23,10 @@
     <ItemGroup>
         <None Remove="Icon.ico" />
         <None Remove="Icon.bmp" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Scripts\**"/>
+        <None Include="Scripts\**"/>
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Icon.ico" />

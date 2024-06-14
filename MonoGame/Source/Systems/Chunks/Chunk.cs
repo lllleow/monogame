@@ -162,7 +162,7 @@ public class Chunk : IChunk
                         var y = (Y * SizeY * SharedGlobals.PixelSizeY) + (chunkY * tile.TileSizeY * SharedGlobals.PixelSizeY);
 
                         var scale = new Vector2(1, 1);
-                        var origin = new Vector2(tile.TileSizeX * SharedGlobals.PixelSizeX / 2, tile.TileSizeX * SharedGlobals.PixelSizeY / 2);
+                        var origin = new Vector2(0, 0);
                         var position = new Vector2(x, y) + origin;
 
                         var tileRectangle = new Rectangle(x, y, tile.TileSizeX * SharedGlobals.PixelSizeX, tile.TileSizeY * SharedGlobals.PixelSizeY);

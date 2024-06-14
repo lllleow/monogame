@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using MonoGame;
 using MonoGame_Common;
 using MonoGame_Common.Enums;
 using MonoGame_Common.Messages.Components.Animator;
@@ -11,11 +12,23 @@ namespace MonoGame_Server.Systems.Server.Controllers;
 
 public class PlayerNetworkServerController : IServerNetworkController
 {
-    private ServerMovementHelper ServerMovementHelper { get; } = new();
-    private Vector2 SpawnPosition { get; } = new(128, 128);
+    public Dictionary<string, Vector2> LevelEditorCameraPositions { get; set; } = new();
 
     public void InitializeListeners()
     {
+        ServerNetworkEventManager.Subscribe<ChangeGameModeNetworkMessage>((server, peer, message) =>
+        {
+            var playerState = server.GetPlayerFromPeer(peer);
+            if (playerState == null) return;
+            playerState.GameMode = message.DesiredGameMode;
+
+            server.BroadcastMessage(new SetGameModeNetworkMessage()
+            {
+                UUID = playerState.UUID,
+                GameMode = playerState.GameMode
+            });
+        });
+
         ServerNetworkEventManager.Subscribe<KeyClickedNetworkMessage>((server, peer, message) =>
         {
             var playerState = server.GetPlayerFromPeer(peer);
@@ -68,41 +81,64 @@ public class PlayerNetworkServerController : IServerNetworkController
 
             if (player.IsMoving)
             {
-                Vector2 currentPosition = player.Position;
-                Vector2 newPosition = currentPosition + MovementHelper.GetDisplacement(player.MovementDirection, SharedGlobals.PlayerSpeed);
-
-                if (ServerMovementHelper.CanMove(player, newPosition))
+                if (player.GameMode == GameMode.Survival)
                 {
-                    string targetState = "walking_front";
-                    switch (player.MovementDirection)
+                    Vector2 currentPosition = player.Position;
+                    Vector2 newPosition = currentPosition + MovementHelper.GetDisplacement(player.MovementDirection, SharedGlobals.PlayerSpeed);
+
+                    if (ServerMovementHelper.CanMove(player, newPosition))
                     {
-                        case Direction.Up:
-                            targetState = "walking_back";
-                            break;
-                        case Direction.Left:
-                            targetState = "walking_left";
-                            break;
-                        case Direction.Down:
-                            targetState = "walking_front";
-                            break;
-                        case Direction.Right:
-                            targetState = "walking_right";
-                            break;
+                        string targetState = "walking_front";
+                        switch (player.MovementDirection)
+                        {
+                            case Direction.Up:
+                                targetState = "walking_back";
+                                break;
+                            case Direction.Left:
+                                targetState = "walking_left";
+                                break;
+                            case Direction.Down:
+                                targetState = "walking_front";
+                                break;
+                            case Direction.Right:
+                                targetState = "walking_right";
+                                break;
+                        }
+
+                        NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage()
+                        {
+                            UUID = player.UUID,
+                            TargetState = targetState
+                        });
+
+                        player.LastStateWasIdle = false;
+                        player.Position = newPosition;
+                        NetworkServer.Instance.BroadcastMessage(new UpdatePlayerPositionNetworkMessage()
+                        {
+                            UUID = player.UUID,
+                            Position = player.Position
+                        });
+                    }
+                }
+                else if (player.GameMode == GameMode.LevelEditor)
+                {
+                    if (!LevelEditorCameraPositions.ContainsKey(player.UUID))
+                    {
+                        LevelEditorCameraPositions.Add(player.UUID, player.Position);
                     }
 
-                    NetworkServer.Instance.BroadcastMessage(new UpdateAnimatorStateNetworkMessage()
+                    Vector2 currentPosition = LevelEditorCameraPositions[player.UUID];
+                    Vector2 newPosition = currentPosition + MovementHelper.GetDisplacement(player.MovementDirection, SharedGlobals.PlayerSpeed * 3);
+                    if (newPosition != currentPosition)
                     {
-                        UUID = player.UUID,
-                        TargetState = targetState
-                    });
+                        LevelEditorCameraPositions[player.UUID] = newPosition;
 
-                    player.LastStateWasIdle = false;
-                    player.Position = newPosition;
-                    NetworkServer.Instance.BroadcastMessage(new UpdatePlayerPositionNetworkMessage()
-                    {
-                        UUID = player.UUID,
-                        Position = player.Position
-                    });
+                        NetworkServer.Instance.SendMessage(player.UUID, new SetLevelEditorCameraPositionNetworkMessage()
+                        {
+                            UUID = player.UUID,
+                            Position = newPosition
+                        });
+                    }
                 }
             }
             else
