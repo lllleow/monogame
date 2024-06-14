@@ -24,13 +24,18 @@ public class UserInterfaceHandler
                     Globals.GraphicsDevice.GraphicsDevice.Viewport.Height),
                 Matrix.Invert(Transform));
         UIScreenSize = new Vector2(transformed.X, transformed.Y);
+
+        foreach (var userInterface in UserInterfaces)
+        {
+            userInterface.Initialize();
+        }
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
         foreach (var userInterface in UserInterfaces)
         {
-            if (userInterface.Visible)
+            if (userInterface.IsVisible())
             {
                 userInterface.Draw(spriteBatch);
             }

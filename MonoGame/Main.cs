@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame_Common;
 using MonoGame_Common.Systems.Scripts;
 using MonoGame.Source;
 using MonoGame.Source.Multiplayer;
@@ -70,9 +71,10 @@ public class Main : Game
         }
 
         Globals.GameTime = gameTime;
+        Globals.InputManager.Update();
         NetworkClient.Update();
         Globals.World.Update(gameTime);
-        Globals.Camera.Follow(Globals.World.GetLocalPlayer(), gameTime);
+
         Camera.Update(gameTime);
         Globals.UserInterfaceHandler.Update(gameTime);
 

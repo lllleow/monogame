@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame_Common.Systems.Scripts;
+using MonoGame_Common.Systems.Tiles.Interfaces;
 using MonoGame.Source.Rendering.UI.Interfaces;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents.Custom;
@@ -10,8 +12,11 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
 {
     private readonly List<TileSlotComponent> tiles;
 
-    public HotbarUserInterfaceComponent(Vector2 localPosition) : base(localPosition, null)
+    public Action<string> OnTileSelected { get; set; } = (tile) => { };
+
+    public HotbarUserInterfaceComponent(Vector2 localPosition, Action<string> onTileSelected) : base(localPosition, null)
     {
+        OnTileSelected = onTileSelected;
         tiles = TileRegistry.Tiles.Keys
             .Select(tile => new TileSlotComponent("tile_slot", TileRegistry.GetTile(tile), new Vector2(0, 0))).ToList();
 
@@ -65,7 +70,7 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
         component.IsSelected = true;
         component.LocalPosition = new Vector2(0, 0);
 
-        var selectedTileId = component.Tile.Id;
-        Globals.World.GetLocalPlayer()?.SetSelectedTile(selectedTileId);
+        var selectedTile = component.Tile;
+        OnTileSelected?.Invoke(selectedTile.Id);
     }
 }

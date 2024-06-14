@@ -8,6 +8,7 @@ using MonoGame_Common.Messages.Player;
 using MonoGame_Common.Messages.World;
 using MonoGame_Common.States;
 using MonoGame_Common.Systems.Tiles.Interfaces;
+using MonoGame.Source.GameModes;
 using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.Systems.Chunks.Interfaces;
@@ -18,6 +19,7 @@ namespace MonoGame.Source.WorldNamespace;
 
 public class World
 {
+    public Dictionary<GameMode, GameModeController> GameModeControllers { get; set; } = new();
     public World()
     {
         ClientNetworkEventManager.Subscribe<ChunkDataNetworkMessage>(message =>
@@ -40,6 +42,14 @@ public class World
             var player = new Player(message.UUID, message.Position);
             Players.Add(player);
         });
+
+        GameModeControllers[GameMode.Survival] = new SurvivalGameModeController();
+        GameModeControllers[GameMode.LevelEditor] = new LevelEditorGameModeController();
+
+        foreach (var controller in GameModeControllers.Values)
+        {
+            controller.Initialize();
+        }
     }
 
     private List<IGameEntity> Entities { get; } = [];
@@ -58,6 +68,12 @@ public class World
         foreach (var entity in GetEntities())
         {
             entity.Update(gameTime);
+        }
+
+        GameModeController currentController = GameModeControllers[Globals.World.GetLocalPlayer()?.GameMode ?? GameMode.Survival];
+        if (currentController != null)
+        {
+            currentController.Update();
         }
     }
 
@@ -217,17 +233,22 @@ public class World
 
     public static (int PosX, int PosY) GetGlobalPositionFromScreenPosition(Vector2 screenPositionBeforeTransform)
     {
+        // Inverse transform the screen position to world space
         var screenPosition = Vector2.Transform(screenPositionBeforeTransform, Matrix.Invert(Globals.Camera.Transform));
 
+        // Calculate chunk sizes in pixels
         var chunkSizeInPixelsX = Chunk.SizeX * SharedGlobals.PixelSizeX;
         var chunkSizeInPixelsY = Chunk.SizeY * SharedGlobals.PixelSizeY;
 
+        // Determine the chunk coordinates
         var chunkX = (int)(screenPosition.X / chunkSizeInPixelsX);
         var chunkY = (int)(screenPosition.Y / chunkSizeInPixelsY);
 
+        // Determine the local position within the chunk
         var localX = (int)(screenPosition.X % chunkSizeInPixelsX) / SharedGlobals.PixelSizeX;
         var localY = (int)(screenPosition.Y % chunkSizeInPixelsY) / SharedGlobals.PixelSizeY;
 
+        // Return the global position
         return ((chunkX * Chunk.SizeX) + localX, (chunkY * Chunk.SizeY) + localY);
     }
 
@@ -258,5 +279,10 @@ public class World
         var chunk = GetChunkFromGlobalPosition(posX, posY);
         var (LocalX, LocalY) = GetLocalPositionFromGlobalPosition(posX, posY);
         chunk.DeleteTile(layer, LocalX, LocalY);
+    }
+
+    public GameModeController GetGameModeController(GameMode gameMode)
+    {
+        return GameModeControllers[gameMode];
     }
 }
