@@ -41,4 +41,9 @@ public class Globals
     {
         SpriteBatch.Begin(transformMatrix: Camera.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
     }
+
+    internal static void DefaultSpriteBatchUIBegin()
+    {
+        SpriteBatch.Begin(transformMatrix: Globals.UserInterfaceHandler.Transform, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+    }
 }

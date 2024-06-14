@@ -18,6 +18,7 @@ public class LevelEditorUserInterface : UserInterface
     private Texture2D tileCursor;
     private (int PosX, int PosY) cursorPosition;
     public string SelectedTile { get; set; } = "base.grass";
+    public LevelEditorToolBarUserInterfaceComponent ToolBar { get; set; } = new();
 
     public LevelEditorUserInterface()
     {
@@ -40,32 +41,38 @@ public class LevelEditorUserInterface : UserInterface
                 )
             )
         );
+
+        AddComponent(
+            new AlignmentUserInterfaceComponent(
+                alignment: UserInterfaceAlignment.LeftCenter,
+                child: new PaddingUserInterfaceComponent(
+                    8,
+                    0,
+                    0,
+                    0,
+                    ToolBar
+                )
+            )
+        );
     }
 
     public override void Initialize()
     {
         base.Initialize();
         tileCursor = Globals.ContentManager.Load<Texture2D>("textures/tile_cursor");
-
-        InputEventManager.Subscribe(inputEvent =>
-        {
-            if (inputEvent.EventType == InputEventType.MouseButtonUp)
-            {
-                NetworkClient.SendMessage(new RequestToPlaceTileNetworkMessage()
-                {
-                    TileId = SelectedTile,
-                    Layer = TileDrawLayer.Tiles,
-                    PosX = cursorPosition.PosX,
-                    PosY = cursorPosition.PosY
-                });
-            }
-        });
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
         base.Draw(spriteBatch);
         DrawTileCursor(spriteBatch);
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
+        ToolBar.CursorPosition = cursorPosition;
+        ToolBar.SelectedTile = SelectedTile;
     }
 
     public void DrawTileCursor(SpriteBatch spriteBatch)
