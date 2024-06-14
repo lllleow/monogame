@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Source.Rendering.UI.Interfaces;
 using MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
@@ -17,6 +18,7 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
     public LevelEditorToolBarUserInterfaceComponent() : base(new Vector2(0, 0), null)
     {
         Tools.Add(new PlaceLevelEditorTool());
+        Tools.Add(new OutlineLevelEditorTool());
 
         List<UserInterfaceComponent> toolComponents = Tools.Select(tool =>
             (UserInterfaceComponent)new LabelUserInterfaceComponent(tool.Name, new Vector2(0, 0))
@@ -73,6 +75,15 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
                 tileManipulatorEditorTool.CursorPosition = CursorPosition;
                 tileManipulatorEditorTool.SelectedTile = SelectedTile;
             }
+        }
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        base.Draw(spriteBatch);
+        foreach (var tool in Tools)
+        {
+            tool.Draw(spriteBatch);
         }
     }
 }

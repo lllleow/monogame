@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame;
 
@@ -8,5 +9,5 @@ public abstract class LevelEditorTool
     public bool Enabled { get; set; } = false;
     public abstract void Initialize();
     public abstract void Update();
-    public abstract void Draw();
+    public abstract void Draw(SpriteBatch spriteBatch);
 }
