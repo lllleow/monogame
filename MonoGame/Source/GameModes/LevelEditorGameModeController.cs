@@ -1,25 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
+using System.Numerics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame_Common;
 using MonoGame_Common.Messages.Player;
-using MonoGame.Source.GameModes;
 using MonoGame.Source.Multiplayer;
 
-namespace MonoGame.Source.Systems.Components.Movement;
+namespace MonoGame.Source.GameModes;
 
-public class MovementComponent : EntityComponent
+public class LevelEditorGameModeController : GameModeController
 {
+    public Vector2 CameraPosition { get; set; } = new(0, 0);
+
     private List<Keys> lastKeys = new();
 
-    public override void Update(GameTime gameTime)
+    public override void Initialize()
     {
-        if (Globals.World.GetLocalPlayer()?.GameMode != GameMode.Survival)
+        ClientNetworkEventManager.Subscribe<SetLevelEditorCameraPositionNetworkMessage>(message =>
         {
-            return;
-        }
+            if (message.UUID == Globals.World.GetLocalPlayer()?.UUID)
+            {
+                CameraPosition = message.Position;
+            }
+        });
+    }
+
+    public override void Update()
+    {
+        Globals.Camera.Follow(CameraPosition);
 
         var state = Keyboard.GetState();
         List<Keys> keys = [];
@@ -52,14 +59,10 @@ public class MovementComponent : EntityComponent
 
         lastKeys = keys;
         var commonsKeys = keys.Select(x => (MonoGame_Common.Enums.Keys)x).ToList();
-        foreach (var key in keys)
-        {
-            Console.WriteLine(key);
-        }
 
         NetworkClient.SendMessage(new KeyClickedNetworkMessage()
         {
-            UUID = Entity.UUID,
+            UUID = Globals.World.GetLocalPlayer()?.UUID ?? "",
             Keys = commonsKeys
         });
     }

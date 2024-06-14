@@ -8,6 +8,7 @@ using MonoGame_Common.Messages.Player;
 using MonoGame_Common.Messages.World;
 using MonoGame_Common.States;
 using MonoGame_Common.Systems.Tiles.Interfaces;
+using MonoGame.Source.GameModes;
 using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.Systems.Chunks.Interfaces;
@@ -18,6 +19,7 @@ namespace MonoGame.Source.WorldNamespace;
 
 public class World
 {
+    public Dictionary<GameMode, GameModeController> GameModeControllers { get; set; } = new();
     public World()
     {
         ClientNetworkEventManager.Subscribe<ChunkDataNetworkMessage>(message =>
@@ -40,6 +42,14 @@ public class World
             var player = new Player(message.UUID, message.Position);
             Players.Add(player);
         });
+
+        GameModeControllers[GameMode.Survival] = new SurvivalGameModeController();
+        GameModeControllers[GameMode.LevelEditor] = new LevelEditorGameModeController();
+
+        foreach (var controller in GameModeControllers.Values)
+        {
+            controller.Initialize();
+        }
     }
 
     private List<IGameEntity> Entities { get; } = [];
@@ -58,6 +68,12 @@ public class World
         foreach (var entity in GetEntities())
         {
             entity.Update(gameTime);
+        }
+
+        GameModeController currentController = GameModeControllers[Globals.World.GetLocalPlayer()?.GameMode ?? GameMode.Survival];
+        if (currentController != null)
+        {
+            currentController.Update();
         }
     }
 

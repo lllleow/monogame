@@ -30,7 +30,7 @@ public class UserInterfaceHandler
     {
         foreach (var userInterface in UserInterfaces)
         {
-            if (userInterface.Visible)
+            if (userInterface.IsVisible())
             {
                 userInterface.Draw(spriteBatch);
             }

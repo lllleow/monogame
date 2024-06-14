@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame_Common;
 using MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 using MonoGame.Source.Rendering.UI.UserInterfaceComponents.Custom;
 
@@ -23,5 +24,10 @@ public class LevelEditorUserInterface : UserInterface
                 )
             )
         );
+    }
+
+    public override bool IsVisible()
+    {
+        return Globals.World.GetLocalPlayer()?.GameMode == GameMode.LevelEditor;
     }
 }

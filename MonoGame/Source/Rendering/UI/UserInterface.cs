@@ -9,7 +9,6 @@ public class UserInterface : IUserInterface
 {
     public string Name { get; set; }
     public List<IUserInterfaceComponent> Components { get; set; } = [];
-    public bool Visible { get; set; } = true;
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
@@ -17,6 +16,11 @@ public class UserInterface : IUserInterface
         {
             component.Draw(spriteBatch);
         }
+    }
+
+    public virtual bool IsVisible()
+    {
+        return true;
     }
 
     public virtual void Update(GameTime gameTime)
