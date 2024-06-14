@@ -40,7 +40,7 @@ public class Player : GameEntity
         AddComponent(new CollisionComponent(CollisionMode.CollisionMask));
         AddComponent(new MovementComponent());
 
-        // SetGameMode(GameMode.LevelEditor);
+        SetGameMode(GameMode.LevelEditor);
     }
 
     public string SelectedTile { get; set; } = "base.grass";

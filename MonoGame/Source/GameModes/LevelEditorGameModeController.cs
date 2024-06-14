@@ -10,7 +10,6 @@ namespace MonoGame.Source.GameModes;
 public class LevelEditorGameModeController : GameModeController
 {
     public Vector2 CameraPosition { get; set; } = new(0, 0);
-
     private List<Keys> lastKeys = new();
 
     public override void Initialize()
