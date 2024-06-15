@@ -12,6 +12,8 @@ public class UserInterfaceComponent : IUserInterfaceComponent
 {
     private readonly PrimitiveBatch primitiveBatch =
         new(Globals.GraphicsDevice.GraphicsDevice, Globals.UserInterfaceHandler.Transform);
+    public Vector2 SizeOverride { get; set; } = Vector2.Zero;
+    public float Opacity { get; set; } = 1f;
 
     public UserInterfaceComponent(string name, Vector2 localPosition)
     {

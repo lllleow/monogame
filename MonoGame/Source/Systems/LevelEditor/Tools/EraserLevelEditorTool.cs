@@ -1,20 +1,14 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using MonoGame_Common;
 using MonoGame_Common.Enums;
-using MonoGame_Common.Messages.Player;
-using MonoGame.Source;
 using MonoGame.Source.Multiplayer;
 
 namespace MonoGame;
 
-public class PlaceLevelEditorTool : SelectLevelEditorTool
+public class EraserLevelEditorTool : SelectLevelEditorTool
 {
-    public PlaceLevelEditorTool()
+    public EraserLevelEditorTool()
     {
-        Name = "Place";
+        Name = "Eraser";
     }
 
     public override void OnSelectTiles()
@@ -30,7 +24,7 @@ public class PlaceLevelEditorTool : SelectLevelEditorTool
             {
                 if (x == startX || x == endX || y == startY || y == endY)
                 {
-                    NetworkClient.SendMessage(new RequestToPlaceTileNetworkMessage()
+                    NetworkClient.SendMessage(new RequestToDeleteTileNetworkMessage()
                     {
                         TileId = SelectedTile,
                         Layer = TileDrawLayer.Tiles,

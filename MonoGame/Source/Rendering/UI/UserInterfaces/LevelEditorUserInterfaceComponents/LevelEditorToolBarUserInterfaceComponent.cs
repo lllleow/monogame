@@ -14,6 +14,7 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
     public LevelEditorTool SelectedTool { get; set; } = null;
     public (int PosX, int PosY) CursorPosition { get; set; } = (0, 0);
     public string SelectedTile { get; set; } = "base.grass";
+    private List<IUserInterfaceComponent> toolComponents;
 
     public LevelEditorToolBarUserInterfaceComponent() : base(new Vector2(0, 0), null)
     {
@@ -21,43 +22,43 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
         BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile;
 
         Tools.Add(new PlaceLevelEditorTool());
-        Tools.Add(new OutlineLevelEditorTool());
+        Tools.Add(new EraserLevelEditorTool());
+        Tools.Add(new SelectLevelEditorTool());
 
-        List<UserInterfaceComponent> toolComponents = Tools.Select(tool =>
-            (UserInterfaceComponent)new LabelUserInterfaceComponent(tool.Name, new Vector2(0, 0))
-        ).ToList();
-
-        for (int i = 0; i < toolComponents.Count; i++)
-        {
-            LevelEditorTool tool = Tools[i];
-            if (tool == null) continue;
-            toolComponents[i].OnClick = component => SetSelectedTool(tool);
-        }
+        toolComponents = Tools.Select(tool =>
+            (UserInterfaceComponent)new ButtonUserInterfaceComponent(tool.Name, component => SetSelectedTool(component, tool))
+            {
+                SizeOverride = new Vector2(50, 15)
+            }
+        ).Cast<IUserInterfaceComponent>().ToList();
 
         foreach (var tool in Tools)
         {
             tool.Initialize();
         }
 
-        SetSelectedTool(Tools[0]);
+        SetSelectedTool(toolComponents[0], Tools[0]);
 
         SetChild(new PaddingUserInterfaceComponent(
-            8,
-            8,
-            8,
-            8,
+            4,
+            4,
+            4,
+            4,
             child: new DirectionalListUserInterfaceComponent(
                 "list",
                 spacing: 2,
                 localPosition: new Vector2(0, 0),
                 direction: ListDirection.Vertical,
-                children: toolComponents.Cast<IUserInterfaceComponent>().ToList()
+                children: toolComponents
             )
         ));
     }
 
-    public void SetSelectedTool(LevelEditorTool tool)
+    public void SetSelectedTool(IUserInterfaceComponent component, LevelEditorTool tool)
     {
+        toolComponents.ForEach(component => ((ButtonUserInterfaceComponent)component).IsClicked = false);
+        ((ButtonUserInterfaceComponent)component).IsClicked = true;
+
         foreach (var _tool in Tools)
         {
             if (_tool == tool)

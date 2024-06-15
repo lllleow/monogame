@@ -40,6 +40,13 @@ public class SingleChildUserInterfaceComponent : UserInterfaceComponent
 
     public override Vector2 GetPreferredSize()
     {
-        return (Child?.GetPreferredSize() ?? Vector2.Zero) + (Child?.LocalPosition ?? Vector2.Zero);
+        if (SizeOverride != Vector2.Zero)
+        {
+            return SizeOverride;
+        }
+        else
+        {
+            return (Child?.GetPreferredSize() ?? Vector2.Zero) + (Child?.LocalPosition ?? Vector2.Zero);
+        }
     }
 }
