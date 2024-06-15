@@ -135,4 +135,22 @@ public class UserInterfaceComponent : IUserInterfaceComponent
             OnClick?.Invoke(this);
         }
     }
+
+    public int GetPercentageOfScreenWidth(float percent)
+    {
+        float screenHeight = Globals.GraphicsDevice.PreferredBackBufferHeight;
+        float screenWidth = Globals.GraphicsDevice.PreferredBackBufferWidth;
+        Vector2 screenSize = new Vector2(screenWidth, screenHeight);
+        Vector2 uiSize = Vector2.Transform(screenSize, Matrix.Invert(Globals.UserInterfaceHandler.GetUITransform()));
+        return (int)(uiSize.X * percent);
+    }
+
+    public int GetPercentageOfScreenHeight(float percent)
+    {
+        float screenHeight = Globals.GraphicsDevice.PreferredBackBufferHeight;
+        float screenWidth = Globals.GraphicsDevice.PreferredBackBufferWidth;
+        Vector2 screenSize = new Vector2(screenWidth, screenHeight);
+        Vector2 uiSize = Vector2.Transform(screenSize, Matrix.Invert(Globals.UserInterfaceHandler.GetUITransform()));
+        return (int)(uiSize.Y * percent);
+    }
 }

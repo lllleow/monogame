@@ -14,4 +14,6 @@ public interface IUserInterfaceComponent
     public Vector2 GetPreferredSize();
     public Vector2 GetChildOffset(IUserInterfaceComponent child);
     public bool Enabled { get; set; }
+    public int GetPercentageOfScreenWidth(float percent);
+    public int GetPercentageOfScreenHeight(float percent);
 }

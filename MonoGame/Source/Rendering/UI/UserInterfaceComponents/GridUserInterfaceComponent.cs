@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Source.Rendering.UI.Interfaces;
 
@@ -19,7 +20,8 @@ public class GridUserInterfaceComponent : MultipleChildUserInterfaceComponent
 
     public override Vector2 GetPreferredSize()
     {
-        return base.GetPreferredSize();
+        Vector2 childSize = Children.First().GetPreferredSize();
+        return new Vector2((childSize.X * MaxColumns) + (Spacing.X * (MaxColumns - 1)), (childSize.Y * MaxRows) + (Spacing.Y * (MaxRows - 1)));
     }
 
     public override Vector2 GetChildOffset(IUserInterfaceComponent child)

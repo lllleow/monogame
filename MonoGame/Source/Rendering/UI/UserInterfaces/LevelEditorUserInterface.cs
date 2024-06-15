@@ -67,6 +67,13 @@ public class LevelEditorUserInterface : UserInterface
                 )
             )
         );
+
+        AddComponent(
+            new AlignmentUserInterfaceComponent(
+                alignment: UserInterfaceAlignment.Center,
+                child: new TileSelectorUserInterfaceComponent()
+            )
+        );
     }
 
     public override void Initialize()
