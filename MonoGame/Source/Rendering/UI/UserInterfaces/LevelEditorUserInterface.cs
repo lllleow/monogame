@@ -3,13 +3,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame_Common;
-using MonoGame_Common.Enums;
-using MonoGame_Common.Messages.Player;
-using MonoGame.Source.Multiplayer;
+using MonoGame.Source.GameModes;
 using MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 using MonoGame.Source.Rendering.UI.UserInterfaceComponents.Custom;
 using MonoGame.Source.WorldNamespace;
-using MonoGame.Source.GameModes;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaces;
 
@@ -21,12 +18,16 @@ public class LevelEditorUserInterface : UserInterface
     public string SelectedTile { get; set; } = "base.grass";
     public LevelEditorToolBarUserInterfaceComponent ToolBar { get; set; } = new();
     private TileSelectorUserInterfaceComponent tileSelectorComponent;
+    private SlotUserInterfaceComponentController slotController;
 
     public LevelEditorUserInterface()
     {
         Name = "level_editor_user_interface";
 
-        tileSelectorComponent = new TileSelectorUserInterfaceComponent();
+        tileSelectorComponent = new TileSelectorUserInterfaceComponent()
+        {
+            Controller = slotController
+        };
 
         AddComponent(
             new AlignmentUserInterfaceComponent(
@@ -43,6 +44,9 @@ public class LevelEditorUserInterface : UserInterface
                             SelectedTile = tile;
                         }
                     )
+                    {
+                        Controller = slotController
+                    }
                 )
             )
         );
@@ -86,7 +90,7 @@ public class LevelEditorUserInterface : UserInterface
         base.Initialize();
         tileCursor = Globals.ContentManager.Load<Texture2D>("textures/tile_cursor");
 
-        InputEventManager.Subscribe(inputEvent =>
+        InputEventManager.Subscribe(InputEventChannel.LevelEditor, inputEvent =>
         {
             if (inputEvent.EventType == InputEventType.KeyUp)
             {

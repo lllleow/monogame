@@ -13,6 +13,7 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
     private readonly List<TileSlotComponent> tiles = new();
 
     public Action<string> OnTileSelected { get; set; } = (tile) => { };
+    public SlotUserInterfaceComponentController Controller { get; set; }
 
     private int slotCount = 8;
     public HotbarUserInterfaceComponent(Vector2 localPosition, Action<string> onTileSelected) : base(localPosition, null)
@@ -21,11 +22,12 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
         BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile;
         OnTileSelected = onTileSelected;
 
-        // tiles = TileRegistry.Tiles.Keys
-        //     .Select(tile => new TileSlotComponent("tile_slot", TileRegistry.GetTile(tile), new Vector2(0, 0))).ToList();
         for (int i = 0; i < slotCount; i++)
         {
-            tiles.Add(new TileSlotComponent("tile_slot", null, new Vector2(0, 0)));
+            tiles.Add(new TileSlotComponent("tile_slot", null, new Vector2(0, 0))
+            {
+                Controller = Controller
+            });
         }
 
         SetChild(new PaddingUserInterfaceComponent(

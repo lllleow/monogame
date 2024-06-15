@@ -1,11 +1,12 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using MonoGame_Common;
 using MonoGame_Common.Util.Helpers;
 using MonoGame.Source.Rendering.UI.Interfaces;
 using MonoGame.Source.Utils.Helpers;
 using MonoGame.Source.Utils.Loaders;
-using MonoGame_Common;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
@@ -19,16 +20,26 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
     public TextureLocation SlotTexture { get; set; } = TextureLocation.FirstTextureCoordinate("textures/slot");
     public bool IsSelected { get; set; } = false;
     public bool IsDragging { get; set; } = false;
+    public Action<SlotComponent> OnSlotDragGrab { get; set; } = (slot) => { };
+    public Action<SlotComponent> OnSlotDragDrop { get; set; } = (slot) => { };
+    public SlotUserInterfaceComponentController Controller { get; set; }
 
     public override void Initialize(IUserInterfaceComponent parent)
     {
         base.Initialize(parent);
-        InputEventManager.Subscribe(inputEvent =>
+
+        if (Controller != null)
+        {
+            Controller.AddSlot(this);
+        }
+
+        InputEventManager.Subscribe(InputEventChannel.UI, inputEvent =>
         {
             if (inputEvent.EventType == InputEventType.MouseButtonDown)
             {
                 if (inputEvent.Button == MouseButton.Left && MouseIntersectsComponent())
                 {
+                    OnSlotDragGrab?.Invoke(this);
                     IsDragging = true;
                 }
             }
@@ -37,6 +48,11 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
                 if (inputEvent.Button == MouseButton.Left)
                 {
                     IsDragging = false;
+
+                    if (MouseIntersectsComponent())
+                    {
+                        OnSlotDragDrop?.Invoke(this);
+                    }
                 }
             }
         });

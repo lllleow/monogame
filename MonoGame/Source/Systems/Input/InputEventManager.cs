@@ -7,23 +7,36 @@ namespace MonoGame;
 
 public class InputEventManager
 {
-    private static List<Action<InputEvent>> subscriptions = new();
+    private static Dictionary<InputEventChannel, List<Action<InputEvent>>> subscriptions = new();
 
-    public static void Subscribe(Action<InputEvent> handler)
+    public static void Subscribe(InputEventChannel channel, Action<InputEvent> handler)
     {
-        subscriptions.Add(handler);
+        if (!subscriptions.ContainsKey(channel))
+        {
+            subscriptions[channel] = new List<Action<InputEvent>>();
+        }
+
+        subscriptions[channel].Add(handler);
     }
 
     public static void RaiseEvent(InputEvent message)
     {
-        foreach (var subscription in subscriptions)
+        foreach (var channel in subscriptions.Keys)
+        {
+            RaiseEvent(channel, message);
+        }
+    }
+
+    public static void RaiseEvent(InputEventChannel channel, InputEvent message)
+    {
+        foreach (var subscription in subscriptions[channel])
         {
             subscription(message);
         }
     }
 
-    public static void Unsubscribe(Action<InputEvent> handler)
+    public static void Unsubscribe(InputEventChannel channel, Action<InputEvent> handler)
     {
-        subscriptions.Remove(handler);
+        subscriptions[channel].Remove(handler);
     }
 }
