@@ -2,11 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Source;
-using MonoGame.Source.Multiplayer;
 using MonoGame_Common;
-using MonoGame_Common.Enums;
-using MonoGame_Common.Messages.Player;
+using MonoGame.Source;
 
 namespace MonoGame;
 
@@ -21,6 +18,8 @@ public class SelectLevelEditorTool : TileManipulatorEditorTool
     {
         Name = "Select";
         tileCursor = Globals.ContentManager.Load<Texture2D>("textures/tile_cursor");
+
+        ToolConfigurations.Add(new SelectFillToolConfiguration());
     }
 
     public override void Initialize()

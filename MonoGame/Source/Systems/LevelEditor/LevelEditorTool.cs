@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame;
@@ -10,4 +11,5 @@ public abstract class LevelEditorTool
     public abstract void Initialize();
     public abstract void Update();
     public abstract void Draw(SpriteBatch spriteBatch);
+    public List<ToolConfiguration> ToolConfigurations { get; set; } = [];
 }

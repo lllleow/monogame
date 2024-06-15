@@ -12,7 +12,7 @@ namespace MonoGame;
 
 public class PlaceLevelEditorTool : SelectLevelEditorTool
 {
-    public PlaceLevelEditorTool()
+    public PlaceLevelEditorTool() : base()
     {
         Name = "Place";
     }

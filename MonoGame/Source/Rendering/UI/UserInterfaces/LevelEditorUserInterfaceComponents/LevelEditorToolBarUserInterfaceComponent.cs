@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,17 +19,14 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
 
     public LevelEditorToolBarUserInterfaceComponent() : base(new Vector2(0, 0), null)
     {
-        BackgroundImage = "textures/ui_background";
-        BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile;
-
         Tools.Add(new PlaceLevelEditorTool());
         Tools.Add(new EraserLevelEditorTool());
-        Tools.Add(new SelectLevelEditorTool());
+        // Tools.Add(new SelectLevelEditorTool());
 
         toolComponents = Tools.Select(tool =>
             (UserInterfaceComponent)new ButtonUserInterfaceComponent(tool.Name, component => SetSelectedTool(component, tool))
             {
-                SizeOverride = new Vector2(50, 15)
+                SizeOverride = new Vector2(40, 15)
             }
         ).Cast<IUserInterfaceComponent>().ToList();
 
@@ -38,6 +36,20 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
         }
 
         SetSelectedTool(toolComponents[0], Tools[0]);
+        Build();
+    }
+
+    public void Build()
+    {
+        List<IUserInterfaceComponent> toolConfigurations = [];
+        if (SelectedTool != null)
+        {
+            toolConfigurations = SelectedTool?.ToolConfigurations.Select(configuration =>
+            (UserInterfaceComponent)new ButtonUserInterfaceComponent(configuration.Name, component => SetSelectedToolConfiguration(component, configuration))
+            {
+                SizeOverride = new Vector2(50, 15)
+            }).Cast<IUserInterfaceComponent>().ToList();
+        }
 
         SetChild(new PaddingUserInterfaceComponent(
             4,
@@ -48,10 +60,63 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
                 "list",
                 spacing: 2,
                 localPosition: new Vector2(0, 0),
-                direction: ListDirection.Vertical,
-                children: toolComponents
+                direction: ListDirection.Horizontal,
+                children: [
+                    new ContainerUserInterfaceComponent(
+                        new Vector2(0, 0),
+                        new PaddingUserInterfaceComponent(
+                            4,
+                            4,
+                            4,
+                            4,
+                            child: new DirectionalListUserInterfaceComponent(
+                                "list",
+                                spacing: 2,
+                                localPosition: new Vector2(0, 0),
+                                direction: ListDirection.Vertical,
+                                children: toolComponents
+                            )
+                        )
+                    )
+                    {
+                        BackgroundImage = "textures/ui_background",
+                        BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile
+                    },
+                    new ContainerUserInterfaceComponent(
+                        new Vector2(0, 0),
+                        new PaddingUserInterfaceComponent(
+                            4,
+                            4,
+                            4,
+                            4,
+                            child: new DirectionalListUserInterfaceComponent(
+                                "list",
+                                spacing: 2,
+                                localPosition: new Vector2(0, 0),
+                                direction: ListDirection.Vertical,
+                                children: toolConfigurations
+                            )
+                        )
+                    )
+                    {
+                        BackgroundImage = "textures/ui_background",
+                        BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile
+                    },
+                ]
             )
         ));
+    }
+
+    public void SetSelectedToolConfiguration(IUserInterfaceComponent component, ToolConfiguration configuration)
+    {
+        SelectedTool.ToolConfigurations.ForEach(toolConfiguration => ((ButtonUserInterfaceComponent)component).IsClicked = false);
+        ((ButtonUserInterfaceComponent)component).IsClicked = !((ButtonUserInterfaceComponent)component).IsClicked;
+
+        configuration.Enabled = true;
+        foreach (var toolConfiguration in SelectedTool.ToolConfigurations)
+        {
+            toolConfiguration.Enabled = false;
+        }
     }
 
     public void SetSelectedTool(IUserInterfaceComponent component, LevelEditorTool tool)
@@ -72,6 +137,7 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
         }
 
         SelectedTool = tool;
+        Build();
     }
 
     public override void Update(GameTime gameTime)

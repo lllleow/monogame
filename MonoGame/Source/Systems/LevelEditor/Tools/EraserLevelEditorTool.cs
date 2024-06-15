@@ -6,7 +6,7 @@ namespace MonoGame;
 
 public class EraserLevelEditorTool : SelectLevelEditorTool
 {
-    public EraserLevelEditorTool()
+    public EraserLevelEditorTool() : base()
     {
         Name = "Eraser";
     }
