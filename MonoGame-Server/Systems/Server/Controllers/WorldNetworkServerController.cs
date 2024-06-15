@@ -1,4 +1,5 @@
-﻿using MonoGame_Common;
+﻿using MonoGame;
+using MonoGame_Common;
 using MonoGame_Common.Messages.Player;
 using MonoGame_Common.Messages.World;
 using MonoGame_Common.States;
@@ -60,7 +61,12 @@ public class WorldNetworkServerController : IServerNetworkController
             {
                 server.ServerWorld.SetTileAtPosition(message.TileId, message.Layer, message.PosX, message.PosY);
             }
-            else
+        });
+
+        ServerNetworkEventManager.Subscribe<RequestToDeleteTileNetworkMessage>((server, peer, message) =>
+        {
+            var tile = server.ServerWorld.GetTileAtPosition(message.Layer, message.PosX, message.PosY);
+            if (tile != null)
             {
                 server.ServerWorld.DestroyTileAtPosition(message.Layer, message.PosX, message.PosY);
             }

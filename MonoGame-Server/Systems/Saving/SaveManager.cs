@@ -126,6 +126,8 @@ public class SaveManager
     {
         return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
         {
+            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             TypeNameHandling = TypeNameHandling.Auto
         });
     }
@@ -134,6 +136,8 @@ public class SaveManager
     {
         return JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings
         {
+            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             TypeNameHandling = TypeNameHandling.Auto
         });
     }

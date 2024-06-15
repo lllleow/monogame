@@ -54,7 +54,7 @@ public class ServerMovementHelper
                         }
 
                         bool[,] mask = ServerTextureHelper.GetImageMask(croppedImage);
-                        tiles = World.ServerWorld.GetTilesIntersectingWithMask(mask, entityRectangle);
+                        tiles = NetworkServer.Instance.ServerWorld.GetTilesIntersectingWithMask(mask, entityRectangle);
                     }
                 }
                 else

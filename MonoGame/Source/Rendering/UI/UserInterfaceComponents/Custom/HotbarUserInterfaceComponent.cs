@@ -16,16 +16,24 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
 
     public HotbarUserInterfaceComponent(Vector2 localPosition, Action<string> onTileSelected) : base(localPosition, null)
     {
+        BackgroundImage = "textures/ui_background";
+        BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile;
         OnTileSelected = onTileSelected;
         tiles = TileRegistry.Tiles.Keys
             .Select(tile => new TileSlotComponent("tile_slot", TileRegistry.GetTile(tile), new Vector2(0, 0))).ToList();
 
-        SetChild(new DirectionalListUserInterfaceComponent(
-            "list",
-            spacing: 2,
-            localPosition: new Vector2(0, 0),
-            direction: ListDirection.Horizontal,
-            children: tiles.Cast<IUserInterfaceComponent>().ToList()
+        SetChild(new PaddingUserInterfaceComponent(
+                4,
+                4,
+                4,
+                4,
+                child: new DirectionalListUserInterfaceComponent(
+                    "list",
+                    spacing: 2,
+                    localPosition: new Vector2(0, 0),
+                    direction: ListDirection.Horizontal,
+                    children: tiles.Cast<IUserInterfaceComponent>().ToList()
+             )
         ));
     }
 
@@ -64,11 +72,9 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
         foreach (var tile in tiles)
         {
             tile.IsSelected = false;
-            tile.LocalPosition = new Vector2(0, 1);
         }
 
         component.IsSelected = true;
-        component.LocalPosition = new Vector2(0, 0);
 
         var selectedTile = component.Tile;
         OnTileSelected?.Invoke(selectedTile.Id);

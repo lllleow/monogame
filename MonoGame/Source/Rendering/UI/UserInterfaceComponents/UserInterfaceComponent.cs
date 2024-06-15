@@ -12,6 +12,8 @@ public class UserInterfaceComponent : IUserInterfaceComponent
 {
     private readonly PrimitiveBatch primitiveBatch =
         new(Globals.GraphicsDevice.GraphicsDevice, Globals.UserInterfaceHandler.Transform);
+    public Vector2 SizeOverride { get; set; } = Vector2.Zero;
+    public float Opacity { get; set; } = 1f;
 
     public UserInterfaceComponent(string name, Vector2 localPosition)
     {
@@ -28,9 +30,11 @@ public class UserInterfaceComponent : IUserInterfaceComponent
     public Action<IUserInterfaceComponent> OnClick { get; set; }
     public string Name { get; set; }
     public Vector2 LocalPosition { get; set; }
+    public bool Enabled { get; set; } = true;
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
+        if (!Enabled) return;
         if (ShowBounds && !BoundRenderOffForTypes.Contains(GetType()))
         {
             primitiveBatch.Begin(PrimitiveType.LineList, Globals.UserInterfaceHandler.Transform);
@@ -60,16 +64,26 @@ public class UserInterfaceComponent : IUserInterfaceComponent
         }
     }
 
+    public bool IsClicked { get; set; } = false;
     public virtual void Update(GameTime gameTime)
     {
+        if (!Enabled) return;
         CurrentMouseState = Mouse.GetState();
 
-        if (CurrentMouseState.LeftButton == ButtonState.Pressed || CurrentMouseState.RightButton == ButtonState.Pressed)
+        if (CurrentMouseState.LeftButton == ButtonState.Pressed)
         {
-            var mouseX = CurrentMouseState.X;
-            var mouseY = CurrentMouseState.Y;
+            IsClicked = true;
+        }
+        else if (CurrentMouseState.LeftButton == ButtonState.Released)
+        {
+            if (IsClicked)
+            {
+                var mouseX = CurrentMouseState.X;
+                var mouseY = CurrentMouseState.Y;
 
-            HandleMouseClick(CurrentMouseState.LeftButton == ButtonState.Pressed, mouseX, mouseY);
+                HandleMouseClick(CurrentMouseState.LeftButton == ButtonState.Pressed, mouseX, mouseY);
+                IsClicked = false;
+            }
         }
     }
 

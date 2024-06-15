@@ -6,8 +6,7 @@ namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class SingleChildUserInterfaceComponent : UserInterfaceComponent
 {
-    public SingleChildUserInterfaceComponent(string name, Vector2 localPosition, IUserInterfaceComponent child) : base(
-        name, localPosition)
+    public SingleChildUserInterfaceComponent(string name, Vector2 localPosition, IUserInterfaceComponent child) : base(name, localPosition)
     {
         child?.Initialize(this);
         Child = child;
@@ -40,6 +39,13 @@ public class SingleChildUserInterfaceComponent : UserInterfaceComponent
 
     public override Vector2 GetPreferredSize()
     {
-        return (Child?.GetPreferredSize() ?? Vector2.Zero) + (Child?.LocalPosition ?? Vector2.Zero);
+        if (SizeOverride != Vector2.Zero)
+        {
+            return SizeOverride;
+        }
+        else
+        {
+            return (Child?.GetPreferredSize() ?? Vector2.Zero) + (Child?.LocalPosition ?? Vector2.Zero);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame.Source.Rendering.UI.Interfaces;
 
@@ -41,7 +42,7 @@ public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceC
         float maxWidth = 0;
         float totalHeight = 0;
 
-        foreach (var child in Children)
+        foreach (var child in Children.Where(child => child.Enabled))
         {
             var childPreferredSize = child.GetPreferredSize();
 
