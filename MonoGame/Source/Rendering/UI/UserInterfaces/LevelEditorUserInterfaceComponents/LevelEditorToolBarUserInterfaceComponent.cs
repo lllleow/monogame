@@ -17,6 +17,9 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
 
     public LevelEditorToolBarUserInterfaceComponent() : base(new Vector2(0, 0), null)
     {
+        BackgroundImage = "textures/ui_background";
+        BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile;
+
         Tools.Add(new PlaceLevelEditorTool());
         Tools.Add(new OutlineLevelEditorTool());
 
@@ -38,12 +41,18 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
 
         SetSelectedTool(Tools[0]);
 
-        SetChild(new DirectionalListUserInterfaceComponent(
-            "list",
-            spacing: 2,
-            localPosition: new Vector2(0, 0),
-            direction: ListDirection.Vertical,
-            children: toolComponents.Cast<IUserInterfaceComponent>().ToList()
+        SetChild(new PaddingUserInterfaceComponent(
+            8,
+            8,
+            8,
+            8,
+            child: new DirectionalListUserInterfaceComponent(
+                "list",
+                spacing: 2,
+                localPosition: new Vector2(0, 0),
+                direction: ListDirection.Vertical,
+                children: toolComponents.Cast<IUserInterfaceComponent>().ToList()
+            )
         ));
     }
 

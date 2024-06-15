@@ -39,7 +39,7 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
             Vector2.Zero,
             SpriteEffects.None,
             1f);
-        var iconSize = size * 0.75f;
+        var iconSize = size * 0.5f;
 
         if (textureLocation != null)
         {
@@ -49,7 +49,7 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
             spriteBatch.Draw(
                 SpritesheetLoader.GetSpritesheet(textureLocation.Spritesheet),
                 new Rectangle((int)iconPosition.X, (int)iconPosition.Y, (int)iconSize.X, (int)iconSize.Y),
-                textureRectangle,
+                RectangleHelper.GetTextureRectangleFromCoordinates(0, 0),
                 Color.White,
                 0f,
                 Vector2.Zero,
