@@ -18,16 +18,14 @@ public class LevelEditorUserInterface : UserInterface
     public string SelectedTile { get; set; } = "base.grass";
     public LevelEditorToolBarUserInterfaceComponent ToolBar { get; set; } = new();
     private TileSelectorUserInterfaceComponent tileSelectorComponent;
-    private SlotUserInterfaceComponentController slotController;
+    public SlotUserInterfaceComponentController SlotController { get; set; }
 
     public LevelEditorUserInterface()
     {
         Name = "level_editor_user_interface";
 
-        tileSelectorComponent = new TileSelectorUserInterfaceComponent()
-        {
-            Controller = slotController
-        };
+        SlotController = new LevelEditorUserInterfaceSlotComponentController();
+        tileSelectorComponent = new TileSelectorUserInterfaceComponent(SlotController);
 
         AddComponent(
             new AlignmentUserInterfaceComponent(
@@ -38,15 +36,13 @@ public class LevelEditorUserInterface : UserInterface
                     0,
                     8,
                     new HotbarUserInterfaceComponent(
+                        SlotController,
                         new Vector2(0, 0),
                         (tile) =>
                         {
                             SelectedTile = tile;
                         }
                     )
-                    {
-                        Controller = slotController
-                    }
                 )
             )
         );

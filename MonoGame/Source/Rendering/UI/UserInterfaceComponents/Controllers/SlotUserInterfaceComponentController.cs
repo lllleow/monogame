@@ -22,13 +22,18 @@ public class SlotUserInterfaceComponentController
         Slots.Remove(slot);
     }
 
-    public void OnGrab(SlotComponent slot)
+    public virtual void OnGrab(SlotComponent slot)
     {
         SourceSlot = slot;
     }
 
-    public void OnDrop(SlotComponent slot)
+    private void OnDrop(SlotComponent slot)
     {
         DestinationSlot = slot;
+        OnDrop(SourceSlot, DestinationSlot);
+    }
+
+    public virtual void OnDrop(SlotComponent sourceSlot, SlotComponent destinationSlot)
+    {
     }
 }

@@ -12,8 +12,9 @@ namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class SlotComponent : UserInterfaceComponent, ISlotComponent
 {
-    public SlotComponent(string name, Vector2 localPosition) : base(name, localPosition)
+    public SlotComponent(SlotUserInterfaceComponentController controller, string name, Vector2 localPosition) : base(name, localPosition)
     {
+        Controller = controller;
         IsClickable = true;
     }
 

@@ -11,17 +11,12 @@ namespace MonoGame;
 public class TileSelectorUserInterfaceComponent : ContainerUserInterfaceComponent
 {
     private readonly List<TileSlotComponent> tiles;
-    public SlotUserInterfaceComponentController Controller { get; set; }
 
-    public TileSelectorUserInterfaceComponent() : base(new Vector2(0, 0), null)
+    public TileSelectorUserInterfaceComponent(SlotUserInterfaceComponentController slotController) : base(new Vector2(0, 0), null)
     {
         BackgroundImage = "textures/ui_background";
         BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile;
-        tiles = TileRegistry.Tiles.Keys.Select(tile => new TileSlotComponent("tile_slot", TileRegistry.GetTile(tile), new Vector2(0, 0))
-        {
-            Controller = Controller
-        }
-        ).ToList();
+        tiles = TileRegistry.Tiles.Keys.Select(tile => new TileSlotComponent(slotController, "tile_slot", TileRegistry.GetTile(tile), new Vector2(0, 0))).ToList();
 
         SetChild(new PaddingUserInterfaceComponent(
                 4,
