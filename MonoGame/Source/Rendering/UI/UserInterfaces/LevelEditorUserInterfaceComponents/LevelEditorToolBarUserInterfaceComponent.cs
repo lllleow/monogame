@@ -21,8 +21,8 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
     {
         Tools.Add(new PlaceLevelEditorTool());
         Tools.Add(new EraserLevelEditorTool());
-        // Tools.Add(new SelectLevelEditorTool());
 
+        // Tools.Add(new SelectLevelEditorTool());
         toolComponents = Tools.Select(tool =>
             (UserInterfaceComponent)new ButtonUserInterfaceComponent(tool.Name, component => SetSelectedTool(component, tool))
             {

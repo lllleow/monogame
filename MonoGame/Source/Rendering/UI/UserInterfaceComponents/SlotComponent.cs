@@ -5,6 +5,7 @@ using MonoGame_Common.Util.Helpers;
 using MonoGame.Source.Rendering.UI.Interfaces;
 using MonoGame.Source.Utils.Helpers;
 using MonoGame.Source.Utils.Loaders;
+using MonoGame_Common;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
@@ -17,6 +18,29 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
 
     public TextureLocation SlotTexture { get; set; } = TextureLocation.FirstTextureCoordinate("textures/slot");
     public bool IsSelected { get; set; } = false;
+    public bool IsDragging { get; set; } = false;
+
+    public override void Initialize(IUserInterfaceComponent parent)
+    {
+        base.Initialize(parent);
+        InputEventManager.Subscribe(inputEvent =>
+        {
+            if (inputEvent.EventType == InputEventType.MouseButtonDown)
+            {
+                if (inputEvent.Button == MouseButton.Left && MouseIntersectsComponent())
+                {
+                    IsDragging = true;
+                }
+            }
+            else if (inputEvent.EventType == InputEventType.MouseButtonUp)
+            {
+                if (inputEvent.Button == MouseButton.Left)
+                {
+                    IsDragging = false;
+                }
+            }
+        });
+    }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
@@ -42,6 +66,13 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
             SpriteEffects.None,
             1f);
         var iconSize = size * 0.5f;
+
+        if (IsDragging)
+        {
+            var worldPosition = new Vector2(CurrentMouseState.X, CurrentMouseState.Y);
+            var screenPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.UserInterfaceHandler.GetUITransform()));
+            position = new Vector2(screenPosition.X, screenPosition.Y);
+        }
 
         if (textureLocation != null)
         {

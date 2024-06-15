@@ -62,9 +62,9 @@ public class Main : Game
         base.OnExiting(sender, args);
     }
 
-    int frameCount = 0;
-    float elapsedTime = 0f;
-    string windowTitle = "MonoGame";
+    private int frameCount = 0;
+    private float elapsedTime = 0f;
+    private string windowTitle = "MonoGame";
 
     protected override void Update(GameTime gameTime)
     {

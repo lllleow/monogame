@@ -110,30 +110,39 @@ public class UserInterfaceComponent : IUserInterfaceComponent
 
     private void HandleMouseClick(bool add, int x, int y)
     {
+        if (MouseIntersectsComponent())
+        {
+            OnClick?.Invoke(this);
+        }
+    }
+
+    public bool MouseIntersectsComponent()
+    {
+        CurrentMouseState = Mouse.GetState();
+        var x = CurrentMouseState.X;
+        var y = CurrentMouseState.Y;
+
         var windowWidth = Globals.GraphicsDevice.PreferredBackBufferWidth;
         var windowHeight = Globals.GraphicsDevice.PreferredBackBufferHeight;
 
         if (!Globals.Game.IsActive)
         {
-            return;
+            return false;
         }
 
         if (x < 0 || y < 0 || x >= windowWidth || y >= windowHeight)
         {
-            return;
+            return false;
         }
 
         var worldPosition = new Vector2(x, y);
         var screenPosition =
             Vector2.Transform(worldPosition, Matrix.Invert(Globals.UserInterfaceHandler.GetUITransform()));
 
-        if (screenPosition.X >= GetPositionRelativeToParent().X &&
-            screenPosition.X <= GetPositionRelativeToParent().X + GetPreferredSize().X &&
-            screenPosition.Y >= GetPositionRelativeToParent().Y &&
-            screenPosition.Y <= GetPositionRelativeToParent().Y + GetPreferredSize().Y)
-        {
-            OnClick?.Invoke(this);
-        }
+        return screenPosition.X >= GetPositionRelativeToParent().X &&
+               screenPosition.X <= GetPositionRelativeToParent().X + GetPreferredSize().X &&
+               screenPosition.Y >= GetPositionRelativeToParent().Y &&
+               screenPosition.Y <= GetPositionRelativeToParent().Y + GetPreferredSize().Y;
     }
 
     public int GetPercentageOfScreenWidth(float percent)

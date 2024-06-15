@@ -9,6 +9,7 @@ using MonoGame.Source.Multiplayer;
 using MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 using MonoGame.Source.Rendering.UI.UserInterfaceComponents.Custom;
 using MonoGame.Source.WorldNamespace;
+using MonoGame.Source.GameModes;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaces;
 
@@ -19,10 +20,14 @@ public class LevelEditorUserInterface : UserInterface
     private (int PosX, int PosY) cursorPosition;
     public string SelectedTile { get; set; } = "base.grass";
     public LevelEditorToolBarUserInterfaceComponent ToolBar { get; set; } = new();
+    private TileSelectorUserInterfaceComponent tileSelectorComponent;
 
     public LevelEditorUserInterface()
     {
         Name = "level_editor_user_interface";
+
+        tileSelectorComponent = new TileSelectorUserInterfaceComponent();
+
         AddComponent(
             new AlignmentUserInterfaceComponent(
                 alignment: UserInterfaceAlignment.CenterDown,
@@ -71,7 +76,7 @@ public class LevelEditorUserInterface : UserInterface
         AddComponent(
             new AlignmentUserInterfaceComponent(
                 alignment: UserInterfaceAlignment.Center,
-                child: new TileSelectorUserInterfaceComponent()
+                child: tileSelectorComponent
             )
         );
     }
@@ -80,6 +85,22 @@ public class LevelEditorUserInterface : UserInterface
     {
         base.Initialize();
         tileCursor = Globals.ContentManager.Load<Texture2D>("textures/tile_cursor");
+
+        InputEventManager.Subscribe(inputEvent =>
+        {
+            if (inputEvent.EventType == InputEventType.KeyUp)
+            {
+                if (inputEvent.Key == Microsoft.Xna.Framework.Input.Keys.E)
+                {
+                    tileSelectorComponent.Enabled = !tileSelectorComponent.Enabled;
+                    var gameModeController = Globals.World.GetGameModeController<LevelEditorGameModeController>();
+                    if (gameModeController != null)
+                    {
+                        gameModeController.ShowCursor = !tileSelectorComponent.Enabled;
+                    }
+                }
+            }
+        });
     }
 
     public override void Draw(SpriteBatch spriteBatch)
@@ -97,6 +118,11 @@ public class LevelEditorUserInterface : UserInterface
 
     public void DrawTileCursor(SpriteBatch spriteBatch)
     {
+        if (!Globals.World.GetGameModeController<LevelEditorGameModeController>()?.ShowCursor ?? true)
+        {
+            return;
+        }
+
         currentMouseState = Mouse.GetState();
         Vector2 screenPosition = new Vector2(currentMouseState.X, currentMouseState.Y);
         (int PosX, int PosY) globalPosition = World.GetGlobalPositionFromScreenPosition(screenPosition);

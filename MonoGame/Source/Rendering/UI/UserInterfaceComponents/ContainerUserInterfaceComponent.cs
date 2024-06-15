@@ -41,8 +41,8 @@ public class ContainerUserInterfaceComponent : SingleChildUserInterfaceComponent
                 }
 
                 // Calculate the positions and sizes for the edges and center
-                int centerWidth = (int)Math.Max(0, size.X - 2 * borderSize);
-                int centerHeight = (int)Math.Max(0, size.Y - 2 * borderSize);
+                int centerWidth = (int)Math.Max(0, size.X - (2 * borderSize));
+                int centerHeight = (int)Math.Max(0, size.Y - (2 * borderSize));
 
                 // Draw corners
                 spriteBatch.Draw(backgroundImage, new Rectangle((int)position.X, (int)position.Y, borderSize, borderSize),
@@ -58,23 +58,24 @@ public class ContainerUserInterfaceComponent : SingleChildUserInterfaceComponent
                 if (centerWidth > 0)
                 {
                     spriteBatch.Draw(backgroundImage, new Rectangle((int)(position.X + borderSize), (int)position.Y, centerWidth, borderSize),
-                        new Rectangle(borderSize, 0, backgroundImage.Width - 2 * borderSize, borderSize), Color.White);  // Top edge
+                        new Rectangle(borderSize, 0, backgroundImage.Width - (2 * borderSize), borderSize), Color.White);  // Top edge
                     spriteBatch.Draw(backgroundImage, new Rectangle((int)(position.X + borderSize), (int)(position.Y + size.Y - borderSize), centerWidth, borderSize),
-                        new Rectangle(borderSize, backgroundImage.Height - borderSize, backgroundImage.Width - 2 * borderSize, borderSize), Color.White * Opacity);  // Bottom edge
+                        new Rectangle(borderSize, backgroundImage.Height - borderSize, backgroundImage.Width - (2 * borderSize), borderSize), Color.White * Opacity);  // Bottom edge
                 }
+
                 if (centerHeight > 0)
                 {
                     spriteBatch.Draw(backgroundImage, new Rectangle((int)position.X, (int)(position.Y + borderSize), borderSize, centerHeight),
-                        new Rectangle(0, borderSize, borderSize, backgroundImage.Height - 2 * borderSize), Color.White);  // Left edge
+                        new Rectangle(0, borderSize, borderSize, backgroundImage.Height - (2 * borderSize)), Color.White);  // Left edge
                     spriteBatch.Draw(backgroundImage, new Rectangle((int)(position.X + size.X - borderSize), (int)(position.Y + borderSize), borderSize, centerHeight),
-                        new Rectangle(backgroundImage.Width - borderSize, borderSize, borderSize, backgroundImage.Height - 2 * borderSize), Color.White * Opacity);  // Right edge
+                        new Rectangle(backgroundImage.Width - borderSize, borderSize, borderSize, backgroundImage.Height - (2 * borderSize)), Color.White * Opacity);  // Right edge
                 }
 
                 // Draw center
                 if (centerWidth > 0 && centerHeight > 0)
                 {
                     spriteBatch.Draw(backgroundImage, new Rectangle((int)(position.X + borderSize), (int)(position.Y + borderSize), centerWidth, centerHeight),
-                        new Rectangle(borderSize, borderSize, backgroundImage.Width - 2 * borderSize, backgroundImage.Height - 2 * borderSize), Color.White * Opacity);  // Center
+                        new Rectangle(borderSize, borderSize, backgroundImage.Width - (2 * borderSize), backgroundImage.Height - (2 * borderSize)), Color.White * Opacity);  // Center
                 }
             }
         }

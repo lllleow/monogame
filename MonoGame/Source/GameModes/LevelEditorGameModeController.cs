@@ -12,6 +12,7 @@ public class LevelEditorGameModeController : GameModeController
 {
     public Vector2 CameraPosition { get; set; } = new(0, 0);
     private List<Keys> lastKeys = new();
+    public bool ShowCursor { get; set; } = true;
 
     public override void Initialize()
     {

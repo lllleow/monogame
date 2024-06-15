@@ -10,11 +10,11 @@ using MonoGame_Common.States;
 using MonoGame_Common.Systems.Tiles.Interfaces;
 using MonoGame.Source.GameModes;
 using MonoGame.Source.Multiplayer;
+using MonoGame.Source.Rendering.Utils;
 using MonoGame.Source.Systems.Chunks;
 using MonoGame.Source.Systems.Chunks.Interfaces;
 using MonoGame.Source.Systems.Entity.Interfaces;
 using MonoGame.Source.Systems.Entity.Player;
-using MonoGame.Source.Rendering.Utils;
 
 namespace MonoGame.Source.WorldNamespace;
 
@@ -332,8 +332,9 @@ public class World
         chunk.DeleteTile(layer, LocalX, LocalY);
     }
 
-    public GameModeController GetGameModeController(GameMode gameMode)
+    public T GetGameModeController<T>()
+    where T : GameModeController
     {
-        return GameModeControllers[gameMode];
+        return GameModeControllers.Values.FirstOrDefault(x => x.GetType() == typeof(T)) as T;
     }
 }

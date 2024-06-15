@@ -20,9 +20,9 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
         BackgroundImage = "textures/ui_background";
         BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile;
         OnTileSelected = onTileSelected;
+
         // tiles = TileRegistry.Tiles.Keys
         //     .Select(tile => new TileSlotComponent("tile_slot", TileRegistry.GetTile(tile), new Vector2(0, 0))).ToList();
-
         for (int i = 0; i < slotCount; i++)
         {
             tiles.Add(new TileSlotComponent("tile_slot", null, new Vector2(0, 0)));
