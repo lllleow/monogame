@@ -17,6 +17,7 @@ public class TileSelectorUserInterfaceComponent : ContainerUserInterfaceComponen
         BackgroundImage = "textures/ui_background";
         BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile;
         tiles = TileRegistry.Tiles.Keys.Select(tile => new TileSlotComponent(slotController, "tile_slot", TileRegistry.GetTile(tile), new Vector2(0, 0))).ToList();
+        Enabled = false;
 
         SetChild(new PaddingUserInterfaceComponent(
                 4,
