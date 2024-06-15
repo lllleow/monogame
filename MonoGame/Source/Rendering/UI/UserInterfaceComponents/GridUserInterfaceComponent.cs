@@ -7,21 +7,20 @@ namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class GridUserInterfaceComponent : MultipleChildUserInterfaceComponent
 {
-    public GridUserInterfaceComponent(string name, int maxColumns, int maxRows, Vector2 spacing, Vector2 localPosition, List<IUserInterfaceComponent> children) : base(name, localPosition, children)
+    public GridUserInterfaceComponent(int maxColumns, Vector2 spacing, List<IUserInterfaceComponent> children) : base("grid", new Vector2(0, 0), children)
     {
         MaxColumns = maxColumns;
-        MaxRows = maxRows;
         Spacing = spacing;
     }
 
     public int MaxColumns { get; set; }
-    public int MaxRows { get; set; }
     public Vector2 Spacing { get; set; } = Vector2.Zero;
 
     public override Vector2 GetPreferredSize()
     {
         Vector2 childSize = Children.First().GetPreferredSize();
-        return new Vector2((childSize.X * MaxColumns) + (Spacing.X * (MaxColumns - 1)), (childSize.Y * MaxRows) + (Spacing.Y * (MaxRows - 1)));
+        int rows = Children.Count / MaxColumns;
+        return new Vector2((childSize.X * MaxColumns) + (Spacing.X * (MaxColumns - 1)), (childSize.Y * rows) + (Spacing.Y * (rows - 1)));
     }
 
     public override Vector2 GetChildOffset(IUserInterfaceComponent child)
