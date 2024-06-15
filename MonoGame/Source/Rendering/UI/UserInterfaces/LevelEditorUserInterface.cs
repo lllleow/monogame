@@ -54,6 +54,19 @@ public class LevelEditorUserInterface : UserInterface
                 )
             )
         );
+
+        AddComponent(
+            new AlignmentUserInterfaceComponent(
+                alignment: UserInterfaceAlignment.RightDown,
+                child: new PaddingUserInterfaceComponent(
+                    8,
+                    0,
+                    0,
+                    0,
+                    new LevelEditorZoomSelectorUserInterfaceComponent()
+                )
+            )
+        );
     }
 
     public override void Initialize()
