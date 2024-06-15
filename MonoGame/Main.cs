@@ -32,8 +32,8 @@ public class Main : Game
 
         Globals.Camera = new Camera(ScreenSizeX, ScreenSizeY);
 
-        // IsFixedTimeStep = true;
-        // TargetElapsedTime = TimeSpan.FromMilliseconds(200);
+        IsFixedTimeStep = true;
+        TargetElapsedTime = TimeSpan.FromMilliseconds(1000 / 60);
     }
 
     protected override void Initialize()
@@ -62,12 +62,28 @@ public class Main : Game
         base.OnExiting(sender, args);
     }
 
+    int frameCount = 0;
+    float elapsedTime = 0f;
+    string windowTitle = "MonoGame";
+
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
             Keyboard.GetState().IsKeyDown(Keys.Escape))
         {
             Exit();
+        }
+
+        // Update frame count and elapsed time
+        frameCount++;
+        elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+        // Update window title every few cycles
+        if (elapsedTime >= 1f)
+        {
+            Window.Title = $"{windowTitle} - FPS: {frameCount / elapsedTime}";
+            frameCount = 0;
+            elapsedTime = 0f;
         }
 
         Globals.GameTime = gameTime;

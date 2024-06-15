@@ -40,7 +40,7 @@ public class Player : GameEntity
         AddComponent(new CollisionComponent(CollisionMode.CollisionMask));
         AddComponent(new MovementComponent());
 
-        SetGameMode(GameMode.LevelEditor);
+        SetGameMode(GameMode.Survival);
     }
 
     public PlayerNetworkController NetworkController { get; set; } = new();

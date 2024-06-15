@@ -31,7 +31,7 @@ public class TextureRendererTileComponentState : TileComponentState
     public Rectangle GetSpriteRectangle()
     {
         CommonTile? commonTile = TileState?.GetCommonTile();
-        if (commonTile == null) return Rectangle.Empty;
+        if (commonTile == null) return new Rectangle(0, 0, SharedGlobals.PixelSizeY, SharedGlobals.PixelSizeY);
         return new Rectangle(TextureX * SharedGlobals.PixelSizeX, TextureY * SharedGlobals.PixelSizeY, commonTile.TileSizeX * SharedGlobals.PixelSizeX, commonTile.TileSizeY * SharedGlobals.PixelSizeY);
     }
 

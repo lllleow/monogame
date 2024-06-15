@@ -38,9 +38,11 @@ public class TextureRendererTileComponent : ITileComponent
 
     public TileComponentState GetTileComponentState()
     {
-        TextureRendererTileComponentState tileComponentState = new TextureRendererTileComponentState();
-        tileComponentState.TextureX = TextureX;
-        tileComponentState.TextureY = TextureY;
+        TextureRendererTileComponentState tileComponentState = new TextureRendererTileComponentState
+        {
+            TextureX = TextureX,
+            TextureY = TextureY
+        };
         return tileComponentState;
     }
 }
