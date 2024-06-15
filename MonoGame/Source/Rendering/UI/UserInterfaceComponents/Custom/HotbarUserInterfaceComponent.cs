@@ -10,17 +10,23 @@ namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents.Custom;
 
 public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
 {
-    private readonly List<TileSlotComponent> tiles;
+    private readonly List<TileSlotComponent> tiles = new();
 
     public Action<string> OnTileSelected { get; set; } = (tile) => { };
 
+    private int slotCount = 8;
     public HotbarUserInterfaceComponent(Vector2 localPosition, Action<string> onTileSelected) : base(localPosition, null)
     {
         BackgroundImage = "textures/ui_background";
         BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile;
         OnTileSelected = onTileSelected;
-        tiles = TileRegistry.Tiles.Keys
-            .Select(tile => new TileSlotComponent("tile_slot", TileRegistry.GetTile(tile), new Vector2(0, 0))).ToList();
+        // tiles = TileRegistry.Tiles.Keys
+        //     .Select(tile => new TileSlotComponent("tile_slot", TileRegistry.GetTile(tile), new Vector2(0, 0))).ToList();
+
+        for (int i = 0; i < slotCount; i++)
+        {
+            tiles.Add(new TileSlotComponent("tile_slot", null, new Vector2(0, 0)));
+        }
 
         SetChild(new PaddingUserInterfaceComponent(
                 4,
@@ -77,6 +83,9 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
         component.IsSelected = true;
 
         var selectedTile = component.Tile;
-        OnTileSelected?.Invoke(selectedTile.Id);
+        if (selectedTile != null)
+        {
+            OnTileSelected?.Invoke(selectedTile.Id);
+        }
     }
 }

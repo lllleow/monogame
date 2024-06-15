@@ -24,6 +24,7 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
         base.Draw(spriteBatch);
 
         var textureLocation = GetDrawable();
+
         var position = GetPositionRelativeToParent();
         var size = GetPreferredSize();
 
