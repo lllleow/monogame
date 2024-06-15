@@ -1,26 +1,25 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame_Common;
 using MonoGame.Source;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using MonoGame.Source.Multiplayer;
-using MonoGame_Common.Messages.Player;
-using MonoGame_Common.Enums;
 
 namespace MonoGame;
 
-public class OutlineLevelEditorTool : TileManipulatorEditorTool
+public class SelectLevelEditorTool : TileManipulatorEditorTool
 {
     public bool IsPlacing { get; set; } = false;
     public (int PosX, int PosY)? StartingPosition { get; set; } = null;
     public (int PosX, int PosY)? EndPosition { get; set; } = null;
     private Texture2D tileCursor;
 
-    public OutlineLevelEditorTool()
+    public SelectLevelEditorTool()
     {
-        Name = "Outline Tool";
+        Name = "Select";
         tileCursor = Globals.ContentManager.Load<Texture2D>("textures/tile_cursor");
+
+        ToolConfigurations.Add(new SelectFillToolConfiguration());
     }
 
     public override void Initialize()
@@ -45,9 +44,7 @@ public class OutlineLevelEditorTool : TileManipulatorEditorTool
         {
             if (StartingPosition != null && EndPosition != null)
             {
-                PlaceTiles();
-                EndPosition = null;
-                StartingPosition = null;
+                OnSelectTiles();
             }
         }
         else
@@ -56,29 +53,14 @@ public class OutlineLevelEditorTool : TileManipulatorEditorTool
         }
     }
 
-    public void PlaceTiles()
+    public void ClearSelection()
     {
-        int startX = Math.Min(StartingPosition?.PosX ?? 0, EndPosition?.PosX ?? 0);
-        int startY = Math.Min(StartingPosition?.PosY ?? 0, EndPosition?.PosY ?? 0);
-        int endX = Math.Max(StartingPosition?.PosX ?? 0, EndPosition?.PosX ?? 0);
-        int endY = Math.Max(StartingPosition?.PosY ?? 0, EndPosition?.PosY ?? 0);
+        EndPosition = null;
+        StartingPosition = null;
+    }
 
-        for (int x = startX; x <= endX; x++)
-        {
-            for (int y = startY; y <= endY; y++)
-            {
-                if (x == startX || x == endX || y == startY || y == endY)
-                {
-                    NetworkClient.SendMessage(new RequestToPlaceTileNetworkMessage()
-                    {
-                        TileId = SelectedTile,
-                        Layer = TileDrawLayer.Tiles,
-                        PosX = x,
-                        PosY = y
-                    });
-                }
-            }
-        }
+    public virtual void OnSelectTiles()
+    {
     }
 
     public override void Draw(SpriteBatch spriteBatch)
@@ -99,12 +81,22 @@ public class OutlineLevelEditorTool : TileManipulatorEditorTool
         {
             for (int y = startY; y <= endY; y++)
             {
-                if (x == startX || x == endX || y == startY || y == endY)
+                if (GetToolConfiguration<SelectFillToolConfiguration>()?.Enabled ?? false)
                 {
                     Rectangle destinationRectangle = new Rectangle(x * SharedGlobals.PixelSizeX, y * SharedGlobals.PixelSizeY, 16, 16);
                     spriteBatch.End();
                     Globals.DefaultSpriteBatchBegin();
                     spriteBatch.Draw(tileCursor, destinationRectangle, Color.White);
+                }
+                else
+                {
+                    if (x == startX || x == endX || y == startY || y == endY)
+                    {
+                        Rectangle destinationRectangle = new Rectangle(x * SharedGlobals.PixelSizeX, y * SharedGlobals.PixelSizeY, 16, 16);
+                        spriteBatch.End();
+                        Globals.DefaultSpriteBatchBegin();
+                        spriteBatch.Draw(tileCursor, destinationRectangle, Color.White);
+                    }
                 }
             }
         }
