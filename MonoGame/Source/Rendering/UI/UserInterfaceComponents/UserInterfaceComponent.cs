@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame_Common;
 using MonoGame.Source.Rendering.UI.Interfaces;
 using MonoGame.Source.Rendering.Utils;
 
@@ -69,27 +70,34 @@ public class UserInterfaceComponent : IUserInterfaceComponent
     {
         if (!Enabled) return;
         CurrentMouseState = Mouse.GetState();
-
-        if (CurrentMouseState.LeftButton == ButtonState.Pressed)
-        {
-            IsClicked = true;
-        }
-        else if (CurrentMouseState.LeftButton == ButtonState.Released)
-        {
-            if (IsClicked)
-            {
-                var mouseX = CurrentMouseState.X;
-                var mouseY = CurrentMouseState.Y;
-
-                HandleMouseClick(CurrentMouseState.LeftButton == ButtonState.Pressed, mouseX, mouseY);
-                IsClicked = false;
-            }
-        }
     }
 
     public virtual void Initialize(IUserInterfaceComponent parent)
     {
         Parent = parent;
+        InputEventManager.Subscribe(InputEventChannel.UI, inputEvent =>
+        {
+            if (OnClick == null) return;
+
+            if (inputEvent.EventType == InputEventType.MouseButtonDown)
+            {
+                if (inputEvent.Button == MouseButton.Left && MouseIntersectsComponent())
+                {
+                    inputEvent.Handled = true;
+                    IsClicked = true;
+                }
+            }
+
+            if (inputEvent.EventType == InputEventType.MouseButtonUp)
+            {
+                if (inputEvent.Button == MouseButton.Left && MouseIntersectsComponent() && IsClicked)
+                {
+                    IsClicked = false;
+                    inputEvent.Handled = true;
+                    OnClick?.Invoke(this);
+                }
+            }
+        });
     }
 
     public virtual Vector2 GetPositionRelativeToParent()
@@ -106,14 +114,6 @@ public class UserInterfaceComponent : IUserInterfaceComponent
     public virtual Vector2 GetChildOffset(IUserInterfaceComponent child)
     {
         return Vector2.Zero;
-    }
-
-    private void HandleMouseClick(bool add, int x, int y)
-    {
-        if (MouseIntersectsComponent())
-        {
-            OnClick?.Invoke(this);
-        }
     }
 
     public bool MouseIntersectsComponent()
