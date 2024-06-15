@@ -22,7 +22,7 @@ public class EraserLevelEditorTool : SelectLevelEditorTool
         {
             for (int y = startY; y <= endY; y++)
             {
-                if (x == startX || x == endX || y == startY || y == endY)
+                if (GetToolConfiguration<SelectFillToolConfiguration>()?.Enabled ?? false)
                 {
                     NetworkClient.SendMessage(new RequestToDeleteTileNetworkMessage()
                     {
@@ -31,6 +31,19 @@ public class EraserLevelEditorTool : SelectLevelEditorTool
                         PosX = x,
                         PosY = y
                     });
+                }
+                else
+                {
+                    if (x == startX || x == endX || y == startY || y == endY)
+                    {
+                        NetworkClient.SendMessage(new RequestToDeleteTileNetworkMessage()
+                        {
+                            TileId = SelectedTile,
+                            Layer = TileDrawLayer.Tiles,
+                            PosX = x,
+                            PosY = y
+                        });
+                    }
                 }
             }
         }

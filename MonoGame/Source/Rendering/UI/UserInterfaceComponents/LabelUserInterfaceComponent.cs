@@ -15,6 +15,7 @@ public class LabelUserInterfaceComponent : UserInterfaceComponent
 
     public override void Draw(SpriteBatch batch)
     {
+        if (!Enabled) return;
         base.Draw(batch);
         Globals.SpriteBatch.DrawString(Globals.DefaultFont, Text, GetPositionRelativeToParent(), Color.White * Opacity, scale: Scale, rotation: 0f, origin: Vector2.Zero, effects: SpriteEffects.None, layerDepth: 1f);
     }

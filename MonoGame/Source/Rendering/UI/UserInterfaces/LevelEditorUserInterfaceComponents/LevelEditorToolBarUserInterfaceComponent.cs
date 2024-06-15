@@ -35,7 +35,6 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
             tool.Initialize();
         }
 
-        SetSelectedTool(toolComponents[0], Tools[0]);
         Build();
     }
 
@@ -47,16 +46,12 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
             toolConfigurations = SelectedTool?.ToolConfigurations.Select(configuration =>
             (UserInterfaceComponent)new ButtonUserInterfaceComponent(configuration.Name, component => SetSelectedToolConfiguration(component, configuration))
             {
+                IsClicked = configuration.Enabled,
                 SizeOverride = new Vector2(50, 15)
             }).Cast<IUserInterfaceComponent>().ToList();
         }
 
-        SetChild(new PaddingUserInterfaceComponent(
-            4,
-            4,
-            4,
-            4,
-            child: new DirectionalListUserInterfaceComponent(
+        SetChild(new DirectionalListUserInterfaceComponent(
                 "list",
                 spacing: 2,
                 localPosition: new Vector2(0, 0),
@@ -99,44 +94,47 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
                         )
                     )
                     {
+                        Enabled = SelectedTool != null,
                         BackgroundImage = "textures/ui_background",
                         BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile
                     },
                 ]
-            )
-        ));
+            ));
     }
 
     public void SetSelectedToolConfiguration(IUserInterfaceComponent component, ToolConfiguration configuration)
     {
-        SelectedTool.ToolConfigurations.ForEach(toolConfiguration => ((ButtonUserInterfaceComponent)component).IsClicked = false);
-        ((ButtonUserInterfaceComponent)component).IsClicked = !((ButtonUserInterfaceComponent)component).IsClicked;
-
-        configuration.Enabled = true;
-        foreach (var toolConfiguration in SelectedTool.ToolConfigurations)
-        {
-            toolConfiguration.Enabled = false;
-        }
+        configuration.Enabled = !configuration.Enabled;
+        ((ButtonUserInterfaceComponent)component).IsClicked = configuration.Enabled;
     }
 
     public void SetSelectedTool(IUserInterfaceComponent component, LevelEditorTool tool)
     {
         toolComponents.ForEach(component => ((ButtonUserInterfaceComponent)component).IsClicked = false);
-        ((ButtonUserInterfaceComponent)component).IsClicked = true;
-
-        foreach (var _tool in Tools)
+        if (tool != SelectedTool)
         {
-            if (_tool == tool)
+            ((ButtonUserInterfaceComponent)component).IsClicked = true;
+
+            foreach (var _tool in Tools)
             {
-                _tool.Enabled = true;
+                if (_tool == tool)
+                {
+                    _tool.Enabled = true;
+                }
+                else
+                {
+                    _tool.Enabled = false;
+                }
             }
-            else
-            {
-                _tool.Enabled = false;
-            }
+
+            SelectedTool = tool;
+        }
+        else
+        {
+            tool.Enabled = false;
+            SelectedTool = null;
         }
 
-        SelectedTool = tool;
         Build();
     }
 

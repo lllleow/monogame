@@ -34,6 +34,7 @@ public class ButtonUserInterfaceComponent : ContainerUserInterfaceComponent
 
     public override void Update(GameTime gameTime)
     {
+        if (!Enabled) return;
         base.Update(gameTime);
 
         if (IsClicked)

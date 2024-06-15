@@ -20,6 +20,7 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
 
     public override void Draw(SpriteBatch spriteBatch)
     {
+        if (!Enabled) return;
         base.Draw(spriteBatch);
 
         var textureLocation = GetDrawable();

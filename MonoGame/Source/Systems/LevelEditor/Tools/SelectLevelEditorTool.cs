@@ -81,12 +81,22 @@ public class SelectLevelEditorTool : TileManipulatorEditorTool
         {
             for (int y = startY; y <= endY; y++)
             {
-                if (x == startX || x == endX || y == startY || y == endY)
+                if (GetToolConfiguration<SelectFillToolConfiguration>()?.Enabled ?? false)
                 {
                     Rectangle destinationRectangle = new Rectangle(x * SharedGlobals.PixelSizeX, y * SharedGlobals.PixelSizeY, 16, 16);
                     spriteBatch.End();
                     Globals.DefaultSpriteBatchBegin();
                     spriteBatch.Draw(tileCursor, destinationRectangle, Color.White);
+                }
+                else
+                {
+                    if (x == startX || x == endX || y == startY || y == endY)
+                    {
+                        Rectangle destinationRectangle = new Rectangle(x * SharedGlobals.PixelSizeX, y * SharedGlobals.PixelSizeY, 16, 16);
+                        spriteBatch.End();
+                        Globals.DefaultSpriteBatchBegin();
+                        spriteBatch.Draw(tileCursor, destinationRectangle, Color.White);
+                    }
                 }
             }
         }

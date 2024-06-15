@@ -16,6 +16,7 @@ public class ContainerUserInterfaceComponent : SingleChildUserInterfaceComponent
 
     public override void Draw(SpriteBatch spriteBatch)
     {
+        if (!Enabled) return;
         if (BackgroundImage != null)
         {
             var backgroundImage = Globals.ContentManager.Load<Texture2D>(BackgroundImage);
