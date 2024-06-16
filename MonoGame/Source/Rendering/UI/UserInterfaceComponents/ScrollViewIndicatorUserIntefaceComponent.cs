@@ -18,7 +18,6 @@ public class ScrollViewIndicatorUserIntefaceComponent : ContainerUserInterfaceCo
 
     public override Vector2 GetPreferredSize()
     {
-        Vector2 baseSize = base.GetPreferredSize();
         return new Vector2(6, Height);
     }
 }
