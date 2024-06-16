@@ -5,6 +5,8 @@ using MonoGame_Common;
 using MonoGame.Source.Rendering.UI.Interfaces;
 using MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 using System.Linq;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Source;
 
 namespace MonoGame;
 
@@ -14,7 +16,7 @@ public class ScrollViewUserInterfaceComponent : DirectionalListUserInterfaceComp
     public Vector2 ContentOffset { get; set; } = Vector2.Zero;
     private ScrollViewIndicatorUserIntefaceComponent scrollViewIndicator;
 
-    public ScrollViewUserInterfaceComponent(Vector2 size, IUserInterfaceComponent child) : base("scroll_view", ListDirection.Horizontal, Vector2.Zero, 2, [])
+    public ScrollViewUserInterfaceComponent(Vector2 size, IUserInterfaceComponent child) : base("scroll_view", ListDirection.Horizontal, Vector2.Zero, 0, [])
     {
         SizeOverride = size;
         scrollViewIndicator = new ScrollViewIndicatorUserIntefaceComponent(size.Y);
@@ -36,9 +38,10 @@ public class ScrollViewUserInterfaceComponent : DirectionalListUserInterfaceComp
                 float yOffset = inputEvent.ScrollDelta / 10;
 
                 Vector2 newContentOffset = ContentOffset + new Vector2(0, yOffset);
-                if (newContentOffset.Y < -ContentSize.Y)
+                int border = 4;
+                if (newContentOffset.Y < -ContentSize.Y + border)
                 {
-                    newContentOffset = new Vector2(newContentOffset.X, -ContentSize.Y);
+                    newContentOffset = new Vector2(newContentOffset.X, -ContentSize.Y + border);
                 }
 
                 if (newContentOffset.Y > 0)
@@ -76,6 +79,23 @@ public class ScrollViewUserInterfaceComponent : DirectionalListUserInterfaceComp
         {
             return childSize;
         }
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        Vector2 uiPosition = GetPositionRelativeToParent();
+        Vector2 uiSize = GetPreferredSize();
+        Vector2 position = Vector2.Transform(uiPosition, Globals.UserInterfaceHandler.GetUITransform());
+        Vector2 size = Vector2.Transform(uiSize, Globals.UserInterfaceHandler.GetUITransform());
+        RasterizerState rasterizerState = new RasterizerState() { ScissorTestEnable = true };
+        Globals.GraphicsDevice.GraphicsDevice.RasterizerState = rasterizerState;
+        Globals.GraphicsDevice.GraphicsDevice.ScissorRectangle = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
+        spriteBatch.End();
+        spriteBatch.Begin(transformMatrix: Globals.UserInterfaceHandler.Transform, sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp, rasterizerState: rasterizerState);
+        base.Draw(spriteBatch);
+        spriteBatch.End();
+        Globals.DefaultSpriteBatchUIBegin();
+        Globals.GraphicsDevice.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, Globals.GraphicsDevice.GraphicsDevice.Viewport.Width, Globals.GraphicsDevice.GraphicsDevice.Viewport.Height);
     }
 
     public override Vector2 GetChildOffset(IUserInterfaceComponent child)

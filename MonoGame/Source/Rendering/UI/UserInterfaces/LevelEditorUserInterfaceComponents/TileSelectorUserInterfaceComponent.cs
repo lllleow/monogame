@@ -36,14 +36,14 @@ public class TileSelectorUserInterfaceComponent : ContainerUserInterfaceComponen
                 4,
                 child: new ContainerUserInterfaceComponent(
                     new Vector2(0, 0),
-                    new ScrollViewUserInterfaceComponent(
+                    new PaddingUserInterfaceComponent(
+                            4,
+                            4,
+                            4,
+                            4,
+                            child: new ScrollViewUserInterfaceComponent(
                         new Vector2(-1, 75),
-                        new PaddingUserInterfaceComponent(
-                            4,
-                            4,
-                            4,
-                            4,
-                            child: new GridUserInterfaceComponent(
+                        new GridUserInterfaceComponent(
                                 8,
                                 new Vector2(2, 2),
                                 children: tiles.Cast<IUserInterfaceComponent>().ToList()
