@@ -77,7 +77,7 @@ public class UserInterfaceComponent : IUserInterfaceComponent
         Parent = parent;
         InputEventManager.Subscribe(InputEventChannel.UI, inputEvent =>
         {
-            if (OnClick == null) return;
+            if (OnClick == null || !Enabled) return;
 
             if (inputEvent.EventType == InputEventType.MouseButtonDown)
             {

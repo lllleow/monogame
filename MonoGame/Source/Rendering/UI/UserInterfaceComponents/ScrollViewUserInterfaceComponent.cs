@@ -1,13 +1,9 @@
-﻿using System;
-using System.ComponentModel;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame_Common;
+using MonoGame.Source;
 using MonoGame.Source.Rendering.UI.Interfaces;
 using MonoGame.Source.Rendering.UI.UserInterfaceComponents;
-using System.Linq;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Source;
-using System.Drawing;
 
 namespace MonoGame;
 
@@ -40,7 +36,8 @@ public class ScrollViewUserInterfaceComponent : DirectionalListUserInterfaceComp
         base.Initialize(parent);
         InputEventManager.Subscribe(InputEventChannel.UI, inputEvent =>
         {
-            if (inputEvent.EventType == InputEventType.MouseScrolled)
+            if (!Enabled) return;
+            if (inputEvent.EventType == InputEventType.MouseScrolled && MouseIntersectsComponent())
             {
                 inputEvent.Handled = true;
                 float yOffset = inputEvent.ScrollDelta / 10;

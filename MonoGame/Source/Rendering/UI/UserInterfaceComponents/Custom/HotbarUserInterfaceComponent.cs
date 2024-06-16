@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using MonoGame_Common.Systems.Scripts;
 using MonoGame_Common.Systems.Tiles.Interfaces;
 using MonoGame.Source.Rendering.UI.Interfaces;
+using MonoGame_Common;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents.Custom;
 
@@ -47,6 +48,28 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
         base.Initialize(parent);
         tiles.ForEach(tile => tile.OnClick = component => SetSelected(component as TileSlotComponent));
         SetSelected(tiles[0]);
+
+        InputEventManager.Subscribe(InputEventChannel.UI, inputEvent =>
+        {
+            if (inputEvent.EventType == InputEventType.MouseScrolled && MouseIntersectsComponent())
+            {
+                inputEvent.Handled = true;
+                float currentDelta = inputEvent.ScrollDelta * 100;
+
+                if (currentDelta > 0)
+                {
+                    var currentIndex = tiles.FindIndex(tile => tile.IsSelected);
+                    var nextIndex = (currentIndex + 1) % tiles.Count;
+                    SetSelected(tiles[nextIndex]);
+                }
+                else if (currentDelta < 0)
+                {
+                    var currentIndex = tiles.FindIndex(tile => tile.IsSelected);
+                    var previousIndex = (currentIndex - 1 + tiles.Count) % tiles.Count;
+                    SetSelected(tiles[previousIndex]);
+                }
+            }
+        });
     }
 
     public override void Update(GameTime gameTime)
@@ -55,19 +78,6 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
 
         var currentScrollValue = CurrentMouseState.ScrollWheelValue;
         var previousScrollValue = PreviousMouseState.ScrollWheelValue;
-
-        if (currentScrollValue > previousScrollValue)
-        {
-            var currentIndex = tiles.FindIndex(tile => tile.IsSelected);
-            var nextIndex = (currentIndex + 1) % tiles.Count;
-            SetSelected(tiles[nextIndex]);
-        }
-        else if (currentScrollValue < previousScrollValue)
-        {
-            var currentIndex = tiles.FindIndex(tile => tile.IsSelected);
-            var previousIndex = (currentIndex - 1 + tiles.Count) % tiles.Count;
-            SetSelected(tiles[previousIndex]);
-        }
 
         PreviousMouseState = CurrentMouseState;
     }
