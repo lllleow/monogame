@@ -125,6 +125,11 @@ public class TextFieldUserInterfaceComponent : ScrollViewUserInterfaceComponent
             Label.Text = "Search";
         }
 
+        if (Label.GetPreferredSize().X > GetPreferredSize().X)
+        {
+            ContentOffset = -new Vector2(Label.GetPreferredSize().X - GetPreferredSize().X, 0);
+        }
+
         OnTextChanged?.Invoke(Text);
     }
 
