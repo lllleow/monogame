@@ -52,7 +52,7 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
         AddInputSubscriber(InputEventManager.Subscribe(InputEventChannel.UI, inputEvent =>
         {
             if (!Enabled) return;
-            if (inputEvent.EventType == InputEventType.MouseScrolled && MouseIntersectsComponent())
+            if (inputEvent.EventType == InputEventType.MouseScrolled)
             {
                 inputEvent.Handled = true;
                 float currentDelta = inputEvent.ScrollDelta * 100;

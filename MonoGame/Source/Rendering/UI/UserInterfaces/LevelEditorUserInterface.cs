@@ -97,6 +97,7 @@ public class LevelEditorUserInterface : UserInterface
                     if (gameModeController != null)
                     {
                         gameModeController.ShowCursor = !tileSelectorComponent.Enabled;
+                        gameModeController.BlockMovement = tileSelectorComponent.Enabled;
                     }
                 }
             }

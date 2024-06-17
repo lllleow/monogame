@@ -99,7 +99,7 @@ public class Main : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+        GraphicsDevice.Clear(new Color(30, 188, 115, 1));
 
         Globals.DefaultSpriteBatchBegin();
         Globals.World.Draw(Globals.SpriteBatch);
