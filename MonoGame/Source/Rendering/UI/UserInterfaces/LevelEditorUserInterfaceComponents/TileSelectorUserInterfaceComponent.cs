@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame_Common.Systems.Scripts;
 using MonoGame.Source.Rendering.UI.Interfaces;
 using MonoGame.Source.Rendering.UI.UserInterfaceComponents;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame;
 
@@ -36,7 +35,7 @@ public class TileSelectorUserInterfaceComponent : ContainerUserInterfaceComponen
         Build();
     }
 
-    public void Build()
+    public override void Build()
     {
         SetChild(new PaddingUserInterfaceComponent(
                 4,
@@ -56,21 +55,31 @@ public class TileSelectorUserInterfaceComponent : ContainerUserInterfaceComponen
                                 localPosition: new Vector2(0, 0),
                                 direction: Axis.Vertical,
                                 children: [
-                                    new StretchUserInterfaceComponent(Axis.Horizontal, new TextFieldUserInterfaceComponent(
-                                        onTextChanged: (text) =>
-                                        {
-                                            tiles.Clear();
-                                            TileRegistry.Tiles.Keys.ToList().ForEach(tile =>
+                                    new StretchUserInterfaceComponent(
+                                    Axis.Horizontal,
+                                    child: new ContainerUserInterfaceComponent(
+                                        new Vector2(0, 0),
+                                        child: new StretchUserInterfaceComponent(Axis.Horizontal, new TextFieldUserInterfaceComponent(
+                                            onTextChanged: (text) =>
                                             {
-                                                if (text.Length == 0 || TileRegistry.Tiles[tile].Name.ToLower().Contains(text.ToLower()))
+                                                tiles.Clear();
+                                                TileRegistry.Tiles.Keys.ToList().ForEach(tile =>
                                                 {
-                                                    tiles.Add(new TileSlotComponent(SlotController, "tile_slot", TileRegistry.GetTile(tile), new Vector2(0, 0)));
-                                                }
-                                            });
-                                            grid.RemoveAllChildren();
-                                            grid.AddManyChildren(tiles.Cast<IUserInterfaceComponent>().ToList());
-                                        }
-                                    )),
+                                                    if (text.Length == 0 || TileRegistry.Tiles[tile].Name.ToLower().Contains(text.ToLower()))
+                                                    {
+                                                        tiles.Add(new TileSlotComponent(SlotController, "tile_slot", TileRegistry.GetTile(tile), new Vector2(0, 0)));
+                                                    }
+                                                });
+                                                grid.RemoveAllChildren();
+                                                grid.AddManyChildren(tiles.Cast<IUserInterfaceComponent>().ToList());
+                                            }
+                                        ))
+                                    )
+                                    {
+                                        BackgroundImage = "textures/ui_background",
+                                        BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile
+                                    }
+                                    ),
                                     new ScrollViewUserInterfaceComponent(
                                         new Vector2(-1, 75),
                                         grid

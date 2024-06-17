@@ -33,7 +33,7 @@ public class ScrollViewUserInterfaceComponent : DirectionalListUserInterfaceComp
 
     public Vector2 GetContentSize()
     {
-        return child.GetPreferredSize();
+        return child?.GetPreferredSize() ?? Vector2.Zero;
     }
 
     public override void Initialize(IUserInterfaceComponent parent)

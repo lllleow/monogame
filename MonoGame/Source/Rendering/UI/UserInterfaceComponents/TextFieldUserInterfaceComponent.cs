@@ -7,7 +7,7 @@ using System;
 
 namespace MonoGame;
 
-public class TextFieldUserInterfaceComponent : ContainerUserInterfaceComponent
+public class TextFieldUserInterfaceComponent : ScrollViewUserInterfaceComponent
 {
     public string Text { get; set; } = string.Empty;
     public bool IsFocused { get; set; } = false;
@@ -18,8 +18,6 @@ public class TextFieldUserInterfaceComponent : ContainerUserInterfaceComponent
 
     public TextFieldUserInterfaceComponent(Action<string> onTextChanged) : base(new Vector2(0, 0), null)
     {
-        BackgroundImage = "textures/ui_background";
-        BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile;
         OnTextChanged = onTextChanged;
         Opacity = 0.5f;
 
@@ -28,13 +26,15 @@ public class TextFieldUserInterfaceComponent : ContainerUserInterfaceComponent
             new Vector2(0, 0)
         );
 
-        SetChild(new PaddingUserInterfaceComponent(
-                4,
-                4,
-                4,
-                4,
-                child: Label
-        ));
+        AddChild(
+            new PaddingUserInterfaceComponent(
+                    4,
+                    4,
+                    4,
+                    4,
+                    child: Label
+            )
+        );
     }
 
     public override void Initialize(IUserInterfaceComponent parent)

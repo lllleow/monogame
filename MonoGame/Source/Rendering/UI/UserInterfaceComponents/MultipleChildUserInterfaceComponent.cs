@@ -22,8 +22,11 @@ public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
 
     public void AddChild(IUserInterfaceComponent child)
     {
-        child.Initialize(this);
-        Children.Add(child);
+        child?.Initialize(this);
+        if (child != null)
+        {
+            Children.Add(child);
+        }
     }
 
     public void RemoveChild(IUserInterfaceComponent child)
