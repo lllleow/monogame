@@ -2,9 +2,9 @@
 using MonoGame_Common.Util.Tile.TextureProcessors;
 using MonoGame_Common.Enums;
 
-public class FenceTile : CommonTile
+public class BaseWallTile : WallTile
 {
-    public FenceTile()
+    public BaseWallTile()
     {
         Id = "base.wall";
         Name = "Wall";
@@ -16,4 +16,4 @@ public class FenceTile : CommonTile
     }
 }
 
-return new FenceTile();
+return new BaseWallTile();

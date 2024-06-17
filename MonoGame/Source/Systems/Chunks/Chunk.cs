@@ -168,6 +168,17 @@ public class Chunk : IChunk
                             layerDepth = 0.2f + (globalY / 1000f);
                         }
 
+                        if (layer.Key == TileDrawLayer.Walls)
+                        {
+                            layerDepth = 0.3f + (globalY / 1000f);
+                        }
+
+                        // Pensar sobre isso aqui
+                        if (tile is WallTile)
+                        {
+                            position += new Vector2(SharedGlobals.PixelSizeX / 2, SharedGlobals.PixelSizeY / 2);
+                        }
+
                         if (tile?.HasComponent<TextureRendererTileComponent>() ?? false)
                         {
                             TextureRendererTileComponent textureRendererTileComponent = tile.GetComponent<TextureRendererTileComponent>();

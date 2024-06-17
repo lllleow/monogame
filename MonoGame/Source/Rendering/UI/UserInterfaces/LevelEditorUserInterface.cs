@@ -11,6 +11,8 @@ using System.ComponentModel;
 using MonoGame.Source.Rendering.UI.Interfaces;
 using System.Reflection.Emit;
 using System.Collections.Generic;
+using MonoGame_Common.Systems.Tiles.Interfaces;
+using MonoGame_Common.Systems.Scripts;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaces;
 
@@ -181,7 +183,24 @@ public class LevelEditorUserInterface : UserInterface
         PosXLabel.Text = "Pos X: " + globalPosition.PosX;
         PosYLabel.Text = "Pos Y: " + globalPosition.PosY;
         cursorPosition = globalPosition;
-        Rectangle destinationRectangle = new Rectangle(globalPosition.PosX * SharedGlobals.PixelSizeX, globalPosition.PosY * SharedGlobals.PixelSizeY, 16, 16);
+
+        CommonTile tile = TileRegistry.GetTile(SelectedTile);
+        Rectangle destinationRectangle;
+        if (tile != null)
+        {
+            if (tile is WallTile)
+            {
+                destinationRectangle = new Rectangle((globalPosition.PosX * SharedGlobals.PixelSizeX) + (SharedGlobals.PixelSizeX / 2), (globalPosition.PosY * SharedGlobals.PixelSizeY) + (SharedGlobals.PixelSizeY / 2), tile.TileSizeX * SharedGlobals.PixelSizeX, tile.TileSizeY * SharedGlobals.PixelSizeY);
+            }
+            else
+            {
+                destinationRectangle = new Rectangle(globalPosition.PosX * SharedGlobals.PixelSizeX, globalPosition.PosY * SharedGlobals.PixelSizeY, tile.TileSizeX * SharedGlobals.PixelSizeX, tile.TileSizeY * SharedGlobals.PixelSizeY);
+            }
+        }
+        else
+        {
+            destinationRectangle = new Rectangle(globalPosition.PosX * SharedGlobals.PixelSizeX, globalPosition.PosY * SharedGlobals.PixelSizeY, SharedGlobals.PixelSizeX, SharedGlobals.PixelSizeY);
+        }
 
         spriteBatch.End();
         Globals.DefaultSpriteBatchBegin();

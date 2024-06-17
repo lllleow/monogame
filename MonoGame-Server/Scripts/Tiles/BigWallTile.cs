@@ -2,7 +2,7 @@
 using MonoGame_Common.Util.Tile.TextureProcessors;
 using MonoGame_Common.Enums;
 
-public class BigWallTile : CommonTile
+public class BigWallTile : WallTile
 {
     public BigWallTile()
     {
