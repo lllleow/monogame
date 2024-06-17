@@ -7,6 +7,10 @@ using MonoGame.Source.GameModes;
 using MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 using MonoGame.Source.Rendering.UI.UserInterfaceComponents.Custom;
 using MonoGame.Source.WorldNamespace;
+using System.ComponentModel;
+using MonoGame.Source.Rendering.UI.Interfaces;
+using System.Reflection.Emit;
+using System.Collections.Generic;
 
 namespace MonoGame.Source.Rendering.UI.UserInterfaces;
 
@@ -19,6 +23,8 @@ public class LevelEditorUserInterface : UserInterface
     public LevelEditorToolBarUserInterfaceComponent ToolBar { get; set; } = new();
     private TileSelectorUserInterfaceComponent tileSelectorComponent;
     public SlotUserInterfaceComponentController SlotController { get; set; }
+    public LabelUserInterfaceComponent PosXLabel { get; set; }
+    public LabelUserInterfaceComponent PosYLabel { get; set; }
 
     public LevelEditorUserInterface()
     {
@@ -79,6 +85,51 @@ public class LevelEditorUserInterface : UserInterface
                 child: tileSelectorComponent
             )
         );
+
+        PosXLabel = new LabelUserInterfaceComponent("Pos X: ", new Vector2(0, 0));
+        PosYLabel = new LabelUserInterfaceComponent("Pos Y: ", new Vector2(0, 0));
+        AddComponent(
+            new AlignmentUserInterfaceComponent(
+                alignment: UserInterfaceAlignment.LeftDown,
+                child: new PaddingUserInterfaceComponent(
+                    8,
+                    8,
+                    8,
+                    8,
+                    child: new ContainerUserInterfaceComponent(
+                        new Vector2(0, 0),
+                        child: new PaddingUserInterfaceComponent(
+                            4,
+                            4,
+                            4,
+                            4,
+                            child: new SizedBoxUserInterfaceComponent(
+                                new Vector2(0, 0),
+                                new Vector2(25, -1),
+                                child: new StretchUserInterfaceComponent(
+                                    Axis.Horizontal,
+                                    child: new DirectionalListUserInterfaceComponent(
+                                        "list",
+                                        Axis.Vertical,
+                                        localPosition: new Vector2(0, 0),
+                                        spacing: 2,
+                                        children: new List<IUserInterfaceComponent>()
+                                        {
+                                            PosXLabel,
+                                            PosYLabel,
+                                        }
+                                    )
+                                )
+                            )
+                        )
+                    )
+                    {
+                        BackgroundImage = "textures/ui_background",
+                        BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile
+                    }
+                )
+            )
+        );
     }
 
     public override void Initialize()
@@ -127,6 +178,8 @@ public class LevelEditorUserInterface : UserInterface
         currentMouseState = Mouse.GetState();
         Vector2 screenPosition = new Vector2(currentMouseState.X, currentMouseState.Y);
         (int PosX, int PosY) globalPosition = World.GetGlobalPositionFromScreenPosition(screenPosition);
+        PosXLabel.Text = "Pos X: " + globalPosition.PosX;
+        PosYLabel.Text = "Pos Y: " + globalPosition.PosY;
         cursorPosition = globalPosition;
         Rectangle destinationRectangle = new Rectangle(globalPosition.PosX * SharedGlobals.PixelSizeX, globalPosition.PosY * SharedGlobals.PixelSizeY, 16, 16);
 

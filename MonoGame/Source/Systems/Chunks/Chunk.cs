@@ -142,6 +142,9 @@ public class Chunk : IChunk
                     var tile = GetTile(layer.Key, chunkX, chunkY);
                     if (tile != null)
                     {
+                        var globalX = (X * SizeX) + (chunkX * tile.TileSizeX);
+                        var globalY = (Y * SizeY) + (chunkY * tile.TileSizeY);
+
                         var x = (X * SizeX * SharedGlobals.PixelSizeX) + (chunkX * tile.TileSizeX * SharedGlobals.PixelSizeX);
                         var y = (Y * SizeY * SharedGlobals.PixelSizeY) + (chunkY * tile.TileSizeY * SharedGlobals.PixelSizeY);
 
@@ -153,22 +156,16 @@ public class Chunk : IChunk
                         var tileRectangle = new Rectangle(x, y, tile.TileSizeX * SharedGlobals.PixelSizeX, tile.TileSizeY * SharedGlobals.PixelSizeY);
                         var colorWithOpacity = Color.White;
 
-                        var layerDepth = 1f;
+                        var layerDepth = 0f;
 
                         if (layer.Key == TileDrawLayer.Terrain)
                         {
                             layerDepth = 0.1f;
                         }
 
-                        if (layer.Key == TileDrawLayer.Background)
-                        {
-                            layerDepth = 0f;
-                        }
-
                         if (layer.Key == TileDrawLayer.Tiles)
                         {
-                            layerDepth = 0.9f;
-                            layerDepth += y / 1000;
+                            layerDepth = 0.2f + (globalY / 1000f);
                         }
 
                         if (tile?.HasComponent<TextureRendererTileComponent>() ?? false)
