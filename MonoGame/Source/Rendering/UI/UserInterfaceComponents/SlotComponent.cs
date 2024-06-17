@@ -84,13 +84,6 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
             1f);
         var iconSize = size * 0.5f;
 
-        if (IsDragging)
-        {
-            var worldPosition = new Vector2(CurrentMouseState.X, CurrentMouseState.Y);
-            var screenPosition = Vector2.Transform(worldPosition, Matrix.Invert(Globals.UserInterfaceHandler.GetUITransform()));
-            position = new Vector2(screenPosition.X, screenPosition.Y);
-        }
-
         if (textureLocation != null)
         {
             var iconPosition = new Vector2(

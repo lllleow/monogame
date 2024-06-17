@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using MonoGame_Common.Systems.Scripts;
 using MonoGame.Source.Rendering.UI.Interfaces;
 using MonoGame.Source.Rendering.UI.UserInterfaceComponents;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame;
 
@@ -85,5 +86,11 @@ public class TileSelectorUserInterfaceComponent : ContainerUserInterfaceComponen
                 }
         )
         );
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        base.Draw(spriteBatch);
+        SlotController.Draw(spriteBatch);
     }
 }
