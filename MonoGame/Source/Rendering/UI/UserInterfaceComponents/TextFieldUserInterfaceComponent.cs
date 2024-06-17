@@ -21,9 +21,10 @@ public class TextFieldUserInterfaceComponent : ContainerUserInterfaceComponent
         BackgroundImage = "textures/ui_background";
         BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile;
         OnTextChanged = onTextChanged;
+        Opacity = 0.5f;
 
         Label = new LabelUserInterfaceComponent(
-            " ",
+            "Search",
             new Vector2(0, 0)
         );
 
@@ -95,12 +96,14 @@ public class TextFieldUserInterfaceComponent : ContainerUserInterfaceComponent
     {
         IsFocused = true;
         UpdateText();
+        Opacity = 1f;
     }
 
     public void OnLoseFocus()
     {
         IsFocused = false;
         UpdateText();
+        Opacity = 0.5f;
     }
 
     public void UpdateText()
@@ -119,7 +122,7 @@ public class TextFieldUserInterfaceComponent : ContainerUserInterfaceComponent
         }
         else
         {
-            Label.Text = " ";
+            Label.Text = "Search";
         }
 
         OnTextChanged?.Invoke(Text);

@@ -7,6 +7,7 @@ using MonoGame.Source;
 using MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 using MonoGame.Source.Utils.Helpers;
 using MonoGame.Source.Utils.Loaders;
+using MonoGame_Common;
 
 namespace MonoGame;
 
@@ -15,6 +16,17 @@ public class SlotUserInterfaceComponentController
     public List<SlotComponent> Slots { get; set; } = new();
     private SlotComponent SourceSlot { get; set; }
     private SlotComponent DestinationSlot { get; set; }
+
+    public SlotUserInterfaceComponentController()
+    {
+        InputEventManager.Subscribe(InputEventChannel.LevelEditor, inputEvent =>
+        {
+            if (inputEvent.EventType == InputEventType.MouseButtonUp)
+            {
+                ResetSlots();
+            }
+        });
+    }
 
     public void AddSlot(SlotComponent slot)
     {
@@ -41,6 +53,12 @@ public class SlotUserInterfaceComponentController
 
     public virtual void OnDrop(SlotComponent sourceSlot, SlotComponent destinationSlot)
     {
+        ResetSlots();
+    }
+
+    public void ResetSlots()
+    {
+
         SourceSlot = null;
         DestinationSlot = null;
     }
