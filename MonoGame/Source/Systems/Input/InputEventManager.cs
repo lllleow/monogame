@@ -1,29 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
-using MonoGame_Common.Messages;
-using MonoGame.Source.Multiplayer.Interfaces;
+using System.Linq;
 
 namespace MonoGame;
 
 public class InputEventManager
 {
-    private static List<Action<InputEvent>> subscriptions = new();
+    private static Dictionary<InputEventChannel, List<(int Priority, Action<InputEvent> Handler)>> subscriptions = new();
 
-    public static void Subscribe(Action<InputEvent> handler)
+    public static InputSubscriberReference Subscribe(InputEventChannel channel, Action<InputEvent> handler, int priority = 0)
     {
-        subscriptions.Add(handler);
+        if (!subscriptions.ContainsKey(channel))
+        {
+            subscriptions[channel] = new List<(int, Action<InputEvent>)>();
+        }
+
+        subscriptions[channel].Add((priority, handler));
+        return new InputSubscriberReference(channel, priority, handler);
     }
 
     public static void RaiseEvent(InputEvent message)
     {
-        foreach (var subscription in subscriptions)
+        foreach (var channel in subscriptions.Keys)
         {
-            subscription(message);
+            var orderedSubscriptions = subscriptions[channel].OrderBy(subscription => subscription.Priority);
+            foreach (var subscription in orderedSubscriptions)
+            {
+                if (message.Handled) return;
+                subscription.Handler(message);
+            }
         }
     }
 
-    public static void Unsubscribe(Action<InputEvent> handler)
+    public static void RaiseEvent(InputEventChannel channel, InputEvent message)
     {
-        subscriptions.Remove(handler);
+        foreach (var subscription in subscriptions[channel])
+        {
+            subscription.Handler(message);
+        }
+    }
+
+    public static void Unsubscribe(InputSubscriberReference reference)
+    {
+        subscriptions[reference.Channel].RemoveAll(subscription => subscription.Handler == reference.Handler);
     }
 }

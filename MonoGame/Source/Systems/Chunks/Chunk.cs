@@ -35,14 +35,6 @@ public class Chunk : IChunk
         {
             Tiles[layer] = new CommonTile[SizeX, SizeY];
         }
-
-        for (var chunkX = 0; chunkX < SizeX; chunkX++)
-        {
-            for (var chunkY = 0; chunkY < SizeY; chunkY++)
-            {
-                _ = SetTile("base.grass", TileDrawLayer.Background, chunkX, chunkY);
-            }
-        }
     }
 
     public Chunk(ChunkState chunkState)
@@ -69,14 +61,6 @@ public class Chunk : IChunk
             }
 
             Tiles[layer.Key] = commonTiles;
-        }
-
-        for (var chunkX = 0; chunkX < SizeX; chunkX++)
-        {
-            for (var chunkY = 0; chunkY < SizeY; chunkY++)
-            {
-                _ = SetTile("base.grass", TileDrawLayer.Background, chunkX, chunkY);
-            }
         }
     }
 

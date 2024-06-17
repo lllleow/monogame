@@ -192,11 +192,13 @@ public class ServerWorld
                     tileMask = ServerTextureHelper.GetImageMaskForRectangle(commonTile.SpritesheetName, tileComponent.GetSpriteRectangle());
                 }
 
-                // NetworkServer.Instance.BroadcastMessage(new RenderMaskNetworkMessage()
-                // {
-                //     Rectangle = tileRect,
-                //     Mask = tileMask
-                // });
+                /*
+                    NetworkServer.Instance.BroadcastMessage(new RenderMaskNetworkMessage()
+                    {
+                        Rectangle = tileRect,
+                        Mask = tileMask
+                    });
+                */
 
                 if (tile.Id != null && CollisionMaskHandler.CheckMaskCollision(tileMask, rectangle, tileMask, tileRect))
                 {
@@ -204,6 +206,7 @@ public class ServerWorld
                 }
             }
         }
+
         return intersectingTiles.Values.ToList();
     }
 

@@ -62,9 +62,9 @@ public class Main : Game
         base.OnExiting(sender, args);
     }
 
-    int frameCount = 0;
-    float elapsedTime = 0f;
-    string windowTitle = "MonoGame";
+    private int frameCount = 0;
+    private float elapsedTime = 0f;
+    private string windowTitle = "MonoGame";
 
     protected override void Update(GameTime gameTime)
     {
@@ -99,7 +99,7 @@ public class Main : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+        GraphicsDevice.Clear(new Color(30, 188, 115, 1));
 
         Globals.DefaultSpriteBatchBegin();
         Globals.World.Draw(Globals.SpriteBatch);

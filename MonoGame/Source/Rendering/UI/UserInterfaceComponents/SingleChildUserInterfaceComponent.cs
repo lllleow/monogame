@@ -16,11 +16,13 @@ public class SingleChildUserInterfaceComponent : UserInterfaceComponent
 
     public void RemoveChild()
     {
+        Child?.Dispose();
         Child = null;
     }
 
     public void SetChild(IUserInterfaceComponent child)
     {
+        Child?.Dispose();
         child?.Initialize(this);
         Child = child;
     }
@@ -39,13 +41,34 @@ public class SingleChildUserInterfaceComponent : UserInterfaceComponent
 
     public override Vector2 GetPreferredSize()
     {
+        Vector2 childSize = (Child?.GetPreferredSize() ?? Vector2.Zero) + (Child?.LocalPosition ?? Vector2.Zero);
         if (SizeOverride != Vector2.Zero)
         {
+            if (SizeOverride.X < 0 && SizeOverride.Y > 0)
+            {
+                return new Vector2(childSize.X, SizeOverride.Y);
+            }
+            else if (SizeOverride.X > 0 && SizeOverride.Y < 0)
+            {
+                return new Vector2(SizeOverride.X, childSize.Y);
+            }
+
+            CalculatedSize = SizeOverride;
             return SizeOverride;
         }
         else
         {
-            return (Child?.GetPreferredSize() ?? Vector2.Zero) + (Child?.LocalPosition ?? Vector2.Zero);
+            CalculatedSize = childSize;
+            return childSize;
+        }
+    }
+
+    public override void OnEnabledChanged()
+    {
+        base.OnEnabledChanged();
+        if (Child != null)
+        {
+            Child.Enabled = Enabled;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace MonoGame;
 public class ButtonUserInterfaceComponent : ContainerUserInterfaceComponent
 {
     public string Text { get; set; } = string.Empty;
-    public bool IsClicked { get; set; } = false;
+    public new bool IsClicked { get; set; } = false;
 
     public ButtonUserInterfaceComponent(string text, Action<IUserInterfaceComponent> onClick) : base(new Vector2(0, 0), null)
     {

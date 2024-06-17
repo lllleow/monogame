@@ -16,12 +16,12 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
     public (int PosX, int PosY) CursorPosition { get; set; } = (0, 0);
     public string SelectedTile { get; set; } = "base.grass";
     private List<IUserInterfaceComponent> toolComponents;
+    private List<IUserInterfaceComponent> toolConfigurations = [];
 
     public LevelEditorToolBarUserInterfaceComponent() : base(new Vector2(0, 0), null)
     {
         Tools.Add(new PlaceLevelEditorTool());
         Tools.Add(new EraserLevelEditorTool());
-        // Tools.Add(new SelectLevelEditorTool());
 
         toolComponents = Tools.Select(tool =>
             (UserInterfaceComponent)new ButtonUserInterfaceComponent(tool.Name, component => SetSelectedTool(component, tool))
@@ -38,11 +38,15 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
         Build();
     }
 
-    public void Build()
+    public override void Build()
     {
-        List<IUserInterfaceComponent> toolConfigurations = [];
         if (SelectedTool != null)
         {
+            foreach (var configuration in toolConfigurations)
+            {
+                configuration.Dispose();
+            }
+
             toolConfigurations = SelectedTool?.ToolConfigurations.Select(configuration =>
             (UserInterfaceComponent)new ButtonUserInterfaceComponent(configuration.Name, component => SetSelectedToolConfiguration(component, configuration))
             {
@@ -55,7 +59,7 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
                 "list",
                 spacing: 2,
                 localPosition: new Vector2(0, 0),
-                direction: ListDirection.Horizontal,
+                direction: Axis.Horizontal,
                 children: [
                     new ContainerUserInterfaceComponent(
                         new Vector2(0, 0),
@@ -68,7 +72,7 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
                                 "list",
                                 spacing: 2,
                                 localPosition: new Vector2(0, 0),
-                                direction: ListDirection.Vertical,
+                                direction: Axis.Vertical,
                                 children: toolComponents
                             )
                         )
@@ -88,7 +92,7 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
                                 "list",
                                 spacing: 2,
                                 localPosition: new Vector2(0, 0),
-                                direction: ListDirection.Vertical,
+                                direction: Axis.Vertical,
                                 children: toolConfigurations
                             )
                         )
@@ -106,6 +110,8 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
     {
         configuration.Enabled = !configuration.Enabled;
         ((ButtonUserInterfaceComponent)component).IsClicked = configuration.Enabled;
+
+        Build();
     }
 
     public void SetSelectedTool(IUserInterfaceComponent component, LevelEditorTool tool)

@@ -10,8 +10,35 @@ public class UserInterface : IUserInterface
     public string Name { get; set; }
     public List<IUserInterfaceComponent> Components { get; set; } = [];
 
+    private bool _enabled = true;
+
+    public bool Enabled
+    {
+        get
+        {
+            return _enabled;
+        }
+        set
+        {
+            if (_enabled != value)
+            {
+                _enabled = value;
+                OnEnabledChanged();
+            }
+        }
+    }
+
+    protected virtual void OnEnabledChanged()
+    {
+        foreach (var component in Components)
+        {
+            component.Enabled = Enabled;
+        }
+    }
+
     public virtual void Draw(SpriteBatch spriteBatch)
     {
+        if (!Enabled) return;
         foreach (var component in Components)
         {
             Globals.SpriteBatch.End();
@@ -31,6 +58,7 @@ public class UserInterface : IUserInterface
 
     public virtual void Update(GameTime gameTime)
     {
+        if (!Enabled) return;
         foreach (var component in Components)
         {
             component.Update(gameTime);
