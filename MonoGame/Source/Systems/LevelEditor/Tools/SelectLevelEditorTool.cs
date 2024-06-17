@@ -24,7 +24,7 @@ public class SelectLevelEditorTool : TileManipulatorEditorTool
 
     public override void Initialize()
     {
-        InputEventManager.Subscribe(inputEvent =>
+        InputEventManager.Subscribe(InputEventChannel.LevelEditor, inputEvent =>
         {
             if (!Enabled) return;
 

@@ -6,7 +6,8 @@ public enum TileDrawLayer
 
     Terrain,
 
-    Tiles
+    Tiles,
+    Walls
 }
 
 public static class TileDrawLayerPriority
@@ -17,7 +18,8 @@ public static class TileDrawLayerPriority
         {
             TileDrawLayer.Background,
             TileDrawLayer.Terrain,
-            TileDrawLayer.Tiles
+            TileDrawLayer.Tiles,
+            TileDrawLayer.Walls
         };
     }
 }

@@ -4,7 +4,7 @@ using System.Numerics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame_Common.Messages.Player;
 using MonoGame.Source.Multiplayer;
-using MonoGame.Source.WorldNamespace;
+using MonoGame_Common;
 
 namespace MonoGame.Source.GameModes;
 
@@ -12,6 +12,8 @@ public class LevelEditorGameModeController : GameModeController
 {
     public Vector2 CameraPosition { get; set; } = new(0, 0);
     private List<Keys> lastKeys = new();
+    public bool ShowCursor { get; set; } = true;
+    public bool BlockMovement { get; set; } = false;
 
     public override void Initialize()
     {
@@ -26,6 +28,7 @@ public class LevelEditorGameModeController : GameModeController
 
     public override void Update()
     {
+        if (BlockMovement) return;
         Globals.Camera.Follow(CameraPosition);
 
         var state = Keyboard.GetState();

@@ -15,6 +15,8 @@ public class CommonTile
     public int TileSizeX { get; set; } = 1;
 
     public int TileSizeY { get; set; } = 1;
+    public int TileTextureSizeX { get; set; } = 1;
+    public int TileTextureSizeY { get; set; } = 1;
 
     public CollisionMode CollisionMode { get; set; } = CollisionMode.BoundingBox;
 

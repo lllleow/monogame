@@ -22,6 +22,8 @@ public class LabelUserInterfaceComponent : UserInterfaceComponent
 
     public override Vector2 GetPreferredSize()
     {
-        return Globals.DefaultFont.MeasureString(Text) * Scale;
+        Vector2 size = Globals.DefaultFont.MeasureString(Text) * Scale;
+        CalculatedSize = size;
+        return size;
     }
 }

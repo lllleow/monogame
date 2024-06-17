@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using MonoGame_Common;
 using MonoGame_Common.Util.Helpers;
 using MonoGame.Source.Rendering.UI.Interfaces;
 using MonoGame.Source.Utils.Helpers;
@@ -10,13 +12,52 @@ namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class SlotComponent : UserInterfaceComponent, ISlotComponent
 {
-    public SlotComponent(string name, Vector2 localPosition) : base(name, localPosition)
+    public SlotComponent(SlotUserInterfaceComponentController controller, string name, Vector2 localPosition) : base(name, localPosition)
     {
+        Controller = controller;
         IsClickable = true;
     }
 
     public TextureLocation SlotTexture { get; set; } = TextureLocation.FirstTextureCoordinate("textures/slot");
     public bool IsSelected { get; set; } = false;
+    public bool IsDragging { get; set; } = false;
+    public Action<SlotComponent> OnSlotDragGrab { get; set; } = (slot) => { };
+    public Action<SlotComponent> OnSlotDragDrop { get; set; } = (slot) => { };
+    public SlotUserInterfaceComponentController Controller { get; set; }
+
+    public override void Initialize(IUserInterfaceComponent parent)
+    {
+        base.Initialize(parent);
+
+        if (Controller != null)
+        {
+            Controller.AddSlot(this);
+        }
+
+        AddInputSubscriber(InputEventManager.Subscribe(InputEventChannel.UI, inputEvent =>
+        {
+            if (inputEvent.EventType == InputEventType.MouseButtonDown)
+            {
+                if (inputEvent.Button == MouseButton.Left && MouseIntersectsComponent())
+                {
+                    OnSlotDragGrab?.Invoke(this);
+                    IsDragging = true;
+                }
+            }
+            else if (inputEvent.EventType == InputEventType.MouseButtonUp)
+            {
+                if (inputEvent.Button == MouseButton.Left)
+                {
+                    IsDragging = false;
+
+                    if (MouseIntersectsComponent())
+                    {
+                        OnSlotDragDrop?.Invoke(this);
+                    }
+                }
+            }
+        }));
+    }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
@@ -24,6 +65,7 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
         base.Draw(spriteBatch);
 
         var textureLocation = GetDrawable();
+
         var position = GetPositionRelativeToParent();
         var size = GetPreferredSize();
 
@@ -66,6 +108,8 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
 
     public override Vector2 GetPreferredSize()
     {
-        return new Vector2(16, 16);
+        Vector2 size = new Vector2(16, 16);
+        CalculatedSize = size;
+        return size;
     }
 }

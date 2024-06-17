@@ -4,8 +4,7 @@ public enum InputEventType
 {
     KeyDown,
     KeyUp,
-    KeyClicked,
     MouseButtonDown,
     MouseButtonUp,
-    MouseButtonClicked
+    MouseScrolled
 }

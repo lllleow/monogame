@@ -8,13 +8,13 @@ namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceComponent
 {
-    public DirectionalListUserInterfaceComponent(string name, ListDirection direction, Vector2 localPosition, int spacing, List<IUserInterfaceComponent> children) : base(name, localPosition, children)
+    public DirectionalListUserInterfaceComponent(string name, Axis direction, Vector2 localPosition, int spacing, List<IUserInterfaceComponent> children) : base(name, localPosition, children)
     {
         Direction = direction;
         Spacing = spacing;
     }
 
-    public ListDirection Direction { get; set; } = ListDirection.Horizontal;
+    public Axis Direction { get; set; } = Axis.Horizontal;
     public int Spacing { get; set; } = 2;
 
     public override Vector2 GetChildOffset(IUserInterfaceComponent child)
@@ -24,7 +24,7 @@ public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceC
 
         for (var i = 0; i < index; i++)
         {
-            if (Direction == ListDirection.Horizontal)
+            if (Direction == Axis.Horizontal)
             {
                 offset.X += Children[i].GetPreferredSize().X + Spacing;
             }
@@ -46,7 +46,7 @@ public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceC
         {
             var childPreferredSize = child.GetPreferredSize();
 
-            if (Direction == ListDirection.Vertical)
+            if (Direction == Axis.Vertical)
             {
                 maxWidth = Math.Max(maxWidth, childPreferredSize.X);
                 totalHeight += childPreferredSize.Y;
@@ -58,7 +58,7 @@ public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceC
             }
         }
 
-        if (Direction == ListDirection.Horizontal)
+        if (Direction == Axis.Horizontal)
         {
             maxWidth += Spacing * (Children.Count - 1);
         }
@@ -67,6 +67,8 @@ public class DirectionalListUserInterfaceComponent : MultipleChildUserInterfaceC
             totalHeight += Spacing * (Children.Count - 1);
         }
 
-        return new Vector2((int)maxWidth, (int)totalHeight);
+        Vector2 size = new Vector2((int)maxWidth, (int)totalHeight);
+        CalculatedSize = size;
+        return size;
     }
 }

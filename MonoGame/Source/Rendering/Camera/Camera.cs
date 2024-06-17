@@ -9,7 +9,7 @@ public class Camera
 {
     private readonly float followSpeed = 7f;
     private readonly int previousScrollValue;
-    private readonly float scaleFactor = 3f;
+    public float ScaleFactor { get; set; } = 3f;
 
     public Camera(int screenSizeX, int screenSizeY)
     {
@@ -30,12 +30,12 @@ public class Camera
         var entityCenter = new Vector2(position.X + (SharedGlobals.PixelSizeX / 2), position.Y + (SharedGlobals.PixelSizeY / 2));
         var screenCenter = new Vector2(ScreenSizeX / 2f, ScreenSizeY / 2f);
         var targetTranslation = Matrix.CreateTranslation(
-            screenCenter.X - (entityCenter.X * scaleFactor),
-            screenCenter.Y - (entityCenter.Y * scaleFactor),
+            screenCenter.X - (entityCenter.X * ScaleFactor),
+            screenCenter.Y - (entityCenter.Y * ScaleFactor),
             0
         );
 
-        var targetTransform = Matrix.Multiply(Matrix.CreateScale(scaleFactor, scaleFactor, 1f), targetTranslation);
+        var targetTransform = Matrix.Multiply(Matrix.CreateScale(ScaleFactor, ScaleFactor, 1f), targetTranslation);
         Transform = Matrix.Lerp(Transform, targetTransform, followSpeed * deltaTime);
     }
 

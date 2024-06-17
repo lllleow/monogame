@@ -32,6 +32,12 @@ public class InputManager
             }
         }
 
+        int scrollDelta = currentMouseState.ScrollWheelValue - previousMouseState.ScrollWheelValue;
+        if (scrollDelta != 0)
+        {
+            InputEventManager.RaiseEvent(new InputEvent { EventType = InputEventType.MouseScrolled, ScrollDelta = scrollDelta });
+        }
+
         CheckMouseButton(MouseButton.Left, currentMouseState.LeftButton, previousMouseState.LeftButton);
         CheckMouseButton(MouseButton.Right, currentMouseState.RightButton, previousMouseState.RightButton);
         CheckMouseButton(MouseButton.Middle, currentMouseState.MiddleButton, previousMouseState.MiddleButton);

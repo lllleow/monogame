@@ -15,13 +15,13 @@ using MonoGame.Source.Utils;
 using MonoGame.Source.Utils.Helpers;
 using MonoGame.Source.Utils.Loaders;
 using MonoGame.Source.WorldNamespace;
+using System;
 
 namespace MonoGame.Source.Systems.Chunks;
 
 public class Chunk : IChunk
 {
     private readonly PrimitiveBatch primitiveBatch = new(Globals.GraphicsDevice.GraphicsDevice);
-
     private readonly World world = Globals.World;
 
     public Chunk(World world, int x, int y)
@@ -34,14 +34,6 @@ public class Chunk : IChunk
         foreach (var layer in TileDrawLayerPriority.GetPriority())
         {
             Tiles[layer] = new CommonTile[SizeX, SizeY];
-        }
-
-        for (var chunkX = 0; chunkX < SizeX; chunkX++)
-        {
-            for (var chunkY = 0; chunkY < SizeY; chunkY++)
-            {
-                _ = SetTile("base.grass", TileDrawLayer.Background, chunkX, chunkY);
-            }
         }
     }
 
@@ -69,14 +61,6 @@ public class Chunk : IChunk
             }
 
             Tiles[layer.Key] = commonTiles;
-        }
-
-        for (var chunkX = 0; chunkX < SizeX; chunkX++)
-        {
-            for (var chunkY = 0; chunkY < SizeY; chunkY++)
-            {
-                _ = SetTile("base.grass", TileDrawLayer.Background, chunkX, chunkY);
-            }
         }
     }
 
@@ -158,31 +142,41 @@ public class Chunk : IChunk
                     var tile = GetTile(layer.Key, chunkX, chunkY);
                     if (tile != null)
                     {
+                        var globalX = (X * SizeX) + (chunkX * tile.TileSizeX);
+                        var globalY = (Y * SizeY) + (chunkY * tile.TileSizeY);
+
                         var x = (X * SizeX * SharedGlobals.PixelSizeX) + (chunkX * tile.TileSizeX * SharedGlobals.PixelSizeX);
                         var y = (Y * SizeY * SharedGlobals.PixelSizeY) + (chunkY * tile.TileSizeY * SharedGlobals.PixelSizeY);
 
                         var scale = new Vector2(1, 1);
                         var origin = new Vector2(0, 0);
-                        var position = new Vector2(x, y) + origin;
+                        var textureOrigin = new Vector2((tile.TileTextureSizeX - 1) * SharedGlobals.PixelSizeX, (tile.TileTextureSizeY - 1) * SharedGlobals.PixelSizeY);
+                        var position = new Vector2(x, y) + origin - textureOrigin;
 
                         var tileRectangle = new Rectangle(x, y, tile.TileSizeX * SharedGlobals.PixelSizeX, tile.TileSizeY * SharedGlobals.PixelSizeY);
                         var colorWithOpacity = Color.White;
 
-                        var layerDepth = 1f;
+                        var layerDepth = 0f;
 
                         if (layer.Key == TileDrawLayer.Terrain)
                         {
                             layerDepth = 0.1f;
                         }
 
-                        if (layer.Key == TileDrawLayer.Background)
-                        {
-                            layerDepth = 0f;
-                        }
-
                         if (layer.Key == TileDrawLayer.Tiles)
                         {
-                            layerDepth = 0.9f;
+                            layerDepth = 0.2f + (globalY / 1000f);
+                        }
+
+                        if (layer.Key == TileDrawLayer.Walls)
+                        {
+                            layerDepth = 0.3f + (globalY / 1000f);
+                        }
+
+                        // Pensar sobre isso aqui
+                        if (tile is WallTile)
+                        {
+                            position += new Vector2(SharedGlobals.PixelSizeX / 2, SharedGlobals.PixelSizeY / 2);
                         }
 
                         if (tile?.HasComponent<TextureRendererTileComponent>() ?? false)

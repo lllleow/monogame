@@ -32,7 +32,7 @@ public class TextureRendererTileComponentState : TileComponentState
     {
         CommonTile? commonTile = TileState?.GetCommonTile();
         if (commonTile == null) return new Rectangle(0, 0, SharedGlobals.PixelSizeY, SharedGlobals.PixelSizeY);
-        return new Rectangle(TextureX * SharedGlobals.PixelSizeX, TextureY * SharedGlobals.PixelSizeY, commonTile.TileSizeX * SharedGlobals.PixelSizeX, commonTile.TileSizeY * SharedGlobals.PixelSizeY);
+        return new Rectangle(TextureX * SharedGlobals.PixelSizeX, TextureY * SharedGlobals.PixelSizeY, commonTile.TileTextureSizeY * SharedGlobals.PixelSizeX, commonTile.TileTextureSizeY * SharedGlobals.PixelSizeY);
     }
 
     public void UpdateTextureCoordinates(TileNeighborConfiguration configuration)
