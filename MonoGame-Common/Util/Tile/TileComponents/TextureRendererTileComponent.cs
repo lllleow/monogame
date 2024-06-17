@@ -26,7 +26,7 @@ public class TextureRendererTileComponent : ITileComponent
 
     public Rectangle GetSpriteRectangle()
     {
-        return new Rectangle(TextureX * SharedGlobals.PixelSizeX, TextureY * SharedGlobals.PixelSizeY, Tile.TileSizeX * SharedGlobals.PixelSizeX, Tile.TileSizeY * SharedGlobals.PixelSizeY);
+        return new Rectangle(TextureX * SharedGlobals.PixelSizeX * Tile.TileTextureSizeX, TextureY * SharedGlobals.PixelSizeY * Tile.TileTextureSizeY, Tile.TileTextureSizeX * SharedGlobals.PixelSizeX, Tile.TileTextureSizeY * SharedGlobals.PixelSizeY);
     }
 
     public void UpdateTextureCoordinates(TileNeighborConfiguration configuration)

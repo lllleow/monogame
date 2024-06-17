@@ -15,13 +15,13 @@ using MonoGame.Source.Utils;
 using MonoGame.Source.Utils.Helpers;
 using MonoGame.Source.Utils.Loaders;
 using MonoGame.Source.WorldNamespace;
+using System;
 
 namespace MonoGame.Source.Systems.Chunks;
 
 public class Chunk : IChunk
 {
     private readonly PrimitiveBatch primitiveBatch = new(Globals.GraphicsDevice.GraphicsDevice);
-
     private readonly World world = Globals.World;
 
     public Chunk(World world, int x, int y)
@@ -147,7 +147,8 @@ public class Chunk : IChunk
 
                         var scale = new Vector2(1, 1);
                         var origin = new Vector2(0, 0);
-                        var position = new Vector2(x, y) + origin;
+                        var textureOrigin = new Vector2((tile.TileTextureSizeX - 1) * SharedGlobals.PixelSizeX, (tile.TileTextureSizeY - 1) * SharedGlobals.PixelSizeY);
+                        var position = new Vector2(x, y) + origin - textureOrigin;
 
                         var tileRectangle = new Rectangle(x, y, tile.TileSizeX * SharedGlobals.PixelSizeX, tile.TileSizeY * SharedGlobals.PixelSizeY);
                         var colorWithOpacity = Color.White;
@@ -167,6 +168,7 @@ public class Chunk : IChunk
                         if (layer.Key == TileDrawLayer.Tiles)
                         {
                             layerDepth = 0.9f;
+                            layerDepth += y / 1000;
                         }
 
                         if (tile?.HasComponent<TextureRendererTileComponent>() ?? false)
