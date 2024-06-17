@@ -39,7 +39,7 @@ public class ScrollViewUserInterfaceComponent : DirectionalListUserInterfaceComp
     public override void Initialize(IUserInterfaceComponent parent)
     {
         base.Initialize(parent);
-        InputEventManager.Subscribe(InputEventChannel.UI, inputEvent =>
+        AddInputSubscriber(InputEventManager.Subscribe(InputEventChannel.UI, inputEvent =>
         {
             if (!Enabled) return;
             if (inputEvent.EventType == InputEventType.MouseScrolled && MouseIntersectsComponent())
@@ -70,7 +70,7 @@ public class ScrollViewUserInterfaceComponent : DirectionalListUserInterfaceComp
                     BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile
                 });
             }
-        });
+        }));
     }
 
     public override Vector2 GetPreferredSize()

@@ -49,8 +49,9 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
         tiles.ForEach(tile => tile.OnClick = component => SetSelected(component as TileSlotComponent));
         SetSelected(tiles[0]);
 
-        InputEventManager.Subscribe(InputEventChannel.UI, inputEvent =>
+        AddInputSubscriber(InputEventManager.Subscribe(InputEventChannel.UI, inputEvent =>
         {
+            if (!Enabled) return;
             if (inputEvent.EventType == InputEventType.MouseScrolled && MouseIntersectsComponent())
             {
                 inputEvent.Handled = true;
@@ -69,7 +70,7 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
                     SetSelected(tiles[previousIndex]);
                 }
             }
-        });
+        }));
     }
 
     public override void Update(GameTime gameTime)

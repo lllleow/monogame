@@ -16,11 +16,13 @@ public class SingleChildUserInterfaceComponent : UserInterfaceComponent
 
     public void RemoveChild()
     {
+        Child?.Dispose();
         Child = null;
     }
 
     public void SetChild(IUserInterfaceComponent child)
     {
+        Child?.Dispose();
         child?.Initialize(this);
         Child = child;
     }
@@ -58,6 +60,15 @@ public class SingleChildUserInterfaceComponent : UserInterfaceComponent
         {
             CalculatedSize = childSize;
             return childSize;
+        }
+    }
+
+    public override void OnEnabledChanged()
+    {
+        base.OnEnabledChanged();
+        if (Child != null)
+        {
+            Child.Enabled = Enabled;
         }
     }
 }

@@ -39,8 +39,9 @@ public class TextFieldUserInterfaceComponent : ContainerUserInterfaceComponent
     public override void Initialize(IUserInterfaceComponent parent)
     {
         base.Initialize(parent);
-        InputEventManager.Subscribe(InputEventChannel.UI, priority: 1, handler: inputEvent =>
+        AddInputSubscriber(InputEventManager.Subscribe(InputEventChannel.UI, priority: 1, handler: inputEvent =>
         {
+            if (!Enabled) return;
             if (inputEvent.EventType == InputEventType.MouseButtonUp)
             {
                 if (MouseIntersectsComponent())
@@ -87,7 +88,7 @@ public class TextFieldUserInterfaceComponent : ContainerUserInterfaceComponent
                     }
                 }
             }
-        });
+        }));
     }
 
     public void OnFocus()

@@ -31,7 +31,6 @@ public class UserInterfaceComponent : IUserInterfaceComponent
     public Action<IUserInterfaceComponent> OnClick { get; set; }
     public string Name { get; set; }
     public Vector2 LocalPosition { get; set; }
-    public bool Enabled { get; set; } = true;
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
@@ -67,6 +66,33 @@ public class UserInterfaceComponent : IUserInterfaceComponent
 
     public bool IsClicked { get; set; } = false;
     public Vector2 CalculatedSize { get; set; }
+    private bool _enabled = true;
+    public bool Enabled
+    {
+        get
+        {
+            return _enabled;
+        }
+        set
+        {
+            if (_enabled != value)
+            {
+                _enabled = value;
+                OnEnabledChanged();
+            }
+        }
+    }
+
+    public List<InputSubscriberReference> Subscribers { get; set; } = [];
+
+    public void AddInputSubscriber(InputSubscriberReference reference)
+    {
+        Subscribers.Add(reference);
+    }
+
+    public virtual void OnEnabledChanged()
+    {
+    }
 
     public virtual void Update(GameTime gameTime)
     {
@@ -77,7 +103,7 @@ public class UserInterfaceComponent : IUserInterfaceComponent
     public virtual void Initialize(IUserInterfaceComponent parent)
     {
         Parent = parent;
-        InputEventManager.Subscribe(InputEventChannel.UI, inputEvent =>
+        AddInputSubscriber(InputEventManager.Subscribe(InputEventChannel.UI, inputEvent =>
         {
             if (OnClick == null || !Enabled) return;
 
@@ -99,7 +125,7 @@ public class UserInterfaceComponent : IUserInterfaceComponent
                     OnClick?.Invoke(this);
                 }
             }
-        });
+        }));
     }
 
     public virtual Vector2 GetPositionRelativeToParent()
@@ -120,6 +146,7 @@ public class UserInterfaceComponent : IUserInterfaceComponent
 
     public bool MouseIntersectsComponent()
     {
+        if (!Enabled) return false;
         CurrentMouseState = Mouse.GetState();
         var x = CurrentMouseState.X;
         var y = CurrentMouseState.Y;
@@ -163,5 +190,18 @@ public class UserInterfaceComponent : IUserInterfaceComponent
         Vector2 screenSize = new Vector2(screenWidth, screenHeight);
         Vector2 uiSize = Vector2.Transform(screenSize, Matrix.Invert(Globals.UserInterfaceHandler.GetUITransform()));
         return (int)(uiSize.Y * percent);
+    }
+
+    public virtual void Dispose()
+    {
+        foreach (var subscriber in Subscribers)
+        {
+            InputEventManager.Unsubscribe(subscriber);
+        }
+    }
+
+    public virtual void Build()
+    {
+        throw new NotImplementedException();
     }
 }

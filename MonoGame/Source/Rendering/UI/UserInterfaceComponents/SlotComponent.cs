@@ -34,7 +34,7 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
             Controller.AddSlot(this);
         }
 
-        InputEventManager.Subscribe(InputEventChannel.UI, inputEvent =>
+        AddInputSubscriber(InputEventManager.Subscribe(InputEventChannel.UI, inputEvent =>
         {
             if (inputEvent.EventType == InputEventType.MouseButtonDown)
             {
@@ -56,7 +56,7 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
                     }
                 }
             }
-        });
+        }));
     }
 
     public override void Draw(SpriteBatch spriteBatch)

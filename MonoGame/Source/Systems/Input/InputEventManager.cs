@@ -8,7 +8,7 @@ public class InputEventManager
 {
     private static Dictionary<InputEventChannel, List<(int Priority, Action<InputEvent> Handler)>> subscriptions = new();
 
-    public static void Subscribe(InputEventChannel channel, Action<InputEvent> handler, int priority = 0)
+    public static InputSubscriberReference Subscribe(InputEventChannel channel, Action<InputEvent> handler, int priority = 0)
     {
         if (!subscriptions.ContainsKey(channel))
         {
@@ -16,6 +16,7 @@ public class InputEventManager
         }
 
         subscriptions[channel].Add((priority, handler));
+        return new InputSubscriberReference(channel, priority, handler);
     }
 
     public static void RaiseEvent(InputEvent message)
@@ -39,8 +40,8 @@ public class InputEventManager
         }
     }
 
-    public static void Unsubscribe(InputEventChannel channel, Action<InputEvent> handler)
+    public static void Unsubscribe(InputSubscriberReference reference)
     {
-        subscriptions[channel].RemoveAll(subscription => subscription.Handler == handler);
+        subscriptions[reference.Channel].RemoveAll(subscription => subscription.Handler == reference.Handler);
     }
 }

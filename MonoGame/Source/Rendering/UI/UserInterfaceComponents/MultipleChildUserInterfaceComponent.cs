@@ -28,6 +28,7 @@ public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
 
     public void RemoveChild(IUserInterfaceComponent child)
     {
+        child.Dispose();
         _ = Children.Remove(child);
     }
 
@@ -78,6 +79,21 @@ public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
         foreach (var child in children)
         {
             AddChild(child);
+        }
+    }
+
+    public void ReplaceChildren(List<IUserInterfaceComponent> children)
+    {
+        RemoveAllChildren();
+        AddManyChildren(children);
+    }
+
+    public override void OnEnabledChanged()
+    {
+        base.OnEnabledChanged();
+        foreach (var child in Children)
+        {
+            child.Enabled = Enabled;
         }
     }
 }
