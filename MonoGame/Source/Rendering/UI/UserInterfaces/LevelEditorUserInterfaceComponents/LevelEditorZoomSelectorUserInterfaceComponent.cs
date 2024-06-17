@@ -28,7 +28,7 @@ public class LevelEditorZoomSelectorUserInterfaceComponent : ContainerUserInterf
                         "list",
                         spacing: 2,
                         localPosition: new Vector2(0, 0),
-                        direction: ListDirection.Horizontal,
+                        direction: Axis.Horizontal,
                         children: new List<IUserInterfaceComponent>()
                         {
                             new ButtonUserInterfaceComponent("+", component =>

@@ -1,6 +1,6 @@
 ﻿namespace MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
-public enum ListDirection
+public enum Axis
 {
     Horizontal,
     Vertical

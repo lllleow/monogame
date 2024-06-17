@@ -55,7 +55,7 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
                 "list",
                 spacing: 2,
                 localPosition: new Vector2(0, 0),
-                direction: ListDirection.Horizontal,
+                direction: Axis.Horizontal,
                 children: [
                     new ContainerUserInterfaceComponent(
                         new Vector2(0, 0),
@@ -68,7 +68,7 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
                                 "list",
                                 spacing: 2,
                                 localPosition: new Vector2(0, 0),
-                                direction: ListDirection.Vertical,
+                                direction: Axis.Vertical,
                                 children: toolComponents
                             )
                         )
@@ -88,7 +88,7 @@ public class LevelEditorToolBarUserInterfaceComponent : ContainerUserInterfaceCo
                                 "list",
                                 spacing: 2,
                                 localPosition: new Vector2(0, 0),
-                                direction: ListDirection.Vertical,
+                                direction: Axis.Vertical,
                                 children: toolConfigurations
                             )
                         )

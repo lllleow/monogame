@@ -39,28 +39,28 @@ public class ContainerUserInterfaceComponent : SingleChildUserInterfaceComponent
                     borderSize = (int)(Math.Min(size.X, size.Y) / 2);
                 }
 
-                int centerWidth = (int)Math.Max(0, size.X - (2 * borderSize));
-                int centerHeight = (int)Math.Max(0, size.Y - (2 * borderSize));
+                int centerWidth = (int)Math.Ceiling(Math.Max(0, size.X - (2 * borderSize)));
+                int centerHeight = (int)Math.Ceiling(Math.Max(0, size.Y - (2 * borderSize)));
 
                 spriteBatch.Draw(
                     backgroundImage,
                     new Rectangle((int)position.X, (int)position.Y, borderSize, borderSize),
                     new Rectangle(0, 0, borderSize, borderSize),
-                    Color.White
+                    Color.White * Opacity
                 );
 
                 spriteBatch.Draw(
                     backgroundImage,
                     new Rectangle((int)(position.X + size.X - borderSize), (int)position.Y, borderSize, borderSize),
                     new Rectangle(backgroundImage.Width - borderSize, 0, borderSize, borderSize),
-                    Color.White
+                    Color.White * Opacity
                 );
 
                 spriteBatch.Draw(
                     backgroundImage,
                     new Rectangle((int)position.X, (int)(position.Y + size.Y - borderSize), borderSize, borderSize),
                     new Rectangle(0, backgroundImage.Height - borderSize, borderSize, borderSize),
-                    Color.White
+                    Color.White * Opacity
                 );
 
                 spriteBatch.Draw(
@@ -76,7 +76,7 @@ public class ContainerUserInterfaceComponent : SingleChildUserInterfaceComponent
                         backgroundImage,
                         new Rectangle((int)(position.X + borderSize), (int)position.Y, centerWidth, borderSize),
                         new Rectangle(borderSize, 0, backgroundImage.Width - (2 * borderSize), borderSize),
-                        Color.White
+                        Color.White * Opacity
                     );
 
                     spriteBatch.Draw(
@@ -93,7 +93,7 @@ public class ContainerUserInterfaceComponent : SingleChildUserInterfaceComponent
                         backgroundImage,
                         new Rectangle((int)position.X, (int)(position.Y + borderSize), borderSize, centerHeight),
                         new Rectangle(0, borderSize, borderSize, backgroundImage.Height - (2 * borderSize)),
-                        Color.White
+                        Color.White * Opacity
                     );
 
                     spriteBatch.Draw(

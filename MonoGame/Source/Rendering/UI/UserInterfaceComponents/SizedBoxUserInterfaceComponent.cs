@@ -16,11 +16,12 @@ public class SizedBoxUserInterfaceComponent : SingleChildUserInterfaceComponent
     public override Vector2 GetPreferredSize()
     {
         var childSize = base.GetPreferredSize();
-
-        return Size.X < 0 && Size.Y < 0
+        var size = Size.X < 0 && Size.Y < 0
             ? childSize
             : Size.Y > 0 && Size.X < 0
             ? new Vector2(childSize.X, Size.Y)
             : Size.X > 0 && Size.Y < 0 ? new Vector2(Size.X, childSize.Y) : Size;
+        CalculatedSize = size;
+        return size;
     }
 }

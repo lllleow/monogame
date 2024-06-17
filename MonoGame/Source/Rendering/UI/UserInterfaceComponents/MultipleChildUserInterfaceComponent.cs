@@ -63,6 +63,21 @@ public class MultipleChildUserInterfaceComponent : UserInterfaceComponent
         }
 
         var minimumBoundingRectangle = RectangleHelper.GetMinimumBoundingRectangle(rectangles);
-        return new Vector2(minimumBoundingRectangle.Width, minimumBoundingRectangle.Height);
+        Vector2 endSize = new Vector2(minimumBoundingRectangle.Width, minimumBoundingRectangle.Height);
+        CalculatedSize = endSize;
+        return endSize;
+    }
+
+    public void RemoveAllChildren()
+    {
+        Children.Clear();
+    }
+
+    public void AddManyChildren(List<IUserInterfaceComponent> children)
+    {
+        foreach (var child in children)
+        {
+            AddChild(child);
+        }
     }
 }

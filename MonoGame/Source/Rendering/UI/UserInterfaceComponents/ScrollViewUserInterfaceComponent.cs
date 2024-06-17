@@ -9,26 +9,31 @@ namespace MonoGame;
 
 public class ScrollViewUserInterfaceComponent : DirectionalListUserInterfaceComponent
 {
-    public Vector2 ContentSize { get; set; } = Vector2.Zero;
     public Vector2 ContentOffset { get; set; } = Vector2.Zero;
     private ScrollViewIndicatorUserIntefaceComponent scrollViewIndicator;
+    private IUserInterfaceComponent child;
 
-    public ScrollViewUserInterfaceComponent(Vector2 size, IUserInterfaceComponent child) : base("scroll_view", ListDirection.Horizontal, Vector2.Zero, 0, [])
+    public ScrollViewUserInterfaceComponent(Vector2 size, IUserInterfaceComponent child) : base("scroll_view", Axis.Horizontal, Vector2.Zero, 0, [])
     {
         SizeOverride = size;
         scrollViewIndicator = new ScrollViewIndicatorUserIntefaceComponent(size.Y);
 
-        ContentSize = child.GetPreferredSize();
+        this.child = child;
 
         AddChild(child);
         AddChild(scrollViewIndicator);
 
-        float sizeOverridePercentageOfContentSize = SizeOverride.Y / ContentSize.Y;
+        float sizeOverridePercentageOfContentSize = SizeOverride.Y / GetContentSize().Y;
         scrollViewIndicator.SetChild(new ScrollViewIndicatorUserIntefaceComponent(SizeOverride.Y * sizeOverridePercentageOfContentSize)
         {
             BackgroundImage = "textures/ui_background_selected",
             BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile
         });
+    }
+
+    public Vector2 GetContentSize()
+    {
+        return child.GetPreferredSize();
     }
 
     public override void Initialize(IUserInterfaceComponent parent)
@@ -44,9 +49,9 @@ public class ScrollViewUserInterfaceComponent : DirectionalListUserInterfaceComp
 
                 Vector2 newContentOffset = ContentOffset + new Vector2(0, yOffset);
                 int border = 4;
-                if (newContentOffset.Y < -ContentSize.Y + border)
+                if (newContentOffset.Y < -GetContentSize().Y + border)
                 {
-                    newContentOffset = new Vector2(newContentOffset.X, -ContentSize.Y + border);
+                    newContentOffset = new Vector2(newContentOffset.X, -GetContentSize().Y + border);
                 }
 
                 if (newContentOffset.Y > 0)
@@ -56,8 +61,8 @@ public class ScrollViewUserInterfaceComponent : DirectionalListUserInterfaceComp
 
                 ContentOffset = newContentOffset;
 
-                float sizeOverridePercentageOfContentSize = SizeOverride.Y / ContentSize.Y;
-                float percentageScrolled = ContentOffset.Y / ContentSize.Y;
+                float sizeOverridePercentageOfContentSize = SizeOverride.Y / GetContentSize().Y;
+                float percentageScrolled = ContentOffset.Y / GetContentSize().Y;
                 scrollViewIndicator.SetChild(new ScrollViewIndicatorUserIntefaceComponent(SizeOverride.Y * sizeOverridePercentageOfContentSize)
                 {
                     LocalPosition = new Vector2(0, -(percentageScrolled * (SizeOverride.Y - (SizeOverride.Y * sizeOverridePercentageOfContentSize)))),

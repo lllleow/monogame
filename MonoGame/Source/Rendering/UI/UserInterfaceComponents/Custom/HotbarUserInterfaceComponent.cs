@@ -37,7 +37,7 @@ public class HotbarUserInterfaceComponent : ContainerUserInterfaceComponent
                     "list",
                     spacing: 2,
                     localPosition: new Vector2(0, 0),
-                    direction: ListDirection.Horizontal,
+                    direction: Axis.Horizontal,
                     children: tiles.Cast<IUserInterfaceComponent>().ToList()
              )
         ));

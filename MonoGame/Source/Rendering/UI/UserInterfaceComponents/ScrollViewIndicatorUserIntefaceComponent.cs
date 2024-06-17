@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using Microsoft.Xna.Framework;
-using MonoGame.Source.Rendering.UI.Interfaces;
+﻿using Microsoft.Xna.Framework;
 using MonoGame.Source.Rendering.UI.UserInterfaceComponents;
 
 namespace MonoGame;
@@ -16,8 +13,10 @@ public class ScrollViewIndicatorUserIntefaceComponent : ContainerUserInterfaceCo
         BackgroundImageMode = UserInterfaceBackgroundImageMode.Tile;
     }
 
-    public override Vector2 GetPreferredSize()
+    public override Microsoft.Xna.Framework.Vector2 GetPreferredSize()
     {
-        return new Vector2(6, Height);
+        Vector2 size = new Vector2(6, Height);
+        CalculatedSize = size;
+        return size;
     }
 }

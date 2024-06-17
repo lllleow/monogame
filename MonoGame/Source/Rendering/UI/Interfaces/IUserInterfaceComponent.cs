@@ -7,6 +7,7 @@ public interface IUserInterfaceComponent
 {
     public string Name { get; set; }
     public Vector2 LocalPosition { get; set; }
+    public Vector2 CalculatedSize { get; set; }
     public void Initialize(IUserInterfaceComponent parent);
     public void Draw(SpriteBatch spriteBatch);
     public void Update(GameTime gameTime);

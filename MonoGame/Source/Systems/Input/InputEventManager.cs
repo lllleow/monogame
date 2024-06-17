@@ -25,7 +25,7 @@ public class InputEventManager
             var orderedSubscriptions = subscriptions[channel].OrderBy(subscription => subscription.Priority);
             foreach (var subscription in orderedSubscriptions)
             {
-                // if (message.Handled) return;
+                if (message.Handled) return;
                 subscription.Handler(message);
             }
         }

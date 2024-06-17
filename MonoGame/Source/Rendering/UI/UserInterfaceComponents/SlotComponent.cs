@@ -115,6 +115,8 @@ public class SlotComponent : UserInterfaceComponent, ISlotComponent
 
     public override Vector2 GetPreferredSize()
     {
-        return new Vector2(16, 16);
+        Vector2 size = new Vector2(16, 16);
+        CalculatedSize = size;
+        return size;
     }
 }

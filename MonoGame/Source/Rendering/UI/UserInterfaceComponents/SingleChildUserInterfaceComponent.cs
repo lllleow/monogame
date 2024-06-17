@@ -51,10 +51,12 @@ public class SingleChildUserInterfaceComponent : UserInterfaceComponent
                 return new Vector2(SizeOverride.X, childSize.Y);
             }
 
+            CalculatedSize = SizeOverride;
             return SizeOverride;
         }
         else
         {
+            CalculatedSize = childSize;
             return childSize;
         }
     }

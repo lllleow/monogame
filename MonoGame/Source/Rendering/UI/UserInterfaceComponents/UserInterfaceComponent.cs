@@ -66,6 +66,8 @@ public class UserInterfaceComponent : IUserInterfaceComponent
     }
 
     public bool IsClicked { get; set; } = false;
+    public Vector2 CalculatedSize { get; set; }
+
     public virtual void Update(GameTime gameTime)
     {
         if (!Enabled) return;

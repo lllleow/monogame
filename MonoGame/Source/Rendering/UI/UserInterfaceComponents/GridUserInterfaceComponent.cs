@@ -15,12 +15,25 @@ public class GridUserInterfaceComponent : MultipleChildUserInterfaceComponent
 
     public int MaxColumns { get; set; }
     public Vector2 Spacing { get; set; } = Vector2.Zero;
+    public Vector2 LastChildSize { get; set; }
 
     public override Vector2 GetPreferredSize()
     {
-        Vector2 childSize = Children.First().GetPreferredSize();
+        Vector2 childSize;
+        if (Children.Count == 0)
+        {
+            childSize = LastChildSize;
+        }
+        else
+        {
+            childSize = Children.First().GetPreferredSize();
+            LastChildSize = childSize;
+        }
+
         int rows = Children.Count / MaxColumns;
-        return new Vector2((childSize.X * MaxColumns) + (Spacing.X * (MaxColumns - 1)), (childSize.Y * rows) + (Spacing.Y * (rows - 1)));
+        Vector2 size = new Vector2((childSize.X * MaxColumns) + (Spacing.X * (MaxColumns - 1)), (childSize.Y * rows) + (Spacing.Y * (rows - 1)));
+        CalculatedSize = size;
+        return size;
     }
 
     public override Vector2 GetChildOffset(IUserInterfaceComponent child)

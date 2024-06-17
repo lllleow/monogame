@@ -25,6 +25,8 @@ public class PaddingUserInterfaceComponent : SingleChildUserInterfaceComponent
 
     public override Vector2 GetPreferredSize()
     {
-        return base.GetPreferredSize() + new Vector2(PaddingLeft + PaddingRight, PaddingUp + PaddingDown);
+        Vector2 size = base.GetPreferredSize() + new Vector2(PaddingLeft + PaddingRight, PaddingUp + PaddingDown);
+        CalculatedSize = size;
+        return size;
     }
 }
